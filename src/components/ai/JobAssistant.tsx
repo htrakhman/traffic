@@ -343,13 +343,13 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     </div>
                     <h3 className="font-semibold text-white mb-2">Work Zone AI Planner</h3>
                     <p className="text-sm text-slate-400 max-w-sm mx-auto mb-6 leading-relaxed">
-                      Outline your work zone on the map below the chat, then describe the job — I'll recommend equipment and quantities.
+                      Describe your job in the message box — I will help you locate the site and outline the work zone on the map, then recommend equipment and quantities.
                     </p>
                   </>
                 )}
                 {embedded && (
                   <p className="text-sm text-slate-500 max-w-md mx-auto mb-4 leading-relaxed">
-                    Mark the site on the map under the chat, type your job, or try a sample below.
+                    Type your job or try a sample — I will guide you on the map below, or you can mark the site directly.
                   </p>
                 )}
                 <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
@@ -542,6 +542,71 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
             mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col gap-2.5' : 'space-y-2.5'
           }`}
         >
+          <div className="flex flex-col gap-1.5 shrink-0">
+            <div className="flex items-center gap-1.5 px-0.5">
+              <MessageSquare size={12} className="shrink-0 text-brand-400/90" aria-hidden />
+              <label
+                htmlFor="job-assistant-composer"
+                className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-brand-400/90"
+              >
+                Message
+              </label>
+              <span className="hidden min-[380px]:inline text-[10px] text-slate-500">
+                Describe your job — I will help you integrate the map with your site
+              </span>
+            </div>
+            <div className="flex gap-2 items-end">
+              <div className="flex-1 relative rounded-2xl border border-brand-500/25 bg-slate-950/85 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] focus-within:border-brand-500/50 focus-within:ring-1 focus-within:ring-brand-500/20 transition-colors">
+                <textarea
+                  id="job-assistant-composer"
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Describe the job or site — I can guide map placement and your work zone. A place name in the text still moves the map when you send."
+                  rows={1}
+                  className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none resize-none max-h-32"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      void sendMessage(input).catch(() => {})
+                    }
+                  }}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute right-2.5 bottom-2.5 p-1.5 text-slate-500 hover:text-slate-300 rounded-xl hover:bg-slate-800/90 transition-all"
+                  title="Upload job site photo"
+                >
+                  <Upload size={14} />
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => void sendMessage(input).catch(() => {})}
+                disabled={!input.trim() || isStreaming}
+                className="flex-shrink-0 w-10 h-10 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-brand-500/25"
+              >
+                <Send size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Image preview */}
+          {imagePreview && (
+            <div className="relative inline-block shrink-0">
+              <img src={imagePreview} alt="Job site" className="h-16 w-auto rounded-lg border border-slate-700 object-cover" />
+              <button
+                onClick={() => {
+                  imageFileRef.current = null
+                  setImagePreview(null)
+                }}
+                className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-slate-700 rounded-full flex items-center justify-center hover:bg-red-500 transition-colors"
+              >
+                <X size={10} className="text-white" />
+              </button>
+            </div>
+          )}
+
           <div
             ref={mapPanelRef}
             className={`rounded-xl border border-slate-700/90 bg-slate-900/50 overflow-hidden shadow-inner [&:fullscreen]:rounded-none [&:fullscreen]:bg-slate-950 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:h-full [&:fullscreen]:min-h-0 ${
@@ -621,69 +686,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 tallFrame={mapPanelFullscreen}
                 fillHeightBoost={mapExpanded && !mapPanelFullscreen}
               />
-            </div>
-          </div>
-
-          {/* Image preview */}
-          {imagePreview && (
-            <div className="relative inline-block mb-2">
-              <img src={imagePreview} alt="Job site" className="h-16 w-auto rounded-lg border border-slate-700 object-cover" />
-              <button
-                onClick={() => {
-                  imageFileRef.current = null
-                  setImagePreview(null)
-                }}
-                className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-slate-700 rounded-full flex items-center justify-center hover:bg-red-500 transition-colors"
-              >
-                <X size={10} className="text-white" />
-              </button>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-1.5 px-0.5">
-              <MessageSquare size={12} className="shrink-0 text-brand-400/90" aria-hidden />
-              <label
-                htmlFor="job-assistant-composer"
-                className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-brand-400/90"
-              >
-                Message
-              </label>
-              <span className="hidden min-[380px]:inline text-[10px] text-slate-500">Goes to assistant with your outline</span>
-            </div>
-            <div className="flex gap-2 items-end">
-              <div className="flex-1 relative rounded-2xl border border-brand-500/25 bg-slate-950/85 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] focus-within:border-brand-500/50 focus-within:ring-1 focus-within:ring-brand-500/20 transition-colors">
-                <textarea
-                  id="job-assistant-composer"
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Optional notes for the assistant — sends with your drawn zone. A place name in the text still moves the map when you send."
-                  rows={1}
-                  className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none resize-none max-h-32"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault()
-                      void sendMessage(input).catch(() => {})
-                    }
-                  }}
-                />
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute right-2.5 bottom-2.5 p-1.5 text-slate-500 hover:text-slate-300 rounded-xl hover:bg-slate-800/90 transition-all"
-                  title="Upload job site photo"
-                >
-                  <Upload size={14} />
-                </button>
-              </div>
-              <button
-                type="button"
-                onClick={() => void sendMessage(input).catch(() => {})}
-                disabled={!input.trim() || isStreaming}
-                className="flex-shrink-0 w-10 h-10 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-brand-500/25"
-              >
-                <Send size={16} />
-              </button>
             </div>
           </div>
           <input

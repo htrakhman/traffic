@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react'
+import { SITE_CONTACT_EMAIL, SITE_NAME } from '../../config/site'
 
 export default function Footer() {
   return (
@@ -16,7 +17,7 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="font-bold text-lg text-white">
-                Traffic<span className="text-brand-400">Kit</span>
+                Traffic Control <span className="text-brand-400">Rental</span>
               </span>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-6">
@@ -27,9 +28,9 @@ export default function Footer() {
                 <Phone size={14} className="text-brand-400" />
                 1-800-555-1234
               </a>
-              <a href="mailto:rent@traffickit.io" className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
+              <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
                 <Mail size={14} className="text-brand-400" />
-                rent@traffickit.io
+                {SITE_CONTACT_EMAIL}
               </a>
               <div className="flex items-start gap-2 text-sm text-slate-400">
                 <MapPin size={14} className="text-brand-400 mt-0.5 flex-shrink-0" />
@@ -83,7 +84,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Information</h3>
             <ul className="space-y-2.5">
               {[
-                { label: 'About TrafficKit', href: '/about' },
+                { label: `About ${SITE_NAME}`, href: '/about' },
                 { label: 'How It Works', href: '/how-it-works' },
                 { label: 'FAQ', href: '/faq' },
                 { label: 'MUTCD Reference', href: '/resources/mutcd', external: true },
@@ -103,7 +104,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-slate-800/60 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} TrafficKit. All rights reserved.
+            © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
           </p>
           <div className="flex items-center gap-1 text-xs text-slate-600">
             <span className="text-yellow-500">⚠</span>

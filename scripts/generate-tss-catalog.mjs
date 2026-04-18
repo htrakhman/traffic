@@ -337,7 +337,7 @@ function attachVariantGroups(products) {
 
 async function main() {
   console.log('Fetching sitemap…')
-  const res = await fetch(SITEMAP, { headers: { 'user-agent': 'TrafficKit-catalog-sync/1.0' } })
+  const res = await fetch(SITEMAP, { headers: { 'user-agent': 'TrafficControlRental-catalog-sync/1.0' } })
   if (!res.ok) throw new Error(`Sitemap HTTP ${res.status}`)
   const xml = await res.text()
   const locRe = /<loc>([^<]+)<\/loc>/g

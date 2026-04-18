@@ -1,4 +1,7 @@
 import type { Product } from '../types'
+import { SITE_NAME } from '../config/site'
+
+const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
 
 /**
  * Rental rates in this file are **retail** prices (50% markup on supplier-reference economics).
@@ -101,7 +104,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '7 lbs',
     dimensions: '28" H × 15" × 15" base',
-    metaTitle: 'Rent 28" Traffic Cones | MUTCD / MASH Compliant | TrafficKit',
+    metaTitle: titleBrand('Rent 28" Traffic Cones | MUTCD / MASH Compliant'),
     metaDescription: 'Rent NCHRP-350 & MASH-accepted 28" orange traffic cones starting at $2.25/day. 500+ in stock. Perfect for lane closures and shoulder work up to 45 mph. Fast delivery.',
   },
   {
@@ -178,7 +181,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '10 lbs',
     dimensions: '36" H × 14" × 14" base',
-    metaTitle: 'Rent 36" Reflective Traffic Cones | Highway-Grade MUTCD | TrafficKit',
+    metaTitle: titleBrand('Rent 36" Reflective Traffic Cones | Highway-Grade MUTCD'),
     metaDescription: 'Rent MUTCD-compliant 36" orange traffic cones with high-intensity reflective collars. Required for 45+ mph work zones. NCHRP-350 crash tested. From $3.38/day.',
   },
   {
@@ -256,7 +259,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~32 lbs (drum + base)',
     dimensions: '37" H × 23" base diameter',
-    metaTitle: 'Rent Channelizing Drums | 37" HI Reflective Tire Base | TrafficKit',
+    metaTitle: titleBrand('Rent Channelizing Drums | 37" HI Reflective Tire Base'),
     metaDescription: 'Rent MUTCD/NCHRP-350 channelizing drums with 6" high-intensity reflective stripes and 22-lb tire ring base. Ideal for night work and long-duration closures. From $6.75/day.',
   },
 
@@ -336,7 +339,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
-    metaTitle: 'Rent Road Work Ahead Sign (W20-1) | 36" Reflective Roll-Up | TrafficKit',
+    metaTitle: titleBrand('Rent Road Work Ahead Sign (W20-1) | 36" Reflective Roll-Up'),
     metaDescription: 'Rent MUTCD W20-1 "Road Work Ahead" 36" reflective roll-up signs from $7.50/day. Required for all work zones. Fiberglass ribs, reflective vinyl. Same-day delivery available.',
   },
   {
@@ -413,7 +416,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
-    metaTitle: 'Rent Flagger Ahead Sign (W20-7a) | 36" Reflective Roll-Up | TrafficKit',
+    metaTitle: titleBrand('Rent Flagger Ahead Sign (W20-7a) | 36" Reflective Roll-Up'),
     metaDescription: 'Rent MUTCD W20-7a "Flagger Ahead" 36" reflective roll-up signs from $7.50/day. Required by law when flaggers control traffic. Fast delivery to job sites.',
   },
   {
@@ -490,7 +493,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~10 lbs',
     dimensions: 'Folds flat for storage',
-    metaTitle: 'Rent Cortina Tri-Pod Sign Stand | 36" & 48" Signs | TrafficKit',
+    metaTitle: titleBrand('Rent Cortina Tri-Pod Sign Stand | 36" & 48" Signs'),
     metaDescription: 'Rent Cortina powder-coated steel tri-pod sign stands for 36" and 48" roll-up traffic signs from $6/day. Folds flat, stable tripod base. Pair with any MUTCD sign rental.',
   },
   {
@@ -562,7 +565,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
-    metaTitle: 'Rent One Lane Road Ahead Sign (W20-4) | 36" Roll-Up | TrafficKit',
+    metaTitle: titleBrand('Rent One Lane Road Ahead Sign (W20-4) | 36" Roll-Up'),
     metaDescription: 'Rent MUTCD W20-4 "One Lane Road Ahead" 36" roll-up signs from $7.50/day. Required for single-lane alternating traffic operations. Fiberglass ribs, durable vinyl.',
   },
 
@@ -642,7 +645,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~25 lbs',
     dimensions: '96" W × 60" H',
-    metaTitle: 'Rent Type III Road Closure Barricades | 8 ft Break-Away | TrafficKit',
+    metaTitle: titleBrand('Rent Type III Road Closure Barricades | 8 ft Break-Away'),
     metaDescription: 'Rent MUTCD Type III break-away barricades with 3×8 ft EG reflective rails from $12/day. NCHRP-350 crash-tested. Required for complete road closures. Flasher-ready.',
   },
   {
@@ -716,7 +719,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~12 lbs',
     dimensions: '24" W × 45" H',
-    metaTitle: 'Rent Type II Traffic Barricades | HI Reflective Sheeting | TrafficKit',
+    metaTitle: titleBrand('Rent Type II Traffic Barricades | HI Reflective Sheeting'),
     metaDescription: 'Rent MUTCD Type II folding plastic barricades with high-intensity reflective sheeting from $8.25/day. 120 in stock. Ideal for lane closures, pedestrian detours, and channelization.',
   },
   {
@@ -796,7 +799,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 3,
     weight: '85 lbs empty / ~900 lbs filled',
     dimensions: '72" L × 18" W × 32" H',
-    metaTitle: 'Rent Water-Filled Barriers | Yodock 2001MB NCHRP-350 | TrafficKit',
+    metaTitle: titleBrand('Rent Water-Filled Barriers | Yodock 2001MB NCHRP-350'),
     metaDescription: 'Rent Yodock 2001MB NCHRP-350 water-filled construction barriers from $27/day. 900 lbs filled for positive worker protection. Interlocking 6-ft sections. 3-day minimum.',
   },
 
@@ -878,7 +881,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~1,000 lbs',
     dimensions: '48" H × 96" W panel; 95" L trailer',
-    metaTitle: 'Rent Arrow Board Trailer | Hi-Way Safety M90 Solar 15-Lamp | TrafficKit',
+    metaTitle: titleBrand('Rent Arrow Board Trailer | Hi-Way Safety M90 Solar 15-Lamp'),
     metaDescription: 'Rent Hi-Way Safety M90 solar arrow board trailers with 15 amber LED PAR46 lamps from $142.50/day. 30-day battery backup. MUTCD required for highway lane closures.',
   },
   {
@@ -952,7 +955,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '100 lbs',
     dimensions: 'Contact supplier for panel dimensions',
-    metaTitle: 'Rent Truck-Mounted Arrow Board | Gregory AVP15 15-LED Wireless | TrafficKit',
+    metaTitle: titleBrand('Rent Truck-Mounted Arrow Board | Gregory AVP15 15-LED Wireless'),
     metaDescription: 'Rent Gregory Industries AVP15 truck-mounted 15-LED arrow boards with wireless remote from $97.50/day. Battery powered. Ideal for moving operations and shadow vehicles.',
   },
 
@@ -1035,7 +1038,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: 'Contact supplier',
     dimensions: '71" × 133" display',
-    metaTitle: 'Rent Portable Message Board | Ver-Mac PCMS-1210 Pro 3-Line Solar | TrafficKit',
+    metaTitle: titleBrand('Rent Portable Message Board | Ver-Mac PCMS-1210 Pro 3-Line Solar'),
     metaDescription: 'Rent Ver-Mac PCMS-1210 Pro 3-line portable message boards from $262.50/day. WiFi + 4G LTE remote programming, solar-powered, NTCIP compliant. Ideal for work zones and events.',
   },
 
@@ -1115,7 +1118,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~1 lb',
     dimensions: '~5" diameter',
-    metaTitle: 'Rent Type B Barricade Flashers | Amber LED MUTCD Compliant | TrafficKit',
+    metaTitle: titleBrand('Rent Type B Barricade Flashers | Amber LED MUTCD Compliant'),
     metaDescription: 'Rent MUTCD Type B amber LED barricade flashers from $2.25/day. Photo-cell auto shutoff, steady or flash mode. Required for nighttime barricade and drum lighting. 400+ in stock.',
   },
   {
@@ -1193,7 +1196,7 @@ export const curatedProducts: Product[] = [
     minimumRentalDays: 1,
     weight: '~3 lbs (set)',
     dimensions: '6 flares in nylon case',
-    metaTitle: 'Rent Road Flares | Orion 30-Min 6-Pack DOT Approved | TrafficKit',
+    metaTitle: titleBrand('Rent Road Flares | Orion 30-Min 6-Pack DOT Approved'),
     metaDescription: 'Rent Orion 30-minute DOT-approved road flares (6-pack) from $18/day. Weather-resistant waxed construction, nylon case and safety vest included. Ideal for emergency delineation.',
   },
 ]

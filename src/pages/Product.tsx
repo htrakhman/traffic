@@ -19,8 +19,7 @@ import { useCatalogSync } from '../context/CatalogSyncContext'
 import { getProductBySlug, getProductsByCategory } from '../data/products'
 import { categories } from '../data/categories'
 import ProductCard from '../components/marketplace/ProductCard'
-
-const SITE_NAME = 'TrafficKit'
+import { SITE_NAME } from '../config/site'
 
 export default function Product() {
   const { tick } = useCatalogSync()

@@ -1,6 +1,7 @@
 import type { JobDetails, MapArea, RecommendationItem, AIRecommendation } from '../types'
 import { curatedProducts, getProductById } from '../data/products'
 import { normalizeRecommendationPricing } from './pricing'
+import { SITE_NAME } from '../config/site'
 
 const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
 
@@ -74,7 +75,7 @@ function buildJobPrompt(jobDetails: Partial<JobDetails>, userMessage?: string): 
   return parts.join('\n')
 }
 
-const SYSTEM_PROMPT = `You are TrafficKit's AI Work Zone Planner — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to rent for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) requirements, ATSSA standards, and common work zone setups.
+const SYSTEM_PROMPT = `You are the AI Work Zone Planner for ${SITE_NAME} — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to rent for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) requirements, ATSSA standards, and common work zone setups.
 
 Your available rental equipment catalog (retail daily rental rates — already include our standard 50% markup on supplier-reference economics; copy dailyRate values exactly):
 ${CATALOG_PROMPT_LINES}
@@ -239,7 +240,7 @@ ${mapQuestion}[Q: What type of road is this on?]
       model: 'claude-sonnet-4-6',
       max_tokens: 1024,
       stream: true,
-      system: `You are TrafficKit's AI Work Zone Planner. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
+      system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
 
 The UI shows a Google Map directly above the chat input with a search field: users can jump to an address, highway + milepost (Geocoder resolves natural language), or decimal lat/lng. In chat they can also type "Location: …" / "Address: …" or a coordinate pair such as 40.7128, -74.0060 — the client recenters the map when they send. They still need a drawn polygon for the [Map work zone] block (area/perimeter); search only moves the map view.
 

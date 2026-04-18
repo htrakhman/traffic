@@ -28,11 +28,11 @@
 
 | # | Item | Effort | Status |
 |---|------|--------|--------|
-| 1 | **Register a domain.** Suggest: `trafficKitNJ.com`, `trafficKit.io`, `rentTrafficKit.com`. Pick one. | 10 min | TODO |
+| 1 | **Register a domain.** Acquired: `trafficcontrolrental.com` — point DNS at Netlify/Vercel and enable HTTPS. | 10 min | Done |
 | 2 | **Deploy to Vercel or Netlify** (configs already exist — `vercel.json` and `netlify.toml`). Point domain at it. | 30 min | TODO |
 | 3 | **Add prerendering or SSG.** Option A (fast): `vite-plugin-ssr` / `vite-plugin-prerender`. Option B (nicer long-term): migrate to Next.js. Recommend A for now. | 2–4 hrs | TODO |
 | 4 | **Per-page meta tags** via `react-helmet-async`. Unique title + description for Home, Browse, each Category, each Product, Quote, Assistant, Planner. | 3–5 hrs | TODO |
-| 5 | **Set up Google Business Profile** for TrafficKit. Address, service areas (Central NJ counties), category "Equipment rental agency," photos, hours, phone. | 45 min | TODO |
+| 5 | **Set up Google Business Profile** for Traffic Control Rental (`trafficcontrolrental.com`). Address, service areas (Central NJ counties), category "Equipment rental agency," photos, hours, phone. | 45 min | TODO |
 | 6 | **Set up Google Search Console + Analytics.** Submit sitemap. | 30 min | TODO |
 
 ### P1 — Foundation (do these in weeks 1–3)
