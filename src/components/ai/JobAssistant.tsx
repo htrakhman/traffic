@@ -13,6 +13,7 @@ import {
   Minimize2,
   UnfoldVertical,
   FoldVertical,
+  PenLine,
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
 import { normalizeRecommendationPricing } from '../../utils/pricing'
@@ -660,16 +661,23 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 >
                   {mapPanelFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
                 </button>
-                {mapArea ? (
-                  <span
-                    className="hidden lg:inline text-[11px] text-brand-400/90 truncate max-w-[5rem]"
-                    title={mapArea.address}
-                  >
-                    Drawn
-                  </span>
-                ) : (
-                  <span className="hidden lg:inline text-[11px] text-slate-500 truncate max-w-[5rem]">Outline</span>
-                )}
+                <button
+                  type="button"
+                  title={
+                    mapArea
+                      ? 'Redraw work zone — click the map to place corners, double-click the last point to finish'
+                      : 'Draw work zone — click the map to place corners, double-click the last point to finish'
+                  }
+                  onClick={() => mapSelectorRef.current?.startWorkZoneDraw()}
+                  className={`flex max-w-[7.5rem] items-center gap-1 rounded-md border px-1.5 py-1 text-[11px] font-medium transition-colors sm:max-w-none ${
+                    mapArea
+                      ? 'border-brand-500/35 bg-brand-500/15 text-brand-200/95 hover:bg-brand-500/25'
+                      : 'border-brand-500/40 bg-brand-500/20 text-brand-100 hover:bg-brand-500/30'
+                  }`}
+                >
+                  <PenLine size={13} className="shrink-0 opacity-90" aria-hidden />
+                  <span className="truncate">{mapArea ? 'Redraw zone' : 'Draw zone'}</span>
+                </button>
               </div>
             </div>
             <div

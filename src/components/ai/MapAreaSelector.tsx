@@ -25,6 +25,8 @@ interface Props {
 export type MapAreaSelectorHandle = {
   flyTo: (lat: number, lng: number, zoom?: number) => void
   searchAndFocus: (query: string) => Promise<{ ok: boolean; error?: string; label?: string }>
+  /** Same as the on-map “Draw work zone” control — enters polygon mode when the map is ready. */
+  startWorkZoneDraw: () => void
 }
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
@@ -218,15 +220,6 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
     [searchDraft, placePredictions, osmConstruction, applyCenter, selectPlacePrediction, selectOsmItem],
   )
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      flyTo: (lat: number, lng: number, zoom = 17) => applyCenter(lat, lng, zoom),
-      searchAndFocus: (q: string) => runSearch(q),
-    }),
-    [applyCenter, runSearch],
-  )
-
   const handleSearchSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSearchError(null)
@@ -309,6 +302,16 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
     drawingRef.current.setDrawingMode(google.maps.drawing.OverlayType.POLYGON)
     setDrawing(true)
   }, [clearPolygon])
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      flyTo: (lat: number, lng: number, zoom = 17) => applyCenter(lat, lng, zoom),
+      searchAndFocus: (q: string) => runSearch(q),
+      startWorkZoneDraw: () => startDrawing(),
+    }),
+    [applyCenter, runSearch, startDrawing],
+  )
 
   useEffect(() => {
     if (status !== 'ready') return
@@ -822,7 +825,7 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
 
         {/* Drawing toolbar */}
         {status === 'ready' && (
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+          <div className="pointer-events-auto absolute bottom-2 left-1/2 z-[20] flex -translate-x-1/2 gap-2">
             {!value ? (
               <button
                 type="button"
@@ -896,9 +899,9 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
           area and perimeter to calibrate equipment quantities.
         </p>
       )}
-      {compact && !stretch && (
+      {compact && (
         <p className="text-[10px] text-slate-600 leading-snug">
-          Pin ≈ site center. Tap <span className="text-slate-500">Draw work zone</span> and outline the area — the AI uses it on send.
+          Pin ≈ site center. Use <span className="text-slate-500">Draw work zone</span> (on the map or in the map header), then click corners to close the polygon — the AI uses it when you send.
         </p>
       )}
     </div>
