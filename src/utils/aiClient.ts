@@ -3,7 +3,14 @@ import { curatedProducts, getProductById } from '../data/products'
 import { normalizeRecommendationPricing } from './pricing'
 import { SITE_NAME } from '../config/site'
 
-const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
+// Route all Anthropic calls through our Vercel serverless proxy at /api/chat.
+// The secret key lives in process.env.ANTHROPIC_API_KEY on the server; it is
+// never shipped in the browser bundle.
+//
+// Demo mode (no live AI) is triggered by VITE_AI_DEMO_MODE=true in the client
+// env or by the proxy returning 500 (e.g. in previews where the key is absent).
+const CHAT_PROXY_URL = '/api/chat'
+const DEMO_MODE = (import.meta.env.VITE_AI_DEMO_MODE as string | undefined) === 'true'
 
 const CATALOG_PROMPT_LINES = curatedProducts
   .map(
@@ -26,6 +33,16 @@ function mapAreaPromptLines(mapArea: MapArea): string[] {
   if (mapArea.address) lines.push(`Map location: ${mapArea.address}`)
   if (mapArea.postedSpeedMph != null && mapArea.postedSpeedLabel) {
     lines.push(`Roadway posted speed (near work zone center): ${mapArea.postedSpeedLabel}`)
+  }
+  if (
+    mapArea.footprintMinSpanFt != null &&
+    mapArea.footprintMaxSpanFt != null &&
+    mapArea.footprintMinSpanFt > 0 &&
+    mapArea.footprintMaxSpanFt > 0
+  ) {
+    lines.push(
+      `Drawn outline footprint (axis-aligned bounds, approximate): ~${Math.round(mapArea.footprintMinSpanFt)} ft × ~${Math.round(mapArea.footprintMaxSpanFt)} ft — compare min span to typical lane/roadway widths when inferring shoulder vs multi-lane/full-width coverage.`,
+    )
   }
   return lines
 }
@@ -119,21 +136,15 @@ export async function getJobRecommendation(
   jobDetails: Partial<JobDetails>,
   userMessage?: string,
 ): Promise<AIRecommendation> {
-  if (!API_KEY) {
-    // Return demo recommendation when no API key
+  if (DEMO_MODE) {
     return getDemoRecommendation(jobDetails, userMessage)
   }
 
   const jobPrompt = buildJobPrompt(jobDetails, userMessage)
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch(CHAT_PROXY_URL, {
     method: 'POST',
-    headers: {
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
       max_tokens: 1500,
@@ -148,6 +159,11 @@ export async function getJobRecommendation(
   })
 
   if (!response.ok) {
+    // If the proxy reports a misconfigured key (no ANTHROPIC_API_KEY in env),
+    // fall back to the demo recommendation instead of surfacing an error.
+    if (response.status === 500) {
+      return getDemoRecommendation(jobDetails, userMessage)
+    }
     const err = await response.text()
     throw new Error(`API error: ${response.status} — ${err}`)
   }
@@ -168,7 +184,7 @@ export async function streamJobChat(
   onDone: () => void,
   options?: { mapArea?: MapArea },
 ): Promise<void> {
-  if (!API_KEY) {
+  if (DEMO_MODE) {
     const messagesForDemo = augmentLastUserMessageWithMapArea(messages, options?.mapArea)
     const lastUser = [...messagesForDemo].reverse().find((m) => m.role === 'user')?.content ?? ''
     if (lastUser.includes('Here are my answers')) {
@@ -205,9 +221,20 @@ ${JSON.stringify(rec)}
 [A: I'll describe the footprint in text instead]
 
 `
-    const demo = `Thanks for describing your job!${hasMapBlock ? '' : ' Use the search bar on the map (or type Location: … / lat,lng in chat) to jump to the site, then draw your work zone polygon — that calibrates quantities.'} A few quick details:
-
-${mapQuestion}[Q: What type of road is this on?]
+    const ma = options?.mapArea
+    const mapBits: string[] = []
+    if (ma?.address) mapBits.push(`location ${ma.address}`)
+    if (ma?.postedSpeedLabel) mapBits.push(ma.postedSpeedLabel)
+    if (ma?.footprintMinSpanFt != null && ma?.footprintMaxSpanFt != null) {
+      mapBits.push(`outline ~${Math.round(ma.footprintMinSpanFt)}×${Math.round(ma.footprintMaxSpanFt)} ft`)
+    }
+    const mapLead =
+      hasMapBlock && mapBits.length > 0
+        ? `From your map (${mapBits.join('; ')}), I'm using that outline for sizing — please confirm a few details:\n\n`
+        : hasMapBlock
+          ? `From your drawn work zone on the map, I'm using that outline for sizing — please confirm a few details:\n\n`
+          : ''
+    const demo = `${mapLead}${hasMapBlock ? '' : `Thanks for describing your job! Use the search bar on the map (or type Location: … / lat,lng in chat) to jump to the site, then draw your work zone polygon — that calibrates quantities. A few quick details:\n\n`}${mapQuestion}[Q: What type of road is this on?]
 [A: Interstate / Freeway (65+ mph)]
 [A: US or State Highway (45–65 mph)]
 [A: County or Arterial Road (35–45 mph)]
@@ -228,14 +255,9 @@ ${mapQuestion}[Q: What type of road is this on?]
 
   const messagesForApi = augmentLastUserMessageWithMapArea(messages, options?.mapArea)
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch(CHAT_PROXY_URL, {
     method: 'POST',
-    headers: {
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6',
       max_tokens: 1024,
@@ -244,7 +266,7 @@ ${mapQuestion}[Q: What type of road is this on?]
 
 The UI shows a Google Map directly above the chat input with a search field: users can jump to an address, highway + milepost (Geocoder resolves natural language), or decimal lat/lng. In chat they can also type "Location: …" / "Address: …" or a coordinate pair such as 40.7128, -74.0060 — the client recenters the map when they send. They still need a drawn polygon for the [Map work zone] block (area/perimeter); search only moves the map view.
 
-When you need info, ask ALL remaining questions at once using this EXACT format — no extra text, one block per question:
+When you need info, ask ALL remaining questions at once using this EXACT format for each question (each [Q:] followed by its [A:] lines):
 
 [Q: Question?]
 [A: Option 1]
@@ -252,14 +274,17 @@ When you need info, ask ALL remaining questions at once using this EXACT format 
 [A: Option 3]
 
 Rules:
-- No intro sentences — go straight to the question blocks
+- If the latest user message does NOT contain a [Map work zone] block: no preamble — go straight to the question blocks.
+- If the latest user message DOES contain [Map work zone]: FIRST output one short sentence (max ~35 words) that explicitly references what that block says (Map location/address, posted speed if present, area/perimeter, footprint spans if present). Treat that block as the user's prior map work — do not tell them to search or draw again unless something is inconsistent or missing.
+- Map-informed follow-ups: use posted speed (when present) to pick the most likely road-type bucket and ask confirmation (put your best match as the first [A:] option). Use footprint min/max spans heuristically (~≤18 ft narrow vs ~≥22–40+ ft often suggests multiple lanes or full roadway width vs shoulder/single lane) combined with the user's text to propose a default lane-impact option first — still offer alternatives and "Not sure".
+- Do not ask generic road-type or lane-impact questions as if no map context exists when [Map work zone] is present; prefer "Confirm …" phrasing grounded in the map fields.
 - If the latest user message does NOT contain a [Map work zone] block, your FIRST batch of questions MUST start with a map question before road/lane questions, using this exact wording:
   [Q: Work zone on the map — what's your next step?]
   [A: Polygon is drawn — ready]
   [A: Not yet — I'll search / move the map, then draw the outline]
   [A: I'll describe the footprint in text instead]
   If [Map work zone] is already present, skip that map question — do not ask them to draw again unless something is unclear
-- Ask all other needed questions in the same message (road type, speed limit, lane impact, duration, day/night)
+- Ask all other still-needed questions in the same message (anything not inferable: duration, day/night, regulatory speed if it clearly differs from posted map speed, etc.)
 - Users may answer every question in one reply (bulleted list); treat all answers as your new context — do not re-ask what they already answered
 - 3–5 options per question, include "Not sure" when useful
 - Once you have road type, speed limit, lane impact, duration, and day/night: OUTPUT A CART WIDGET (see below) — do NOT list equipment in plain text
@@ -277,7 +302,20 @@ ${STREAM_CART_PRODUCT_RATES}`,
     }),
   })
 
-  if (!response.ok) throw new Error(`Stream error: ${response.status}`)
+  if (!response.ok) {
+    // Graceful fallback when the proxy can't reach Anthropic (e.g. missing
+    // server env var on a preview). Emits a short note so the UI isn't blank.
+    if (response.status === 500) {
+      const note = 'AI is temporarily offline. Please try again shortly.'
+      for (const char of note) {
+        onChunk(char)
+        await new Promise((r) => setTimeout(r, 6))
+      }
+      onDone()
+      return
+    }
+    throw new Error(`Stream error: ${response.status}`)
+  }
 
   const reader = response.body!.getReader()
   const decoder = new TextDecoder()

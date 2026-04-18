@@ -119,6 +119,12 @@ export interface MapArea {
   postedSpeedMph?: number
   /** Human-readable line for UI / prompts */
   postedSpeedLabel?: string
+  /**
+   * Axis-aligned bounding box of the drawn path in feet (local equirectangular approx).
+   * min ≈ narrower extent, max ≈ longer — useful heuristics with address/speed for lane vs shoulder coverage.
+   */
+  footprintMinSpanFt?: number
+  footprintMaxSpanFt?: number
 }
 
 export interface JobDetails {

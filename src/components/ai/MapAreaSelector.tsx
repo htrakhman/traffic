@@ -71,6 +71,21 @@ function centroid(path: { lat: number; lng: number }[]): { lat: number; lng: num
   return { lat, lng }
 }
 
+/** Axis-aligned bbox spans in feet (equirectangular at mid-latitude — planning heuristic only). */
+function axisAlignedFootprintSpansFt(path: { lat: number; lng: number }[]): {
+  minSpanFt: number
+  maxSpanFt: number
+} {
+  const lats = path.map((p) => p.lat)
+  const lngs = path.map((p) => p.lng)
+  const dLat = Math.max(...lats) - Math.min(...lats)
+  const dLng = Math.max(...lngs) - Math.min(...lngs)
+  const midLat = (Math.min(...lats) + Math.max(...lats)) / 2
+  const nsFt = Math.abs(dLat) * 111120 * M_TO_FT
+  const ewFt = Math.abs(dLng) * 111120 * Math.cos((midLat * Math.PI) / 180) * M_TO_FT
+  return { minSpanFt: Math.min(nsFt, ewFt), maxSpanFt: Math.max(nsFt, ewFt) }
+}
+
 function fmt(n: number, unit: string): string {
   return `${Math.round(n).toLocaleString()} ${unit}`
 }
@@ -256,6 +271,7 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
 
       const latLngs = path.map((p) => ({ lat: p.lat(), lng: p.lng() }))
       const center = centroid(latLngs)
+      const { minSpanFt, maxSpanFt } = axisAlignedFootprintSpansFt(latLngs)
 
       let address: string | undefined
       if (geocoderRef.current) {
@@ -276,6 +292,8 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
         perimeterLabel: fmt(perimeterFt, 'ft'),
         address,
         center,
+        footprintMinSpanFt: minSpanFt,
+        footprintMaxSpanFt: maxSpanFt,
       }
       onChange(basePayload)
 
