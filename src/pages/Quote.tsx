@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { CheckCircle, Package, Trash2, Plus, Minus } from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
+import type { CartLine } from '../context/CartContext'
+import { useCart } from '../context/CartContext'
 import { products } from '../data/products'
 
 interface QuoteItem {
@@ -17,27 +19,35 @@ interface LocationState {
   recommendation?: AIRecommendation
 }
 
+function buildInitialItems(state: LocationState, cartLines: CartLine[]): QuoteItem[] {
+  if (state.recommendation) {
+    return state.recommendation.items
+      .map((item) => {
+        const prod = products.find((p) => p.id === item.productId)
+        if (!prod) return null
+        return { product: prod, quantity: item.quantity, days: state.recommendation!.estimatedDurationDays }
+      })
+      .filter(Boolean) as QuoteItem[]
+  }
+  if (state.product) {
+    return [{ product: state.product, quantity: state.quantity ?? 1, days: state.rentalDays ?? 1 }]
+  }
+  if (cartLines.length === 0) return []
+  return cartLines
+    .map((line) => {
+      const prod = products.find((p) => p.id === line.productId)
+      if (!prod) return null
+      return { product: prod, quantity: line.quantity, days: line.rentalDays }
+    })
+    .filter(Boolean) as QuoteItem[]
+}
+
 export default function Quote() {
   const location = useLocation()
   const state = (location.state ?? {}) as LocationState
+  const { lines: cartLines } = useCart()
 
-  const buildInitialItems = (): QuoteItem[] => {
-    if (state.recommendation) {
-      return state.recommendation.items
-        .map((item) => {
-          const prod = products.find((p) => p.id === item.productId)
-          if (!prod) return null
-          return { product: prod, quantity: item.quantity, days: state.recommendation!.estimatedDurationDays }
-        })
-        .filter(Boolean) as QuoteItem[]
-    }
-    if (state.product) {
-      return [{ product: state.product, quantity: state.quantity ?? 1, days: state.rentalDays ?? 1 }]
-    }
-    return []
-  }
-
-  const [items, setItems] = useState<QuoteItem[]>(buildInitialItems)
+  const [items, setItems] = useState<QuoteItem[]>(() => buildInitialItems(state, cartLines))
   const [submitted, setSubmitted] = useState(false)
   const [form, setForm] = useState({
     name: '',

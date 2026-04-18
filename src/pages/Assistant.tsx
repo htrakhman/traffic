@@ -34,10 +34,10 @@ export default function Assistant() {
 
       {/* Main layout */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Main assistant panel */}
-          <div className="lg:col-span-7">
-            <div className="card min-h-[600px] flex flex-col">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
+          {/* Main assistant panel — capped height so chat scrolls inside the card, not the whole page */}
+          <div className="lg:col-span-7 min-h-0 flex flex-col">
+            <div className="card flex flex-col overflow-hidden min-h-[480px] h-[min(720px,calc(100dvh-14rem))]">
               <JobAssistant initialPrompt={initialPrompt} />
             </div>
           </div>
@@ -59,6 +59,10 @@ export default function Assistant() {
                   ['Pedestrian exposure', 'High-ped areas may need additional channelization or barriers'],
                   ['Crew count', 'Multiple crews may need separate setups at different locations'],
                   ['Existing equipment', 'Tell the AI what you own so it only recommends what you need to rent'],
+                  [
+                    'Drawn work zone (map)',
+                    'Optional polygon on the map gives the AI area and perimeter to tune cone counts, tapers, and barriers',
+                  ],
                 ].map(([title, desc]) => (
                   <li key={title} className="flex items-start gap-2">
                     <span className="text-brand-400 mt-0.5 flex-shrink-0">·</span>

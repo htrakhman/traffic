@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Search, Phone, ChevronDown } from 'lucide-react'
+import { Menu, X, Search, Phone, ChevronDown, ShoppingCart } from 'lucide-react'
+import { useCart } from '../../context/CartContext'
 import { categories } from '../../data/categories'
 
 export default function Header() {
@@ -8,6 +9,7 @@ export default function Header() {
   const [isCatOpen, setIsCatOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
+  const { itemCount } = useCart()
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 20)
@@ -103,6 +105,18 @@ export default function Header() {
             <Link to="/browse" className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all">
               <Search size={18} />
             </Link>
+            <Link
+              to="/cart"
+              className="relative p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
+              aria-label={itemCount > 0 ? `Cart, ${itemCount} items` : 'Cart'}
+            >
+              <ShoppingCart size={18} />
+              {itemCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white">
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              )}
+            </Link>
             <Link to="/quote" className="btn-primary text-sm py-2 px-4">
               Get a Quote
             </Link>
@@ -135,6 +149,17 @@ export default function Header() {
             ))}
             <div className="border-t border-slate-800 pt-3 mt-3 space-y-1">
               <Link to="/browse" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Browse All</Link>
+              <Link to="/cart" className="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">
+                <span className="flex items-center gap-2">
+                  <ShoppingCart size={16} />
+                  Cart
+                </span>
+                {itemCount > 0 && (
+                  <span className="text-[10px] font-bold bg-brand-500 text-white px-2 py-0.5 rounded-full">
+                    {itemCount > 99 ? '99+' : itemCount}
+                  </span>
+                )}
+              </Link>
               <Link to="/assistant" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Job Planner</Link>
               <Link to="/packages" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Packages</Link>
             </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import {
   Star,
@@ -12,68 +12,179 @@ import {
   MapPin,
   Clock,
   Truck,
+  ShoppingCart,
 } from 'lucide-react'
+import { useCart } from '../context/CartContext'
 import { getProductBySlug, getProductsByCategory } from '../data/products'
 import { categories } from '../data/categories'
 import ProductCard from '../components/marketplace/ProductCard'
+
+const SITE_NAME = 'TrafficKit'
 
 export default function Product() {
   const { slug } = useParams<{ slug: string }>()
   const product = slug ? getProductBySlug(slug) : undefined
   const navigate = useNavigate()
+  const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [rentalDays, setRentalDays] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
-  // SEO meta tags
+  const category = useMemo(
+    () => (product ? categories.find((c) => c.slug === product.categorySlug) : undefined),
+    [product],
+  )
+
+  // SEO / AEO: meta tags, Open Graph, Twitter, canonical, JSON-LD @graph
   useEffect(() => {
     if (!product) return
-    const title = product.metaTitle ?? `Rent ${product.name} | Traffic Control Equipment Rental`
+    const origin = window.location.origin
+    const pagePath = `/product/${product.slug}`
+    const pageUrl = `${origin}${pagePath}`
+    const title = product.metaTitle ?? `Rent ${product.name} | ${SITE_NAME}`
     const desc =
       product.metaDescription ??
-      `Rent ${product.name} for $${product.dailyRate.toFixed(2)}/day. ${product.description}. Free delivery available. MUTCD-compliant traffic control equipment.`
+      `Rent ${product.name} for $${product.dailyRate.toFixed(2)}/day. ${product.description}. MUTCD-aware traffic control equipment rental with delivery.`
+    const ogImage = product.images[0] ?? product.imageUrl
+
     document.title = title
+
+    const upsertMeta = (selectorAttr: 'name' | 'property', key: string, content: string) => {
+      const sel = `meta[${selectorAttr}="${key}"]`
+      let el = document.head.querySelector<HTMLMetaElement>(sel)
+      if (!el) {
+        el = document.createElement('meta')
+        el.setAttribute(selectorAttr, key)
+        el.setAttribute('data-product-seo', '')
+        document.head.appendChild(el)
+      }
+      el.content = content
+    }
+
     let metaDesc = document.querySelector<HTMLMetaElement>('meta[name="description"]')
     if (!metaDesc) {
       metaDesc = document.createElement('meta')
       metaDesc.name = 'description'
+      metaDesc.setAttribute('data-product-seo', '')
       document.head.appendChild(metaDesc)
     }
     metaDesc.content = desc
-  }, [product])
+    metaDesc.setAttribute('data-product-seo', '')
 
-  // JSON-LD structured data
-  useEffect(() => {
-    if (!product) return
-    const existingScript = document.getElementById('product-jsonld')
-    if (existingScript) existingScript.remove()
+    upsertMeta('property', 'og:type', 'product')
+    upsertMeta('property', 'og:title', title)
+    upsertMeta('property', 'og:description', desc)
+    upsertMeta('property', 'og:url', pageUrl)
+    upsertMeta('property', 'og:image', ogImage)
+    upsertMeta('property', 'og:site_name', SITE_NAME)
+    upsertMeta('name', 'twitter:card', 'summary_large_image')
+    upsertMeta('name', 'twitter:title', title)
+    upsertMeta('name', 'twitter:description', desc)
+    upsertMeta('name', 'twitter:image', ogImage)
 
-    const productSchema = {
-      '@context': 'https://schema.org',
-      '@type': 'Product',
-      name: product.name,
-      image: product.images,
-      description: product.longDescription,
-      sku: product.sku,
-      offers: {
-        '@type': 'Offer',
-        availability: product.inStock
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
-        priceCurrency: 'USD',
-        price: product.dailyRate,
-        priceValidUntil: new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
-        seller: { '@type': 'Organization', name: 'TrafficRent' },
-      },
+    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"][data-product-seo]')
+    if (!canonical) {
+      canonical = document.createElement('link')
+      canonical.rel = 'canonical'
+      canonical.setAttribute('data-product-seo', '')
+      document.head.appendChild(canonical)
     }
+    canonical.href = pageUrl
 
-    const schemas: object[] = [productSchema]
+    const graph: object[] = [
+      {
+        '@type': 'Product',
+        '@id': `${pageUrl}#product`,
+        name: product.name,
+        description: product.longDescription,
+        sku: product.sku,
+        image: product.images,
+        url: pageUrl,
+        brand: { '@type': 'Brand', name: product.supplier },
+        category: category?.name,
+        offers: {
+          '@type': 'Offer',
+          url: pageUrl,
+          availability: product.inStock
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          priceCurrency: 'USD',
+          price: product.dailyRate,
+          priceValidUntil: new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
+          seller: {
+            '@type': 'Organization',
+            name: SITE_NAME,
+            url: origin,
+          },
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: product.dailyRate,
+            priceCurrency: 'USD',
+            unitText: 'DAY',
+          },
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Equipment',
+            item: `${origin}/browse`,
+          },
+          ...(category
+            ? [
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: category.name,
+                  item: `${origin}/category/${product.categorySlug}`,
+                } as const,
+              ]
+            : []),
+          {
+            '@type': 'ListItem',
+            position: category ? 3 : 2,
+            name: product.name,
+            item: pageUrl,
+          },
+        ],
+      },
+      {
+        '@type': 'HowTo',
+        '@id': `${pageUrl}#howto-rent`,
+        name: `How to rent ${product.name} from ${SITE_NAME}`,
+        description: `Request a quote, confirm dates, and schedule delivery or pickup for ${product.name}.`,
+        step: [
+          {
+            '@type': 'HowToStep',
+            position: 1,
+            name: 'Request a quote',
+            text: 'Add the item to your cart or submit a quote request with quantity and rental duration.',
+          },
+          {
+            '@type': 'HowToStep',
+            position: 2,
+            name: 'Confirm availability',
+            text: `${SITE_NAME} confirms inventory and final pricing, including any delivery fees.`,
+          },
+          {
+            '@type': 'HowToStep',
+            position: 3,
+            name: 'Deploy and return',
+            text: 'Equipment is delivered to your job site for the rental window, then picked up when the job is complete.',
+          },
+        ],
+      },
+    ]
 
     if (product.faqs && product.faqs.length > 0) {
-      schemas.push({
-        '@context': 'https://schema.org',
+      graph.push({
         '@type': 'FAQPage',
+        '@id': `${pageUrl}#faq`,
         mainEntity: product.faqs.map((f) => ({
           '@type': 'Question',
           name: f.question,
@@ -82,16 +193,23 @@ export default function Product() {
       })
     }
 
-    const script = document.createElement('script')
-    script.id = 'product-jsonld'
-    script.type = 'application/ld+json'
-    script.text = JSON.stringify(schemas)
-    document.head.appendChild(script)
+    const payload = { '@context': 'https://schema.org', '@graph': graph }
+
+    let script = document.getElementById('product-jsonld') as HTMLScriptElement | null
+    if (!script) {
+      script = document.createElement('script')
+      script.id = 'product-jsonld'
+      script.type = 'application/ld+json'
+      document.head.appendChild(script)
+    }
+    script.text = JSON.stringify(payload)
 
     return () => {
+      document.querySelectorAll('meta[data-product-seo]').forEach((n) => n.remove())
+      document.querySelector('link[rel="canonical"][data-product-seo]')?.remove()
       document.getElementById('product-jsonld')?.remove()
     }
-  }, [product])
+  }, [product, category])
 
   if (!product) {
     return (
@@ -106,7 +224,6 @@ export default function Product() {
     )
   }
 
-  const category = categories.find((c) => c.slug === product.categorySlug)
   const related = getProductsByCategory(product.categorySlug)
     .filter((p) => p.id !== product.id)
     .slice(0, 4)
@@ -158,7 +275,11 @@ export default function Product() {
                       selectedImage === i ? 'border-brand-500' : 'border-slate-700'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      alt={`${product.name}, gallery image ${i + 1} of ${product.images.length}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -225,7 +346,13 @@ export default function Product() {
             </div>
 
             <h1 className="text-3xl font-bold text-white mb-2">{product.name}</h1>
-            <p className="text-slate-400 leading-relaxed mb-6">{product.longDescription}</p>
+            <p className="text-slate-300 text-sm font-medium leading-relaxed mb-4">{product.description}</p>
+            <section aria-labelledby="product-overview-heading" className="mb-6">
+              <h2 id="product-overview-heading" className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                Product overview
+              </h2>
+              <p className="text-slate-400 leading-relaxed text-sm">{product.longDescription}</p>
+            </section>
 
             {/* Pricing */}
             <div className="card p-5 mb-6">
@@ -293,6 +420,18 @@ export default function Product() {
               </div>
 
               <button
+                type="button"
+                onClick={() => {
+                  addItem(product, quantity, rentalDays)
+                  navigate('/cart')
+                }}
+                disabled={!product.inStock}
+                className="w-full btn-secondary py-3 justify-center text-base mb-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <ShoppingCart size={18} />
+                Add to cart
+              </button>
+              <button
                 onClick={() => navigate('/quote', { state: { product, quantity, rentalDays } })}
                 disabled={!product.inStock}
                 className="w-full btn-primary py-3 justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
@@ -343,6 +482,62 @@ export default function Product() {
             </div>
           </div>
         </div>
+
+        {/* Manufacturer reference — transparency for SEO / AEO */}
+        <section aria-labelledby="mfg-heading" className="mt-12">
+          <h2 id="mfg-heading" className="text-xl font-bold text-white mb-4">
+            Manufacturer and catalog reference
+          </h2>
+          <div className="card p-6 border-slate-700/80">
+            <p className="text-slate-400 text-sm leading-relaxed mb-4">
+              We rent the same industry-standard models carried by national traffic distributors. The OEM SKU and
+              supplier link below match published specifications, drawings, and compliance listings for this equipment
+              family — useful when your traffic control plan or submittal needs primary-source documentation.
+            </p>
+            <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm border-t border-slate-800 pt-4">
+              <div>
+                <dt className="text-slate-500 font-medium mb-1">Rental SKU ({SITE_NAME})</dt>
+                <dd className="text-slate-200 font-mono">{product.sku}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 font-medium mb-1">Supplier catalog SKU</dt>
+                <dd className="text-slate-200 font-mono">{product.supplierSku}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-500 font-medium mb-1">Distributor</dt>
+                <dd className="text-slate-200">{product.supplier}</dd>
+              </div>
+            </dl>
+            <a
+              href={product.supplierUrl}
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-4 text-sm text-brand-400 hover:text-brand-300 transition-colors"
+            >
+              Open manufacturer product page
+              <ChevronRight size={14} />
+            </a>
+          </div>
+        </section>
+
+        {/* Topic tags — long-tail & AEO */}
+        {product.tags.length > 0 && (
+          <section aria-labelledby="tags-heading" className="mt-8">
+            <h2 id="tags-heading" className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">
+              Related topics
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {product.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700 text-slate-400 text-xs"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ── Specifications ── */}
         {Object.keys(product.specs).length > 0 && (

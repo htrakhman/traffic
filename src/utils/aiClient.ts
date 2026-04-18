@@ -1,14 +1,51 @@
-import type { JobDetails, RecommendationItem } from '../types'
+import type { JobDetails, MapArea, RecommendationItem, AIRecommendation } from '../types'
+import { products, getProductById } from '../data/products'
+import { normalizeRecommendationPricing } from './pricing'
 
 const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
 
-export interface AIRecommendation {
-  summary: string
-  items: RecommendationItem[]
-  totalDailyRate: number
-  estimatedDurationDays: number
-  setupNotes: string[]
-  disclaimer: string
+const CATALOG_PROMPT_LINES = products
+  .map(
+    (p) =>
+      `- ${p.id}: ${p.name} — $${p.dailyRate.toFixed(2)}/day retail (you MUST use this exact dailyRate in JSON)`,
+  )
+  .join('\n')
+
+/** One line for streaming cart instructions */
+const STREAM_CART_PRODUCT_RATES = products
+  .map((p) => `${p.id}: ${p.name} ($${p.dailyRate.toFixed(2)}/day)`)
+  .join(' | ')
+
+/** Human-readable lines for a drawn work zone (form job prompt + chat API suffix). */
+function mapAreaPromptLines(mapArea: MapArea): string[] {
+  const lines = [
+    `Work zone area (drawn on map): ${mapArea.areaLabel} (${Math.round(mapArea.areaFt2).toLocaleString()} sq ft)`,
+    `Work zone perimeter: ${mapArea.perimeterLabel} (${Math.round(mapArea.perimeterFt).toLocaleString()} ft)`,
+  ]
+  if (mapArea.address) lines.push(`Map location: ${mapArea.address}`)
+  return lines
+}
+
+function mapWorkZoneChatSuffix(mapArea: MapArea): string {
+  return `\n\n[Map work zone]\n${mapAreaPromptLines(mapArea).join('\n')}`
+}
+
+function augmentLastUserMessageWithMapArea(
+  messages: { role: 'user' | 'assistant'; content: string }[],
+  mapArea: MapArea | undefined,
+): { role: 'user' | 'assistant'; content: string }[] {
+  if (!mapArea || messages.length === 0) return messages
+  let lastUser = -1
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === 'user') {
+      lastUser = i
+      break
+    }
+  }
+  if (lastUser < 0) return messages
+  return messages.map((m, i) =>
+    i === lastUser ? { ...m, content: m.content + mapWorkZoneChatSuffix(mapArea) } : m,
+  )
 }
 
 function buildJobPrompt(jobDetails: Partial<JobDetails>, userMessage?: string): string {
@@ -29,29 +66,15 @@ function buildJobPrompt(jobDetails: Partial<JobDetails>, userMessage?: string): 
   if (jobDetails.location) parts.push(`Location: ${jobDetails.location}`)
   if (jobDetails.equipmentOwned) parts.push(`Equipment already owned: ${jobDetails.equipmentOwned}`)
   if (jobDetails.deliveryNeeded !== undefined) parts.push(`Delivery needed: ${jobDetails.deliveryNeeded ? 'yes' : 'no'}`)
-  if (jobDetails.mapArea) {
-    const a = jobDetails.mapArea
-    parts.push(`Work zone area (drawn on map): ${a.areaLabel} (${Math.round(a.areaFt2).toLocaleString()} sq ft)`)
-    parts.push(`Work zone perimeter: ${a.perimeterLabel} (${Math.round(a.perimeterFt).toLocaleString()} ft)`)
-    if (a.address) parts.push(`Map location: ${a.address}`)
-  }
+  if (jobDetails.mapArea) parts.push(...mapAreaPromptLines(jobDetails.mapArea))
 
   return parts.join('\n')
 }
 
 const SYSTEM_PROMPT = `You are TrafficKit's AI Work Zone Planner — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to rent for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) requirements, ATSSA standards, and common work zone setups.
 
-Your available rental equipment catalog includes:
-- Traffic Cones: 28" cones ($1.50/day), 36" cones ($2.25/day)
-- Channelizing Drums: 36" drums with retroreflective sheeting ($4.50/day)
-- Roll-Up Signs: Road Work Ahead ($5/day), Flagger Ahead ($5/day), One Lane Road ($5/day), and many others
-- Sign Stands: Telescoping aluminum ($4/day)
-- Barricades: Type III 8ft ($8/day), Type II ($5.50/day)
-- Water-Filled Barriers: 6ft sections ($18/day)
-- Arrow Boards: Trailer-mounted 15-light ($95/day), Truck-mounted 15-light ($65/day)
-- Message Boards: 3-line PCMS solar ($175/day)
-- Warning Lights: Type B flashing ($1.50/day)
-- LED Flares: 6-pack ($12/day)
+Your available rental equipment catalog (retail daily rental rates — already include our standard 50% markup on supplier-reference economics; copy dailyRate values exactly):
+${CATALOG_PROMPT_LINES}
 
 When a user describes their job, provide a structured equipment recommendation. Be specific about quantities. Consider:
 1. Advance warning area needs (signs, spacing based on speed)
@@ -82,22 +105,7 @@ Respond in valid JSON format:
   "disclaimer": "Standard disclaimer about planning guidance vs compliance requirements"
 }
 
-For the productId, use these exact IDs from the catalog:
-- prod-1: 28" Traffic Cone
-- prod-2: 36" Traffic Cone
-- prod-3: Channelizing Drum
-- prod-4: Roll-Up Sign — Road Work Ahead
-- prod-5: Roll-Up Sign — Flagger Ahead
-- prod-6: Telescoping Sign Stand
-- prod-7: Roll-Up Sign — One Lane Road
-- prod-8: Type III Barricade
-- prod-9: Type II Barricade
-- prod-10: Water-Filled Barrier
-- prod-11: Trailer-Mounted Arrow Board
-- prod-12: Truck-Mounted Arrow Board
-- prod-13: Portable Message Board
-- prod-14: Type B Warning Light
-- prod-15: LED Flare 6-Pack
+For the productId field, use only the prod-* IDs listed above. Each item's dailyRate in your JSON must match the catalog rate for that ID (do not invent or round to different numbers).
 
 Always remind users that recommendations are planning guidance only and that final requirements depend on project conditions and applicable state/local standards. Keep the tone contractor-friendly and practical.`
 
@@ -145,16 +153,43 @@ export async function getJobRecommendation(
   const jsonMatch = text.match(/\{[\s\S]*\}/)
   if (!jsonMatch) throw new Error('No JSON found in AI response')
 
-  return JSON.parse(jsonMatch[0]) as AIRecommendation
+  return normalizeRecommendationPricing(JSON.parse(jsonMatch[0]) as AIRecommendation)
 }
 
 export async function streamJobChat(
   messages: { role: 'user' | 'assistant'; content: string }[],
   onChunk: (chunk: string) => void,
   onDone: () => void,
+  options?: { mapArea?: MapArea },
 ): Promise<void> {
   if (!API_KEY) {
-    // Simulate streaming for demo
+    const messagesForDemo = augmentLastUserMessageWithMapArea(messages, options?.mapArea)
+    const lastUser = [...messagesForDemo].reverse().find((m) => m.role === 'user')?.content ?? ''
+    if (lastUser.includes('Here are my answers')) {
+      const rec = normalizeRecommendationPricing(
+        getDemoRecommendation({
+          jobType: 'paving',
+          roadType: 'arterial',
+          speedLimit: 45,
+          laneImpact: 'one_lane_closed',
+          workTime: 'day',
+          durationDays: 5,
+          pedestrianExposure: 'low',
+        }),
+      )
+      const demo = `Here's your recommended equipment setup.
+
+[CART_START]
+${JSON.stringify(rec)}
+[CART_END]`
+      for (const char of demo) {
+        onChunk(char)
+        await new Promise((r) => setTimeout(r, 3))
+      }
+      onDone()
+      return
+    }
+
     const demo = `Thanks for describing your job! To build an accurate equipment list, I need a couple more details.
 
 [Q: What type of road is this on?]
@@ -175,6 +210,8 @@ export async function streamJobChat(
     onDone()
     return
   }
+
+  const messagesForApi = augmentLastUserMessageWithMapArea(messages, options?.mapArea)
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -200,8 +237,10 @@ When you need info, ask ALL remaining questions at once using this EXACT format 
 Rules:
 - No intro sentences — go straight to the question blocks
 - Ask all needed questions in one message (road type, speed limit, lane impact, duration, day/night)
+- Users may answer every question in one reply (bulleted list); treat all answers as your new context — do not re-ask what they already answered
 - 3–5 options per question, include "Not sure" when useful
 - Once you have road type, speed limit, lane impact, duration, and day/night: OUTPUT A CART WIDGET (see below) — do NOT list equipment in plain text
+- If a user message ends with a [Map work zone] block (sq ft, perimeter ft, optional address), use those dimensions to calibrate cone/drum counts, taper and channelization length, and barrier quantities—do not ignore the drawn area when recommending
 
 WHEN READY TO RECOMMEND — output exactly this (a brief sentence, then the cart block):
 Here's your recommended equipment setup.
@@ -209,9 +248,9 @@ Here's your recommended equipment setup.
 {"summary":"...","items":[{"productId":"prod-X","productName":"...","category":"...","quantity":N,"rationale":"...","priority":"required|recommended|optional","dailyRate":X.XX}],"totalDailyRate":XX.XX,"estimatedDurationDays":N,"setupNotes":["..."],"disclaimer":"These recommendations are planning guidance only. Verify with your project engineer or state DOT."}
 [CART_END]
 
-Product IDs to use:
-prod-1: 28" Traffic Cone ($1.50/day) | prod-2: 36" Traffic Cone ($2.25/day) | prod-3: Channelizing Drum ($4.50/day) | prod-4: Roll-Up Sign — Road Work Ahead ($5/day) | prod-5: Roll-Up Sign — Flagger Ahead ($5/day) | prod-6: Telescoping Sign Stand ($4/day) | prod-7: Roll-Up Sign — One Lane Road ($5/day) | prod-8: Type III Barricade ($8/day) | prod-9: Type II Barricade ($5.50/day) | prod-10: Water-Filled Barrier ($18/day) | prod-11: Trailer-Mounted Arrow Board ($95/day) | prod-12: Truck-Mounted Arrow Board ($65/day) | prod-13: Portable Message Board ($175/day) | prod-14: Type B Warning Light ($1.50/day) | prod-15: LED Flare 6-Pack ($12/day)`,
-      messages,
+Product IDs and retail daily rates (use these exact dailyRate values in the cart JSON):
+${STREAM_CART_PRODUCT_RATES}`,
+      messages: messagesForApi,
     }),
   })
 
@@ -250,15 +289,18 @@ function getDemoRecommendation(
   jobDetails: Partial<JobDetails>,
   userMessage?: string,
 ): AIRecommendation {
+  const catalogDaily = (productId: string) => getProductById(productId)!.dailyRate
+
   const isHighSpeed = Number(jobDetails.speedLimit) >= 45
   const isNight = jobDetails.workTime === 'night' || jobDetails.workTime === 'both'
   const isLaneClosure = jobDetails.laneImpact === 'one_lane_closed' || jobDetails.laneImpact === 'two_lanes_closed'
   const isHighPed = jobDetails.pedestrianExposure === 'high' || jobDetails.pedestrianExposure === 'moderate'
   const days = Number(jobDetails.durationDays) || 3
 
+  const coneId = isHighSpeed ? 'prod-2' : 'prod-1'
   const items: RecommendationItem[] = [
     {
-      productId: isHighSpeed ? 'prod-2' : 'prod-1',
+      productId: coneId,
       productName: isHighSpeed ? '36" Traffic Cone' : '28" Traffic Cone',
       category: 'Cones & Drums',
       quantity: isLaneClosure ? 40 : 20,
@@ -266,7 +308,7 @@ function getDemoRecommendation(
         ? '36" cones required for roads 45+ mph per most state standards'
         : 'Standard 28" cones for lane and shoulder delineation',
       priority: 'required',
-      dailyRate: isHighSpeed ? 2.25 : 1.5,
+      dailyRate: catalogDaily(coneId),
     },
     {
       productId: 'prod-4',
@@ -275,7 +317,7 @@ function getDemoRecommendation(
       quantity: 2,
       rationale: 'Required advance warning signs at both approach directions',
       priority: 'required',
-      dailyRate: 5,
+      dailyRate: catalogDaily('prod-4'),
     },
     {
       productId: 'prod-6',
@@ -284,7 +326,7 @@ function getDemoRecommendation(
       quantity: 2,
       rationale: 'One stand per advance warning sign',
       priority: 'required',
-      dailyRate: 4,
+      dailyRate: catalogDaily('prod-6'),
     },
   ]
 
@@ -296,7 +338,7 @@ function getDemoRecommendation(
       quantity: 2,
       rationale: 'Required when lane is closed to alert approaching traffic',
       priority: 'required',
-      dailyRate: 5,
+      dailyRate: catalogDaily('prod-7'),
     })
     items.push({
       productId: 'prod-11',
@@ -305,7 +347,7 @@ function getDemoRecommendation(
       quantity: 1,
       rationale: 'DOT-required arrow board at the beginning of the lane taper',
       priority: 'required',
-      dailyRate: 95,
+      dailyRate: catalogDaily('prod-11'),
     })
   }
 
@@ -317,7 +359,7 @@ function getDemoRecommendation(
       quantity: 15,
       rationale: 'Drums with retroreflective sheeting provide superior visibility at night',
       priority: 'recommended',
-      dailyRate: 4.5,
+      dailyRate: catalogDaily('prod-3'),
     })
     items.push({
       productId: 'prod-14',
@@ -326,7 +368,7 @@ function getDemoRecommendation(
       quantity: 15,
       rationale: 'Flashing amber lights on drums and barricades required for night work',
       priority: 'required',
-      dailyRate: 1.5,
+      dailyRate: catalogDaily('prod-14'),
     })
   }
 
@@ -338,18 +380,16 @@ function getDemoRecommendation(
       quantity: 4,
       rationale: 'Pedestrian channelization and protection in high-foot-traffic areas',
       priority: 'recommended',
-      dailyRate: 8,
+      dailyRate: catalogDaily('prod-8'),
     })
   }
 
-  const totalDailyRate = items.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0)
-
   const jobDesc = userMessage ? `for your described job (${userMessage.slice(0, 60)}...)` : 'for your work zone'
 
-  return {
+  return normalizeRecommendationPricing({
     summary: `Here's a recommended traffic control setup ${jobDesc}. This configuration covers advance warning, channelization${isLaneClosure ? ', and lane closure guidance' : ''}${isNight ? ', plus night-work lighting' : ''}. Quantities are estimated — your traffic control supervisor should verify against local standards.`,
     items,
-    totalDailyRate,
+    totalDailyRate: 0,
     estimatedDurationDays: days,
     setupNotes: [
       `Advance warning signs should be placed ${isHighSpeed ? '1,000–1,500 ft' : '350–500 ft'} upstream of the work zone`,
@@ -359,5 +399,5 @@ function getDemoRecommendation(
     ],
     disclaimer:
       'These recommendations are planning guidance to help you estimate rental needs. Final traffic control plan requirements depend on actual project conditions, applicable state/local standards, and may require a certified Traffic Control Supervisor or TCP. Verify requirements with your project engineer or state DOT.',
-  }
+  })
 }

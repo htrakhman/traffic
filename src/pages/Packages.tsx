@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { Package, ArrowRight, Check } from 'lucide-react'
+import { Package, Check } from 'lucide-react'
 import { packages } from '../data/packages'
 import { products } from '../data/products'
+import { getPackageBundleDailyRate, getPackageListDailySubtotal } from '../utils/pricing'
 
 export default function Packages() {
   return (
@@ -27,6 +28,8 @@ export default function Packages() {
             ...item,
             product: products.find((p) => p.id === item.productId),
           })).filter((i) => i.product)
+          const listDaily = getPackageListDailySubtotal(pkg)
+          const bundleDaily = getPackageBundleDailyRate(pkg)
 
           return (
             <div key={pkg.id} className="card p-6 md:p-8">
@@ -71,12 +74,13 @@ export default function Packages() {
                 {/* Pricing + CTA */}
                 <div className="md:w-56 flex-shrink-0">
                   <div className="card p-5 text-center">
-                    <div className="text-3xl font-black text-white mb-1">
-                      ${pkg.totalDailyRate}
+                    <div className="text-xs text-slate-500 line-through mb-0.5">
+                      List ${listDaily.toFixed(0)}/day
                     </div>
-                    <div className="text-sm text-slate-400 mb-1">per day</div>
+                    <div className="text-3xl font-black text-white mb-1">${bundleDaily.toFixed(0)}</div>
+                    <div className="text-sm text-slate-400 mb-1">per day (bundle)</div>
                     <div className="text-xs text-slate-500 mb-5">
-                      {pkg.items.length} items · ${(pkg.totalDailyRate * 7).toFixed(0)}/week
+                      {pkg.items.length} items · ${(bundleDaily * 7).toFixed(0)}/week est.
                     </div>
                     <Link
                       to={`/quote?package=${pkg.id}`}

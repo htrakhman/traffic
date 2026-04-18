@@ -1,5 +1,9 @@
 import type { Product } from '../types'
 
+/**
+ * Rental rates in this file are **retail** prices (50% markup on supplier-reference economics).
+ * When adjusting reference costs, use `applyRetailMarkup` from `../utils/pricing` so daily / weekly / monthly tiers stay aligned.
+ */
 // Real product images sourced directly from supplier CDNs
 const cone28img = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp'
 const cone36img = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/traffic-cones-jbc-36in-black-base-10-lbs-orange-two-collars-safety-cone-construction-cone.webp'
@@ -1200,6 +1204,9 @@ export const getProductsByCategory = (categorySlug: string): Product[] =>
 
 export const getProductBySlug = (slug: string): Product | undefined =>
   products.find((p) => p.slug === slug)
+
+export const getProductById = (id: string): Product | undefined =>
+  products.find((p) => p.id === id)
 
 export const getFeaturedProducts = (): Product[] =>
   products.filter((p) => p.popular)

@@ -11,7 +11,6 @@ export const packages: Package[] = [
       { productId: 'prod-4', quantity: 2 },  // Road Work Ahead signs
       { productId: 'prod-6', quantity: 2 },  // Sign stands
     ],
-    totalDailyRate: 90,
     savingsPercent: 10,
     popular: true,
   },
@@ -27,7 +26,6 @@ export const packages: Package[] = [
       { productId: 'prod-6', quantity: 3 },  // Sign stands
       { productId: 'prod-11', quantity: 1 }, // Arrow board
     ],
-    totalDailyRate: 307.50,
     savingsPercent: 12,
     popular: true,
   },
@@ -43,7 +41,6 @@ export const packages: Package[] = [
       { productId: 'prod-11', quantity: 1 }, // Arrow board
       { productId: 'prod-14', quantity: 20 }, // Warning lights
     ],
-    totalDailyRate: 495,
     savingsPercent: 15,
     popular: false,
   },
@@ -60,7 +57,6 @@ export const packages: Package[] = [
       { productId: 'prod-13', quantity: 1 }, // Message board
       { productId: 'prod-14', quantity: 10 }, // Warning lights
     ],
-    totalDailyRate: 832.50,
     savingsPercent: 18,
     popular: false,
   },

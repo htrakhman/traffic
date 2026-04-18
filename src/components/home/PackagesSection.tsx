@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Package, ArrowRight, Sparkles } from 'lucide-react'
 import { packages } from '../../data/packages'
+import { getPackageBundleDailyRate } from '../../utils/pricing'
 
 export default function PackagesSection() {
   const featured = packages.filter((p) => p.popular)
@@ -24,7 +25,9 @@ export default function PackagesSection() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {featured.map((pkg) => (
+          {featured.map((pkg) => {
+            const bundleDaily = getPackageBundleDailyRate(pkg)
+            return (
             <div key={pkg.id} className="card p-6 hover:border-slate-700 transition-all duration-200">
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div>
@@ -42,7 +45,7 @@ export default function PackagesSection() {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-2xl font-bold text-white">${pkg.totalDailyRate}<span className="text-sm font-normal text-slate-400">/day</span></div>
+                  <div className="text-2xl font-bold text-white">${bundleDaily.toFixed(0)}<span className="text-sm font-normal text-slate-400">/day</span></div>
                   <div className="text-xs text-slate-500">{pkg.items.length} items included</div>
                 </div>
                 <div className="flex gap-2">
@@ -52,7 +55,8 @@ export default function PackagesSection() {
                 </div>
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* AI upsell */}

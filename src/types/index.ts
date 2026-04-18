@@ -58,7 +58,7 @@ export interface Package {
   description: string
   useCase: string
   items: { productId: string; quantity: number }[]
-  totalDailyRate: number
+  /** Bundle discount off the sum of included items’ retail daily rates */
   savingsPercent: number
   popular: boolean
 }
@@ -136,6 +136,16 @@ export interface RecommendationItem {
   rationale: string
   priority: 'required' | 'recommended' | 'optional'
   dailyRate: number
+}
+
+/** AI / cart recommendation payload (aligned with catalog retail `dailyRate` values). */
+export interface AIRecommendation {
+  summary: string
+  items: RecommendationItem[]
+  totalDailyRate: number
+  estimatedDurationDays: number
+  setupNotes: string[]
+  disclaimer: string
 }
 
 export interface Recommendation {

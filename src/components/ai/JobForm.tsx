@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Sparkles, Loader2, Map } from 'lucide-react'
-import type { JobDetails, JobType, RoadType, LaneImpact, WorkTime, PedestrianExposure } from '../../types'
+import type { JobDetails, JobType, RoadType, LaneImpact, WorkTime, PedestrianExposure, MapArea } from '../../types'
 import MapAreaSelector from './MapAreaSelector'
 
 interface Props {
   onSubmit: (details: JobDetails) => void
   isLoading: boolean
+  mapArea?: MapArea
+  onMapAreaChange: (area: MapArea | undefined) => void
 }
 
 const defaultDetails: JobDetails = {
@@ -24,7 +26,7 @@ const defaultDetails: JobDetails = {
   deliveryNeeded: true,
 }
 
-export default function JobForm({ onSubmit, isLoading }: Props) {
+export default function JobForm({ onSubmit, isLoading, mapArea, onMapAreaChange }: Props) {
   const [details, setDetails] = useState<JobDetails>(defaultDetails)
 
   const set = <K extends keyof JobDetails>(key: K, value: JobDetails[K]) =>
@@ -32,7 +34,7 @@ export default function JobForm({ onSubmit, isLoading }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit(details)
+    onSubmit({ ...details, mapArea })
   }
 
   return (
@@ -214,10 +216,7 @@ export default function JobForm({ onSubmit, isLoading }: Props) {
           <Map size={13} className="text-brand-400" />
           Draw your work zone on the map <span className="text-slate-600 font-normal">(optional)</span>
         </label>
-        <MapAreaSelector
-          value={details.mapArea}
-          onChange={(area) => setDetails((d) => ({ ...d, mapArea: area }))}
-        />
+        <MapAreaSelector value={mapArea} onChange={onMapAreaChange} />
       </div>
 
       {/* Equipment owned */}

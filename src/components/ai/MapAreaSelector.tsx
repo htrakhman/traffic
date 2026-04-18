@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Loader } from '@googlemaps/js-api-loader'
+import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
 import { MapPin, Trash2, PenLine, RotateCcw } from 'lucide-react'
 import type { MapArea } from '../../types'
 
@@ -106,14 +106,13 @@ export default function MapAreaSelector({ value, onChange }: Props) {
     }
     setStatus('loading')
 
-    const loader = new Loader({
-      apiKey: MAPS_KEY,
-      version: 'weekly',
-      libraries: ['drawing', 'geometry', 'places'],
+    setOptions({
+      key: MAPS_KEY,
+      v: 'weekly',
+      libraries: ['drawing', 'geometry'],
     })
 
-    loader
-      .load()
+    Promise.all([importLibrary('maps'), importLibrary('drawing'), importLibrary('geometry')])
       .then(() => {
         if (!containerRef.current) return
 
