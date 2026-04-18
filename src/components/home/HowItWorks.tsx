@@ -15,7 +15,7 @@ const steps = [
     icon: Package,
     title: 'Get a recommendation',
     description:
-      'The AI recommends equipment types, estimated quantities, and suggested packages based on your job details. You can adjust before requesting.',
+      'The AI recommends equipment types and estimated quantities based on your job details. You can adjust before requesting.',
     color: 'amber',
   },
   {

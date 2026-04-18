@@ -48,6 +48,25 @@ export default function ProductCard({ product, index = 0 }: Props) {
           <h3 className="font-semibold text-slate-200 group-hover:text-white text-sm leading-snug transition-colors line-clamp-2">
             {product.name}
           </h3>
+          {(product.colorLabel || product.finishLabel) && (
+            <div className="flex flex-wrap gap-1 mt-1.5">
+              {product.colorLabel && (
+                <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
+                  {product.colorLabel}
+                </span>
+              )}
+              {product.finishLabel && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  {product.finishLabel}
+                </span>
+              )}
+            </div>
+          )}
+          {product.colorVariants && product.colorVariants.length > 1 && (
+            <p className="text-[10px] text-brand-400 mt-1 font-medium">
+              {product.colorVariants.length} color / SKU options
+            </p>
+          )}
           <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
             {product.description}
           </p>

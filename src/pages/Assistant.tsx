@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Sparkles, AlertCircle } from 'lucide-react'
 import JobAssistant from '../components/ai/JobAssistant'
@@ -5,6 +6,7 @@ import JobAssistant from '../components/ai/JobAssistant'
 export default function Assistant() {
   const [searchParams] = useSearchParams()
   const initialPrompt = searchParams.get('q') ?? undefined
+  const [plannerMapBoost, setPlannerMapBoost] = useState(false)
 
   return (
     <main className="min-h-screen pt-20 bg-slate-950">
@@ -37,8 +39,14 @@ export default function Assistant() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
           {/* Main assistant panel — capped height so chat scrolls inside the card, not the whole page */}
           <div className="lg:col-span-7 min-h-0 flex flex-col">
-            <div className="card flex flex-col overflow-hidden min-h-[480px] h-[min(720px,calc(100dvh-14rem))]">
-              <JobAssistant initialPrompt={initialPrompt} />
+            <div
+              className={`card flex flex-col overflow-hidden transition-[height,min-height] duration-200 ease-out ${
+                plannerMapBoost
+                  ? 'min-h-[520px] h-[min(90dvh,calc(100dvh-8rem))]'
+                  : 'min-h-[480px] h-[min(720px,calc(100dvh-14rem))]'
+              }`}
+            >
+              <JobAssistant initialPrompt={initialPrompt} onMapExpandedLayoutChange={setPlannerMapBoost} />
             </div>
           </div>
 

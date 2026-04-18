@@ -15,6 +15,7 @@ import {
   ShoppingCart,
 } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import { useCatalogSync } from '../context/CatalogSyncContext'
 import { getProductBySlug, getProductsByCategory } from '../data/products'
 import { categories } from '../data/categories'
 import ProductCard from '../components/marketplace/ProductCard'
@@ -22,6 +23,7 @@ import ProductCard from '../components/marketplace/ProductCard'
 const SITE_NAME = 'TrafficKit'
 
 export default function Product() {
+  const { tick } = useCatalogSync()
   const { slug } = useParams<{ slug: string }>()
   const product = slug ? getProductBySlug(slug) : undefined
   const navigate = useNavigate()
@@ -35,6 +37,13 @@ export default function Product() {
     () => (product ? categories.find((c) => c.slug === product.categorySlug) : undefined),
     [product],
   )
+
+  const related = useMemo(() => {
+    if (!product) return []
+    return getProductsByCategory(product.categorySlug)
+      .filter((p) => p.id !== product.id)
+      .slice(0, 4)
+  }, [product, tick])
 
   // SEO / AEO: meta tags, Open Graph, Twitter, canonical, JSON-LD @graph
   useEffect(() => {
@@ -224,9 +233,6 @@ export default function Product() {
     )
   }
 
-  const related = getProductsByCategory(product.categorySlug)
-    .filter((p) => p.id !== product.id)
-    .slice(0, 4)
   const totalCost = product.dailyRate * quantity * rentalDays
 
   return (
@@ -347,6 +353,59 @@ export default function Product() {
 
             <h1 className="text-3xl font-bold text-white mb-2">{product.name}</h1>
             <p className="text-slate-300 text-sm font-medium leading-relaxed mb-4">{product.description}</p>
+
+            {(product.colorLabel || product.finishLabel) && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {product.colorLabel && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-600 text-slate-300 text-xs">
+                    Color: {product.colorLabel}
+                  </span>
+                )}
+                {product.finishLabel && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-500/25 text-amber-200 text-xs">
+                    Sheeting: {product.finishLabel}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {product.colorVariants && product.colorVariants.length > 1 && (
+              <div className="mb-6" role="group" aria-label="Color and SKU options">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                  Colorways & SKUs
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {product.colorVariants.map((v) => {
+                    const active = v.slug === product.slug
+                    return (
+                      <Link
+                        key={v.slug}
+                        to={`/product/${v.slug}`}
+                        className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl border text-sm transition-colors ${
+                          active
+                            ? 'bg-brand-500/25 border-brand-400/60 text-white shadow-lg shadow-brand-500/10'
+                            : 'bg-slate-800/80 border-slate-600 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
+                        }`}
+                      >
+                        {v.swatch && (
+                          <span
+                            className="w-4 h-4 rounded-full border border-white/25 shadow-inner shrink-0"
+                            style={{ backgroundColor: v.swatch }}
+                            aria-hidden
+                          />
+                        )}
+                        <span>{v.label}</span>
+                        <span className="text-xs text-slate-500 tabular-nums">${v.dailyRate.toFixed(2)}/day</span>
+                      </Link>
+                    )
+                  })}
+                </div>
+                <p className="text-xs text-slate-500 mt-2">
+                  Same product line as Traffic Safety Store; each SKU is a separate rental listing with its own rate.
+                </p>
+              </div>
+            )}
+
             <section aria-labelledby="product-overview-heading" className="mb-6">
               <h2 id="product-overview-heading" className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
                 Product overview
@@ -490,9 +549,9 @@ export default function Product() {
           </h2>
           <div className="card p-6 border-slate-700/80">
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              We rent the same industry-standard models carried by national traffic distributors. The OEM SKU and
-              supplier link below match published specifications, drawings, and compliance listings for this equipment
-              family — useful when your traffic control plan or submittal needs primary-source documentation.
+              {product.supplierUrl
+                ? 'We rent industry-standard models. The OEM catalog SKU and manufacturer link below help when your traffic control plan or submittal needs primary-source documentation.'
+                : 'We rent industry-standard models. The OEM catalog SKU below identifies the equipment family for your submittal — contact us if you need manufacturer cut sheets or compliance letters.'}
             </p>
             <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm border-t border-slate-800 pt-4">
               <div>
@@ -508,15 +567,17 @@ export default function Product() {
                 <dd className="text-slate-200">{product.supplier}</dd>
               </div>
             </dl>
-            <a
-              href={product.supplierUrl}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-4 text-sm text-brand-400 hover:text-brand-300 transition-colors"
-            >
-              Open manufacturer product page
-              <ChevronRight size={14} />
-            </a>
+            {product.supplierUrl ? (
+              <a
+                href={product.supplierUrl}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-4 text-sm text-brand-400 hover:text-brand-300 transition-colors"
+              >
+                Open manufacturer product page
+                <ChevronRight size={14} />
+              </a>
+            ) : null}
           </div>
         </section>
 

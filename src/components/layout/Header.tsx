@@ -91,8 +91,8 @@ export default function Header() {
             <Link to="/assistant" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
               Job Planner
             </Link>
-            <Link to="/packages" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
-              Packages
+            <Link to="/planner" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
+              Site map
             </Link>
           </nav>
 
@@ -161,7 +161,7 @@ export default function Header() {
                 )}
               </Link>
               <Link to="/assistant" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Job Planner</Link>
-              <Link to="/packages" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Packages</Link>
+              <Link to="/planner" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Site map</Link>
             </div>
             <div className="border-t border-slate-800 pt-3 mt-3">
               <Link to="/quote" className="btn-primary w-full justify-center">Get a Quote</Link>

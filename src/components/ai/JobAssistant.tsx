@@ -1,11 +1,25 @@
-import { useState, useRef, useEffect } from 'react'
-import { Sparkles, Send, Upload, X, RefreshCw, AlertCircle, MapPin, ChevronDown } from 'lucide-react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { extractGeocodeQueryFromMessage, parseLatLngFromMessage } from '../../utils/locationParse'
+import {
+  Sparkles,
+  Send,
+  Upload,
+  X,
+  RefreshCw,
+  AlertCircle,
+  MapPin,
+  MessageSquare,
+  Maximize2,
+  Minimize2,
+  UnfoldVertical,
+  FoldVertical,
+} from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
 import { normalizeRecommendationPricing } from '../../utils/pricing'
 import type { ChatMessage, JobDetails, AIRecommendation, MapArea } from '../../types'
 import CartWidget from './CartWidget'
 import JobForm from './JobForm'
-import MapAreaSelector from './MapAreaSelector'
+import MapAreaSelector, { type MapAreaSelectorHandle } from './MapAreaSelector'
 
 type Segment =
   | { type: 'text'; content: string }
@@ -65,12 +79,22 @@ function parseSegments(content: string): Segment[] {
 
 interface Props {
   initialPrompt?: string
+  /** Tighter empty state when the planner is embedded (e.g. homepage) so it does not repeat the page headline. */
+  embedded?: boolean
+  /**
+   * Fires when “larger map” (in-panel) is on so the host card can grow — otherwise the map stays ~short
+   * inside fixed-height shells (Hero / Assistant).
+   */
+  onMapExpandedLayoutChange?: (expanded: boolean) => void
 }
 
 type Mode = 'chat' | 'form'
 
-export default function JobAssistant({ initialPrompt }: Props) {
+export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLayoutChange }: Props) {
   const [mode, setMode] = useState<Mode>('chat')
+  /** Taller map inside the planner card (still on the Job Planner page — not browser fullscreen). */
+  const [mapExpanded, setMapExpanded] = useState(false)
+  const [mapPanelFullscreen, setMapPanelFullscreen] = useState(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState(initialPrompt ?? '')
   const [isStreaming, setIsStreaming] = useState(false)
@@ -79,7 +103,6 @@ export default function JobAssistant({ initialPrompt }: Props) {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [mapArea, setMapArea] = useState<MapArea | undefined>()
-  const [mapSectionOpen, setMapSectionOpen] = useState(false)
   /** `${assistantMsgIndex}-${segmentIndex}` → selected option (batch-sent together per assistant message) */
   const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(new Map())
   /** Assistant message indices whose Q&A batch was already submitted */
@@ -87,6 +110,24 @@ export default function JobAssistant({ initialPrompt }: Props) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const mapSelectorRef = useRef<MapAreaSelectorHandle>(null)
+  const mapPanelRef = useRef<HTMLDivElement>(null)
+
+  const mapUsesExtraHeight = mapPanelFullscreen || mapExpanded
+  const shrinkChatForTallMap = mode === 'chat' && mapExpanded && !mapPanelFullscreen
+
+  useLayoutEffect(() => {
+    onMapExpandedLayoutChange?.(Boolean(mapExpanded && !mapPanelFullscreen))
+    return () => {
+      onMapExpandedLayoutChange?.(false)
+    }
+  }, [mapExpanded, mapPanelFullscreen, onMapExpandedLayoutChange])
+
+  useEffect(() => {
+    const syncFs = () => setMapPanelFullscreen(document.fullscreenElement === mapPanelRef.current)
+    document.addEventListener('fullscreenchange', syncFs)
+    return () => document.removeEventListener('fullscreenchange', syncFs)
+  }, [])
 
   const scrollPanelToBottom = () => {
     const el = scrollContainerRef.current
@@ -111,7 +152,18 @@ export default function JobAssistant({ initialPrompt }: Props) {
     if (!text.trim() || isStreaming) return
     setError(null)
 
-    const userMsg: ChatMessage = { role: 'user', content: text.trim(), timestamp: new Date() }
+    const trimmed = text.trim()
+    const coords = parseLatLngFromMessage(trimmed)
+    if (coords) {
+      mapSelectorRef.current?.flyTo(coords.lat, coords.lng, 17)
+    } else {
+      const place = extractGeocodeQueryFromMessage(trimmed)
+      if (place) {
+        await mapSelectorRef.current?.searchAndFocus(place)
+      }
+    }
+
+    const userMsg: ChatMessage = { role: 'user', content: trimmed, timestamp: new Date() }
     const newMessages = [...messages, userMsg]
     setMessages(newMessages)
     setInput('')
@@ -213,7 +265,10 @@ export default function JobAssistant({ initialPrompt }: Props) {
     setChoiceSelections(new Map())
     setLockedQuestionMessages(new Set())
     setMapArea(undefined)
-    setMapSectionOpen(false)
+    setMapExpanded(false)
+    if (mapPanelRef.current && document.fullscreenElement === mapPanelRef.current) {
+      void document.exitFullscreen().catch(() => {})
+    }
   }
 
   const isEmpty = messages.length === 0 && !recommendation
@@ -256,7 +311,13 @@ export default function JobAssistant({ initialPrompt }: Props) {
       {/* Content — scroll stays here; no scrollIntoView (avoids scrolling the whole page on each token) */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 min-h-0 overflow-y-auto overscroll-y-contain"
+        className={`min-h-0 overflow-y-auto overscroll-y-contain ${
+          shrinkChatForTallMap
+            ? embedded
+              ? 'max-h-[min(130px,24svh)] shrink-0 sm:max-h-[min(170px,28svh)]'
+              : 'max-h-[min(200px,32svh)] shrink-0 sm:max-h-[min(240px,36svh)]'
+            : 'flex-1'
+        }`}
       >
         {/* Guided form */}
         {mode === 'form' && (
@@ -274,14 +335,23 @@ export default function JobAssistant({ initialPrompt }: Props) {
         {mode === 'chat' && (
           <div className="p-4">
             {isEmpty && !isStreaming && (
-              <div className="text-center py-8">
-                <div className="w-14 h-14 bg-brand-500/10 border border-brand-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Sparkles size={24} className="text-brand-400" />
-                </div>
-                <h3 className="font-semibold text-white mb-2">Work Zone AI Planner</h3>
-                <p className="text-sm text-slate-400 max-w-sm mx-auto mb-6 leading-relaxed">
-                  Describe your job in plain English and I'll recommend the traffic control equipment and quantities you'll likely need.
-                </p>
+              <div className={`text-center ${embedded ? 'py-5' : 'py-8'}`}>
+                {!embedded && (
+                  <>
+                    <div className="w-14 h-14 bg-brand-500/10 border border-brand-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <Sparkles size={24} className="text-brand-400" />
+                    </div>
+                    <h3 className="font-semibold text-white mb-2">Work Zone AI Planner</h3>
+                    <p className="text-sm text-slate-400 max-w-sm mx-auto mb-6 leading-relaxed">
+                      Outline your work zone on the map below the chat, then describe the job — I'll recommend equipment and quantities.
+                    </p>
+                  </>
+                )}
+                {embedded && (
+                  <p className="text-sm text-slate-500 max-w-md mx-auto mb-4 leading-relaxed">
+                    Mark the site on the map under the chat, type your job, or try a sample below.
+                  </p>
+                )}
                 <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
                   {[
                     'Paving crew, one lane closed, 45 mph road, 5 days',
@@ -467,25 +537,91 @@ export default function JobAssistant({ initialPrompt }: Props) {
 
       {/* Input area — only show in chat mode */}
       {mode === 'chat' && (
-        <div className="p-4 border-t border-slate-800 space-y-3">
-          <div>
-            <button
-              type="button"
-              onClick={() => setMapSectionOpen((o) => !o)}
-              className="flex w-full items-center justify-between gap-2 rounded-lg border border-slate-700 bg-slate-800/40 px-3 py-2 text-left text-xs font-medium text-slate-300 hover:border-slate-600 hover:bg-slate-800/70 transition-colors"
-            >
-              <span className="flex items-center gap-2">
-                <MapPin size={14} className="text-brand-400 flex-shrink-0" />
-                Work zone on map
-                {mapArea ? <span className="text-brand-400/90 font-normal">· drawn</span> : <span className="text-slate-500 font-normal">(optional)</span>}
+        <div
+          className={`p-3 sm:p-4 border-t border-slate-800 ${
+            mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col gap-2.5' : 'space-y-2.5'
+          }`}
+        >
+          <div
+            ref={mapPanelRef}
+            className={`rounded-xl border border-slate-700/90 bg-slate-900/50 overflow-hidden shadow-inner [&:fullscreen]:rounded-none [&:fullscreen]:bg-slate-950 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:h-full [&:fullscreen]:min-h-0 ${
+              mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col' : ''
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 border-b border-slate-800 bg-slate-800/40">
+              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wide min-w-0">
+                <MapPin size={12} className="text-brand-400 flex-shrink-0" />
+                <span className="truncate">Work zone map</span>
               </span>
-              <ChevronDown size={16} className={`text-slate-500 flex-shrink-0 transition-transform ${mapSectionOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {mapSectionOpen && (
-              <div className="mt-2">
-                <MapAreaSelector value={mapArea} onChange={setMapArea} />
+              <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  title={
+                    mapExpanded
+                      ? 'Use default map height'
+                      : 'Larger map (stays on this page — drag and draw as usual)'
+                  }
+                  aria-pressed={mapExpanded}
+                  disabled={mapPanelFullscreen}
+                  onClick={() => setMapExpanded((v) => !v)}
+                  className={`rounded-md border border-slate-700/90 p-1 transition-colors ${
+                    mapPanelFullscreen
+                      ? 'cursor-not-allowed opacity-35 text-slate-500'
+                      : mapExpanded
+                        ? 'bg-slate-600 text-white hover:bg-slate-500'
+                        : 'bg-slate-900/70 text-slate-400 hover:text-white hover:bg-slate-700/80'
+                  }`}
+                >
+                  {mapExpanded ? <FoldVertical size={13} /> : <UnfoldVertical size={13} />}
+                </button>
+                <button
+                  type="button"
+                  title={mapPanelFullscreen ? 'Exit full screen' : 'Full screen map'}
+                  onClick={() => {
+                    void (async () => {
+                      const el = mapPanelRef.current
+                      if (!el) return
+                      try {
+                        if (document.fullscreenElement) await document.exitFullscreen()
+                        else {
+                          await el.requestFullscreen()
+                        }
+                      } catch {
+                        /* unsupported or denied */
+                      }
+                    })()
+                  }}
+                  className="rounded-md border border-slate-700/90 bg-slate-900/70 p-1 text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors"
+                >
+                  {mapPanelFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                </button>
+                {mapArea ? (
+                  <span
+                    className="hidden lg:inline text-[11px] text-brand-400/90 truncate max-w-[5rem]"
+                    title={mapArea.address}
+                  >
+                    Drawn
+                  </span>
+                ) : (
+                  <span className="hidden lg:inline text-[11px] text-slate-500 truncate max-w-[5rem]">Outline</span>
+                )}
               </div>
-            )}
+            </div>
+            <div
+              className={`px-2 pb-2 pt-2 ${
+                mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col min-h-0' : ''
+              }`}
+            >
+              <MapAreaSelector
+                ref={mapSelectorRef}
+                value={mapArea}
+                onChange={setMapArea}
+                variant="compact"
+                fillHeight={mapUsesExtraHeight}
+                tallFrame={mapPanelFullscreen}
+                fillHeightBoost={mapExpanded && !mapPanelFullscreen}
+              />
+            </div>
           </div>
 
           {/* Image preview */}
@@ -504,38 +640,51 @@ export default function JobAssistant({ initialPrompt }: Props) {
             </div>
           )}
 
-          <div className="flex gap-2 items-end">
-            <div className="flex-1 relative bg-slate-800 border border-slate-700 rounded-xl focus-within:border-brand-500/50 transition-colors">
-              <textarea
-                ref={textareaRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Describe your job or ask a question..."
-                rows={1}
-                className="w-full px-3 py-3 bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none resize-none max-h-32"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    void sendMessage(input).catch(() => {})
-                  }
-                }}
-              />
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute right-2 bottom-2.5 p-1.5 text-slate-500 hover:text-slate-300 rounded-lg hover:bg-slate-700 transition-all"
-                title="Upload job site photo"
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-1.5 px-0.5">
+              <MessageSquare size={12} className="shrink-0 text-brand-400/90" aria-hidden />
+              <label
+                htmlFor="job-assistant-composer"
+                className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-brand-400/90"
               >
-                <Upload size={14} />
+                Message
+              </label>
+              <span className="hidden min-[380px]:inline text-[10px] text-slate-500">Goes to assistant with your outline</span>
+            </div>
+            <div className="flex gap-2 items-end">
+              <div className="flex-1 relative rounded-2xl border border-brand-500/25 bg-slate-950/85 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] focus-within:border-brand-500/50 focus-within:ring-1 focus-within:ring-brand-500/20 transition-colors">
+                <textarea
+                  id="job-assistant-composer"
+                  ref={textareaRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Optional notes for the assistant — sends with your drawn zone. A place name in the text still moves the map when you send."
+                  rows={1}
+                  className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none resize-none max-h-32"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      void sendMessage(input).catch(() => {})
+                    }
+                  }}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="absolute right-2.5 bottom-2.5 p-1.5 text-slate-500 hover:text-slate-300 rounded-xl hover:bg-slate-800/90 transition-all"
+                  title="Upload job site photo"
+                >
+                  <Upload size={14} />
+                </button>
+              </div>
+              <button
+                type="button"
+                onClick={() => void sendMessage(input).catch(() => {})}
+                disabled={!input.trim() || isStreaming}
+                className="flex-shrink-0 w-10 h-10 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-brand-500/25"
+              >
+                <Send size={16} />
               </button>
             </div>
-            <button
-              type="button"
-              onClick={() => void sendMessage(input).catch(() => {})}
-              disabled={!input.trim() || isStreaming}
-              className="flex-shrink-0 w-10 h-10 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-xl flex items-center justify-center transition-all shadow-lg shadow-brand-500/25"
-            >
-              <Send size={16} />
-            </button>
           </div>
           <input
             ref={fileInputRef}

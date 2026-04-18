@@ -17,7 +17,8 @@ import {
   Maximize2,
 } from 'lucide-react'
 import type { AIRecommendation, RecommendationItem } from '../../types'
-import { products, getProductById } from '../../data/products'
+import { getProducts, getProductById } from '../../data/products'
+import { useCatalogSync } from '../../context/CatalogSyncContext'
 import type { Product } from '../../types'
 
 interface Props {
@@ -65,6 +66,7 @@ function productToLine(p: Product): RecommendationItem {
 }
 
 export default function CartWidget({ recommendation }: Props) {
+  const { tick } = useCatalogSync()
   const [items, setItems] = useState<RecommendationItem[]>(recommendation.items)
   const [showNotes, setShowNotes] = useState(false)
   const [removed, setRemoved] = useState<Set<string>>(new Set())
@@ -79,9 +81,10 @@ export default function CartWidget({ recommendation }: Props) {
   const estimatedTotal = totalDailyRate * recommendation.estimatedDurationDays
 
   const filteredProducts = useMemo(() => {
+    const catalog = getProducts()
     const q = search.trim().toLowerCase()
-    if (!q) return products.slice(0, 8)
-    return products
+    if (!q) return catalog.slice(0, 8)
+    return catalog
       .filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
@@ -89,7 +92,7 @@ export default function CartWidget({ recommendation }: Props) {
           p.tags.some((t) => t.toLowerCase().includes(q)),
       )
       .slice(0, 12)
-  }, [search])
+  }, [search, tick])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

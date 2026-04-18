@@ -1,0 +1,5 @@
+# Same-origin proxy for Google Roads REST (avoids browser CORS on roads.googleapis.com).
+[[redirects]]
+from = "/roads-api/*"
+to = "https://roads.googleapis.com/:splat"
+status = 200

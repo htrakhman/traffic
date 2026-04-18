@@ -4,29 +4,28 @@ import type { Product } from '../types'
  * Rental rates in this file are **retail** prices (50% markup on supplier-reference economics).
  * When adjusting reference costs, use `applyRetailMarkup` from `../utils/pricing` so daily / weekly / monthly tiers stay aligned.
  */
-// Real product images sourced directly from supplier CDNs
-const cone28img = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp'
-const cone36img = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/traffic-cones-jbc-36in-black-base-10-lbs-orange-two-collars-safety-cone-construction-cone.webp'
-const drumImg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/traffic-drum-with-6in-collars-and-tire-ring-base-high-intensity-hi-drum6hitire-construction-barrel.webp'
-const signRWAimg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp'
-const signFLGimg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-flagger-ahead-text-hip-roll-up-sign-mutcd.webp'
-const signOLRimg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-non-roll-up-sign-one-lane-road-ahead-hip-roll-up-sign-mutcd.webp'
-const signStandImg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/cortina-rigid-or-roll-up-tri-pod-sign-stand-hip-roll-up-sign-mutcd.webp'
-const barT3img = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp'
-const barT2img = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/h-by-24in-w-folding-plastic-type-ii-barricade-high-intensity-sheeting-faa-water-filled-barricade.webp'
-const barWFimg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/yodock-2001mb-barrier-orange-without-optional-fence-water-filled-barricade.webp'
+/** Hosted under `public/images/catalog/` — replace files anytime with your own product photography. */
+const cone28img = '/images/catalog/cone.jpg'
+const cone36img = '/images/catalog/cone-36.jpg'
+const drumImg = '/images/catalog/drum.jpg'
+const signRWAimg = '/images/catalog/sign-road-work.jpg'
+const signFLGimg = '/images/catalog/sign-flagger.jpg'
+const signOLRimg = '/images/catalog/sign-one-lane.jpg'
+const signStandImg = '/images/catalog/sign-stand.jpg'
+const barT3img = '/images/catalog/barricade-type3.jpg'
+const barT2img = '/images/catalog/barricade-type2.jpg'
+const barWFimg = '/images/catalog/water-barrier.jpg'
 const arrowTrailerImg = 'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg'
 const arrowTruckImg = 'https://www.wanco.com/wp-content/uploads/2017/02/featr-prod-arrowbd-truck.jpg'
-const msgBoardImg = 'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png'
-const flasherImg = 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/economy-solar-assist-type-b-flasher-red.webp'
-const flareImg = 'https://www.superbrightleds.com/media/catalog/product/cache/ffce3dd14fea5b5f9369938b91f659bc/s/f/sf-x16r-store.jpg'
+const msgBoardImg = '/images/catalog/message-board.jpg'
+const flasherImg = '/images/catalog/barricade-flasher.jpg'
+const flareImg = '/images/catalog/road-flare.jpg'
 
-const TSS = 'Traffic Safety Store'
 const TRANS = 'Trans-Supply'
 const TSP = 'Traffic Safety Products'
 const CORAL = 'Coral Sales (Ver-Mac)'
 
-export const products: Product[] = [
+export const curatedProducts: Product[] = [
   // --- Cones & Drums ---
   {
     id: 'prod-1',
@@ -97,8 +96,8 @@ export const products: Product[] = [
     popular: true,
     sku: 'CON-28-STD',
     supplierSku: 'C28S',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/orange-28-inch-7-0-lb-flow-molded-traffic-cone/C28S',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'Lakeside Plastics',
     minimumRentalDays: 1,
     weight: '7 lbs',
     dimensions: '28" H × 15" × 15" base',
@@ -174,8 +173,8 @@ export const products: Product[] = [
     popular: false,
     sku: 'CON-36-HD',
     supplierSku: 'CR36SRC64',
-    supplierUrl: 'https://www.trafficsafetystore.com/traffic-cones/36',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'JBC Safety Plastic',
     minimumRentalDays: 1,
     weight: '10 lbs',
     dimensions: '36" H × 14" × 14" base',
@@ -190,7 +189,7 @@ export const products: Product[] = [
     slug: 'channelizing-drum',
     description: 'MUTCD / NCHRP-350 channelizing drum with 6" high-intensity reflective sheeting and recycled tire ring base',
     longDescription:
-      'Exact product: Traffic Safety Store DRUM6HITIRE. 37" tall polyethylene channelizing drum with 6" high-intensity orange and white reflective stripes. 23" diameter recycled tire ring base prevents rolling into traffic. ~10 lb drum body + ~22 lb tire base. Exceeds MUTCD standards and meets NCHRP-350 crash test rating. High visibility day and night.',
+      'Exact product: DRUM6HITIRE-class channelizing drum. 37" tall polyethylene channelizing drum with 6" high-intensity orange and white reflective stripes. 23" diameter recycled tire ring base prevents rolling into traffic. ~10 lb drum body + ~22 lb tire base. Exceeds MUTCD standards and meets NCHRP-350 crash test rating. High visibility day and night.',
     dailyRate: 6.75,
     weeklyRate: 27,
     monthlyRate: 81,
@@ -252,8 +251,8 @@ export const products: Product[] = [
     popular: true,
     sku: 'DRM-36-RETRO',
     supplierSku: 'DRUM6HITIRE',
-    supplierUrl: 'https://www.trafficsafetystore.com/traffic-drums/plastic-drum-6-base',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'OEM channelizing drum',
     minimumRentalDays: 1,
     weight: '~32 lbs (drum + base)',
     dimensions: '37" H × 23" base diameter',
@@ -270,7 +269,7 @@ export const products: Product[] = [
     slug: 'roll-up-road-work-ahead',
     description: 'Heavy-duty 36"×36" reflective vinyl roll-up sign, MUTCD W20-1, fiberglass ribs',
     longDescription:
-      'Exact product: Traffic Safety Store RU-36-REF-RWAHD. 36"×36" heavy-duty high-visibility reflective vinyl roll-up sign with fiberglass cross-ribs and plastic corner pockets. MUTCD code W20-1. Compatible with all standard roll-up sign stands. Made in USA. Ships same day.',
+      'Exact product: RU-36-REF-RWAHD — 36"×36" heavy-duty high-visibility reflective vinyl roll-up sign with fiberglass cross-ribs and plastic corner pockets. MUTCD code W20-1. Compatible with all standard roll-up sign stands. Made in USA. Ships same day.',
     dailyRate: 7.5,
     weeklyRate: 30,
     monthlyRate: 90,
@@ -332,8 +331,8 @@ export const products: Product[] = [
     popular: true,
     sku: 'SGN-RU-RWA-36',
     supplierSku: 'RU-36-REF-RWAHD',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/36-inch-heavy-duty-reflective-roll-up-sign-road-work-ahead/RU-36-REF-RWAHD',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'MUTCD roll-up sign (OEM)',
     minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
@@ -348,7 +347,7 @@ export const products: Product[] = [
     slug: 'roll-up-flagger-ahead',
     description: 'Heavy-duty 36"×36" reflective vinyl roll-up sign, MUTCD W20-7a, fiberglass ribs',
     longDescription:
-      'Exact product: Traffic Safety Store RU-36-REF-FLGAHD. 36"×36" heavy-duty high-visibility reflective vinyl "Flagger Ahead" roll-up sign. MUTCD code W20-7a. Required whenever a flagger is controlling traffic in a work zone. Fiberglass cross-ribs, plastic corner pockets. Made in USA.',
+      'Exact product: RU-36-REF-FLGAHD — 36"×36" heavy-duty high-visibility reflective vinyl "Flagger Ahead" roll-up sign. MUTCD code W20-7a. Required whenever a flagger is controlling traffic in a work zone. Fiberglass cross-ribs, plastic corner pockets. Made in USA.',
     dailyRate: 7.5,
     weeklyRate: 30,
     monthlyRate: 90,
@@ -409,8 +408,8 @@ export const products: Product[] = [
     popular: false,
     sku: 'SGN-RU-FLG-36',
     supplierSku: 'RU-36-REF-FLGAHD',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/36-inch-heavy-duty-reflective-roll-up-sign-flagger-ahead-text/RU-36-REF-FLGAHD',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'MUTCD roll-up sign (OEM)',
     minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
@@ -486,8 +485,8 @@ export const products: Product[] = [
     popular: true,
     sku: 'STD-TEL-ALU',
     supplierSku: 'TRI-POD-STD',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/cortina-rigid-or-roll-up-tri-pod-sign-stand/TRI-POD-STD',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'Cortina Safety Products',
     minimumRentalDays: 1,
     weight: '~10 lbs',
     dimensions: 'Folds flat for storage',
@@ -502,7 +501,7 @@ export const products: Product[] = [
     slug: 'roll-up-one-lane-road',
     description: 'Heavy-duty 36"×36" non-reflective orange vinyl roll-up sign, MUTCD W20-4',
     longDescription:
-      'Exact product: Traffic Safety Store RU-36-NON-OLRA. 36"×36" heavy-duty non-reflective bright orange vinyl "One Lane Road Ahead" roll-up sign. MUTCD code W20-4. Fiberglass cross-ribs and plastic corner pockets. Compatible with all standard roll-up sign stands.',
+      'Exact product: RU-36-NON-OLRA — 36"×36" heavy-duty non-reflective bright orange vinyl "One Lane Road Ahead" roll-up sign. MUTCD code W20-4. Fiberglass cross-ribs and plastic corner pockets. Compatible with all standard roll-up sign stands.',
     dailyRate: 7.5,
     weeklyRate: 30,
     monthlyRate: 90,
@@ -558,8 +557,8 @@ export const products: Product[] = [
     popular: false,
     sku: 'SGN-RU-OLR-36',
     supplierSku: 'RU-36-NON-OLRA',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/36-inch-heavy-duty-non-reflective-roll-up-sign-one-lane-road-ahead/RU-36-NON-OLRA',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'MUTCD roll-up sign (OEM)',
     minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
@@ -576,7 +575,7 @@ export const products: Product[] = [
     slug: 'type-iii-barricade',
     description: '60" tall MUTCD Type III break-away barricade with three 8 ft EG reflective plastic rails',
     longDescription:
-      'Exact product: Traffic Safety Store T3-BA-EG-8 (MPN 313-ASBL). 60" tall MUTCD Type III barricade with break-away fold-flat design. Three 8-foot plastic rails with engineer grade (EG) orange and white reflective sheeting. NCHRP-350 accepted. Accommodates two barricade flashers. Complete assembly with plastic uprights, feet, and hardware.',
+      'Exact product: T3-BA-EG-8 (MPN 313-ASBL). 60" tall MUTCD Type III barricade with break-away fold-flat design. Three 8-foot plastic rails with engineer grade (EG) orange and white reflective sheeting. NCHRP-350 accepted. Accommodates two barricade flashers. Complete assembly with plastic uprights, feet, and hardware.',
     dailyRate: 12,
     weeklyRate: 48,
     monthlyRate: 144,
@@ -638,8 +637,8 @@ export const products: Product[] = [
     popular: true,
     sku: 'BAR-T3-8FT',
     supplierSku: 'T3-BA-EG-8',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single/T3-BA-EG-8',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'OEM Type III barricade',
     minimumRentalDays: 1,
     weight: '~25 lbs',
     dimensions: '96" W × 60" H',
@@ -654,7 +653,7 @@ export const products: Product[] = [
     slug: 'type-ii-barricade',
     description: '45"×24" folding plastic MUTCD Type II barricade with high-intensity reflective sheeting',
     longDescription:
-      'Exact product: Traffic Safety Store TYPE 2HI (MPN 37408-FHIP). 45" tall × 24" wide folding plastic Type II barricade with high-intensity (HI) reflective sheeting. Impact-resistant polyethylene, stackable with molded lugs. ~12 lbs. Commonly used for lane closures, channelization, and temporary closures where traffic may still pass.',
+      'Exact product: TYPE 2HI (MPN 37408-FHIP). 45" tall × 24" wide folding plastic Type II barricade with high-intensity (HI) reflective sheeting. Impact-resistant polyethylene, stackable with molded lugs. ~12 lbs. Commonly used for lane closures, channelization, and temporary closures where traffic may still pass.',
     dailyRate: 8.25,
     weeklyRate: 33,
     monthlyRate: 99,
@@ -712,8 +711,8 @@ export const products: Product[] = [
     popular: false,
     sku: 'BAR-T2-24',
     supplierSku: 'TYPE 2HI',
-    supplierUrl: 'https://www.trafficsafetystore.com/shop/45-inch-h-by-24-inch-w-folding-plastic-type-ii-barricade-w-high-intensity-sheeting/TYPE%202HI',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'OEM Type II barricade',
     minimumRentalDays: 1,
     weight: '~12 lbs',
     dimensions: '24" W × 45" H',
@@ -728,7 +727,7 @@ export const products: Product[] = [
     slug: 'water-filled-barrier-6ft',
     description: 'Yodock 2001MB HDPE water-filled construction barrier, 72"L × 32"H × 18"W, NCHRP-350',
     longDescription:
-      'Exact product: Traffic Safety Store 2001MBORG (MPN 148002B). Yodock 2001MB orange HDPE water-filled construction barrier. 72"L × 32"H × 18"W. Ships at 85 lbs empty; weighs ~900 lbs when filled with water. Links together for any run length. Meets NCHRP Report 350 standards. Compatible with optional fence panel toppers.',
+      'Exact product: Yodock 2001MBORG (MPN 148002B). Orange HDPE water-filled construction barrier. 72"L × 32"H × 18"W. Ships at 85 lbs empty; weighs ~900 lbs when filled with water. Links together for any run length. Meets NCHRP Report 350 standards. Compatible with optional fence panel toppers.',
     dailyRate: 27,
     weeklyRate: 108,
     monthlyRate: 324,
@@ -792,8 +791,8 @@ export const products: Product[] = [
     popular: false,
     sku: 'BAR-WF-6FT',
     supplierSku: '2001MBORG',
-    supplierUrl: 'https://www.trafficsafetystore.com/water-filled-barriers/yodock-2001-barrier',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'Yodock / OEM',
     minimumRentalDays: 3,
     weight: '85 lbs empty / ~900 lbs filled',
     dimensions: '72" L × 18" W × 32" H',
@@ -1047,9 +1046,9 @@ export const products: Product[] = [
     categorySlug: 'safety-lighting',
     name: '3-Volt D-Cell LED Barricade Flasher — Amber, Type B',
     slug: 'type-b-flashing-warning-light',
-    description: 'Traffic Safety Store 3VOLT LED amber barricade flasher, photo-cell controlled, MUTCD Type B',
+    description: '3-volt D-cell LED amber barricade flasher, photo-cell controlled, MUTCD Type B',
     longDescription:
-      'Exact product: Traffic Safety Store 3VOLT LED (MPN 99-02006). Amber 3-volt D-cell LED barricade flasher. Photo-cell activated — automatically turns off during daylight to conserve battery. Two modes: Steady-On or Flash. Mounts to barricades, drums, cones, and sign stands. Made in USA. Ships same day.',
+      'Exact product: OEM 3VOLT LED (MPN 99-02006). Amber 3-volt D-cell LED barricade flasher. Photo-cell activated — automatically turns off during daylight to conserve battery. Two modes: Steady-On or Flash. Mounts to barricades, drums, cones, and sign stands. Made in USA. Ships same day.',
     dailyRate: 2.25,
     weeklyRate: 9,
     monthlyRate: 27,
@@ -1111,8 +1110,8 @@ export const products: Product[] = [
     popular: true,
     sku: 'LGT-B-FLSH',
     supplierSku: '3VOLT LED',
-    supplierUrl: 'https://www.trafficsafetystore.com/barricade-lights-flashers/3-volt-led',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'OEM Type B flasher',
     minimumRentalDays: 1,
     weight: '~1 lb',
     dimensions: '~5" diameter',
@@ -1127,7 +1126,7 @@ export const products: Product[] = [
     slug: 'road-flares-6-pack',
     description: 'Six Orion 30-minute waxed road flares in nylon carrying case with orange safety vest',
     longDescription:
-      'Exact product: Traffic Safety Store ORION6030 (MPN 6030). Six-pack of Orion 30-minute waxed road flares. Includes high-visibility red nylon carrying case and orange safety vest. Waxed construction is weather-resistant — works in fog, rain, and snow. DOT approved. Visible day or night. Standard for work zone and emergency delineation where open-flame flares are permitted.',
+      'Exact product: Orion ORION6030 (MPN 6030). Six-pack of Orion 30-minute waxed road flares. Includes high-visibility red nylon carrying case and orange safety vest. Waxed construction is weather-resistant — works in fog, rain, and snow. DOT approved. Visible day or night. Standard for work zone and emergency delineation where open-flame flares are permitted.',
     dailyRate: 18,
     weeklyRate: 72,
     monthlyRate: 216,
@@ -1189,8 +1188,8 @@ export const products: Product[] = [
     popular: false,
     sku: 'LGT-FLR-6PK',
     supplierSku: 'ORION6030',
-    supplierUrl: 'https://www.trafficsafetystore.com/road-flares/orion-30-min-6-pack',
-    supplier: TSS,
+    supplierUrl: '',
+    supplier: 'Orion Safety Products',
     minimumRentalDays: 1,
     weight: '~3 lbs (set)',
     dimensions: '6 flares in nylon case',
@@ -1199,24 +1198,46 @@ export const products: Product[] = [
   },
 ]
 
+const curatedSupplierUrls = new Set(curatedProducts.map((p) => p.supplierUrl))
+const curatedSlugs = new Set(curatedProducts.map((p) => p.slug))
+let extendedProducts: Product[] = []
+
+/** Merge extended catalog from `public/tss-catalog.json` (generated; see `scripts/generate-tss-catalog.mjs`). */
+export function registerExtendedCatalog(raw: Product[]) {
+  extendedProducts = raw.filter(
+    (p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug),
+  )
+}
+
+export function getProducts(): Product[] {
+  if (extendedProducts.length === 0) return curatedProducts
+  return [...curatedProducts, ...extendedProducts]
+}
+
 export const getProductsByCategory = (categorySlug: string): Product[] =>
-  products.filter((p) => p.categorySlug === categorySlug)
+  getProducts().filter((p) => p.categorySlug === categorySlug)
 
 export const getProductBySlug = (slug: string): Product | undefined =>
-  products.find((p) => p.slug === slug)
+  getProducts().find((p) => p.slug === slug)
 
 export const getProductById = (id: string): Product | undefined =>
-  products.find((p) => p.id === id)
+  getProducts().find((p) => p.id === id)
 
 export const getFeaturedProducts = (): Product[] =>
-  products.filter((p) => p.popular)
+  curatedProducts.filter((p) => p.popular)
 
 export const searchProducts = (query: string): Product[] => {
-  const q = query.toLowerCase()
-  return products.filter(
+  const list = getProducts()
+  const q = query.trim().toLowerCase()
+  if (!q) return [...list]
+  const variants = [q]
+  if (q.endsWith('s') && q.length > 2) variants.push(q.slice(0, -1))
+  const matchesField = (field: string) =>
+    variants.some((v) => field.toLowerCase().includes(v))
+  return list.filter(
     (p) =>
-      p.name.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q) ||
-      p.tags.some((t) => t.includes(q)),
+      matchesField(p.name) ||
+      matchesField(p.description) ||
+      p.tags.some((t) => variants.some((v) => t.toLowerCase().includes(v))),
   )
 }

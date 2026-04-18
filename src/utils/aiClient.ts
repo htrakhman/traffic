@@ -1,10 +1,10 @@
 import type { JobDetails, MapArea, RecommendationItem, AIRecommendation } from '../types'
-import { products, getProductById } from '../data/products'
+import { curatedProducts, getProductById } from '../data/products'
 import { normalizeRecommendationPricing } from './pricing'
 
 const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string | undefined
 
-const CATALOG_PROMPT_LINES = products
+const CATALOG_PROMPT_LINES = curatedProducts
   .map(
     (p) =>
       `- ${p.id}: ${p.name} — $${p.dailyRate.toFixed(2)}/day retail (you MUST use this exact dailyRate in JSON)`,
@@ -12,7 +12,7 @@ const CATALOG_PROMPT_LINES = products
   .join('\n')
 
 /** One line for streaming cart instructions */
-const STREAM_CART_PRODUCT_RATES = products
+const STREAM_CART_PRODUCT_RATES = curatedProducts
   .map((p) => `${p.id}: ${p.name} ($${p.dailyRate.toFixed(2)}/day)`)
   .join(' | ')
 
@@ -23,6 +23,9 @@ function mapAreaPromptLines(mapArea: MapArea): string[] {
     `Work zone perimeter: ${mapArea.perimeterLabel} (${Math.round(mapArea.perimeterFt).toLocaleString()} ft)`,
   ]
   if (mapArea.address) lines.push(`Map location: ${mapArea.address}`)
+  if (mapArea.postedSpeedMph != null && mapArea.postedSpeedLabel) {
+    lines.push(`Roadway posted speed (near work zone center): ${mapArea.postedSpeedLabel}`)
+  }
   return lines
 }
 
@@ -84,6 +87,8 @@ When a user describes their job, provide a structured equipment recommendation. 
 5. Pedestrian exposure (may need additional devices)
 6. Whether they already own some gear
 7. If a drawn work zone area (sq ft / perimeter in ft) is given, use those dimensions to calculate precise cone counts, drum spacing, and barrier lengths rather than estimating
+8. If "Roadway posted speed" from the map is provided, treat it as authoritative for sign spacing and taper length unless the user explicitly states a different regulatory/design speed
+9. Users can search the map or type Location:/coordinates in chat to pan the view; only a drawn polygon provides measurable work zone dimensions—remind them to outline the site if they only searched without drawing
 
 Respond in valid JSON format:
 {
@@ -105,7 +110,7 @@ Respond in valid JSON format:
   "disclaimer": "Standard disclaimer about planning guidance vs compliance requirements"
 }
 
-For the productId field, use only the prod-* IDs listed above. Each item's dailyRate in your JSON must match the catalog rate for that ID (do not invent or round to different numbers).
+For the productId field, use the prod-* IDs listed above when they match the need. Each item's dailyRate must match the catalog rate for that ID (do not invent rates).
 
 Always remind users that recommendations are planning guidance only and that final requirements depend on project conditions and applicable state/local standards. Keep the tone contractor-friendly and practical.`
 
@@ -190,9 +195,18 @@ ${JSON.stringify(rec)}
       return
     }
 
-    const demo = `Thanks for describing your job! To build an accurate equipment list, I need a couple more details.
+    const hasMapBlock = lastUser.includes('[Map work zone]')
+    const mapQuestion = hasMapBlock
+      ? ''
+      : `[Q: Work zone on the map — what's your next step?]
+[A: Polygon is drawn — ready]
+[A: Not yet — I'll search / move the map, then draw the outline]
+[A: I'll describe the footprint in text instead]
 
-[Q: What type of road is this on?]
+`
+    const demo = `Thanks for describing your job!${hasMapBlock ? '' : ' Use the search bar on the map (or type Location: … / lat,lng in chat) to jump to the site, then draw your work zone polygon — that calibrates quantities.'} A few quick details:
+
+${mapQuestion}[Q: What type of road is this on?]
 [A: Interstate / Freeway (65+ mph)]
 [A: US or State Highway (45–65 mph)]
 [A: County or Arterial Road (35–45 mph)]
@@ -227,6 +241,8 @@ ${JSON.stringify(rec)}
       stream: true,
       system: `You are TrafficKit's AI Work Zone Planner. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
 
+The UI shows a Google Map directly above the chat input with a search field: users can jump to an address, highway + milepost (Geocoder resolves natural language), or decimal lat/lng. In chat they can also type "Location: …" / "Address: …" or a coordinate pair such as 40.7128, -74.0060 — the client recenters the map when they send. They still need a drawn polygon for the [Map work zone] block (area/perimeter); search only moves the map view.
+
 When you need info, ask ALL remaining questions at once using this EXACT format — no extra text, one block per question:
 
 [Q: Question?]
@@ -236,7 +252,13 @@ When you need info, ask ALL remaining questions at once using this EXACT format 
 
 Rules:
 - No intro sentences — go straight to the question blocks
-- Ask all needed questions in one message (road type, speed limit, lane impact, duration, day/night)
+- If the latest user message does NOT contain a [Map work zone] block, your FIRST batch of questions MUST start with a map question before road/lane questions, using this exact wording:
+  [Q: Work zone on the map — what's your next step?]
+  [A: Polygon is drawn — ready]
+  [A: Not yet — I'll search / move the map, then draw the outline]
+  [A: I'll describe the footprint in text instead]
+  If [Map work zone] is already present, skip that map question — do not ask them to draw again unless something is unclear
+- Ask all other needed questions in the same message (road type, speed limit, lane impact, duration, day/night)
 - Users may answer every question in one reply (bulleted list); treat all answers as your new context — do not re-ask what they already answered
 - 3–5 options per question, include "Not sure" when useful
 - Once you have road type, speed limit, lane impact, duration, and day/night: OUTPUT A CART WIDGET (see below) — do NOT list equipment in plain text

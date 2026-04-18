@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
-import { products, searchProducts } from '../data/products'
+import { getProducts, searchProducts } from '../data/products'
+import { useCatalogSync } from '../context/CatalogSyncContext'
 import ProductCard from '../components/marketplace/ProductCard'
 import FilterSidebar from '../components/marketplace/FilterSidebar'
 
@@ -13,18 +14,37 @@ interface Filters {
 }
 
 export default function Browse() {
+  const { tick } = useCatalogSync()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [query, setQuery] = useState(searchParams.get('q') ?? '')
-  const [filters, setFilters] = useState<Filters>({
-    category: '',
+  const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
+  const [filters, setFilters] = useState<Filters>(() => ({
+    category: searchParams.get('category') ?? '',
     maxDailyRate: 200,
     inStockOnly: false,
     popular: false,
-  })
+  }))
   const [showMobileFilters, setShowMobileFilters] = useState(false)
 
+  useEffect(() => {
+    setQuery(searchParams.get('q') ?? '')
+    setFilters((prev) => ({
+      ...prev,
+      category: searchParams.get('category') ?? '',
+    }))
+  }, [searchParams])
+
+  const applyFilters = useCallback((next: Filters) => {
+    setFilters(next)
+    setSearchParams((prev) => {
+      const n = new URLSearchParams(prev)
+      if (next.category) n.set('category', next.category)
+      else n.delete('category')
+      return n
+    })
+  }, [setSearchParams])
+
   const filteredProducts = useMemo(() => {
-    let list = query.trim() ? searchProducts(query) : [...products]
+    let list = query.trim() ? searchProducts(query) : [...getProducts()]
 
     if (filters.category) list = list.filter((p) => p.categorySlug === filters.category)
     if (filters.maxDailyRate < 200) list = list.filter((p) => p.dailyRate <= filters.maxDailyRate)
@@ -32,11 +52,17 @@ export default function Browse() {
     if (filters.popular) list = list.filter((p) => p.popular)
 
     return list
-  }, [query, filters])
+  }, [query, filters, tick])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    setSearchParams(query ? { q: query } : {})
+    setSearchParams((prev) => {
+      const n = new URLSearchParams(prev)
+      const t = query.trim()
+      if (t) n.set('q', t)
+      else n.delete('q')
+      return n
+    })
   }
 
   return (
@@ -60,7 +86,14 @@ export default function Browse() {
             {query && (
               <button
                 type="button"
-                onClick={() => { setQuery(''); setSearchParams({}) }}
+                onClick={() => {
+                  setQuery('')
+                  setSearchParams((prev) => {
+                    const n = new URLSearchParams(prev)
+                    n.delete('q')
+                    return n
+                  })
+                }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-300 rounded"
               >
                 <X size={14} />
@@ -75,7 +108,7 @@ export default function Browse() {
           {/* Desktop sidebar */}
           <aside className="hidden lg:block w-56 flex-shrink-0">
             <div className="sticky top-24 bg-slate-900 border border-slate-800 rounded-xl p-5">
-              <FilterSidebar filters={filters} onChange={setFilters} />
+              <FilterSidebar filters={filters} onChange={applyFilters} />
             </div>
           </aside>
 
@@ -103,7 +136,12 @@ export default function Browse() {
                 <h3 className="text-lg font-semibold text-white mb-2">No results found</h3>
                 <p className="text-slate-400 text-sm mb-6">Try a different search or adjust your filters.</p>
                 <button
-                  onClick={() => { setQuery(''); setFilters({ category: '', maxDailyRate: 200, inStockOnly: false, popular: false }) }}
+                  type="button"
+                  onClick={() => {
+                    setQuery('')
+                    setFilters({ category: '', maxDailyRate: 200, inStockOnly: false, popular: false })
+                    setSearchParams({})
+                  }}
                   className="btn-secondary text-sm"
                 >
                   Clear all
@@ -127,7 +165,10 @@ export default function Browse() {
           <div className="absolute right-0 top-0 bottom-0 w-80 bg-slate-900 border-l border-slate-800 overflow-y-auto p-6 animate-slide-up">
             <FilterSidebar
               filters={filters}
-              onChange={(f) => { setFilters(f); setShowMobileFilters(false) }}
+              onChange={(f) => {
+                applyFilters(f)
+                setShowMobileFilters(false)
+              }}
               onClose={() => setShowMobileFilters(false)}
             />
           </div>

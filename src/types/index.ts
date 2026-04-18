@@ -4,7 +4,8 @@ export interface Category {
   slug: string
   description: string
   icon: string
-  productCount: number
+  /** Static fallback; UI prefers live counts from `getProducts()` when catalog is loaded */
+  productCount?: number
   imageUrl: string
 }
 
@@ -16,6 +17,17 @@ export interface ProductFAQ {
 export interface ProductUseCase {
   title: string
   description: string
+}
+
+/** One selectable color / SKU option within the same OEM product family */
+export interface ProductColorVariant {
+  label: string
+  slug: string
+  supplierSku: string
+  supplierUrl: string
+  dailyRate: number
+  /** CSS hex or named color for UI swatch */
+  swatch?: string
 }
 
 export interface Product {
@@ -40,8 +52,8 @@ export interface Product {
   popular: boolean
   sku: string
   supplierSku: string       // Exact SKU used to reorder from supplier
-  supplierUrl: string       // Direct supplier product page URL
-  supplier: string          // Supplier name (e.g. "Traffic Safety Store")
+  supplierUrl: string       // Optional manufacturer page URL (empty string if none)
+  supplier: string          // Manufacturer or generic source label for submittals
   minimumRentalDays: number
   weight?: string
   dimensions?: string
@@ -50,17 +62,14 @@ export interface Product {
   compliance?: string[]     // MUTCD, NCHRP-350, MASH, DOT, etc.
   metaTitle?: string        // SEO page title override
   metaDescription?: string  // SEO meta description override
-}
-
-export interface Package {
-  id: string
-  name: string
-  description: string
-  useCase: string
-  items: { productId: string; quantity: number }[]
-  /** Bundle discount off the sum of included items’ retail daily rates */
-  savingsPercent: number
-  popular: boolean
+  /** Parsed from supplier URL (e.g. Orange, White, Fluorescent Lime) */
+  colorLabel?: string
+  /** Reflective sheeting / product “scheme” when present in supplier data (e.g. Engineer-grade, High-intensity) */
+  finishLabel?: string
+  /** Groups alternate SKUs (colorways) from the same supplier product line */
+  variantGroupKey?: string
+  /** Other color/SKU options for this product line (from sibling catalog URLs when present) */
+  colorVariants?: ProductColorVariant[]
 }
 
 export type JobType =
@@ -106,6 +115,10 @@ export interface MapArea {
   address?: string
   /** Centroid lat/lng */
   center: { lat: number; lng: number }
+  /** Posted limit (mph) near centroid — Google Roads when licensed, else OSM maxspeed */
+  postedSpeedMph?: number
+  /** Human-readable line for UI / prompts */
+  postedSpeedLabel?: string
 }
 
 export interface JobDetails {

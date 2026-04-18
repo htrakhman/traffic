@@ -1,4 +1,4 @@
-import type { AIRecommendation, RecommendationItem, Package } from '../types'
+import type { AIRecommendation, RecommendationItem } from '../types'
 import { getProductById } from '../data/products'
 
 /**
@@ -14,21 +14,6 @@ export function roundMoney(value: number): number {
 /** Apply 50% markup to a supplier-reference daily rate (use when setting or auditing catalog numbers). */
 export function applyRetailMarkup(supplierReferenceDaily: number): number {
   return roundMoney(supplierReferenceDaily * RETAIL_MARKUP_MULTIPLIER)
-}
-
-export function getPackageListDailySubtotal(pkg: Package): number {
-  return roundMoney(
-    pkg.items.reduce((sum, row) => {
-      const p = getProductById(row.productId)
-      if (!p) return sum
-      return sum + p.dailyRate * row.quantity
-    }, 0),
-  )
-}
-
-export function getPackageBundleDailyRate(pkg: Package): number {
-  const list = getPackageListDailySubtotal(pkg)
-  return roundMoney(list * (1 - pkg.savingsPercent / 100))
 }
 
 /**

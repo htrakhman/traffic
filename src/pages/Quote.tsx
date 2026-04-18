@@ -4,7 +4,7 @@ import { CheckCircle, Package, Trash2, Plus, Minus } from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
 import type { CartLine } from '../context/CartContext'
 import { useCart } from '../context/CartContext'
-import { products } from '../data/products'
+import { getProductById } from '../data/products'
 
 interface QuoteItem {
   product: Product
@@ -23,7 +23,7 @@ function buildInitialItems(state: LocationState, cartLines: CartLine[]): QuoteIt
   if (state.recommendation) {
     return state.recommendation.items
       .map((item) => {
-        const prod = products.find((p) => p.id === item.productId)
+        const prod = getProductById(item.productId)
         if (!prod) return null
         return { product: prod, quantity: item.quantity, days: state.recommendation!.estimatedDurationDays }
       })
@@ -35,7 +35,7 @@ function buildInitialItems(state: LocationState, cartLines: CartLine[]): QuoteIt
   if (cartLines.length === 0) return []
   return cartLines
     .map((line) => {
-      const prod = products.find((p) => p.id === line.productId)
+      const prod = getProductById(line.productId)
       if (!prod) return null
       return { product: prod, quantity: line.quantity, days: line.rentalDays }
     })

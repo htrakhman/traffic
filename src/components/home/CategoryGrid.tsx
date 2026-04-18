@@ -1,8 +1,20 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { useCatalogSync } from '../../context/CatalogSyncContext'
 import { categories } from '../../data/categories'
+import { getProducts } from '../../data/products'
 
 export default function CategoryGrid() {
+  const { tick } = useCatalogSync()
+  const countsBySlug = useMemo(() => {
+    const m: Record<string, number> = {}
+    for (const p of getProducts()) {
+      m[p.categorySlug] = (m[p.categorySlug] ?? 0) + 1
+    }
+    return m
+  }, [tick])
+
   return (
     <section id="categories" className="py-20 px-4 sm:px-6 max-w-7xl mx-auto">
       {/* Section header */}
@@ -52,7 +64,7 @@ export default function CategoryGrid() {
                 {cat.description}
               </p>
               <div className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-400">
-                {cat.productCount} items available
+                {countsBySlug[cat.slug] ?? cat.productCount ?? 0} items available
               </div>
             </div>
           </Link>

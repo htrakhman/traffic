@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/roads-api/:path*",
+      "destination": "https://roads.googleapis.com/:path*"
+    }
+  ]
+}

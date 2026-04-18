@@ -1,27 +1,14 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { ArrowRight, Sparkles, Search, Zap } from 'lucide-react'
-
-const quickPrompts = [
-  'Paving crew, one lane closed, 45 mph road',
-  'Utility trench, arterial, day + night work',
-  'Tree crew on residential street shoulder',
-  'Full closure, bridge repair, 2 weeks',
-]
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Sparkles, Search, Zap, ExternalLink } from 'lucide-react'
+import JobAssistant from '../ai/JobAssistant'
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState<'ai' | 'browse'>('ai')
-  const [prompt, setPrompt] = useState('')
+  const [plannerMapBoost, setPlannerMapBoost] = useState(false)
   const navigate = useNavigate()
-
-  const handleAISubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (prompt.trim()) {
-      navigate(`/assistant?q=${encodeURIComponent(prompt.trim())}`)
-    } else {
-      navigate('/assistant')
-    }
-  }
+  const [searchParams, setSearchParams] = useSearchParams()
+  const plannerQuery = searchParams.get('q')?.trim() || undefined
 
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-20 pb-10">
@@ -29,7 +16,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 to-slate-950" />
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-500/8 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-4">
           <Zap size={10} className="fill-current" />
@@ -68,41 +55,43 @@ export default function Hero() {
           </button>
         </div>
 
-        {/* AI panel */}
+        {/* AI panel — full chat + map on the homepage */}
         {activeTab === 'ai' && (
-          <div className="max-w-2xl mx-auto animate-fade-in">
-            <form onSubmit={handleAISubmit} className="mb-3">
-              <div className="relative bg-slate-900 border border-slate-700 rounded-xl shadow-2xl shadow-black/40 overflow-hidden focus-within:border-brand-500/50 transition-all duration-300">
-                <div className="flex items-start gap-2.5 px-4 pt-3 pb-2">
-                  <Sparkles size={14} className="text-brand-400 mt-0.5 flex-shrink-0" />
-                  <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe your job... e.g. 'Utility crew, water main repair, 35 mph arterial, one lane closed, 3 days'"
-                    className="flex-1 bg-transparent text-slate-100 placeholder-slate-500 text-sm leading-snug resize-none outline-none min-h-[52px] max-h-[52px]"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAISubmit(e) }
-                    }}
-                  />
-                </div>
-                <div className="flex items-center justify-between px-4 py-2 border-t border-slate-800">
-                  <span className="text-xs text-slate-600">Enter to plan</span>
-                  <button type="submit" className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-lg transition-all shadow-lg shadow-brand-500/25">
-                    Plan my job <ArrowRight size={12} />
+          <div className="w-full max-w-4xl mx-auto animate-fade-in text-left">
+            <div
+              className={`card flex flex-col overflow-hidden shadow-2xl shadow-black/40 transition-[height,min-height] duration-200 ease-out ${
+                plannerMapBoost
+                  ? 'min-h-[460px] h-[min(90dvh,calc(100dvh-4.5rem))]'
+                  : 'min-h-[420px] h-[min(680px,calc(100dvh-12rem))]'
+              }`}
+            >
+              <JobAssistant
+                key={plannerQuery ?? 'home'}
+                initialPrompt={plannerQuery}
+                embedded
+                onMapExpandedLayoutChange={setPlannerMapBoost}
+              />
+            </div>
+            <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
+              <Link
+                to={plannerQuery ? `/assistant?q=${encodeURIComponent(plannerQuery)}` : '/assistant'}
+                className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors"
+              >
+                Open full planner layout
+                <ExternalLink size={12} className="opacity-80" />
+              </Link>
+              {plannerQuery && (
+                <>
+                  <span className="hidden sm:inline text-slate-600">·</span>
+                  <button
+                    type="button"
+                    onClick={() => setSearchParams({})}
+                    className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+                  >
+                    Clear topic from URL
                   </button>
-                </div>
-              </div>
-            </form>
-            <div className="flex flex-wrap justify-center gap-1.5">
-              {quickPrompts.map((qp) => (
-                <button
-                  key={qp}
-                  onClick={() => navigate(`/assistant?q=${encodeURIComponent(qp)}`)}
-                  className="px-2.5 py-1 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 text-slate-400 hover:text-slate-200 text-xs rounded-full transition-all"
-                >
-                  {qp}
-                </button>
-              ))}
+                </>
+              )}
             </div>
           </div>
         )}
@@ -122,9 +111,22 @@ export default function Hero() {
               />
             </div>
             <div className="flex flex-wrap justify-center gap-1.5">
-              {['Traffic Cones', 'Arrow Boards', 'Roll-Up Signs', 'Barricades', 'Message Boards', 'Warning Lights'].map((cat) => (
-                <Link key={cat} to={`/browse?q=${encodeURIComponent(cat)}`} className="px-2.5 py-1 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 hover:border-brand-500/30 text-slate-400 hover:text-brand-300 text-xs rounded-full transition-all">
-                  {cat}
+              {(
+                [
+                  { label: 'Traffic Cones', category: 'cones-drums' },
+                  { label: 'Arrow Boards', category: 'arrow-boards' },
+                  { label: 'Roll-Up Signs', category: 'signs-sign-stands' },
+                  { label: 'Barricades', category: 'barricades-barriers' },
+                  { label: 'Message Boards', category: 'message-boards' },
+                  { label: 'Warning Lights', category: 'safety-lighting' },
+                ] as const
+              ).map(({ label, category }) => (
+                <Link
+                  key={category}
+                  to={`/browse?category=${encodeURIComponent(category)}`}
+                  className="px-2.5 py-1 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 hover:border-brand-500/30 text-slate-400 hover:text-brand-300 text-xs rounded-full transition-all"
+                >
+                  {label}
                 </Link>
               ))}
             </div>

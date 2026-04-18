@@ -1,13 +1,19 @@
+import { useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import { useCatalogSync } from '../context/CatalogSyncContext'
 import { categories } from '../data/categories'
 import { getProductsByCategory } from '../data/products'
 import ProductCard from '../components/marketplace/ProductCard'
 
 export default function Category() {
   const { slug } = useParams<{ slug: string }>()
+  const { tick } = useCatalogSync()
   const category = categories.find((c) => c.slug === slug)
-  const products = slug ? getProductsByCategory(slug) : []
+  const products = useMemo(
+    () => (slug ? getProductsByCategory(slug) : []),
+    [slug, tick],
+  )
 
   if (!category) {
     return (
