@@ -99,6 +99,20 @@ function titleize(slug) {
     .join(' ')
 }
 
+/** Slugs encode mixed numbers as N-num-den-inch (e.g. 12-3-4-inch → "12 3 4 Inch"); restore readable fractions. */
+function repairMixedFractionDimensions(s) {
+  return s.replace(/\b(\d+) (\d{1,2}) (\d{1,2}) Inch\b/g, '$1 $2/$3 Inch')
+}
+
+/** Rare TSS slug typo: …-double-sided-sided → "Double Sided Sided" in title copy. */
+function repairDuplicateSidedWord(s) {
+  return s.replace(/\b(Single|Double) Sided Sided\b/gi, '$1 Sided')
+}
+
+function polishTitleFromSlugTitle(s) {
+  return repairDuplicateSidedWord(repairMixedFractionDimensions(s))
+}
+
 function hashId(url) {
   return `tss-${createHash('sha256').update(url).digest('hex').slice(0, 16)}`
 }
@@ -413,7 +427,7 @@ async function main() {
     const finishLabel = extractFinishLabel(slugSeg)
     const hero = pickHeroImage(categoryId, categorySlug, slugSeg, colorLabel)
 
-    const nameParts = [titleize(slugSeg) || skuRaw]
+    const nameParts = [polishTitleFromSlugTitle(titleize(slugSeg) || skuRaw)]
     const metaBits = []
     if (colorLabel) metaBits.push(colorLabel)
     if (finishLabel) metaBits.push(finishLabel)
