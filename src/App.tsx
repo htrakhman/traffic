@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import type { Product } from './types'
 import { CartProvider } from './context/CartContext'
+import { MembershipProvider } from './context/MembershipContext'
 import { CatalogSyncProvider, useCatalogSync } from './context/CatalogSyncContext'
 import { registerExtendedCatalog } from './data/products'
 import Header from './components/layout/Header'
@@ -72,10 +73,12 @@ export default function App() {
     <BrowserRouter>
       <CatalogSyncProvider>
         <CatalogLoader />
-        <CartProvider>
-          <ScrollToTop />
-          <AppLayout />
-        </CartProvider>
+        <MembershipProvider>
+          <CartProvider>
+            <ScrollToTop />
+            <AppLayout />
+          </CartProvider>
+        </MembershipProvider>
       </CatalogSyncProvider>
     </BrowserRouter>
   )

@@ -4,6 +4,9 @@ import { CheckCircle, Package, Trash2, Plus, Minus } from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
 import type { CartLine } from '../context/CartContext'
 import { useCart } from '../context/CartContext'
+import { useMembership } from '../context/MembershipContext'
+import { getDeliveryPickupFees } from '../constants/deliveryPickup'
+import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { getProductById } from '../data/products'
 import { readQuoteAiDraft, clearQuoteAiDraft } from '../utils/quoteAiDraftStorage'
 
@@ -57,6 +60,7 @@ export default function Quote() {
   const location = useLocation()
   const state = (location.state ?? {}) as LocationState
   const { lines: cartLines } = useCart()
+  const { isMember } = useMembership()
 
   const [items, setItems] = useState<QuoteItem[]>(() => buildInitialItems(state, cartLines))
   const [submitted, setSubmitted] = useState(false)
@@ -86,7 +90,9 @@ export default function Quote() {
   const removeItem = (i: number) => setItems((prev) => prev.filter((_, j) => j !== i))
 
   const totalDaily = items.reduce((s, item) => s + item.product.dailyRate * item.quantity, 0)
-  const grandTotal = items.reduce((s, item) => s + item.product.dailyRate * item.quantity * item.days, 0)
+  const rentalGrandTotal = items.reduce((s, item) => s + item.product.dailyRate * item.quantity * item.days, 0)
+  const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
+  const grandTotal = rentalGrandTotal + deliveryPickupCombined
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -205,12 +211,14 @@ export default function Quote() {
                     <span>Daily rate (all items)</span>
                     <span>${totalDaily.toFixed(2)}/day</span>
                   </div>
+                  <DeliveryPickupBreakdown isMember={isMember} className="pt-2 border-t border-slate-800" />
                   <div className="flex justify-between font-semibold text-white text-base pt-2 border-t border-slate-800">
                     <span>Estimated total</span>
                     <span>${grandTotal.toFixed(2)}</span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    Final pricing will be confirmed in the formal quote. Delivery charges may apply.
+                    Final pricing will be confirmed in the formal quote. Totals include delivery and pickup as shown
+                    {isMember ? ' (member benefit).' : '.'}
                   </p>
                 </div>
               </div>

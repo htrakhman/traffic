@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, Search, Phone, ChevronDown, ShoppingCart } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
+import { useMembership } from '../../context/MembershipContext'
 import { categories } from '../../data/categories'
 
 export default function Header() {
@@ -10,6 +11,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
   const { itemCount } = useCart()
+  const { isMember, setIsMember } = useMembership()
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 20)
@@ -101,6 +103,16 @@ export default function Header() {
 
           {/* Desktop right side */}
           <div className="hidden lg:flex items-center gap-3">
+            <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-400 hover:text-slate-300 transition-colors shrink-0">
+              <input
+                type="checkbox"
+                checked={isMember}
+                onChange={(e) => setIsMember(e.target.checked)}
+                className="w-3.5 h-3.5 rounded border-slate-600 accent-brand-500"
+                aria-label="Member pricing: free delivery and pickup"
+              />
+              <span className="whitespace-nowrap">Member</span>
+            </label>
             <a href="tel:+18005551234" className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors">
               <Phone size={14} />
               <span>1-800-555-1234</span>
@@ -151,6 +163,15 @@ export default function Header() {
               </Link>
             ))}
             <div className="border-t border-slate-800 pt-3 mt-3 space-y-1">
+              <label className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isMember}
+                  onChange={(e) => setIsMember(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-600 accent-brand-500"
+                />
+                <span className="text-sm text-slate-300">Member pricing (free delivery and pickup)</span>
+              </label>
               <Link to="/browse" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Browse All</Link>
               <Link to="/cart" className="flex items-center justify-between px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">
                 <span className="flex items-center gap-2">

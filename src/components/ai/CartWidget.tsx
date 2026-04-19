@@ -20,6 +20,9 @@ import { getProducts, getProductById } from '../../data/products'
 import { clearQuoteAiDraft, writeQuoteAiDraft } from '../../utils/quoteAiDraftStorage'
 import { useCatalogSync } from '../../context/CatalogSyncContext'
 import { useCart } from '../../context/CartContext'
+import { useMembership } from '../../context/MembershipContext'
+import { getDeliveryPickupFees } from '../../constants/deliveryPickup'
+import DeliveryPickupBreakdown from '../pricing/DeliveryPickupBreakdown'
 import type { Product } from '../../types'
 
 interface Props {
@@ -71,6 +74,7 @@ function productToLine(p: Product): RecommendationItem {
 export default function CartWidget({ recommendation, layout = 'modal' }: Props) {
   const { tick } = useCatalogSync()
   const { addItem } = useCart()
+  const { isMember } = useMembership()
   const [items, setItems] = useState<RecommendationItem[]>(recommendation.items)
   const [showNotes, setShowNotes] = useState(false)
   const [removed, setRemoved] = useState<Set<string>>(new Set())
@@ -130,7 +134,9 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
   }, [quoteDraftPersistKey, recommendation, items, removed])
 
   const totalDailyRate = activeItems.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0)
-  const estimatedTotal = totalDailyRate * recommendation.estimatedDurationDays
+  const rentalPeriodTotal = totalDailyRate * recommendation.estimatedDurationDays
+  const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
+  const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
 
   const filteredProducts = useMemo(() => {
     const catalog = getProducts()
@@ -263,7 +269,10 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
               ${totalDailyRate.toFixed(0)}
               <span className="text-[10px] sm:text-xs font-normal text-slate-400">/day</span>
             </div>
-            <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedTotal.toFixed(0)} total</div>
+            <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedGrandTotal.toFixed(0)} total</div>
+            <div className="text-[8px] sm:text-[9px] text-slate-600 tabular-nums max-w-[9rem] sm:max-w-none leading-tight text-right">
+              {isMember ? 'Incl. delivery & pickup (member)' : 'Incl. $150 delivery + $150 pickup'}
+            </div>
           </div>
           {inOverlay ? (
             <button
@@ -449,10 +458,12 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
             <div className="w-px h-8 bg-slate-700" />
             <div>
               <div className="text-[10px] text-slate-500 uppercase tracking-wide">Est. total</div>
-              <div className="text-sm font-bold text-brand-400">~${estimatedTotal.toFixed(0)}</div>
+              <div className="text-sm font-bold text-brand-400">~${estimatedGrandTotal.toFixed(0)}</div>
             </div>
           </div>
         </div>
+
+        <DeliveryPickupBreakdown isMember={isMember} variant="compact" className="mt-2 pt-2 border-t border-slate-700/50" />
 
         {recommendation.setupNotes.length > 0 && (
           <>

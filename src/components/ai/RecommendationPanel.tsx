@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { CheckCircle, AlertCircle, Info, ShoppingCart, ExternalLink } from 'lucide-react'
 import type { AIRecommendation } from '../../types'
+import { useMembership } from '../../context/MembershipContext'
+import { getDeliveryPickupFees } from '../../constants/deliveryPickup'
+import DeliveryPickupBreakdown from '../pricing/DeliveryPickupBreakdown'
 
 interface Props {
   recommendation: AIRecommendation
@@ -13,7 +16,10 @@ const priorityConfig = {
 }
 
 export default function RecommendationPanel({ recommendation }: Props) {
-  const totalCost = recommendation.totalDailyRate * recommendation.estimatedDurationDays
+  const { isMember } = useMembership()
+  const rentalPeriodTotal = recommendation.totalDailyRate * recommendation.estimatedDurationDays
+  const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
+  const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
 
   return (
     <div className="space-y-4 animate-slide-up">
@@ -31,7 +37,7 @@ export default function RecommendationPanel({ recommendation }: Props) {
         {[
           { label: 'Daily Rate', value: `$${recommendation.totalDailyRate.toFixed(0)}/day` },
           { label: 'Est. Duration', value: `${recommendation.estimatedDurationDays} days` },
-          { label: 'Est. Total', value: `~$${totalCost.toFixed(0)}` },
+          { label: 'Est. Total', value: `~$${estimatedGrandTotal.toFixed(0)}` },
         ].map((stat) => (
           <div key={stat.label} className="bg-slate-800/60 rounded-lg p-3 text-center">
             <div className="text-sm font-bold text-white">{stat.value}</div>
@@ -39,6 +45,8 @@ export default function RecommendationPanel({ recommendation }: Props) {
           </div>
         ))}
       </div>
+
+      <DeliveryPickupBreakdown isMember={isMember} className="px-0.5" />
 
       {/* Items list */}
       <div className="space-y-2">

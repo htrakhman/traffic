@@ -15,6 +15,9 @@ import {
   ShoppingCart,
 } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import { useMembership } from '../context/MembershipContext'
+import { getDeliveryPickupFees } from '../constants/deliveryPickup'
+import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { useCatalogSync } from '../context/CatalogSyncContext'
 import { getProductBySlug, getProductsByCategory } from '../data/products'
 import { categories } from '../data/categories'
@@ -27,6 +30,7 @@ export default function Product() {
   const product = slug ? getProductBySlug(slug) : undefined
   const navigate = useNavigate()
   const { addItem } = useCart()
+  const { isMember } = useMembership()
   const [quantity, setQuantity] = useState(1)
   const [rentalDays, setRentalDays] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
@@ -234,7 +238,9 @@ export default function Product() {
     )
   }
 
-  const totalCost = product.dailyRate * quantity * rentalDays
+  const rentalLineTotal = product.dailyRate * quantity * rentalDays
+  const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
+  const totalCost = rentalLineTotal + deliveryPickupCombined
 
   return (
     <main className="min-h-screen pt-20">
@@ -316,7 +322,7 @@ export default function Product() {
             <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-slate-500">
               <div className="card p-2">
                 <Truck size={14} className="mx-auto mb-1 text-brand-400" />
-                Free Delivery Available
+                {isMember ? 'Delivery & pickup included (member)' : 'Delivery & pickup + fees'}
               </div>
               <div className="card p-2">
                 <Clock size={14} className="mx-auto mb-1 text-brand-400" />
@@ -472,11 +478,16 @@ export default function Product() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between py-3 border-t border-slate-800 mb-4">
-                <span className="text-sm text-slate-400">
-                  Estimated total ({rentalDays}d × {quantity}×)
-                </span>
-                <span className="text-xl font-bold text-white">${totalCost.toFixed(2)}</span>
+              <div className="space-y-2 py-3 border-t border-slate-800 mb-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-400">Rental ({rentalDays}d × {quantity}×)</span>
+                  <span className="font-semibold text-slate-200 tabular-nums">${rentalLineTotal.toFixed(2)}</span>
+                </div>
+                <DeliveryPickupBreakdown isMember={isMember} />
+              </div>
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
+                <span className="text-sm text-slate-300">Estimated total</span>
+                <span className="text-xl font-bold text-white tabular-nums">${totalCost.toFixed(2)}</span>
               </div>
 
               <button

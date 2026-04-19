@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom'
 import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import { useMembership } from '../context/MembershipContext'
+import { getDeliveryPickupFees } from '../constants/deliveryPickup'
+import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { getProductById } from '../data/products'
 
 export default function Cart() {
   const { lines, setLineQuantity, setLineRentalDays, removeLine, clearCart } = useCart()
+  const { isMember } = useMembership()
 
   const resolved = lines
     .map((line) => {
@@ -17,10 +21,12 @@ export default function Cart() {
     (s, { line, product }) => s + product.dailyRate * line.quantity,
     0,
   )
-  const grandTotal = resolved.reduce(
+  const rentalGrandTotal = resolved.reduce(
     (s, { line, product }) => s + product.dailyRate * line.quantity * line.rentalDays,
     0,
   )
+  const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
+  const grandTotal = rentalGrandTotal + deliveryPickupCombined
 
   return (
     <main className="min-h-screen pt-20">
@@ -150,12 +156,14 @@ export default function Cart() {
                 <span>Daily rate (all items)</span>
                 <span>${totalDaily.toFixed(2)}/day</span>
               </div>
+              <DeliveryPickupBreakdown isMember={isMember} className="pt-2 border-t border-slate-800" />
               <div className="flex justify-between text-lg font-semibold text-white pt-2 border-t border-slate-800">
                 <span>Estimated total</span>
                 <span>${grandTotal.toFixed(2)}</span>
               </div>
               <p className="text-xs text-slate-500">
-                Final pricing confirmed on your formal quote. Delivery may be extra.
+                Final pricing confirmed on your formal quote. Estimated total includes delivery and pickup as shown
+                {isMember ? ' (member benefit).' : '.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
                 <Link to="/quote" className="btn-primary flex-1 justify-center py-3">
