@@ -9,8 +9,11 @@
   "scripts": {
     "catalog": "node scripts/generate-tss-catalog.mjs",
     "patch-catalog-images": "python3 scripts/patch-tss-catalog-images.py",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "rss": "node scripts/generate-rss.mjs",
+    "seo:build": "node scripts/generate-sitemap.mjs && node scripts/generate-rss.mjs",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run seo:build && tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

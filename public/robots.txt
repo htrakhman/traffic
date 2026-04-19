@@ -1,0 +1,25 @@
+# Traffic Control Rental — robots.txt
+# Owned by the seo-specialist subagent.
+
+User-agent: *
+Allow: /
+Disallow: /cart
+Disallow: /quote/thank-you
+
+# Answer engine crawlers — allow explicitly.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://trafficcontrolrental.com/sitemap.xml

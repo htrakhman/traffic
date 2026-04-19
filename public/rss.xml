@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Traffic Control Rental — Work Zone Guides</title>
+    <link>https://trafficcontrolrental.com/blog</link>
+    <atom:link href="https://trafficcontrolrental.com/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Practical, contractor-voiced guides on traffic control rental, MUTCD work zone setup, and job-site safety.</description>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 19 Apr 2026 02:33:59 GMT</lastBuildDate>
+    <item>
+      <title>Traffic Control Rental: What to Rent, What It Costs, and How to Plan a Work Zone</title>
+      <link>https://trafficcontrolrental.com/blog/traffic-control-rental-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/traffic-control-rental-guide</guid>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A contractor-focused guide to renting traffic control equipment — what you actually need, typical day/week rates, and how to lay out an MUTCD-compliant work zone without overspending.</description>
+    </item>
+  </channel>
+</rss>

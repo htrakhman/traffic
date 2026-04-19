@@ -1,0 +1,15 @@
+{
+  "owner": "seo-specialist subagent",
+  "description": "Paper trail of articles this subagent has shipped. Append one entry per publish.",
+  "entries": [
+    {
+      "date": "2026-04-18",
+      "slug": "traffic-control-rental-guide",
+      "url": "/blog/traffic-control-rental-guide",
+      "primaryKeyword": "traffic control rental",
+      "targetVolume": 500,
+      "wordCount": 1300,
+      "notes": "Seed article. Pillar piece covering the highest-volume rental term in the tracker."
+    }
+  ]
+}
