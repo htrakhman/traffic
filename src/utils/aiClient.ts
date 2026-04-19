@@ -196,7 +196,7 @@ export async function getJobRecommendation(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'gemini-2.5-flash',
-      max_tokens: 1500,
+      max_tokens: 2500,
       system: SYSTEM_PROMPT,
       messages: [
         {
@@ -310,7 +310,8 @@ ${JSON.stringify(rec)}
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'gemini-2.5-flash',
-      max_tokens: 1024,
+      /** Cart JSON + rationales for many SKUs needs headroom; 1024 often truncates mid-[CART_START]. */
+      max_tokens: 4096,
       stream: true,
       system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
 

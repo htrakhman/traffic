@@ -90,7 +90,7 @@ function parseSegments(content: string): Segment[] {
     segments.push({
       type: 'text',
       content:
-        'The equipment list could not be read (missing or invalid data). Please try sending your job details again.',
+        'The equipment list did not finish loading (the reply was cut off or the cart JSON was incomplete). Use “Send answers to AI” again, or send a short follow-up such as “regenerate the equipment cart”. If this keeps happening, switch to Guided Form — it uses a non-streaming request with a larger output budget.',
     })
     return segments
   }

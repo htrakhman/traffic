@@ -1,5 +1,7 @@
 /** Road segments tagged as under construction in OpenStreetMap (community-sourced; active projects). */
 
+import { fetchOverpassInterpreter } from './overpassClient'
+
 export type OsmConstructionItem = {
   id: string
   lat: number
@@ -24,8 +26,7 @@ export async function fetchOsmConstructionNear(
 );
 out center tags;`
 
-  const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`
-  const res = await fetch(url, { signal })
+  const res = await fetchOverpassInterpreter(query, signal)
   if (!res.ok) return []
 
   const data = (await res.json()) as {

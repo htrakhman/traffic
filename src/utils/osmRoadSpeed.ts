@@ -3,6 +3,8 @@
  * Used when Google Roads speed limits are unavailable (CORS in browser, or Asset Tracking license).
  */
 
+import { fetchOverpassInterpreter } from './overpassClient'
+
 export type OsmPostedSpeed = {
   postedSpeedMph: number
   postedSpeedLabel: string
@@ -48,8 +50,7 @@ export async function fetchPostedSpeedFromOsm(
 );
 out tags center;`
 
-  const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`
-  const res = await fetch(url, { signal })
+  const res = await fetchOverpassInterpreter(query, signal)
   if (!res.ok) return undefined
 
   const data = (await res.json()) as {
