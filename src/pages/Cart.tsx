@@ -1,14 +1,26 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight, CreditCard } from 'lucide-react'
+import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight, CreditCard, Map } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useMembership } from '../context/MembershipContext'
 import { getDeliveryPickupFees } from '../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { getProductById } from '../data/products'
+import WorkzoneVisualizerModal from '../components/workzone/WorkzoneVisualizerModal'
+import { getLatestJobAssistantPersisted } from '../utils/jobAssistantSessionStorage'
+import type { MapArea } from '../types'
 
 export default function Cart() {
   const { lines, setLineQuantity, setLineRentalDays, removeLine, clearCart } = useCart()
   const { isMember } = useMembership()
+  const [showVisualizer, setShowVisualizer] = useState(false)
+  const [savedMapArea, setSavedMapArea] = useState<MapArea | null>(null)
+
+  // Load saved workzone from Job Assistant session storage
+  useEffect(() => {
+    const session = getLatestJobAssistantPersisted()
+    if (session?.mapArea) setSavedMapArea(session.mapArea)
+  }, [])
 
   const resolved = lines
     .map((line) => {
@@ -165,7 +177,29 @@ export default function Cart() {
                 Final total confirmed when you lock in your order. Estimated total includes delivery and pickup as shown
                 {isMember ? ' (member benefit).' : '.'}
               </p>
-              <div className="flex flex-col sm:flex-row gap-2 pt-2">
+              {/* Show in Map — active if a workzone polygon was drawn in the Job Assistant */}
+              <button
+                type="button"
+                onClick={() => setShowVisualizer(true)}
+                className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium border transition-colors ${
+                  savedMapArea
+                    ? 'bg-brand-500/10 border-brand-500/40 text-brand-300 hover:bg-brand-500/20 hover:border-brand-400'
+                    : 'bg-slate-800/50 border-slate-700 text-slate-500 cursor-default'
+                }`}
+                title={savedMapArea ? 'Show equipment laid out in your drawn work zone' : 'Draw a work zone in the Job Assistant first'}
+              >
+                <Map size={17} className={savedMapArea ? 'text-brand-400' : 'text-slate-600'} />
+                <span>Show in Map</span>
+                {savedMapArea ? (
+                  <span className="ml-auto text-[10px] bg-brand-500/20 text-brand-400 rounded-full px-2 py-0.5 font-semibold">
+                    AI layout
+                  </span>
+                ) : (
+                  <span className="ml-auto text-[10px] text-slate-600">Draw workzone first</span>
+                )}
+              </button>
+
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Link to="/checkout" className="btn-primary flex-1 justify-center py-3 gap-2">
                   <CreditCard size={18} />
                   Checkout
@@ -182,6 +216,15 @@ export default function Cart() {
           </div>
         )}
       </div>
+
+      {/* Workzone Visualizer Modal */}
+      {showVisualizer && (
+        <WorkzoneVisualizerModal
+          mapArea={savedMapArea}
+          cartLines={lines}
+          onClose={() => setShowVisualizer(false)}
+        />
+      )}
     </main>
   )
 }
