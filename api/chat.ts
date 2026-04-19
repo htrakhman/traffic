@@ -7,7 +7,7 @@
 // FUNCTION_INVOCATION_FAILED. Buffer the upstream body first, then send once.
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { handleChatRequest } from './lib/chatProxyRouter'
+import { handleChatRequest } from './lib/chatProxyRouter.js'
 
 export const config = { runtime: 'nodejs' }
 

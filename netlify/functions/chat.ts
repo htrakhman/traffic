@@ -2,7 +2,7 @@
  * Netlify Functions entry for POST /api/chat (see netlify.toml redirect).
  * Buffers the transformed SSE so classic Lambda-style responses work everywhere.
  */
-import { handleChatRequest } from '../../api/lib/chatProxyRouter'
+import { handleChatRequest } from '../../api/lib/chatProxyRouter.js'
 
 type NetlifyEvent = { httpMethod?: string; body?: string | null }
 

@@ -4,7 +4,7 @@
  * generateContent fallback when streamGenerateContent is unavailable.
  */
 
-import { anthropicSseLine, sseFromFullText } from './chatSse'
+import { anthropicSseLine, sseFromFullText } from './chatSse.js'
 
 const GEMINI_HOST = 'https://generativelanguage.googleapis.com/v1beta'
 

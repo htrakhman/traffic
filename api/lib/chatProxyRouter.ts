@@ -4,8 +4,8 @@
  * (e.g. "openai,gemini" to try OpenAI first when both keys exist).
  */
 
-import { getGeminiKey, handleGeminiChatRequest } from './geminiChatProxy'
-import { handleOpenAICompatibleRequest } from './openaiCompatibleChat'
+import { getGeminiKey, handleGeminiChatRequest } from './geminiChatProxy.js'
+import { handleOpenAICompatibleRequest } from './openaiCompatibleChat.js'
 
 const MAX_BODY_BYTES = 64 * 1024
 

@@ -4,7 +4,7 @@
  * Works for api.openai.com and OpenAI-compatible hosts (e.g. Perplexity).
  */
 
-import { anthropicSseLine, sseFromFullText } from './chatSse'
+import { anthropicSseLine, sseFromFullText } from './chatSse.js'
 
 const MAX_BODY_BYTES = 64 * 1024
 
