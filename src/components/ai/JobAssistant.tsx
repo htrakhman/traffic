@@ -844,17 +844,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 {inner}
               </div>
               {errorBlock}
-              {mode === 'chat' && (
-                <div
-                  className={`p-3 sm:p-4 border-t border-slate-800 ${
-                    mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col gap-2.5' : 'space-y-2.5'
-                  }`}
-                >
-                  {composerBlock}
-                  {mapPanel}
-                  {fileInput}
-                </div>
-              )}
             </>
           )
         }

@@ -235,12 +235,6 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
     setSearchOpen(false)
   }
 
-  const buildRecommendationState = (): AIRecommendation => ({
-    ...recommendation,
-    items: activeItems,
-    totalDailyRate,
-  })
-
   const cartBody = (
     <div className="flex flex-col flex-1 min-h-0 max-h-full overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-brand-500/10 to-slate-800/60 border-b border-slate-700/60 flex-shrink-0">
