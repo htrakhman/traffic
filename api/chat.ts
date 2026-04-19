@@ -8,6 +8,30 @@ import { handleChatRequest } from './lib/chatProxyRouter'
 
 export const config = { runtime: 'nodejs' }
 
+function parseJsonBody(req: VercelRequest): Record<string, unknown> {
+  const b = req.body as unknown
+  if (b == null) return {}
+  if (Buffer.isBuffer(b)) {
+    try {
+      return JSON.parse(b.toString('utf8') || '{}') as Record<string, unknown>
+    } catch {
+      return {}
+    }
+  }
+  if (typeof b === 'string') {
+    try {
+      return JSON.parse(b || '{}') as Record<string, unknown>
+    } catch {
+      return {}
+    }
+  }
+  if (typeof b === 'object') {
+    return b as Record<string, unknown>
+  }
+  return {}
+}
+
+/** Pipe WHATWG stream to Node response (Buffer.from view must use byteOffset/byteLength). */
 async function pipeWebStreamToNodeResponse(
   body: ReadableStream<Uint8Array>,
   res: VercelResponse,
@@ -17,10 +41,16 @@ async function pipeWebStreamToNodeResponse(
     while (true) {
       const { done, value } = await reader.read()
       if (done) break
-      if (value?.byteLength) res.write(Buffer.from(value))
+      if (value !== undefined && value.byteLength > 0) {
+        res.write(Buffer.from(value.buffer, value.byteOffset, value.byteLength))
+      }
     }
   } finally {
-    reader.releaseLock()
+    try {
+      reader.releaseLock()
+    } catch {
+      /* ignore */
+    }
   }
 }
 
@@ -31,12 +61,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(405).json({ error: 'Method not allowed' })
     }
 
-    const bodyObj =
-      typeof req.body === 'string'
-        ? (JSON.parse(req.body || '{}') as Record<string, unknown>)
-        : ((req.body ?? {}) as Record<string, unknown>)
+    const bodyObj = parseJsonBody(req)
 
-    const inner = await handleChatRequest(bodyObj)
+    let inner: Response
+    try {
+      inner = await handleChatRequest(bodyObj)
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e)
+      console.error('[api/chat] handleChatRequest', msg)
+      return res.status(500).json({ error: 'chat proxy failed', detail: msg })
+    }
 
     const ct = inner.headers.get('content-type') ?? ''
 
@@ -48,16 +82,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     res.status(inner.status)
-    inner.headers.forEach((v, k) => {
-      if (k.toLowerCase() === 'transfer-encoding') return
+    for (const [k, v] of inner.headers.entries()) {
+      const lk = k.toLowerCase()
+      if (lk === 'transfer-encoding' || lk === 'content-length') continue
       res.setHeader(k, v)
-    })
-
-    if (!inner.body) {
-      return res.end()
     }
 
-    await pipeWebStreamToNodeResponse(inner.body as ReadableStream<Uint8Array>, res)
+    if (inner.body) {
+      await pipeWebStreamToNodeResponse(inner.body as ReadableStream<Uint8Array>, res)
+    }
     return res.end()
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
