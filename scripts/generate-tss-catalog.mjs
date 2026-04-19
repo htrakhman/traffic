@@ -270,7 +270,7 @@ const IMG_CONE_YELLOW = '/catalog/cone-28-orange-7lb.webp'
 const IMG_YODOCK_ORANGE =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/yodock-2001mb-barrier-orange-without-optional-fence-water-filled-barricade.webp'
 const IMG_YODOCK_WHITE =
-  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/yodock-2001mb-water-filled-construction-barrier-white-without-optional-fence-water-filled-barricade.webp'
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/yodock-2001mb-barrier-white-without-optional-fence-water-filled-barricade.webp'
 const IMG_VEST_LIME =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp'
 const IMG_DRUM_ORANGE = '/catalog/channelizing-drum-6in-hi-tire-base.webp'
