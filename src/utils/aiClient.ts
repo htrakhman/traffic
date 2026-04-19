@@ -145,7 +145,7 @@ export async function getJobRecommendation(
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       max_tokens: 1500,
       system: SYSTEM_PROMPT,
       messages: [
@@ -258,7 +258,7 @@ ${JSON.stringify(rec)}
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       max_tokens: 1024,
       stream: true,
       system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
@@ -302,10 +302,20 @@ ${STREAM_CART_PRODUCT_RATES}`,
   })
 
   if (!response.ok) {
-    // Graceful fallback when the proxy can't reach Anthropic (e.g. missing
-    // server env var on a preview). Emits a short note so the UI isn't blank.
+    const raw = await response.text()
     if (response.status === 500) {
-      const note = 'AI is temporarily offline. Please try again shortly.'
+      let note = 'AI is temporarily offline. Please try again shortly.'
+      try {
+        const j = JSON.parse(raw) as { error?: string }
+        if (typeof j.error === 'string' && j.error.includes('GEMINI_API_KEY')) {
+          note =
+            'Chat is not configured: add GEMINI_API_KEY (Google AI Studio) in your host environment variables, then redeploy.'
+        } else if (typeof j.error === 'string' && j.error.includes('chat proxy failed')) {
+          note = 'Chat failed on the server. Redeploy the latest build or check Vercel/Netlify function logs for /api/chat.'
+        }
+      } catch {
+        /* ignore */
+      }
       for (const char of note) {
         onChunk(char)
         await new Promise((r) => setTimeout(r, 6))
@@ -317,7 +327,7 @@ ${STREAM_CART_PRODUCT_RATES}`,
       response.status === 404
         ? ' (deploy issue: /api/chat not found — add Vercel api/chat.ts or Netlify function + redirect)'
         : ''
-    throw new Error(`Stream error: ${response.status}${hint}`)
+    throw new Error(`Stream error: ${response.status}${hint} — ${raw.slice(0, 200)}`)
   }
 
   const reader = response.body!.getReader()
