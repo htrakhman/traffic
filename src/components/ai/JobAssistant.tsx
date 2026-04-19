@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
 import { normalizeRecommendationPricing } from '../../utils/pricing'
+import { tryParseTailAfterCartStart } from '../../utils/chatCartParse'
 import type { ChatMessage, JobDetails, AIRecommendation, MapArea } from '../../types'
 import CartWidget from './CartWidget'
 import JobForm from './JobForm'
@@ -73,7 +74,27 @@ function parseSegments(content: string): Segment[] {
     lastIndex = match.index + match[0].length
   }
 
-  const remaining = content.slice(lastIndex).trim()
+  let remaining = content.slice(lastIndex)
+  const openIdx = remaining.indexOf('[CART_START]')
+  if (openIdx !== -1) {
+    const beforeMarker = remaining.slice(0, openIdx).trim()
+    if (beforeMarker) segments.push(...parseQASegments(beforeMarker))
+    const afterOpen = remaining.slice(openIdx + '[CART_START]'.length)
+    const parsedOpen = tryParseTailAfterCartStart(afterOpen)
+    if (parsedOpen) {
+      segments.push({ type: 'cart', recommendation: parsedOpen.rec })
+      if (parsedOpen.remainder.trim()) segments.push(...parseQASegments(parsedOpen.remainder.trim()))
+      return segments
+    }
+    segments.push({
+      type: 'text',
+      content:
+        'The equipment list could not be read (missing or invalid data). Please try sending your job details again.',
+    })
+    return segments
+  }
+
+  remaining = remaining.trim()
   if (remaining) segments.push(...parseQASegments(remaining))
   return segments
 }
@@ -389,21 +410,41 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 // Assistant message
                 const isLast = i === messages.length - 1
                 if (isStreaming && isLast) {
-                  const visibleText = msg.content
-                    .replace(/\[CART_START\][\s\S]*?(\[CART_END\]|$)/g, '')
+                  const cartIdx = msg.content.indexOf('[CART_START]')
+                  const lead = cartIdx === -1 ? msg.content : msg.content.slice(0, cartIdx)
+                  const visibleText = lead
                     .replace(/\[Q:[^\]]*\]/g, '')
                     .replace(/\[A:[^\]]*\]/g, '')
                     .replace(/\n{3,}/g, '\n\n')
                     .trim()
+                  const afterCart =
+                    cartIdx === -1 ? '' : msg.content.slice(cartIdx + '[CART_START]'.length)
+                  const streamingCart = afterCart ? tryParseTailAfterCartStart(afterCart)?.rec : undefined
                   return (
-                    <div key={i} className="flex gap-3 animate-slide-up">
-                      <div className="w-7 h-7 bg-brand-500/10 border border-brand-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Sparkles size={12} className="text-brand-400" />
+                    <div key={i} className="space-y-2 animate-slide-up">
+                      <div className="flex gap-3">
+                        <div className="w-7 h-7 bg-brand-500/10 border border-brand-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Sparkles size={12} className="text-brand-400" />
+                        </div>
+                        <div className="max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed bg-slate-800/80 border border-slate-700 text-slate-200 rounded-tl-sm">
+                          <span className="whitespace-pre-wrap">{visibleText}</span>
+                          <span className="inline-block w-0.5 h-4 bg-brand-400 ml-0.5 align-middle animate-pulse" />
+                        </div>
                       </div>
-                      <div className="max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed bg-slate-800/80 border border-slate-700 text-slate-200 rounded-tl-sm">
-                        <span className="whitespace-pre-wrap">{visibleText}</span>
-                        <span className="inline-block w-0.5 h-4 bg-brand-400 ml-0.5 animate-pulse" />
-                      </div>
+                      {streamingCart && (
+                        <div className="flex gap-3">
+                          <div className="w-7 flex-shrink-0" aria-hidden />
+                          <div className="flex-1 min-w-0">
+                            <CartWidget recommendation={streamingCart} layout="inline" />
+                          </div>
+                        </div>
+                      )}
+                      {cartIdx !== -1 && !streamingCart && (
+                        <div className="flex gap-3">
+                          <div className="w-7 flex-shrink-0" aria-hidden />
+                          <p className="text-xs text-slate-500 py-1">Finishing equipment list…</p>
+                        </div>
+                      )}
                     </div>
                   )
                 }
@@ -495,7 +536,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                         )}
                         {nonCartSegs.length > 0 && <div className="w-7 flex-shrink-0" />}
                         <div className="flex-1 min-w-0">
-                          <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} />
+                          <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} layout="inline" />
                         </div>
                       </div>
                     ))}
@@ -523,7 +564,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
         {/* Recommendation result (from form mode) */}
         {recommendation && (
           <div className="p-4 border-t border-slate-800">
-            <CartWidget key="cart-form" recommendation={recommendation} />
+            <CartWidget key="cart-form" recommendation={recommendation} layout="inline" />
           </div>
         )}
       </div>

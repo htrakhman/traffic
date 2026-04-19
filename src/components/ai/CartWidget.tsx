@@ -11,7 +11,6 @@ import {
   AlertCircle,
   Info,
   Search,
-  CheckCircle,
   Package,
   X,
   Maximize2,
@@ -19,10 +18,13 @@ import {
 import type { AIRecommendation, RecommendationItem } from '../../types'
 import { getProducts, getProductById } from '../../data/products'
 import { useCatalogSync } from '../../context/CatalogSyncContext'
+import { useCart } from '../../context/CartContext'
 import type { Product } from '../../types'
 
 interface Props {
   recommendation: AIRecommendation
+  /** `inline` = card inside chat (no fullscreen overlay). */
+  layout?: 'modal' | 'inline'
 }
 
 const priorityConfig = {
@@ -65,17 +67,33 @@ function productToLine(p: Product): RecommendationItem {
   }
 }
 
-export default function CartWidget({ recommendation }: Props) {
+export default function CartWidget({ recommendation, layout = 'modal' }: Props) {
   const { tick } = useCatalogSync()
+  const { addItem } = useCart()
   const [items, setItems] = useState<RecommendationItem[]>(recommendation.items)
   const [showNotes, setShowNotes] = useState(false)
   const [removed, setRemoved] = useState<Set<string>>(new Set())
-  const [modalOpen, setModalOpen] = useState(true)
+  const [modalOpen, setModalOpen] = useState(layout === 'modal')
   const [search, setSearch] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
+  const searchSectionRef = useRef<HTMLDivElement>(null)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const activeItems = items.filter((item) => !removed.has(itemKey(item)))
+
+  const recommendationItemsKey = useMemo(
+    () =>
+      recommendation.items
+        .map((i) => `${i.productId}:${i.quantity}:${i.productName}`)
+        .join('|'),
+    [recommendation.items],
+  )
+
+  useEffect(() => {
+    setItems(recommendation.items)
+    setRemoved(new Set())
+  }, [recommendationItemsKey, recommendation.items])
 
   const totalDailyRate = activeItems.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0)
   const estimatedTotal = totalDailyRate * recommendation.estimatedDurationDays
@@ -95,19 +113,18 @@ export default function CartWidget({ recommendation }: Props) {
   }, [search, tick])
 
   useEffect(() => {
+    if (layout !== 'modal' || !modalOpen) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setModalOpen(false)
     }
-    if (modalOpen) {
-      document.addEventListener('keydown', onKey)
-      const prev = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
-      return () => {
-        document.removeEventListener('keydown', onKey)
-        document.body.style.overflow = prev
-      }
+    document.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prev
     }
-  }, [modalOpen])
+  }, [layout, modalOpen])
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -130,6 +147,33 @@ export default function CartWidget({ recommendation }: Props) {
       next.delete(key)
       return next
     })
+  }
+
+  const setQtyExact = (key: string, raw: number) => {
+    const n = Math.floor(raw)
+    const q = Number.isFinite(n) && n >= 1 ? n : 1
+    setItems((prev) =>
+      prev.map((item) => (itemKey(item) !== key ? item : { ...item, quantity: q })),
+    )
+    setRemoved((prev) => {
+      const next = new Set(prev)
+      next.delete(key)
+      return next
+    })
+  }
+
+  const handleAddToCart = () => {
+    const days = Math.max(1, Math.floor(recommendation.estimatedDurationDays))
+    for (const item of activeItems) {
+      const p = getProductById(item.productId)
+      if (p) addItem(p, item.quantity, days)
+    }
+  }
+
+  const focusAddOptions = () => {
+    searchSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    setSearchOpen(true)
+    window.setTimeout(() => searchInputRef.current?.focus(), 180)
   }
 
   const removeItem = (key: string) => {
@@ -192,21 +236,27 @@ export default function CartWidget({ recommendation }: Props) {
             </div>
             <div className="text-[10px] text-slate-500">~${estimatedTotal.toFixed(0)} total</div>
           </div>
-          <button
-            type="button"
-            onClick={() => setModalOpen(false)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors"
-            aria-label="Close quote"
-          >
-            <X size={16} />
-          </button>
+          {layout === 'modal' && (
+            <button
+              type="button"
+              onClick={() => setModalOpen(false)}
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors"
+              aria-label="Close quote"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="px-3 py-2 border-b border-slate-800/80 bg-slate-900/50 flex-shrink-0" ref={searchRef}>
-        <div className="relative">
+      <div
+        className="px-3 py-2 border-b border-slate-800/80 bg-slate-900/50 flex-shrink-0"
+        ref={searchSectionRef}
+      >
+        <div className="relative" ref={searchRef}>
           <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
+            ref={searchInputRef}
             type="search"
             value={search}
             onChange={(e) => {
@@ -294,7 +344,15 @@ export default function CartWidget({ recommendation }: Props) {
                   >
                     <Minus size={10} />
                   </button>
-                  <span className="w-7 text-center text-xs font-bold text-white">{item.quantity}</span>
+                  <input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={item.quantity}
+                    onChange={(e) => setQtyExact(key, parseInt(e.target.value, 10))}
+                    className="w-9 min-w-0 bg-slate-900 text-center text-xs font-bold text-white outline-none focus:ring-0 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    aria-label={`Quantity for ${item.productName}`}
+                  />
                   <button
                     type="button"
                     onClick={() => updateQty(key, 1)}
@@ -386,22 +444,41 @@ export default function CartWidget({ recommendation }: Props) {
           <p className="text-[9px] text-amber-200/50 leading-relaxed">{recommendation.disclaimer}</p>
         </div>
 
-        <div className="flex gap-2">
-          <Link
-            to="/quote"
-            state={{ recommendation: buildRecommendationState() }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/20"
-          >
-            <CheckCircle size={13} />
-            Get quote
-          </Link>
-          <Link
-            to="/browse"
-            className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-slate-700/60 hover:bg-slate-700 border border-slate-600 text-slate-200 text-xs font-semibold rounded-xl transition-all"
-          >
-            <Search size={13} />
-            Browse
-          </Link>
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={activeItems.length === 0}
+              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/20"
+            >
+              <ShoppingCart size={13} />
+              Add to cart
+            </button>
+            <Link
+              to="/browse"
+              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 bg-slate-700/60 hover:bg-slate-700 border border-slate-600 text-slate-200 text-xs font-semibold rounded-xl transition-all text-center"
+            >
+              Continue shopping
+            </Link>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={focusAddOptions}
+              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold text-brand-200 border border-brand-500/45 rounded-xl hover:bg-brand-500/12 transition-colors"
+            >
+              <Plus size={13} />
+              Add more options
+            </button>
+            <Link
+              to="/quote"
+              state={{ recommendation: buildRecommendationState() }}
+              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold text-slate-200 border border-slate-600 rounded-xl hover:bg-slate-800/90 transition-colors text-center"
+            >
+              Get quote
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -457,6 +534,14 @@ export default function CartWidget({ recommendation }: Props) {
       </div>,
       document.body,
     )
+
+  if (layout === 'inline') {
+    return (
+      <div className="w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-lg shadow-black/25 overflow-hidden flex flex-col max-h-[min(480px,55svh)] min-h-[200px]">
+        {cartBody}
+      </div>
+    )
+  }
 
   return (
     <div className="w-full space-y-2">
