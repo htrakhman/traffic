@@ -3,9 +3,8 @@ import { curatedProducts, getProductById } from '../data/products'
 import { normalizeRecommendationPricing } from './pricing'
 import { SITE_NAME } from '../config/site'
 
-// Route all Anthropic calls through our Vercel serverless proxy at /api/chat.
-// The secret key lives in process.env.ANTHROPIC_API_KEY on the server; it is
-// never shipped in the browser bundle.
+// Route chat through our serverless proxy at /api/chat (Gemini on the server).
+// Set GEMINI_API_KEY (or GOOGLE_AI_API_KEY) in Vercel / Netlify env — never VITE_*.
 //
 // Demo mode (no live AI) is triggered by VITE_AI_DEMO_MODE=true in the client
 // env or by the proxy returning 500 (e.g. in previews where the key is absent).
@@ -146,7 +145,7 @@ export async function getJobRecommendation(
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
+      model: 'gemini-2.0-flash',
       max_tokens: 1500,
       system: SYSTEM_PROMPT,
       messages: [
@@ -159,7 +158,7 @@ export async function getJobRecommendation(
   })
 
   if (!response.ok) {
-    // If the proxy reports a misconfigured key (no ANTHROPIC_API_KEY in env),
+    // If the proxy reports a misconfigured key (no GEMINI_API_KEY in env),
     // fall back to the demo recommendation instead of surfacing an error.
     if (response.status === 500) {
       return getDemoRecommendation(jobDetails, userMessage)
@@ -259,7 +258,7 @@ ${JSON.stringify(rec)}
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
+      model: 'gemini-2.0-flash',
       max_tokens: 1024,
       stream: true,
       system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
@@ -314,7 +313,11 @@ ${STREAM_CART_PRODUCT_RATES}`,
       onDone()
       return
     }
-    throw new Error(`Stream error: ${response.status}`)
+    const hint =
+      response.status === 404
+        ? ' (deploy issue: /api/chat not found — add Vercel api/chat.ts or Netlify function + redirect)'
+        : ''
+    throw new Error(`Stream error: ${response.status}${hint}`)
   }
 
   const reader = response.body!.getReader()

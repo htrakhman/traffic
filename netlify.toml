@@ -1,3 +1,10 @@
+# Chat API (Netlify Functions). Must appear before SPA fallback if you add one.
+[[redirects]]
+from = "/api/chat"
+to = "/.netlify/functions/chat"
+status = 200
+force = true
+
 # Same-origin proxy for Google Roads REST (avoids browser CORS on roads.googleapis.com).
 [[redirects]]
 from = "/roads-api/*"
