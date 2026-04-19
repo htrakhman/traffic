@@ -484,22 +484,59 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
     </div>
   )
 
+  const previewThumbs = activeItems.slice(0, 5).map((item) => {
+    const p = getProductById(item.productId)
+    return { key: itemKey(item), imageUrl: p?.imageUrl }
+  })
+
   const teaser = (
     <button
       type="button"
       onClick={() => setModalOpen(true)}
-      className="w-full rounded-2xl border border-brand-500/30 bg-gradient-to-br from-brand-500/15 to-slate-900/90 p-4 text-left shadow-lg shadow-brand-900/20 hover:border-brand-500/50 transition-all group"
+      className="w-full rounded-2xl border border-brand-500/35 bg-gradient-to-br from-brand-500/18 via-slate-900/90 to-slate-950/95 p-3.5 sm:p-4 text-left shadow-lg shadow-black/30 hover:border-brand-500/55 hover:shadow-xl hover:shadow-brand-900/20 transition-all group"
     >
+      {previewThumbs.length > 0 && (
+        <div className="flex items-center gap-1.5 mb-3 pl-0.5">
+          <div className="flex -space-x-2.5 sm:-space-x-2">
+            {previewThumbs.map((t) => (
+              <div
+                key={t.key}
+                className="relative z-0 h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 overflow-hidden rounded-lg border-2 border-slate-900/80 bg-slate-800 ring-1 ring-slate-700/80 shadow-md"
+              >
+                {t.imageUrl ? (
+                  <img
+                    src={t.imageUrl}
+                    alt=""
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                    onError={(e) => {
+                      ;(e.target as HTMLImageElement).style.display = 'none'
+                    }}
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-slate-800/90">
+                    <Package size={14} className="text-slate-500" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          {activeItems.length > 5 && (
+            <span className="ml-0.5 text-[10px] font-semibold text-slate-400">+{activeItems.length - 5}</span>
+          )}
+        </div>
+      )}
       <div className="flex items-center gap-3">
-        <div className="w-11 h-11 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-500/30 transition-colors">
-          <ShoppingCart size={20} className="text-brand-400" />
+        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-500/30 transition-colors">
+          <ShoppingCart size={18} className="text-brand-400" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold text-white">Equipment quote ready</p>
-          <p className="text-[11px] text-slate-400 mt-0.5">
-            {activeItems.length} line{activeItems.length !== 1 ? 's' : ''} · ${totalDailyRate.toFixed(0)}/day · tap
-            to edit or add gear
+          <p className="text-xs sm:text-sm font-semibold text-white">Equipment list ready</p>
+          <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+            {activeItems.length} line{activeItems.length !== 1 ? 's' : ''} · {activeItems.reduce((a, b) => a + b.quantity, 0)} units
+            <span className="text-slate-500"> · </span>~${totalDailyRate.toFixed(0)}/day
           </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">Open to adjust quantities, search the catalog, or add to your cart</p>
         </div>
         <Maximize2 size={16} className="text-slate-500 group-hover:text-brand-400 flex-shrink-0 transition-colors" />
       </div>
@@ -515,7 +552,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
       >
         <button
           type="button"
-          className="absolute inset-0 bg-black/70 backdrop-blur-sm border-0 cursor-default w-full h-full"
+          className="absolute inset-0 bg-black/80 backdrop-blur-md border-0 cursor-default w-full h-full"
           aria-label="Dismiss overlay"
           onClick={() => setModalOpen(false)}
         />
@@ -523,7 +560,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           role="dialog"
           aria-modal="true"
           aria-labelledby="cart-quote-title"
-          className="relative z-[1] w-full sm:max-w-lg max-h-[92vh] sm:max-h-[min(88vh,720px)] flex flex-col rounded-t-2xl sm:rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-2xl overflow-hidden animate-slide-up"
+          className="relative z-[1] w-full sm:max-w-xl max-h-[92vh] sm:max-h-[min(90vh,760px)] flex flex-col rounded-t-[1.25rem] sm:rounded-2xl border border-slate-600/50 bg-slate-900/98 ring-1 ring-white/[0.06] shadow-2xl shadow-black/50 overflow-hidden animate-slide-up"
           onClick={(e) => e.stopPropagation()}
         >
           <span id="cart-quote-title" className="sr-only">
@@ -537,7 +574,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
 
   if (layout === 'inline') {
     return (
-      <div className="w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-lg shadow-black/25 overflow-hidden flex flex-col max-h-[min(480px,55svh)] min-h-[200px]">
+      <div className="w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 ring-1 ring-white/[0.04] shadow-xl shadow-black/30 overflow-hidden flex flex-col max-h-[min(520px,58svh)] min-h-[200px]">
         {cartBody}
       </div>
     )
