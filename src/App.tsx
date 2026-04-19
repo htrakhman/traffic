@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
+import { usePostHog } from '@posthog/react'
 import type { Product } from './types'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
@@ -26,6 +27,16 @@ function ScrollToTop() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [pathname])
+  return null
+}
+
+/** SPA route changes: capture $pageview when PostHog is enabled (see `main.tsx`). */
+function PostHogPageview() {
+  const client = usePostHog()
+  const location = useLocation()
+  useEffect(() => {
+    client?.capture('$pageview')
+  }, [client, location.pathname, location.search])
   return null
 }
 
@@ -82,6 +93,7 @@ export default function App() {
         <MembershipProvider>
           <CartProvider>
             <ScrollToTop />
+            {import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN ? <PostHogPageview /> : null}
             <AppLayout />
           </CartProvider>
         </MembershipProvider>
