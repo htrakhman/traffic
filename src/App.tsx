@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import type { Product } from './types'
+import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { MembershipProvider } from './context/MembershipContext'
 import { CatalogSyncProvider, useCatalogSync } from './context/CatalogSyncContext'
@@ -18,6 +19,7 @@ import Checkout from './pages/Checkout'
 import SiteMapPlanner from './pages/SiteMapPlanner'
 import Blog from './pages/Blog'
 import Article from './pages/Article'
+import Account from './pages/Account'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -61,6 +63,7 @@ function AppLayout() {
           <Route path="/planner" element={<SiteMapPlanner />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<Article />} />
+          <Route path="/account" element={<Account />} />
           {/* Fallback */}
           <Route path="*" element={<Home />} />
         </Routes>
@@ -75,12 +78,14 @@ export default function App() {
     <BrowserRouter>
       <CatalogSyncProvider>
         <CatalogLoader />
+        <AuthProvider>
         <MembershipProvider>
           <CartProvider>
             <ScrollToTop />
             <AppLayout />
           </CartProvider>
         </MembershipProvider>
+        </AuthProvider>
       </CatalogSyncProvider>
     </BrowserRouter>
   )

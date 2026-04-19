@@ -10,6 +10,51 @@
       "targetVolume": 500,
       "wordCount": 1300,
       "notes": "Seed article. Pillar piece covering the highest-volume rental term in the tracker."
+    },
+    {
+      "date": "2026-04-19",
+      "slug": "uniform-traffic-control-devices-mutcd-guide",
+      "url": "/blog/uniform-traffic-control-devices-mutcd-guide",
+      "primaryKeyword": "uniform traffic control devices",
+      "targetVolume": 50000,
+      "wordCount": 2040,
+      "notes": "PILLAR ARTICLE. Comprehensive MUTCD guide covering device categories, barricade types, AFADs, flagger requirements, and crashworthiness standards."
+    },
+    {
+      "date": "2026-04-19",
+      "slug": "arrow-board-rental-guide",
+      "url": "/blog/arrow-board-rental-guide",
+      "primaryKeyword": "arrow board rental",
+      "targetVolume": 500,
+      "wordCount": 1480,
+      "notes": "Type A/B/C specs, trailer vs truck-mounted decision matrix, daily/weekly/monthly rates, lamp requirements per MUTCD §6L.06."
+    },
+    {
+      "date": "2026-04-19",
+      "slug": "automated-flagger-assistance-device-afad-guide",
+      "url": "/blog/automated-flagger-assistance-device-afad-guide",
+      "primaryKeyword": "automated flagger assistance device",
+      "targetVolume": 500,
+      "wordCount": 1520,
+      "notes": "MUTCD §6E.04 operational rules, STOP/SLOW vs Red/Yellow Lens types, single-lane traffic requirement, purchase vs rental economics."
+    },
+    {
+      "date": "2026-04-19",
+      "slug": "barricade-rental-near-me-guide",
+      "url": "/blog/barricade-rental-near-me-guide",
+      "primaryKeyword": "barricade rental near me",
+      "targetVolume": 500,
+      "wordCount": 1650,
+      "notes": "Type I/II/III per MUTCD §6F.63, material comparison (steel vs plastic vs water-filled), speed/duration decision tree, provider vetting checklist."
+    },
+    {
+      "date": "2026-04-19",
+      "slug": "portable-traffic-control-devices-guide",
+      "url": "/blog/portable-traffic-control-devices-guide",
+      "primaryKeyword": "portable traffic control devices",
+      "targetVolume": 500,
+      "wordCount": 1620,
+      "notes": "Portable signals (ATSSA-certified), rumble strips, cones vs drums, NCHRP 350 / MASH crashworthiness, portable vs permanent decision framework."
     }
   ]
 }

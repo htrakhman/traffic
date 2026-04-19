@@ -6,13 +6,48 @@
     <atom:link href="https://trafficcontrolrental.com/rss.xml" rel="self" type="application/rss+xml" />
     <description>Practical, contractor-voiced guides on traffic control rental, MUTCD work zone setup, and job-site safety.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Apr 2026 02:33:59 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Apr 2026 04:57:23 GMT</lastBuildDate>
+    <item>
+      <title>What Are Uniform Traffic Control Devices? An MUTCD Field Guide</title>
+      <link>https://trafficcontrolrental.com/blog/uniform-traffic-control-devices-mutcd-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/uniform-traffic-control-devices-mutcd-guide</guid>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A comprehensive breakdown of uniform traffic control devices, MUTCD standards, and how each device category keeps work zones and traffic safe. Written for contractors and DOT crews.</description>
+    </item>
+    <item>
+      <title>Portable Traffic Control Devices: A Crew-Tested Equipment Guide</title>
+      <link>https://trafficcontrolrental.com/blog/portable-traffic-control-devices-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/portable-traffic-control-devices-guide</guid>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Portable signals, cones, rumble strips, and barricades for short-term or mobile work zones. NCHRP 350 / MASH ratings, ATSSA standards, and when to use each type.</description>
+    </item>
+    <item>
+      <title>Barricade Rental Near Me: How to Pick the Right Type and Provider</title>
+      <link>https://trafficcontrolrental.com/blog/barricade-rental-near-me-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/barricade-rental-near-me-guide</guid>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <description>MUTCD Type I, II, and III barricades explained. Decide which type your job needs, compare water-filled vs. steel vs. plastic, and what to ask a local rental provider.</description>
+    </item>
+    <item>
+      <title>Automated Flagger Assistance Devices (AFADs): What They Are and When to Use One</title>
+      <link>https://trafficcontrolrental.com/blog/automated-flagger-assistance-device-afad-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/automated-flagger-assistance-device-afad-guide</guid>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A technical guide to AFADs: how they work, MUTCD Section 6E.04 rules, when to use STOP/SLOW vs. Red/Yellow Lens models, and typical costs-purchase vs. daily rental.</description>
+    </item>
+    <item>
+      <title>Arrow Board Rental: Trailer vs. Truck-Mount, Specs, and What You Will Pay</title>
+      <link>https://trafficcontrolrental.com/blog/arrow-board-rental-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/arrow-board-rental-guide</guid>
+      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Compare trailer and truck-mounted arrow boards for lane closures. Learn MUTCD Type A/B/C specs, when they're required, and real rental rates for daily, weekly, and monthly terms.</description>
+    </item>
     <item>
       <title>Traffic Control Rental: What to Rent, What It Costs, and How to Plan a Work Zone</title>
       <link>https://trafficcontrolrental.com/blog/traffic-control-rental-guide</link>
       <guid>https://trafficcontrolrental.com/blog/traffic-control-rental-guide</guid>
       <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A contractor-focused guide to renting traffic control equipment — what you actually need, typical day/week rates, and how to lay out an MUTCD-compliant work zone without overspending.</description>
+      <description>A contractor-focused guide to renting traffic control equipment - what you actually need, typical day/week rates, and how to lay out an MUTCD-compliant work zone without overspending.</description>
     </item>
   </channel>
 </rss>
