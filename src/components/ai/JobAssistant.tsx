@@ -860,18 +860,18 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
         }
 
         return (
-          <div className="flex flex-1 min-h-0 flex-col md:flex-row md:gap-3 md:min-h-0">
-            <div className="flex flex-col flex-1 min-h-0 min-w-0 md:min-w-0 md:max-w-[52%] lg:max-w-[55%]">
+          <div className="flex min-h-0 flex-1 flex-row gap-3">
+            <div className="flex min-h-0 min-w-0 max-w-[52%] flex-1 flex-col lg:max-w-[55%]">
               <div ref={scrollContainerRef} className={scrollAreaClassName}>
                 {inner}
               </div>
               {errorBlock}
-              <div className="p-3 sm:p-4 border-t border-slate-800 shrink-0 space-y-2.5">
+              <div className="shrink-0 space-y-2.5 border-t border-slate-800 p-3 sm:p-4">
                 {composerBlock}
                 {fileInput}
               </div>
             </div>
-            <div className="flex min-h-[min(42vh,300px)] flex-1 flex-col min-w-0 border-t border-slate-800 pt-3 md:min-h-0 md:border-l md:border-t-0 md:pl-3 md:pt-0">
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-slate-800 pl-3">
               {mapPanel}
             </div>
           </div>
