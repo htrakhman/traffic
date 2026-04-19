@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle } from 'react'
+import { useEffect, useRef, useState, useCallback, forwardRef, useImperativeHandle, useMemo } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
 import { MapPin, MapPinned, Navigation, Trash2, PenLine, RotateCcw, Search } from 'lucide-react'
 import type { MapArea } from '../../types'
@@ -571,6 +571,77 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
       mapRef.current = null
     }
   }, [buildArea])
+
+  const valuePathSerialized = useMemo(
+    () => (value?.path && value.path.length >= 3 ? JSON.stringify(value.path) : ''),
+    [value?.path],
+  )
+
+  /** Restore polygon from parent `value` (e.g. sessionStorage) and drop overlay when `value` is cleared. */
+  useEffect(() => {
+    if (status !== 'ready' || !mapRef.current) return
+
+    if (!valuePathSerialized) {
+      if (polygonRef.current) {
+        roadsFetchGen.current += 1
+        polygonRef.current.setMap(null)
+        polygonRef.current = null
+      }
+      drawingRef.current?.setDrawingMode(null)
+      setDrawing(false)
+      return
+    }
+
+    let pathPts: { lat: number; lng: number }[]
+    try {
+      pathPts = JSON.parse(valuePathSerialized) as { lat: number; lng: number }[]
+    } catch {
+      return
+    }
+    if (!pathPts?.length || pathPts.length < 3) return
+
+    const map = mapRef.current
+
+    if (polygonRef.current) {
+      const arr = polygonRef.current.getPath().getArray()
+      const same =
+        arr.length === pathPts.length &&
+        arr.every((ll, i) => {
+          const p = pathPts[i]
+          return Math.abs(ll.lat() - p.lat) < 1e-6 && Math.abs(ll.lng() - p.lng) < 1e-6
+        })
+      if (same) return
+    }
+
+    polygonRef.current?.setMap(null)
+    polygonRef.current = null
+    drawingRef.current?.setDrawingMode(null)
+    setDrawing(false)
+
+    const poly = new google.maps.Polygon({
+      paths: pathPts,
+      map,
+      fillColor: '#f97316',
+      fillOpacity: 0.25,
+      strokeColor: '#f97316',
+      strokeWeight: 2,
+      editable: true,
+      draggable: true,
+    })
+    polygonRef.current = poly
+
+    const updateArea = () => void buildArea(poly)
+    google.maps.event.addListener(poly.getPath(), 'set_at', updateArea)
+    google.maps.event.addListener(poly.getPath(), 'insert_at', updateArea)
+    google.maps.event.addListener(poly.getPath(), 'remove_at', updateArea)
+
+    const bounds = new google.maps.LatLngBounds()
+    pathPts.forEach((c) => bounds.extend(c))
+    map.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 })
+    if (markerRef.current && value?.center) {
+      markerRef.current.position = value.center
+    }
+  }, [status, valuePathSerialized, value, buildArea])
 
   if (noKey) {
     return (

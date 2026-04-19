@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } from 'react'
 import { extractGeocodeQueryFromMessage, parseLatLngFromMessage } from '../../utils/locationParse'
 import {
   Sparkles,
@@ -14,13 +14,17 @@ import {
   UnfoldVertical,
   FoldVertical,
   PenLine,
-  Columns2,
-  PanelBottom,
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
 import { normalizeRecommendationPricing } from '../../utils/pricing'
 import { tryParseTailAfterCartStart } from '../../utils/chatCartParse'
 import type { ChatMessage, JobDetails, AIRecommendation, MapArea } from '../../types'
+import {
+  buildPersistPayload,
+  clearJobAssistantSession,
+  readJobAssistantSession,
+  writeJobAssistantSession,
+} from '../../utils/jobAssistantSessionStorage'
 import CartWidget from './CartWidget'
 import JobForm from './JobForm'
 import MapAreaSelector, { type MapAreaSelectorHandle } from './MapAreaSelector'
@@ -106,7 +110,7 @@ interface Props {
   /** Tighter empty state when the planner is embedded (e.g. homepage) so it does not repeat the page headline. */
   embedded?: boolean
   /**
-   * Fires when the planner needs extra vertical space (tall map, split chat/map, etc.) so the host card can grow.
+   * Fires when the planner needs extra vertical space (tall map, chat + map columns, etc.) so the host card can grow.
    */
   onMapExpandedLayoutChange?: (expanded: boolean) => void
 }
@@ -132,52 +136,106 @@ function ThinkingIndicator() {
 }
 
 export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLayoutChange }: Props) {
-  const [mode, setMode] = useState<Mode>('chat')
+  const [persistedBoot] = useState(() => readJobAssistantSession(embedded))
+
+  const [mode, setMode] = useState<Mode>(() => persistedBoot?.mode ?? 'chat')
   /** Taller map inside the planner card (still on the Job Planner page — not browser fullscreen). */
-  const [mapExpanded, setMapExpanded] = useState(false)
-  /** Chat + map side-by-side on wider screens (still one card). */
-  const [splitChatMap, setSplitChatMap] = useState(false)
+  const [mapExpanded, setMapExpanded] = useState(() => persistedBoot?.mapExpanded ?? false)
   const [mapPanelFullscreen, setMapPanelFullscreen] = useState(false)
-  const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [input, setInput] = useState(initialPrompt ?? '')
+  const [messages, setMessages] = useState<ChatMessage[]>(() => persistedBoot?.messages ?? [])
+  const [input, setInput] = useState(() => persistedBoot?.input ?? (initialPrompt ?? ''))
   const [isStreaming, setIsStreaming] = useState(false)
-  const [recommendation, setRecommendation] = useState<AIRecommendation | null>(null)
+  const [recommendation, setRecommendation] = useState<AIRecommendation | null>(
+    () => persistedBoot?.recommendation ?? null,
+  )
   const imageFileRef = useRef<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [mapArea, setMapArea] = useState<MapArea | undefined>()
+  const [mapArea, setMapArea] = useState<MapArea | undefined>(() => persistedBoot?.mapArea)
   /** User moved the pin via map search, suggestions, chat location, or geolocation — drives the setup checklist. */
-  const [mapSiteLocated, setMapSiteLocated] = useState(false)
+  const [mapSiteLocated, setMapSiteLocated] = useState(() => persistedBoot?.mapSiteLocated ?? false)
   const handleMapSiteLocated = useCallback(() => setMapSiteLocated(true), [])
   /** `${assistantMsgIndex}-${segmentIndex}` → selected option (batch-sent together per assistant message) */
-  const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(new Map())
+  const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(
+    () => persistedBoot?.choiceSelections ?? new Map(),
+  )
   /** Assistant message indices whose Q&A batch was already submitted */
-  const [lockedQuestionMessages, setLockedQuestionMessages] = useState<Set<number>>(new Set())
+  const [lockedQuestionMessages, setLockedQuestionMessages] = useState<Set<number>>(
+    () => persistedBoot?.lockedQuestionMessages ?? new Set(),
+  )
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const mapSelectorRef = useRef<MapAreaSelectorHandle>(null)
   const mapPanelRef = useRef<HTMLDivElement>(null)
 
-  const mapUsesExtraHeight =
-    mapPanelFullscreen || mapExpanded || (splitChatMap && mode === 'chat')
-  const shrinkChatForTallMap =
-    mode === 'chat' && mapExpanded && !mapPanelFullscreen && !splitChatMap
+  const mapUsesExtraHeight = mapPanelFullscreen || mapExpanded || mode === 'chat'
 
   useLayoutEffect(() => {
     onMapExpandedLayoutChange?.(
-      Boolean((mapExpanded && !mapPanelFullscreen) || (splitChatMap && mode === 'chat')),
+      Boolean((mapExpanded && !mapPanelFullscreen) || mode === 'chat'),
     )
     return () => {
       onMapExpandedLayoutChange?.(false)
     }
-  }, [mapExpanded, mapPanelFullscreen, splitChatMap, mode, onMapExpandedLayoutChange])
+  }, [mapExpanded, mapPanelFullscreen, mode, onMapExpandedLayoutChange])
 
   useEffect(() => {
     const syncFs = () => setMapPanelFullscreen(document.fullscreenElement === mapPanelRef.current)
     document.addEventListener('fullscreenchange', syncFs)
     return () => document.removeEventListener('fullscreenchange', syncFs)
   }, [])
+
+  const persistSig = useMemo(
+    () =>
+      JSON.stringify({
+        mode,
+        messages: messages.map((m) => ({
+          role: m.role,
+          content: m.content,
+          t: m.timestamp instanceof Date ? m.timestamp.getTime() : 0,
+        })),
+        input,
+        mapArea,
+        mapSiteLocated,
+        recommendation,
+        cs: [...choiceSelections.entries()].sort((a, b) => a[0].localeCompare(b[0])),
+        lq: [...lockedQuestionMessages].sort((a, b) => a - b),
+        mapExpanded,
+      }),
+    [
+      mode,
+      messages,
+      input,
+      mapArea,
+      mapSiteLocated,
+      recommendation,
+      choiceSelections,
+      lockedQuestionMessages,
+      mapExpanded,
+    ],
+  )
+
+  useEffect(() => {
+    if (isStreaming) return
+    const t = setTimeout(() => {
+      writeJobAssistantSession(
+        embedded,
+        buildPersistPayload({
+          mode,
+          messages,
+          input,
+          mapArea,
+          mapSiteLocated,
+          recommendation,
+          choiceSelections,
+          lockedQuestionMessages,
+          mapExpanded,
+        }),
+      )
+    }, 400)
+    return () => clearTimeout(t)
+  }, [persistSig, embedded, isStreaming])
 
   const scrollPanelToBottom = () => {
     const el = scrollContainerRef.current
@@ -306,6 +364,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   }
 
   const handleReset = () => {
+    clearJobAssistantSession(embedded)
     setMessages([])
     setInput('')
     setRecommendation(null)
@@ -317,7 +376,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     setMapArea(undefined)
     setMapSiteLocated(false)
     setMapExpanded(false)
-    setSplitChatMap(false)
     if (mapPanelRef.current && document.fullscreenElement === mapPanelRef.current) {
       void document.exitFullscreen().catch(() => {})
     }
@@ -349,28 +407,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
             Guided Form
           </button>
         </div>
-        {mode === 'chat' && (
-          <button
-            type="button"
-            onClick={() => setSplitChatMap((v) => !v)}
-            aria-pressed={splitChatMap}
-            aria-label={
-              splitChatMap ? 'Stack chat and map vertically' : 'Split view: chat and map side by side'
-            }
-            title={
-              splitChatMap
-                ? 'Stack chat and map vertically'
-                : 'Split view: chat and map side by side (on wider screens)'
-            }
-            className={`shrink-0 p-2 rounded-lg border transition-all ${
-              splitChatMap
-                ? 'border-brand-500/40 bg-brand-500/15 text-brand-200 hover:bg-brand-500/25'
-                : 'border-slate-700/80 bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            {splitChatMap ? <PanelBottom size={14} aria-hidden /> : <Columns2 size={14} aria-hidden />}
-          </button>
-        )}
         {showReset && (
           <button
             onClick={handleReset}
@@ -383,14 +419,9 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
       </div>
 
       {(() => {
-        const splitViewActive = splitChatMap && mode === 'chat'
-        const scrollAreaClassName = `min-h-0 overflow-y-auto overscroll-y-contain ${
-          shrinkChatForTallMap
-            ? embedded
-              ? 'max-h-[min(130px,24svh)] shrink-0 sm:max-h-[min(170px,28svh)]'
-              : 'max-h-[min(200px,32svh)] shrink-0 sm:max-h-[min(240px,36svh)]'
-            : 'flex-1'
-        }`
+        const splitViewActive = mode === 'chat'
+        const scrollAreaClassName =
+          'min-h-0 overflow-y-auto overscroll-y-contain flex-1'
 
         const inner = (
           <>
@@ -745,8 +776,8 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="After the map is set: lane closure, duration, day/night… (A place name in your message still moves the map when you send.)"
-                    rows={1}
-                    className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none resize-none max-h-32"
+                    rows={4}
+                    className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm leading-relaxed text-slate-100 placeholder-slate-500 outline-none resize-none min-h-[6.25rem] max-h-44"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault()

@@ -5,6 +5,7 @@ import type { Product, AIRecommendation } from '../types'
 import type { CartLine } from '../context/CartContext'
 import { useCart } from '../context/CartContext'
 import { getProductById } from '../data/products'
+import { readQuoteAiDraft, clearQuoteAiDraft } from '../utils/quoteAiDraftStorage'
 
 interface QuoteItem {
   product: Product
@@ -26,6 +27,16 @@ function buildInitialItems(state: LocationState, cartLines: CartLine[]): QuoteIt
         const prod = getProductById(item.productId)
         if (!prod) return null
         return { product: prod, quantity: item.quantity, days: state.recommendation!.estimatedDurationDays }
+      })
+      .filter(Boolean) as QuoteItem[]
+  }
+  const sessionRec = readQuoteAiDraft()
+  if (sessionRec?.items?.length) {
+    return sessionRec.items
+      .map((item) => {
+        const prod = getProductById(item.productId)
+        if (!prod) return null
+        return { product: prod, quantity: item.quantity, days: sessionRec.estimatedDurationDays }
       })
       .filter(Boolean) as QuoteItem[]
   }
@@ -79,6 +90,7 @@ export default function Quote() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    clearQuoteAiDraft()
     setSubmitted(true)
   }
 

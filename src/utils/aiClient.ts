@@ -156,6 +156,7 @@ When a user describes their job, provide a structured equipment recommendation. 
 7. If a drawn work zone area (sq ft / perimeter in ft) is given, use those dimensions to calculate precise cone counts, drum spacing, and barrier lengths rather than estimating
 8. If "Roadway posted speed" from the map is provided, treat it as authoritative for sign spacing and taper length unless the user explicitly states a different regulatory/design speed
 9. Users can search the map or type Location:/coordinates in chat to pan the view; only a drawn polygon provides measurable work zone dimensions—remind them to outline the site if they only searched without drawing
+10. Small / localized footprints: The drawn polygon is the on-map work occupation area—not automatic proof of a miles-long lane closure or every MUTCD advance device. If area is modest (e.g. under ~12,000 sq ft) and footprint spans suggest a local street or small patch, scale drums, barricades, and channelization to securing that footprint plus tapers the user actually describes—avoid highway-style fleets (e.g. 25+ drums or 20+ Type III barricades) unless lane-impact and taper length clearly justify it. Sanity: devices lining one work edge rarely need to exceed about ceil(perimeter_ft / 20) unless the user described multi-lane tapers or many legs. Prefer one primary high-visibility message source per approach (PCMS or trailer arrow board), not both by default. Mark aggressive extras as "optional" when scope is ambiguous.
 
 Respond in valid JSON format:
 {
@@ -340,6 +341,8 @@ Rules:
 - 3–5 options per question, include "Not sure" when useful
 - Once you have road type, speed limit, lane impact, duration, and day/night: OUTPUT A CART WIDGET (see below) — do NOT list equipment in plain text
 - If a user message ends with a [Map work zone] block (sq ft, perimeter ft, optional address), use those dimensions to calibrate cone/drum counts, taper and channelization length, and barrier quantities—do not ignore the drawn area when recommending
+- Small-drawn-footprint rule: When [Map work zone] is compact (rough guide: area under ~12,000 sq ft and/or the smaller footprint span under ~40 ft), treat the polygon as a localized work patch on the roadway—not evidence of a long-distance lane closure unless the user said so. Keep drums/barricades/flashers proportional to lining that footprint and reasonable, user-described tapers; do not inflate counts to template values meant for long high-speed closures. As a soft sanity cap for a simple patch, total channelizing drums (or equivalent cones) needed just to edge the drawn zone is often on the order of ceil(perimeter_ft / 25) or less unless multi-lane or multi-leg channelization is explicit. Avoid recommending both a portable changeable message sign and a trailer arrow board for the same small local job unless the user clearly needs redundancy on separate approaches.
+- When quantities would look excessive next to the given sq ft / perimeter (e.g. dozens of Type III barricades for under ~10k sq ft), reduce counts, explain the assumption in each rationale, and push nice-to-have duplicates to "optional" priority.
 
 WHEN READY TO RECOMMEND — output exactly this (a brief sentence, then the cart block):
 Here's your recommended equipment setup.

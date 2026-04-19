@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import type { AIRecommendation, RecommendationItem } from '../../types'
 import { getProducts, getProductById } from '../../data/products'
+import { clearQuoteAiDraft, writeQuoteAiDraft } from '../../utils/quoteAiDraftStorage'
 import { useCatalogSync } from '../../context/CatalogSyncContext'
 import { useCart } from '../../context/CartContext'
 import type { Product } from '../../types'
@@ -94,6 +95,38 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
     setItems(recommendation.items)
     setRemoved(new Set())
   }, [recommendationItemsKey, recommendation.items])
+
+  const quoteDraftPersistKey = useMemo(
+    () =>
+      JSON.stringify({
+        itemsKey: recommendationItemsKey,
+        removed: [...removed].sort(),
+        qty: items.map((i) => `${itemKey(i)}:${i.quantity}`),
+        days: recommendation.estimatedDurationDays,
+        sum: recommendation.summary,
+      }),
+    [
+      recommendationItemsKey,
+      removed,
+      items,
+      recommendation.estimatedDurationDays,
+      recommendation.summary,
+    ],
+  )
+
+  /** Same-tab + new-tab quote: Router `state` is lost on target=_blank, so we mirror the draft here. */
+  useEffect(() => {
+    const active = items.filter((item) => !removed.has(itemKey(item)))
+    if (active.length === 0) {
+      clearQuoteAiDraft()
+      return
+    }
+    writeQuoteAiDraft({
+      ...recommendation,
+      items: active,
+      totalDailyRate: active.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0),
+    })
+  }, [quoteDraftPersistKey, recommendation, items, removed])
 
   const totalDailyRate = activeItems.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0)
   const estimatedTotal = totalDailyRate * recommendation.estimatedDurationDays
@@ -473,7 +506,6 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
             </button>
             <Link
               to="/quote"
-              state={{ recommendation: buildRecommendationState() }}
               className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold text-slate-200 border border-slate-600 rounded-xl hover:bg-slate-800/90 transition-colors text-center"
             >
               Get quote
