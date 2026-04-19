@@ -5,7 +5,7 @@ import { SITE_NAME } from '../config/site'
 
 // Route chat through our serverless proxy at /api/chat (OpenAI / Gemini / Perplexity on the server).
 // Set OPENAI_API_KEY, GEMINI_API_KEY (or GOOGLE_AI_API_KEY), and/or PERPLEXITY_API_KEY — never VITE_*.
-// Optional: CHAT_AI_FALLBACK_ORDER=openai,gemini,perplexity
+// Optional: CHAT_AI_FALLBACK_ORDER=gemini,openai,perplexity
 //
 // Demo mode (no live AI) is triggered by VITE_AI_DEMO_MODE=true in the client
 // env or by the proxy returning 500 (e.g. in previews where the key is absent).

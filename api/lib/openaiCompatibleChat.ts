@@ -73,7 +73,13 @@ function openAiStreamToAnthropicSseStream(upstream: ReadableStream<Uint8Array>):
 
 export async function handleOpenAICompatibleRequest(
   incoming: Record<string, unknown>,
-  opts: { apiKey: string; baseUrl: string; defaultModel: string },
+  opts: {
+    apiKey: string
+    baseUrl: string
+    defaultModel: string
+    /** OpenAI API rejects max_tokens for many current models — use max_completion_tokens. */
+    outputTokenLimit?: 'completion' | 'max_tokens'
+  },
 ): Promise<Response> {
   const bodyJson = JSON.stringify(incoming)
   if (bodyJson.length > MAX_BODY_BYTES) {
@@ -104,8 +110,13 @@ export async function handleOpenAICompatibleRequest(
   const payload: Record<string, unknown> = {
     model: opts.defaultModel,
     messages: openAiMessages,
-    max_tokens: maxOut,
     stream,
+  }
+  const limitStyle = opts.outputTokenLimit ?? 'max_tokens'
+  if (limitStyle === 'completion') {
+    payload.max_completion_tokens = maxOut
+  } else {
+    payload.max_tokens = maxOut
   }
 
   const upstream = await fetch(url, {
