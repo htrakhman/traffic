@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react'
 import { extractGeocodeQueryFromMessage, parseLatLngFromMessage } from '../../utils/locationParse'
 import {
   Sparkles,
@@ -14,6 +14,7 @@ import {
   UnfoldVertical,
   FoldVertical,
   PenLine,
+  Check,
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
 import { normalizeRecommendationPricing } from '../../utils/pricing'
@@ -125,6 +126,9 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [mapArea, setMapArea] = useState<MapArea | undefined>()
+  /** User moved the pin via map search, suggestions, chat location, or geolocation — drives the setup checklist. */
+  const [mapSiteLocated, setMapSiteLocated] = useState(false)
+  const handleMapSiteLocated = useCallback(() => setMapSiteLocated(true), [])
   /** `${assistantMsgIndex}-${segmentIndex}` → selected option (batch-sent together per assistant message) */
   const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(new Map())
   /** Assistant message indices whose Q&A batch was already submitted */
@@ -287,6 +291,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     setChoiceSelections(new Map())
     setLockedQuestionMessages(new Set())
     setMapArea(undefined)
+    setMapSiteLocated(false)
     setMapExpanded(false)
     if (mapPanelRef.current && document.fullscreenElement === mapPanelRef.current) {
       void document.exitFullscreen().catch(() => {})
@@ -294,7 +299,15 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   }
 
   const isEmpty = messages.length === 0 && !recommendation
-  const showReset = !isEmpty || mapArea !== undefined
+  const showReset = !isEmpty || mapArea !== undefined || mapSiteLocated
+  const setupSearchDone = mapSiteLocated || !!mapArea
+  const setupZoneDone = !!mapArea
+
+  const focusMapSearch = () => {
+    document.getElementById('map-area-search')?.focus()
+  }
+
+  const focusJobComposer = () => textareaRef.current?.focus()
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -365,13 +378,13 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     </div>
                     <h3 className="font-semibold text-white mb-2">Work Zone AI Planner</h3>
                     <p className="text-sm text-slate-400 max-w-sm mx-auto mb-6 leading-relaxed">
-                      Describe your job in the message box — I will help you locate the site and outline the work zone on the map, then recommend equipment and quantities.
+                      For the best equipment counts, use the map below: search your job site, draw the work zone polygon, then describe the job here and send.
                     </p>
                   </>
                 )}
                 {embedded && (
                   <p className="text-sm text-slate-500 max-w-md mx-auto mb-4 leading-relaxed">
-                    Type your job or try a sample — I will guide you on the map below, or you can mark the site directly.
+                    Best results: scroll to the map — search the address first, draw your work zone, then type your job (or a sample) and send.
                   </p>
                 )}
                 <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
@@ -604,7 +617,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                   ref={textareaRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Describe the job or site — I can guide map placement and your work zone. A place name in the text still moves the map when you send."
+                  placeholder="After the map is set: lane closure, duration, day/night… (A place name in your message still moves the map when you send.)"
                   rows={1}
                   className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm text-slate-100 placeholder-slate-500 outline-none resize-none max-h-32"
                   onKeyDown={(e) => {
@@ -721,6 +734,76 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 </button>
               </div>
             </div>
+            <div className="px-2.5 py-2 border-b border-slate-800/90 bg-slate-950/50 space-y-1.5">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-brand-400/85">Suggested order</p>
+              <div className="grid grid-cols-1 min-[420px]:grid-cols-3 gap-1.5">
+                <button
+                  type="button"
+                  onClick={focusMapSearch}
+                  className={`text-left rounded-lg border px-2 py-1.5 transition-colors ${
+                    setupSearchDone
+                      ? 'border-emerald-500/30 bg-emerald-500/10'
+                      : 'border-sky-500/35 bg-sky-950/50 hover:bg-sky-500/10'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    {setupSearchDone ? (
+                      <Check size={14} className="text-emerald-400 shrink-0" aria-hidden />
+                    ) : (
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-sky-400/55 text-[9px] font-bold text-sky-200">
+                        1
+                      </span>
+                    )}
+                    <span className="text-[11px] font-semibold text-white">Search the site</span>
+                  </div>
+                  <p className="mt-0.5 pl-[22px] text-[10px] leading-snug text-slate-500">
+                    Address, milepost, or coordinates — then <span className="text-slate-400">Go</span>
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => mapSelectorRef.current?.startWorkZoneDraw()}
+                  className={`text-left rounded-lg border px-2 py-1.5 transition-colors ${
+                    setupZoneDone
+                      ? 'border-emerald-500/30 bg-emerald-500/10'
+                      : 'border-brand-500/35 bg-brand-500/10 hover:bg-brand-500/15'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    {setupZoneDone ? (
+                      <Check size={14} className="text-emerald-400 shrink-0" aria-hidden />
+                    ) : (
+                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-brand-400/55 text-[9px] font-bold text-brand-100">
+                        2
+                      </span>
+                    )}
+                    <span className="text-[11px] font-semibold text-white">Draw work zone</span>
+                  </div>
+                  <p className="mt-0.5 pl-[22px] text-[10px] leading-snug text-slate-500">
+                    Corners on the map — double-click last point to finish
+                  </p>
+                </button>
+                <button
+                  type="button"
+                  onClick={focusJobComposer}
+                  className={`text-left rounded-lg border px-2 py-1.5 transition-colors ${
+                    setupZoneDone
+                      ? 'border-slate-600/80 bg-slate-900/80 hover:bg-slate-800/90'
+                      : 'border-slate-700/80 bg-slate-900/60 opacity-90 hover:opacity-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-slate-500/70 text-[9px] font-bold text-slate-300">
+                      3
+                    </span>
+                    <span className="text-[11px] font-semibold text-white">Describe job & send</span>
+                  </div>
+                  <p className="mt-0.5 pl-[22px] text-[10px] leading-snug text-slate-500">
+                    AI uses your outline for cone counts, tapers, and more
+                  </p>
+                </button>
+              </div>
+            </div>
             <div
               className={`px-2 pb-2 pt-2 ${
                 mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col min-h-0' : ''
@@ -730,6 +813,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 ref={mapSelectorRef}
                 value={mapArea}
                 onChange={setMapArea}
+                onUserRecenteredMap={handleMapSiteLocated}
                 variant="compact"
                 fillHeight={mapUsesExtraHeight}
                 tallFrame={mapPanelFullscreen}

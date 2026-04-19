@@ -9,6 +9,8 @@ import { fetchOsmConstructionNear, type OsmConstructionItem } from '../../utils/
 interface Props {
   value?: MapArea
   onChange: (area: MapArea | undefined) => void
+  /** Fires when the user moves the site pin via search, suggestions, chat-driven fly-to, or browser geolocation. */
+  onUserRecenteredMap?: () => void
   /** Shorter map + tighter copy for the chat composer strip */
   variant?: 'default' | 'compact'
   /** Compact mode only: map canvas grows with parent (“large map” layout in Job Assistant). */
@@ -91,10 +93,12 @@ function fmt(n: number, unit: string): string {
 }
 
 const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAreaSelector(
-  { value, onChange, variant = 'default', fillHeight = false, tallFrame = false, fillHeightBoost = false },
+  { value, onChange, onUserRecenteredMap, variant = 'default', fillHeight = false, tallFrame = false, fillHeightBoost = false },
   ref,
 ) {
   const compact = variant === 'compact'
+  const onUserLocateRef = useRef(onUserRecenteredMap)
+  onUserLocateRef.current = onUserRecenteredMap
   const stretch = compact && fillHeight
   const stretchMapMin =
     tallFrame
@@ -135,6 +139,7 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
     map.setZoom(zoom)
     if (markerRef.current) markerRef.current.position = { lat, lng }
     google.maps.event.trigger(map, 'resize')
+    onUserLocateRef.current?.()
   }, [])
 
   const runSearch = useCallback(
@@ -509,6 +514,7 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
               map.setCenter(here)
               map.setZoom(15)
               if (markerRef.current) markerRef.current.position = here
+              onUserLocateRef.current?.()
             },
             () => {},
           )
@@ -625,9 +631,11 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
                 htmlFor="map-area-search"
                 className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-sky-400/90"
               >
-                Map search
+                Find job site
               </label>
-              <span className="hidden min-[380px]:inline text-[10px] text-slate-500">Moves pin & view</span>
+              <span className="hidden min-[380px]:inline text-[10px] text-slate-500">
+                Search first, then <span className="text-slate-400">Go</span> — pin jumps to the job
+              </span>
             </div>
           )}
           <div className="flex gap-1.5 items-stretch">
@@ -919,7 +927,9 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
       )}
       {compact && (
         <p className="text-[10px] text-slate-600 leading-snug">
-          Pin ≈ site center. Use <span className="text-slate-500">Draw work zone</span> (on the map or in the map header), then click corners to close the polygon — the AI uses it when you send.
+          <span className="text-slate-500">1</span> Search so the pin sits on your work area, then{' '}
+          <span className="text-slate-500">2</span> use <span className="text-slate-500">Draw work zone</span> (map or header), click corners, double-click the last point to finish.{' '}
+          <span className="text-slate-500">3</span> Describe the job in chat and send — the AI uses area, perimeter, and speed for quantities.
         </p>
       )}
     </div>
