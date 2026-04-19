@@ -3,7 +3,7 @@
  *
  * Opens a full-screen modal showing a Google Map with:
  *  • The drawn workzone polygon (from Job Assistant session storage)
- *  • AI-placed equipment markers at MUTCD-correct positions & scale
+ *  • AI-placed equipment markers (catalog product photos, zone-colored frames, zoom-scaled)
  *  • Zone overlays (advance warning, taper, buffer, work, termination)
  *  • A planning notes sidebar from the AI TCS expert
  */
@@ -14,7 +14,12 @@ import { importLibrary, setOptions, type APIOptions } from '@googlemaps/js-api-l
 import type { MapArea } from '../../types'
 import type { CartLine } from '../../context/CartContext'
 import { getProductById } from '../../data/products'
-import { planWorkzoneLayout, buildDemoPlan, type WorkzonePlan } from '../../utils/workzonePlannerClient'
+import {
+  planWorkzoneLayout,
+  buildDemoPlan,
+  type WorkzonePlan,
+  type WorkzonePlacement,
+} from '../../utils/workzonePlannerClient'
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
 const MAP_ID = (import.meta.env.VITE_GOOGLE_MAPS_MAP_ID as string | undefined)?.trim() || 'DEMO_MAP_ID'
@@ -35,30 +40,71 @@ const ZONE_LABELS: Record<string, string> = {
   termination: 'Termination',
 }
 
-/* ── Marker icon SVGs per category ── */
-function markerSvg(zone: string, initial: string): string {
-  const fill = ZONE_COLORS[zone] ?? '#f97316'
-  return `
-    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="38" viewBox="0 0 32 38">
-      <path d="M16 0C7.163 0 0 7.163 0 16c0 10.627 14.32 21.373 15.36 22.188.377.291.903.291 1.28 0C17.68 37.373 32 26.627 32 16 32 7.163 24.837 0 16 0z" fill="${fill}"/>
-      <circle cx="16" cy="16" r="10" fill="rgba(0,0,0,0.35)"/>
-      <text x="16" y="20.5" text-anchor="middle" font-size="10" font-weight="bold" font-family="system-ui,sans-serif" fill="white">${initial}</text>
-    </svg>`
+const PLACEHOLDER_IMAGE = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect fill="#1e293b" width="80" height="80" rx="10"/><path fill="#64748b" d="M28 52 L40 24 L52 52z"/></svg>',
+)}`
+
+/** Square marker width/height in CSS px — scales with zoom so the map stays legible after fitBounds. */
+function markerFramePx(zoom: number): number {
+  const z = Number.isFinite(zoom) ? zoom : 17
+  const t = Math.min(1, Math.max(0, (z - 14) / 7))
+  return Math.min(76, Math.max(30, Math.round(32 + t * 38)))
 }
 
-function productInitial(name: string): string {
-  // Cone → C, Drum → D, Sign → S, Barricade → B, Arrow → A, Light → L, Barrier → R
-  const n = name.toLowerCase()
-  if (n.includes('cone')) return 'C'
-  if (n.includes('drum') || n.includes('barrel')) return 'D'
-  if (n.includes('arrow')) return 'A'
-  if (n.includes('light') || n.includes('flash')) return 'L'
-  if (n.includes('barricade')) return 'B'
-  if (n.includes('barrier') || n.includes('block')) return 'R'
-  if (n.includes('sign')) return 'S'
-  if (n.includes('flag')) return 'F'
-  if (n.includes('delineator')) return 'D'
-  return name.charAt(0).toUpperCase()
+function buildProductMarkerElement(placement: WorkzonePlacement, imageUrl: string): HTMLDivElement {
+  const zoneColor = ZONE_COLORS[placement.zone] ?? '#f97316'
+  const rotation = Number.isFinite(placement.rotation) ? placement.rotation : 0
+
+  const root = document.createElement('div')
+  root.dataset.wzMarker = '1'
+  root.style.cssText =
+    'transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;pointer-events:auto;cursor:pointer;'
+
+  const frame = document.createElement('div')
+  frame.style.cssText = [
+    'box-sizing:border-box',
+    `border:2px solid ${zoneColor}`,
+    'border-radius:10px',
+    'background:rgba(15,23,42,0.78)',
+    'backdrop-filter:blur(6px)',
+    '-webkit-backdrop-filter:blur(6px)',
+    'box-shadow:0 4px 14px rgba(0,0,0,0.4)',
+    'padding:3px',
+    'width:100%',
+    'aspect-ratio:1',
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    'overflow:hidden',
+  ].join(';')
+
+  const rot = document.createElement('div')
+  rot.style.cssText = [
+    'width:100%',
+    'height:100%',
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    `transform:rotate(${rotation}deg)`,
+    'transition:transform 0.2s ease',
+  ].join(';')
+
+  const img = document.createElement('img')
+  img.alt = ''
+  img.draggable = false
+  img.referrerPolicy = 'no-referrer'
+  img.style.cssText =
+    'max-width:92%;max-height:92%;width:auto;height:auto;object-fit:contain;display:block;pointer-events:none;'
+  img.src = imageUrl || PLACEHOLDER_IMAGE
+  img.onerror = () => {
+    img.onerror = null
+    img.src = PLACEHOLDER_IMAGE
+  }
+
+  rot.appendChild(img)
+  frame.appendChild(rot)
+  root.appendChild(frame)
+  return root
 }
 
 /* ── Component ── */
@@ -194,46 +240,64 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
     }
   }, [mapsReady, planStatus, runPlanning])
 
-  /* ── Place markers on map once plan is ready ── */
+  /* ── Place markers on map once plan is ready (catalog photos + zoom-scaled frames) ── */
   useEffect(() => {
-    if (!plan || !mapInstanceRef.current || !mapsReady) return
+    if (!plan || !mapInstanceRef.current || !mapsReady || !mapArea) return
 
-    // Clear old markers
-    for (const m of markersRef.current) m.map = null
-    markersRef.current = []
+    let cancelled = false
+    const map = mapInstanceRef.current
+    const listeners: google.maps.MapsEventListener[] = []
 
-    async function placeMarkers() {
+    const clearListeners = () => {
+      for (const h of listeners) google.maps.event.removeListener(h)
+      listeners.length = 0
+    }
+
+    const applyMarkerSizes = (roots: HTMLDivElement[]) => {
+      const m = mapInstanceRef.current
+      if (!m) return
+      const px = markerFramePx(m.getZoom() ?? 17)
+      for (const root of roots) root.style.width = `${px}px`
+    }
+
+    ;(async () => {
+      for (const mk of markersRef.current) mk.map = null
+      markersRef.current = []
+
       const { AdvancedMarkerElement } = await importLibrary('marker') as google.maps.MarkerLibrary
-      const map = mapInstanceRef.current!
+      if (cancelled) return
 
-      // Extend bounds to include all placements
+      const markerRoots: HTMLDivElement[] = []
       const allBounds = new google.maps.LatLngBounds()
-      for (const pt of mapArea!.path) allBounds.extend(pt)
+      for (const pt of mapArea.path) allBounds.extend(pt)
 
-      for (const placement of plan!.placements) {
+      for (const placement of plan.placements) {
+        if (cancelled) return
         const pos = { lat: placement.lat, lng: placement.lng }
         allBounds.extend(pos)
 
-        const initial = productInitial(placement.productName)
-        const svg = markerSvg(placement.zone, initial)
-        const blob = new Blob([svg], { type: 'image/svg+xml' })
-        const url = URL.createObjectURL(blob)
+        const product = getProductById(placement.productId)
+        const root = buildProductMarkerElement(placement, product?.imageUrl ?? '')
+        markerRoots.push(root)
 
-        const img = document.createElement('img')
-        img.src = url
-        img.width = 26
-        img.height = 30
-        img.style.cssText = 'display:block;cursor:pointer;transition:transform 0.15s;'
+        root.addEventListener('mouseenter', () => {
+          root.style.filter = 'brightness(1.06) drop-shadow(0 6px 18px rgba(0,0,0,0.5))'
+        })
+        root.addEventListener('mouseleave', () => {
+          root.style.filter = ''
+        })
+
+        const zIndex =
+          placement.zone === 'advance_warning' ? 10 : placement.zone === 'transition' ? 20 : 15
 
         const marker = new AdvancedMarkerElement({
           map,
           position: pos,
-          content: img,
+          content: root,
           title: placement.label,
-          zIndex: placement.zone === 'advance_warning' ? 10 : placement.zone === 'transition' ? 20 : 15,
+          zIndex,
         })
 
-        // Hover tooltip
         marker.addListener('click', () => {
           const iw = infoWindowRef.current!
           iw.setContent(`
@@ -249,11 +313,22 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
         markersRef.current.push(marker)
       }
 
-      // Fit to show everything with padding
-      map.fitBounds(allBounds, { top: 80, bottom: 120, left: 60, right: 60 })
-    }
+      if (cancelled) return
 
-    placeMarkers()
+      map.fitBounds(allBounds, { top: 80, bottom: 120, left: 60, right: 60 })
+      applyMarkerSizes(markerRoots)
+
+      const onZoomOrIdle = () => applyMarkerSizes(markerRoots)
+      listeners.push(google.maps.event.addListener(map, 'zoom_changed', onZoomOrIdle))
+      listeners.push(google.maps.event.addListener(map, 'idle', onZoomOrIdle))
+    })()
+
+    return () => {
+      cancelled = true
+      clearListeners()
+      for (const mk of markersRef.current) mk.map = null
+      markersRef.current = []
+    }
   }, [plan, mapsReady, mapArea])
 
   /* ── Cleanup ── */
@@ -282,9 +357,11 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
   /* ── Group placements by product for legend ── */
   const productGroups = plan
     ? Object.values(
-        plan.placements.reduce<Record<string, { name: string; zone: string; count: number }>>((acc, p) => {
+        plan.placements.reduce<
+          Record<string, { productId: string; name: string; zone: string; count: number }>
+        >((acc, p) => {
           const key = p.productId
-          if (!acc[key]) acc[key] = { name: p.productName, zone: p.zone, count: 0 }
+          if (!acc[key]) acc[key] = { productId: key, name: p.productName, zone: p.zone, count: 0 }
           acc[key].count++
           return acc
         }, {}),
@@ -383,18 +460,28 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
             <div className="px-4 py-3 border-b border-slate-800">
               <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Equipment Placed</div>
               <div className="space-y-1.5">
-                {productGroups.map((g, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs">
-                    <div
-                      className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 text-white font-bold text-[9px]"
-                      style={{ backgroundColor: ZONE_COLORS[g.zone] ?? '#f97316' }}
-                    >
-                      {productInitial(g.name)}
+                {productGroups.map((g) => {
+                  const thumb = getProductById(g.productId)
+                  return (
+                    <div key={g.productId} className="flex items-center gap-2 text-xs">
+                      <div
+                        className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 border-2 bg-slate-800/80 flex items-center justify-center"
+                        style={{ borderColor: ZONE_COLORS[g.zone] ?? '#f97316' }}
+                      >
+                        <img
+                          src={thumb?.imageUrl ?? PLACEHOLDER_IMAGE}
+                          alt=""
+                          className="max-w-[90%] max-h-[90%] w-auto h-auto object-contain"
+                          onError={(e) => {
+                            ;(e.target as HTMLImageElement).src = PLACEHOLDER_IMAGE
+                          }}
+                        />
+                      </div>
+                      <span className="text-slate-300 truncate flex-1">{g.name}</span>
+                      <span className="text-slate-500 flex-shrink-0">×{g.count}</span>
                     </div>
-                    <span className="text-slate-300 truncate flex-1">{g.name}</span>
-                    <span className="text-slate-500 flex-shrink-0">×{g.count}</span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )}
