@@ -56,29 +56,29 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-normal lg:gap-x-5 lg:py-0 lg:min-h-[4.25rem]">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2.5 shrink-0 min-w-0 max-w-[calc(100vw-8rem)] sm:max-w-none lg:max-w-none">
-              <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center shadow-lg shadow-brand-500/30">
+          <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-normal lg:gap-x-3 xl:gap-x-5 lg:py-0 lg:min-h-[4.25rem]">
+            {/* Logo — slightly smaller wordmark lg–xl so the nav column keeps enough width */}
+            <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0 max-w-[calc(100vw-8rem)] sm:max-w-none xl:gap-2.5">
+              <div className="w-8 h-8 shrink-0 bg-brand-500 rounded-lg flex items-center justify-center shadow-lg shadow-brand-500/30">
                 <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M12 2L8 7h8L12 2z" fill="currentColor" stroke="none" />
                   <path d="M9 9h6l1.5 11H7.5L9 9z" fill="currentColor" stroke="none" />
                 </svg>
               </div>
-              <span className="font-bold text-base sm:text-lg text-white tracking-tight leading-snug">
+              <span className="font-bold text-white tracking-tight leading-snug text-sm sm:text-base lg:text-sm xl:text-lg">
                 Traffic Control <span className="text-brand-400">Rental</span>
               </span>
             </Link>
 
-            {/* Desktop nav — grid middle column + overflow so links never paint over phone/auth */}
-            <nav className="hidden lg:flex justify-center items-center min-w-0 w-full overflow-x-hidden px-1">
-              <div className="flex items-center justify-center gap-0.5 max-w-full">
+            {/* Desktop nav — no horizontal clip (that hid "Equipment" / "Guides"); compact lg–xl instead */}
+            <nav className="hidden lg:flex justify-center items-center min-w-0 w-full px-0.5 xl:px-1">
+              <div className="flex flex-nowrap items-center justify-center gap-0 lg:gap-px xl:gap-0.5">
               {/* Categories dropdown */}
               <div className="relative shrink-0" onMouseLeave={() => setIsCatOpen(false)}>
                 <button
                   type="button"
                   onMouseEnter={() => setIsCatOpen(true)}
-                  className="inline-flex items-center justify-center gap-1 h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1 h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap xl:h-10 xl:px-3 xl:text-sm"
                 >
                   Equipment
                   <ChevronDown size={14} className={`shrink-0 transition-transform ${isCatOpen ? 'rotate-180' : ''}`} />
@@ -114,25 +114,25 @@ export default function Header() {
 
               <Link
                 to="/browse"
-                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0 xl:h-10 xl:px-3 xl:text-sm"
               >
                 Browse
               </Link>
               <Link
                 to="/assistant"
-                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0 xl:h-10 xl:px-3 xl:text-sm"
               >
                 Job Planner
               </Link>
               <Link
                 to="/planner"
-                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0 xl:h-10 xl:px-3 xl:text-sm"
               >
                 Site Map
               </Link>
               <Link
                 to="/blog"
-                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0 xl:h-10 xl:px-3 xl:text-sm"
               >
                 Guides
               </Link>
@@ -145,22 +145,22 @@ export default function Header() {
                 href="tel:+18005551234"
                 aria-label="Call 1-800-555-1234"
                 title="1-800-555-1234"
-                className="inline-flex items-center justify-center gap-2 h-10 min-w-10 shrink-0 px-0 xl:min-w-0 xl:gap-2.5 xl:pr-3 xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
+                className="inline-flex items-center justify-center gap-2 h-9 min-w-9 shrink-0 px-0 xl:h-10 xl:min-w-10 2xl:min-w-0 2xl:gap-2.5 2xl:pr-3 2xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
               >
                 <Phone size={15} className="shrink-0 text-slate-500" aria-hidden />
-                <span className="hidden xl:inline">1-800-555-1234</span>
+                <span className="hidden 2xl:inline">1-800-555-1234</span>
               </a>
-              <div className="flex items-center gap-0.5 pl-2 pr-3 mr-3 border-r border-slate-800 shrink-0">
+              <div className="flex items-center gap-0.5 pl-1.5 pr-2 mr-2 border-r border-slate-800 shrink-0 xl:pl-2 xl:pr-3 xl:mr-3">
                 <Link
                   to="/browse"
-                  className="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
+                  className="inline-flex h-9 w-9 xl:h-10 xl:w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
                   aria-label="Search catalog"
                 >
                   <Search size={18} />
                 </Link>
                 <Link
                   to="/cart"
-                  className="relative inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
+                  className="relative inline-flex h-9 w-9 xl:h-10 xl:w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
                   aria-label={itemCount > 0 ? `Cart, ${itemCount} items` : 'Cart'}
                 >
                   <ShoppingCart size={18} />
@@ -178,7 +178,7 @@ export default function Header() {
                   <button
                     type="button"
                     onClick={() => setIsUserOpen(v => !v)}
-                    className="flex items-center gap-2 h-10 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-sm shrink-0"
+                    className="flex items-center gap-2 h-9 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-sm shrink-0 xl:h-10 xl:px-3"
                   >
                     {isMemberActive && <Crown size={13} className="text-amber-400" />}
                     <User size={15} className="text-slate-300" />
@@ -227,32 +227,34 @@ export default function Header() {
                   )}
                   <Link
                     to="/quote"
-                    className="btn-primary text-sm h-10 px-4 shrink-0 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                    className="btn-primary text-sm h-9 px-3 shrink-0 whitespace-nowrap !shadow-none hover:!translate-y-0 xl:h-10 xl:px-4"
                   >
-                    Book your rental
+                    <span className="xl:hidden">Book rental</span>
+                    <span className="hidden xl:inline">Book your rental</span>
                   </Link>
                 </div>
               ) : (
-                <div className="flex items-center gap-2 shrink-0 pl-1">
+                <div className="flex items-center gap-1.5 shrink-0 pl-1 xl:gap-2">
                   <button
                     type="button"
                     onClick={openLogin}
-                    className="btn-secondary text-sm h-10 px-4 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                    className="btn-secondary text-sm h-9 px-3 whitespace-nowrap !shadow-none hover:!translate-y-0 xl:h-10 xl:px-4"
                   >
                     Sign in
                   </button>
                   <button
                     type="button"
                     onClick={openSignup}
-                    className="btn-primary text-sm h-10 px-4 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                    className="btn-primary text-sm h-9 px-3 whitespace-nowrap !shadow-none hover:!translate-y-0 xl:h-10 xl:px-4"
                   >
                     Sign up
                   </button>
                   <Link
                     to="/quote"
-                    className="btn-primary text-sm h-10 px-4 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                    className="btn-primary text-sm h-9 px-3 whitespace-nowrap !shadow-none hover:!translate-y-0 xl:h-10 xl:px-4"
                   >
-                    Book your rental
+                    <span className="xl:hidden">Book rental</span>
+                    <span className="hidden xl:inline">Book your rental</span>
                   </Link>
                 </div>
               )}
