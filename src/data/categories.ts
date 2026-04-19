@@ -8,8 +8,7 @@ export const categories: Category[] = [
     slug: 'cones-drums',
     description: 'Traffic cones, channelizing drums, delineators, and tubes',
     icon: '',
-    imageUrl:
-      'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp',
+    imageUrl: '/catalog/cone-28-orange-7lb.webp',
   },
   {
     id: 'cat-2',

@@ -54,7 +54,9 @@ export default function Product() {
     const desc =
       product.metaDescription ??
       `Rent ${product.name} for $${product.dailyRate.toFixed(2)}/day. ${product.description}. MUTCD-aware traffic control equipment rental with delivery.`
-    const ogImage = product.images[0] ?? product.imageUrl
+    const absolutize = (u: string) => (u.startsWith('/') ? `${origin}${u}` : u)
+    const ogImage = absolutize(product.images[0] ?? product.imageUrl)
+    const productImagesAbs = product.images.map(absolutize)
 
     document.title = title
 
@@ -107,7 +109,7 @@ export default function Product() {
         name: product.name,
         description: product.longDescription,
         sku: product.sku,
-        image: product.images,
+        image: productImagesAbs,
         url: pageUrl,
         brand: { '@type': 'Brand', name: product.supplier },
         category: category?.name,

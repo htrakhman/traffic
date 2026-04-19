@@ -10,11 +10,10 @@ const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
 /** Traffic Safety Store CDN — product-matched photos (same transforms as `scripts/generate-tss-catalog.mjs`). */
 const cdn = (path: string) =>
   `https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/${path}`
-const cone28img = cdn('i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp')
-const cone36img = cdn('i/traffic-cones-jbc-36in-black-base-10-lbs-orange-safety-cone-construction-cone.webp')
-const drumImg = cdn(
-  'i/traffic-drum-with-6in-collars-and-tire-ring-base-high-intensity-hi-drum6hitire-construction-barrel.webp',
-)
+/** Self-hosted hero shots so cards always match copy (TSS CDN can swap assets behind the same public_id). */
+const cone28img = '/catalog/cone-28-orange-7lb.webp'
+const cone36img = '/catalog/cone-36-orange-10lb.webp'
+const drumImg = '/catalog/channelizing-drum-6in-hi-tire-base.webp'
 const signRWAimg = cdn('images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp')
 const signFLGimg = cdn('images/products/thumb/heavy-duty-roll-up-sign-flagger-ahead-text-hip-roll-up-sign-mutcd.webp')
 const signOLRimg = cdn('images/products/thumb/heavy-duty-roll-up-sign-one-lane-road-ahead-hip-roll-up-sign-mutcd.webp')

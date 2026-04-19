@@ -72,7 +72,7 @@ function classify(slugPath) {
 }
 
 const IMG_BY_CAT = {
-  'cat-1': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp',
+  'cat-1': '/catalog/cone-28-orange-7lb.webp',
   'cat-2': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp',
   'cat-3': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp',
   'cat-4': 'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg',
@@ -249,20 +249,17 @@ function swatchHex(label) {
   return SWATCH[label] ?? SWATCH[label.split(' ')[0]]
 }
 
-const IMG_CONE_ORANGE =
-  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp'
-const IMG_CONE_LIME =
-  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/traffic-cones-jbc-36in-black-base-10-lbs-lime-safety-cone-construction-cone.png'
-const IMG_CONE_YELLOW =
-  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/traffic-cones-12-yellow-safety-cone-construction-cone.webp'
+const IMG_CONE_ORANGE = '/catalog/cone-28-orange-7lb.webp'
+const IMG_CONE_LIME = '/catalog/cone-36-lime.png'
+/** TSS yellow cone asset 404s; reuse orange hero until a stable yellow asset is bundled. */
+const IMG_CONE_YELLOW = '/catalog/cone-28-orange-7lb.webp'
 const IMG_YODOCK_ORANGE =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/yodock-2001mb-barrier-orange-without-optional-fence-water-filled-barricade.webp'
 const IMG_YODOCK_WHITE =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/yodock-2001mb-water-filled-construction-barrier-white-without-optional-fence-water-filled-barricade.webp'
 const IMG_VEST_LIME =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp'
-const IMG_DRUM_ORANGE =
-  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/traffic-drum-with-6in-collars-and-tire-ring-base-high-intensity-hi-drum6hitire-construction-barrel.webp'
+const IMG_DRUM_ORANGE = '/catalog/channelizing-drum-6in-hi-tire-base.webp'
 const IMG_ORION_FLARE =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/orion-15-minute-road-flares-case-of-72-without-wire-stand.webp'
 const IMG_TYPE_B_FLASH =

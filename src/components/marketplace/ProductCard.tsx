@@ -17,10 +17,12 @@ export default function ProductCard({ product, index = 0 }: Props) {
       {/* Image */}
       <div className="relative h-44 overflow-hidden bg-slate-800">
         <img
+          key={`${product.id}:${product.imageUrl}`}
           src={product.imageUrl}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          loading="lazy"
+          loading={index < 9 ? 'eager' : 'lazy'}
+          decoding="async"
         />
         {product.popular && (
           <div className="absolute top-2 left-2">
