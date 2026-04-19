@@ -25,7 +25,8 @@ export const articleArrowBoardRentalGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 9,
-  heroImage: '/images/catalog/message-board.jpg',
+  heroImage:
+    'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg',
   body: h(
     Fragment,
     null,

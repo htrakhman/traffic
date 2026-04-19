@@ -26,7 +26,7 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 10,
-  heroImage: '/images/catalog/barricade-flasher.jpg',
+  heroImage: '/catalog/channelizing-drum-6in-hi-tire-base.webp',
   body: h(
     Fragment,
     null,

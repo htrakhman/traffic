@@ -24,7 +24,8 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 8,
-  heroImage: '/images/catalog/sign-flagger.jpg',
+  heroImage:
+    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-one-lane-road-ahead-hip-roll-up-sign-mutcd.webp',
   body: h(
     Fragment,
     null,
