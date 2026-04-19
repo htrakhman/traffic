@@ -14,6 +14,7 @@ import ProductPage from './pages/Product'
 import Assistant from './pages/Assistant'
 import Quote from './pages/Quote'
 import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
 import SiteMapPlanner from './pages/SiteMapPlanner'
 import Blog from './pages/Blog'
 import Article from './pages/Article'
@@ -54,6 +55,7 @@ function AppLayout() {
           <Route path="/category/:slug" element={<Category />} />
           <Route path="/product/:slug" element={<ProductPage />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/assistant" element={<Assistant />} />
           <Route path="/quote" element={<Quote />} />
           <Route path="/planner" element={<SiteMapPlanner />} />

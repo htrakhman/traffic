@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight } from 'lucide-react'
+import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight, CreditCard } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useMembership } from '../context/MembershipContext'
 import { getDeliveryPickupFees } from '../constants/deliveryPickup'
@@ -38,7 +38,7 @@ export default function Cart() {
               Cart
             </h1>
             <p className="text-slate-400">
-              Review equipment, then request a quote or keep browsing.
+              Review equipment, then check out, request a quote, or keep browsing.
             </p>
           </div>
           {resolved.length > 0 && (
@@ -166,7 +166,11 @@ export default function Cart() {
                 {isMember ? ' (member benefit).' : '.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
-                <Link to="/quote" className="btn-primary flex-1 justify-center py-3">
+                <Link to="/checkout" className="btn-primary flex-1 justify-center py-3 gap-2">
+                  <CreditCard size={18} />
+                  Checkout
+                </Link>
+                <Link to="/quote" className="btn-secondary flex-1 justify-center py-3">
                   Request quote for cart
                   <ArrowRight size={18} />
                 </Link>

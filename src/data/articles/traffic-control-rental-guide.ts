@@ -2,7 +2,7 @@ import { createElement as h, Fragment } from 'react'
 import type { Article } from '../articles'
 
 /**
- * SEED ARTICLE — owned by seo-specialist subagent.
+ * SEED ARTICLE - owned by seo-specialist subagent.
  * Target: "traffic control rental" (500 avg monthly searches, Medium comp, +900% 3mo change)
  * Secondary: "traffic control equipment rental", "traffic safety rental",
  *            "traffic control rental near me", "traffic control equipment"
@@ -11,7 +11,7 @@ export const articleTrafficControlRentalGuide: Article = {
   slug: 'traffic-control-rental-guide',
   title: 'Traffic Control Rental: What to Rent, What It Costs, and How to Plan a Work Zone',
   excerpt:
-    'A contractor-focused guide to renting traffic control equipment — what you actually need, typical day/week rates, and how to lay out an MUTCD-compliant work zone without overspending.',
+    'A contractor-focused guide to renting traffic control equipment - what you actually need, typical day/week rates, and how to lay out an MUTCD-compliant work zone without overspending.',
   metaDescription:
     'Traffic control rental guide: what equipment to rent, real daily/weekly rates, MUTCD-compliant setups, and how to avoid over-renting. Quote in minutes.',
   primaryKeyword: 'traffic control rental',
@@ -149,7 +149,7 @@ export const articleTrafficControlRentalGuide: Article = {
   faqs: [
     {
       q: 'What is the cheapest way to rent traffic control equipment?',
-      a: 'Bundle. A package rate for cones + signs + arrow board + barricades on a weekly term is typically 30–40% cheaper than pricing each item daily. Also ask about return-at-end-of-project versus weekly cycles, which saves pickup fees.',
+      a: 'Bundle. A package rate for cones + signs + arrow board + barricades on a weekly term is typically 30-40% cheaper than pricing each item daily. Also ask about return-at-end-of-project versus weekly cycles, which saves pickup fees.',
     },
     {
       q: 'Do I need permits for traffic control on a public road?',
@@ -161,24 +161,24 @@ export const articleTrafficControlRentalGuide: Article = {
     },
     {
       q: 'What does "MUTCD-compliant" mean for rental equipment?',
-      a: 'MUTCD — the Manual on Uniform Traffic Control Devices — sets federal standards for shape, color, size, and reflectivity of work zone devices. MUTCD-compliant rental gear ships with the correct sheeting grade, dimensions, and legends so a state inspector won\'t red-tag your zone.',
+      a: 'MUTCD - the Manual on Uniform Traffic Control Devices - sets federal standards for shape, color, size, and reflectivity of work zone devices. MUTCD-compliant rental gear ships with the correct sheeting grade, dimensions, and legends so a state inspector won\'t red-tag your zone.',
     },
     {
       q: 'Can the rental company set up my traffic control zone?',
-      a: 'Most full-service providers offer setup and takedown as an add-on, billed hourly or by crew rate. For complex lane closures and freeway work, this is usually worth it — their crews do it daily and carry the liability insurance.',
+      a: 'Most full-service providers offer setup and takedown as an add-on, billed hourly or by crew rate. For complex lane closures and freeway work, this is usually worth it - their crews do it daily and carry the liability insurance.',
     },
     {
       q: 'How long does traffic control rental delivery take?',
-      a: 'Standard delivery is next business day within 30–50 miles. Same-day and emergency drops are available at most providers for a surcharge, typically $200–$500 on top of standard delivery depending on distance and hours.',
+      a: 'Standard delivery is next business day within 30-50 miles. Same-day and emergency drops are available at most providers for a surcharge, typically $200-$500 on top of standard delivery depending on distance and hours.',
     },
     {
       q: 'What happens if rental equipment gets damaged on the job?',
-      a: 'Rental contracts include a loss/damage waiver or a replacement cost schedule. Damage is typically billed at 25–50% of list price; total loss at 60–100%. Photograph each device at drop-off and pickup to avoid disputes.',
+      a: 'Rental contracts include a loss/damage waiver or a replacement cost schedule. Damage is typically billed at 25-50% of list price; total loss at 60-100%. Photograph each device at drop-off and pickup to avoid disputes.',
     },
   ],
   relatedProducts: [
     { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Type I–III Barricades', path: '/category/barricades-barriers' },
+    { label: 'Type I-III Barricades', path: '/category/barricades-barriers' },
     { label: 'Arrow Boards', path: '/category/arrow-boards' },
     { label: 'Roll-up Signs & Stands', path: '/category/signs-sign-stands' },
     { label: 'Portable Message Boards', path: '/category/message-boards' },

@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   ShoppingCart,
+  CreditCard,
   Plus,
   Minus,
   Trash2,
@@ -72,6 +73,7 @@ function productToLine(p: Product): RecommendationItem {
 }
 
 export default function CartWidget({ recommendation, layout = 'modal' }: Props) {
+  const navigate = useNavigate()
   const { tick } = useCatalogSync()
   const { addItem } = useCart()
   const { isMember } = useMembership()
@@ -208,6 +210,13 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
       const p = getProductById(item.productId)
       if (p) addItem(p, item.quantity, days)
     }
+  }
+
+  const handleCheckout = () => {
+    if (activeItems.length === 0) return
+    handleAddToCart()
+    setOverlayOpen(false)
+    navigate('/checkout')
   }
 
   const focusAddOptions = () => {
@@ -498,16 +507,25 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              onClick={handleAddToCart}
+              onClick={handleCheckout}
               disabled={activeItems.length === 0}
               className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 bg-brand-500 hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/20"
+            >
+              <CreditCard size={13} />
+              Checkout
+            </button>
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={activeItems.length === 0}
+              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 bg-slate-700/80 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-600 text-slate-100 text-xs font-semibold rounded-xl transition-all"
             >
               <ShoppingCart size={13} />
               Add to cart
             </button>
             <Link
               to="/browse"
-              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 bg-slate-700/60 hover:bg-slate-700 border border-slate-600 text-slate-200 text-xs font-semibold rounded-xl transition-all text-center"
+              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 bg-slate-800/80 hover:bg-slate-800 border border-slate-600 text-slate-200 text-xs font-semibold rounded-xl transition-all text-center"
             >
               Continue shopping
             </Link>

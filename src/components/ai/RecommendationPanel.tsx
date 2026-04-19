@@ -1,9 +1,11 @@
-import { Link } from 'react-router-dom'
-import { CheckCircle, AlertCircle, Info, ShoppingCart, ExternalLink } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { CheckCircle, AlertCircle, Info, ShoppingCart, ExternalLink, CreditCard } from 'lucide-react'
 import type { AIRecommendation } from '../../types'
 import { useMembership } from '../../context/MembershipContext'
+import { useCart } from '../../context/CartContext'
 import { getDeliveryPickupFees } from '../../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../pricing/DeliveryPickupBreakdown'
+import { getProductById } from '../../data/products'
 
 interface Props {
   recommendation: AIRecommendation
@@ -16,10 +18,25 @@ const priorityConfig = {
 }
 
 export default function RecommendationPanel({ recommendation }: Props) {
+  const navigate = useNavigate()
+  const { addItem } = useCart()
   const { isMember } = useMembership()
   const rentalPeriodTotal = recommendation.totalDailyRate * recommendation.estimatedDurationDays
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
   const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
+
+  const handleCheckoutFromRecommendation = () => {
+    const days = Math.max(1, Math.floor(recommendation.estimatedDurationDays))
+    let added = 0
+    for (const item of recommendation.items) {
+      const p = getProductById(item.productId)
+      if (p) {
+        addItem(p, item.quantity, days)
+        added++
+      }
+    }
+    if (added > 0) navigate('/checkout')
+  }
 
   return (
     <div className="space-y-4 animate-slide-up">
@@ -97,13 +114,21 @@ export default function RecommendationPanel({ recommendation }: Props) {
 
       {/* CTA */}
       <div className="flex flex-col gap-2">
+        <button
+          type="button"
+          onClick={handleCheckoutFromRecommendation}
+          className="btn-primary justify-center py-3 gap-2"
+        >
+          <CreditCard size={16} />
+          Checkout with this list
+        </button>
         <Link
           to="/quote"
           state={{ recommendation }}
-          className="btn-primary justify-center py-3"
+          className="btn-secondary justify-center py-3 gap-2"
         >
           <ShoppingCart size={16} />
-          Request Quote for This Equipment
+          Request quote for this equipment
         </Link>
         <Link to="/browse" className="btn-secondary justify-center text-sm py-2.5">
           Browse & Customize

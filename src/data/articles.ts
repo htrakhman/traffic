@@ -52,8 +52,20 @@ export interface Article {
 
 // Imports are kept static so Vite tree-shakes and includes the bodies in the bundle.
 import { articleTrafficControlRentalGuide } from './articles/traffic-control-rental-guide'
+import { articleUniformTrafficControlDevicesMutcdGuide } from './articles/uniform-traffic-control-devices-mutcd-guide'
+import { articleArrowBoardRentalGuide } from './articles/arrow-board-rental-guide'
+import { articleAutomatedFlaggerAssistanceDeviceAfadGuide } from './articles/automated-flagger-assistance-device-afad-guide'
+import { articleBarricadeRentalNearMeGuide } from './articles/barricade-rental-near-me-guide'
+import { articlePortableTrafficControlDevicesGuide } from './articles/portable-traffic-control-devices-guide'
 
-export const articles: Article[] = [articleTrafficControlRentalGuide]
+export const articles: Article[] = [
+  articleUniformTrafficControlDevicesMutcdGuide,
+  articleArrowBoardRentalGuide,
+  articleAutomatedFlaggerAssistanceDeviceAfadGuide,
+  articleBarricadeRentalNearMeGuide,
+  articlePortableTrafficControlDevicesGuide,
+  articleTrafficControlRentalGuide,
+]
 
 /** Returns articles sorted newest-first. */
 export function getAllArticles(): Article[] {
