@@ -100,17 +100,26 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
     document.head.appendChild(script)
   }, [handleGoogleCredential])
 
-  // Render Google button once GSI is ready and ref is available
+  // Render Google button — defer one frame so the modal is painted and offsetWidth is valid
   useEffect(() => {
     if (!gsiReady || !googleBtnRef.current || !window.google) return
-    window.google.accounts.id.renderButton(googleBtnRef.current, {
-      theme: 'outline',
-      size: 'large',
-      width: googleBtnRef.current.offsetWidth || 400,
-      shape: 'rectangular',
-      text: mode === 'login' ? 'signin_with' : 'signup_with',
-      logo_alignment: 'center',
+    const el = googleBtnRef.current
+    const id = requestAnimationFrame(() => {
+      if (!window.google || !el) return
+      try {
+        window.google.accounts.id.renderButton(el, {
+          theme: 'outline',
+          size: 'large',
+          width: Math.max(el.offsetWidth, 300),
+          shape: 'rectangular',
+          text: mode === 'login' ? 'signin_with' : 'signup_with',
+          logo_alignment: 'center',
+        })
+      } catch {
+        // GSI not ready yet — will retry on next state change
+      }
     })
+    return () => cancelAnimationFrame(id)
   }, [gsiReady, mode])
 
   const handleSubmit = (e: React.FormEvent) => {
