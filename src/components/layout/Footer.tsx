@@ -68,6 +68,7 @@ export default function Footer() {
                 { label: 'AI Job Planner', href: '/assistant' },
                 { label: 'Request a Quote', href: '/quote' },
                 { label: 'Browse All Inventory', href: '/browse' },
+                { label: 'Work Zone Guides', href: '/blog' },
                 { label: 'Delivery & Pickup', href: '/delivery' },
               ].map((item) => (
                 <li key={item.href}>

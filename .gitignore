@@ -4,6 +4,7 @@ node_modules
 # Build
 dist
 *.tsbuildinfo
+vite.config.ts.timestamp-*.mjs
 
 # Environment
 .env

@@ -14,6 +14,8 @@ import Assistant from './pages/Assistant'
 import Quote from './pages/Quote'
 import Cart from './pages/Cart'
 import SiteMapPlanner from './pages/SiteMapPlanner'
+import Blog from './pages/Blog'
+import Article from './pages/Article'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -54,6 +56,8 @@ function AppLayout() {
           <Route path="/assistant" element={<Assistant />} />
           <Route path="/quote" element={<Quote />} />
           <Route path="/planner" element={<SiteMapPlanner />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<Article />} />
           {/* Fallback */}
           <Route path="*" element={<Home />} />
         </Routes>

@@ -2,6 +2,13 @@
 
 *Last updated: 2026-04-18*
 
+## Brand / domain
+
+- **Working name:** TrafficKit (page titles + codebase)
+- **Domain:** trafficcontrolrental.com (acquired 2026-04-18, deploying Vercel)
+- **Positioning name candidates:** "Traffic Control Rental" (SEO-exact-match), "TrafficKit" (brandable)
+  - Lean toward "Traffic Control Rental" in title tags / meta for SEO exact-match advantage; keep "TrafficKit" as the brand people remember
+
 ## What we are
 
 **TrafficKit** is a traffic-control equipment rental business serving
@@ -41,6 +48,19 @@ grading, paving, site work. Typical signals:
 - Work for DOT / municipalities / private developers
 - Active on Facebook/Google (proxy: digitally reachable)
 
+**Refined 2026-04-18 based on first field feedback (Austen, grading contractor):**
+Small/mid contractors typically OWN the commodity TTC gear (cones,
+standard signs, Type I/II barricades). Rental demand concentrates
+on **high-value, low-utilization gear**:
+- Arrow boards (trailer-mount $150–250/day retail)
+- Message boards (trailer-mount $200–300/day)
+- Crash cushions / truck-mounted attenuators
+- Type III barricades in bulk for longer closures
+- Full MUTCD sign packages for short-notice jobs
+
+Lead with these categories in outreach, not cones. Cones are a
+commodity add-on after we've landed them on the expensive gear.
+
 **Secondary (future):** municipalities, utility companies, event
 organizers (parades, races, festivals).
 
@@ -56,6 +76,28 @@ can't get a number without contacting us).
 Practical, no-BS, blue-collar-adjacent. Not "solutions provider"
 corporate speak. We sound like someone who's actually been on a
 work zone.
+
+## Inventory-sourcing notes
+
+Austen (grading contractor, 2026-04-18) flagged **public auctions** as
+a cheap source of used TTC gear. Worth investigating for getting the
+first round of inventory up without capital outlay:
+- GovDeals (municipal surplus)
+- GSAAuctions (federal surplus)
+- Municibid (NJ local govt surplus — especially strong in NJ)
+- IronPlanet / Ritchie Bros (used construction equipment auctions)
+- Check NJDOT surplus equipment auctions
+
+## Alternative business models to watch
+
+Austen also suggested **distribution/resale** rather than rental —
+become a distributor of traffic safety supplies. Parked for now
+since rental is the current thesis (better recurring revenue, lower
+inventory turnover risk), but revisit if:
+- Rental customer acquisition cost stays high >6 months
+- We find a distribution partnership (supplier margin) that's too
+  good to pass up
+- Multiple rental customers ask "can I just buy a few cones from you"
 
 ## Competitors to watch
 

@@ -1,0 +1,77 @@
+/**
+ * Article registry powering /blog and /blog/:slug.
+ *
+ * OWNED BY THE seo-specialist SUBAGENT — see `.claude/agents/seo-specialist.md`.
+ * Do not add articles here by hand. The specialist creates one file per article
+ * in `src/data/articles/` and re-exports it from the `articles` array below.
+ */
+
+import type { ReactNode } from 'react'
+
+export interface ArticleFAQ {
+  q: string
+  a: string
+}
+
+export interface RelatedLink {
+  label: string
+  /** Root-relative URL, e.g. "/category/arrow-boards" or "/product/wanco-arrow-board" */
+  path: string
+}
+
+export interface Article {
+  slug: string
+  title: string
+  /** Short dek shown on the listing card, also used as meta description fallback. */
+  excerpt: string
+  /** Meta description (150–160 chars). If omitted, excerpt is used. */
+  metaDescription?: string
+  /** Primary keyword this article targets (must exist in seo/keywords.json). */
+  primaryKeyword: string
+  /** Secondary/semantic keywords, for internal tracking + meta keywords tag. */
+  secondaryKeywords?: string[]
+  /** Average monthly search volume for the primary keyword, at publish time. */
+  targetVolume: number
+  /** ISO 8601 date (YYYY-MM-DD). */
+  datePublished: string
+  dateModified?: string
+  author?: string
+  /** Estimated read time in minutes. */
+  readMinutes: number
+  /** Hero image URL (absolute or root-relative). */
+  heroImage?: string
+  /** The article body. Use article-body Tailwind utilities. */
+  body: ReactNode
+  /** 5–8 Q/A pairs rendered as accordion + FAQPage JSON-LD. */
+  faqs?: ArticleFAQ[]
+  /** Internal links shown in a "Related equipment" block. */
+  relatedProducts?: RelatedLink[]
+  /** Sibling articles shown in "Keep reading". */
+  relatedArticles?: string[]
+}
+
+// Imports are kept static so Vite tree-shakes and includes the bodies in the bundle.
+import { articleTrafficControlRentalGuide } from './articles/traffic-control-rental-guide'
+
+export const articles: Article[] = [articleTrafficControlRentalGuide]
+
+/** Returns articles sorted newest-first. */
+export function getAllArticles(): Article[] {
+  return [...articles].sort((a, b) => (a.datePublished < b.datePublished ? 1 : -1))
+}
+
+export function getArticleBySlug(slug: string): Article | undefined {
+  return articles.find((a) => a.slug === slug)
+}
+
+export function getRelatedArticles(slug: string, limit = 3): Article[] {
+  const current = getArticleBySlug(slug)
+  if (!current) return []
+  const explicit = (current.relatedArticles || [])
+    .map((s) => getArticleBySlug(s))
+    .filter((a): a is Article => !!a)
+  if (explicit.length >= limit) return explicit.slice(0, limit)
+  // Fall back to most recent other articles.
+  const others = getAllArticles().filter((a) => a.slug !== slug && !explicit.find((e) => e.slug === a.slug))
+  return [...explicit, ...others].slice(0, limit)
+}

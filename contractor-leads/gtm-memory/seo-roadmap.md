@@ -32,7 +32,7 @@
 | 2 | **Deploy to Vercel or Netlify** (configs already exist — `vercel.json` and `netlify.toml`). Point domain at it. | 30 min | TODO |
 | 3 | **Add prerendering or SSG.** Option A (fast): `vite-plugin-ssr` / `vite-plugin-prerender`. Option B (nicer long-term): migrate to Next.js. Recommend A for now. | 2–4 hrs | TODO |
 | 4 | **Per-page meta tags** via `react-helmet-async`. Unique title + description for Home, Browse, each Category, each Product, Quote, Assistant, Planner. | 3–5 hrs | TODO |
-| 5 | **Set up Google Business Profile** for Traffic Control Rental (`trafficcontrolrental.com`). Address, service areas (Central NJ counties), category "Equipment rental agency," photos, hours, phone. | 45 min | TODO |
+| 5 | ~~Set up Google Business Profile~~ **DEFERRED** per Harold 2026-04-18 — testing demand first; revisit once we have ≥3 paying customers or 1 month of organic traffic. | 45 min | Deferred |
 | 6 | **Set up Google Search Console + Analytics.** Submit sitemap. | 30 min | TODO |
 
 ### P1 — Foundation (do these in weeks 1–3)
@@ -107,3 +107,5 @@ Group D — **long-tail AEO** (pure AI-answer-engine wedge):
 ## Changelog
 
 - **2026-04-18** — Initial audit. Site is localhost-only. P0 blockers identified. No keywords ranked yet (site not indexable).
+- **2026-04-18** — Domain acquired: `trafficcontrolrental.com`. Deploying to Vercel. GBP deferred pending demand validation.
+- **2026-04-18** — Added new P0: **ship Vercel serverless proxy for Anthropic API** (`/api/chat`). Current `aiClient.ts` leaks the key in the browser bundle. Patch drafted in `site-patches/2026-04-18-anthropic-serverless-proxy.md`. Until patch ships, cap Anthropic key at $10–20/mo.
