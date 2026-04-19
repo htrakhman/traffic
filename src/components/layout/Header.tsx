@@ -56,9 +56,9 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:py-0 lg:min-h-[4.25rem]">
+          <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-normal lg:gap-x-5 lg:py-0 lg:min-h-[4.25rem]">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2.5 shrink-0 min-w-0 max-w-[calc(100vw-8rem)] sm:max-w-none">
+            <Link to="/" className="flex items-center gap-2.5 shrink-0 min-w-0 max-w-[calc(100vw-8rem)] sm:max-w-none lg:max-w-none">
               <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center shadow-lg shadow-brand-500/30">
                 <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M12 2L8 7h8L12 2z" fill="currentColor" stroke="none" />
@@ -70,9 +70,9 @@ export default function Header() {
               </span>
             </Link>
 
-            {/* Desktop nav — centered in remaining space so gaps stay even */}
-            <nav className="hidden lg:flex flex-1 justify-center items-center min-w-0 px-2">
-              <div className="flex items-center gap-0.5">
+            {/* Desktop nav — grid middle column + overflow so links never paint over phone/auth */}
+            <nav className="hidden lg:flex justify-center items-center min-w-0 w-full overflow-x-hidden px-1">
+              <div className="flex items-center justify-center gap-0.5 max-w-full">
               {/* Categories dropdown */}
               <div className="relative shrink-0" onMouseLeave={() => setIsCatOpen(false)}>
                 <button
@@ -139,18 +139,18 @@ export default function Header() {
               </div>
             </nav>
 
-            {/* Desktop right — phone · icons · auth, with clear rhythm */}
-            <div className="hidden lg:flex items-center shrink-0 gap-0">
+            {/* Desktop right — phone · icons · auth */}
+            <div className="hidden lg:relative lg:z-10 lg:flex lg:items-center lg:shrink-0 lg:gap-0 lg:min-w-0">
               <a
                 href="tel:+18005551234"
                 aria-label="Call 1-800-555-1234"
                 title="1-800-555-1234"
-                className="inline-flex items-center justify-center gap-2 h-10 w-10 shrink-0 xl:w-auto xl:pr-3 xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
+                className="inline-flex items-center justify-center gap-2 h-10 min-w-10 shrink-0 px-0 xl:min-w-0 xl:gap-2.5 xl:pr-3 xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
               >
                 <Phone size={15} className="shrink-0 text-slate-500" aria-hidden />
                 <span className="hidden xl:inline">1-800-555-1234</span>
               </a>
-              <div className="flex items-center gap-0.5 pr-3 mr-3 border-r border-slate-800">
+              <div className="flex items-center gap-0.5 pl-2 pr-3 mr-3 border-r border-slate-800 shrink-0">
                 <Link
                   to="/browse"
                   className="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
