@@ -528,7 +528,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                         <div className="flex gap-3">
                           <div className="w-7 flex-shrink-0" aria-hidden />
                           <div className="flex-1 min-w-0">
-                            <CartWidget recommendation={streamingCart} layout="modal" />
+                            <CartWidget recommendation={streamingCart} layout="modal" mapArea={mapArea} />
                           </div>
                         </div>
                       )}
@@ -629,7 +629,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                         )}
                         {nonCartSegs.length > 0 && <div className="w-7 flex-shrink-0" />}
                         <div className="flex-1 min-w-0">
-                          <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} layout="modal" />
+                          <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} layout="modal" mapArea={mapArea} />
                         </div>
                       </div>
                     ))}
@@ -655,7 +655,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
             {/* Recommendation result (from form mode) */}
             {recommendation && (
               <div className="p-4 border-t border-slate-800">
-                <CartWidget key="cart-form" recommendation={recommendation} layout="modal" />
+                <CartWidget key="cart-form" recommendation={recommendation} layout="modal" mapArea={mapArea} />
               </div>
             )}
           </>

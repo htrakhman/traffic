@@ -292,7 +292,7 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
     : []
 
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col bg-slate-950" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-[250] flex flex-col bg-slate-950" role="dialog" aria-modal="true">
       {/* ── Header ── */}
       <div className="flex-shrink-0 flex items-center gap-3 px-4 py-3 bg-slate-900 border-b border-slate-800">
         <div className="flex items-center gap-2 flex-1 min-w-0">

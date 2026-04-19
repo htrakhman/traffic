@@ -15,21 +15,25 @@ import {
   Package,
   X,
   Maximize2,
+  Map,
 } from 'lucide-react'
-import type { AIRecommendation, RecommendationItem } from '../../types'
+import type { AIRecommendation, MapArea, Product, RecommendationItem } from '../../types'
 import { getProducts, getProductById } from '../../data/products'
 import { clearQuoteAiDraft, writeQuoteAiDraft } from '../../utils/quoteAiDraftStorage'
 import { useCatalogSync } from '../../context/CatalogSyncContext'
 import { useCart } from '../../context/CartContext'
+import type { CartLine } from '../../context/CartContext'
 import { useMembership } from '../../context/MembershipContext'
 import { getDeliveryPickupFees } from '../../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../pricing/DeliveryPickupBreakdown'
-import type { Product } from '../../types'
+import WorkzoneVisualizerModal from '../workzone/WorkzoneVisualizerModal'
 
 interface Props {
   recommendation: AIRecommendation
   /** `modal` (default) = full quote in the chat column, scrollable, with a full-screen control. `inline` = same shell, alternate max-height. */
   layout?: 'modal' | 'inline'
+  /** When set (polygon drawn in Job Assistant), users can open the AI work zone layout on the map. */
+  mapArea?: MapArea | null
 }
 
 const priorityConfig = {
@@ -72,7 +76,7 @@ function productToLine(p: Product): RecommendationItem {
   }
 }
 
-export default function CartWidget({ recommendation, layout = 'modal' }: Props) {
+export default function CartWidget({ recommendation, layout = 'modal', mapArea }: Props) {
   const navigate = useNavigate()
   const { tick } = useCatalogSync()
   const { addItem } = useCart()
@@ -82,6 +86,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
   const [removed, setRemoved] = useState<Set<string>>(new Set())
   /** Full-screen overlay (same UI as embedded, larger canvas). */
   const [overlayOpen, setOverlayOpen] = useState(false)
+  const [showWorkzoneMap, setShowWorkzoneMap] = useState(false)
   const [search, setSearch] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
@@ -136,6 +141,18 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
   }, [quoteDraftPersistKey, recommendation, items, removed])
 
   const totalDailyRate = activeItems.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0)
+
+  const mapReady =
+    Boolean(mapArea) && Array.isArray(mapArea?.path) && (mapArea?.path.length ?? 0) >= 3
+
+  const visualizerCartLines: CartLine[] = useMemo(() => {
+    const days = Math.max(1, Math.floor(recommendation.estimatedDurationDays))
+    return activeItems.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      rentalDays: days,
+    }))
+  }, [activeItems, recommendation.estimatedDurationDays])
   const rentalPeriodTotal = totalDailyRate * recommendation.estimatedDurationDays
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
   const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
@@ -350,7 +367,8 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
         <p className="text-[9px] text-slate-600 mt-1">Add lines from inventory; continue chatting below anytime.</p>
       </div>
 
-      <div className="divide-y divide-slate-800/60 overflow-y-auto flex-1 min-h-0">
+      <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
+        <div className="min-h-0 flex-1 divide-y divide-slate-800/60 overflow-y-auto overscroll-y-contain">
         {activeItems.map((item) => {
           const key = itemKey(item)
           const pc = priorityConfig[item.priority]
@@ -450,9 +468,8 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
             </button>
           </div>
         )}
-      </div>
 
-      <div className="px-4 py-3 bg-slate-800/40 border-t border-slate-700/60 flex-shrink-0">
+        <div className="border-t border-slate-700/60 bg-slate-800/40 px-4 py-3">
         <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
           <div className="flex items-center gap-4">
             <div>
@@ -498,12 +515,40 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           </>
         )}
 
-        <div className="flex items-start gap-1.5 p-2 bg-amber-500/5 border border-amber-500/15 rounded-lg mb-3">
+        <div className="flex items-start gap-1.5 p-2 bg-amber-500/5 border border-amber-500/15 rounded-lg">
           <AlertCircle size={9} className="text-amber-400 flex-shrink-0 mt-px" />
           <p className="text-[9px] text-amber-200/50 leading-relaxed">{recommendation.disclaimer}</p>
         </div>
+        </div>
+        </div>
 
+        <div className="flex-shrink-0 border-t border-slate-700/60 bg-slate-900/95 px-4 py-3">
         <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() => setShowWorkzoneMap(true)}
+            disabled={!mapReady || activeItems.length === 0}
+            className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold border transition-colors ${
+              mapReady && activeItems.length > 0
+                ? 'bg-brand-500/10 border-brand-500/40 text-brand-300 hover:bg-brand-500/20 hover:border-brand-400'
+                : 'bg-slate-800/50 border-slate-700 text-slate-500 cursor-not-allowed'
+            }`}
+            title={
+              mapReady
+                ? 'Show this list laid out on your drawn work zone (AI MUTCD-style placement)'
+                : 'Draw a work zone on the map in this assistant first'
+            }
+          >
+            <Map size={15} className={mapReady ? 'text-brand-400' : 'text-slate-600'} />
+            <span>Show in map</span>
+            {mapReady ? (
+              <span className="ml-auto text-[10px] bg-brand-500/20 text-brand-400 rounded-full px-2 py-0.5 font-semibold">
+                AI layout
+              </span>
+            ) : (
+              <span className="ml-auto text-[10px] text-slate-600">Draw work zone</span>
+            )}
+          </button>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -539,10 +584,22 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
             Add more options
           </button>
         </div>
+        </div>
       </div>
     </div>
     )
   }
+
+  const workzoneMapPortal =
+    showWorkzoneMap &&
+    createPortal(
+      <WorkzoneVisualizerModal
+        mapArea={mapReady ? mapArea : null}
+        cartLines={visualizerCartLines}
+        onClose={() => setShowWorkzoneMap(false)}
+      />,
+      document.body,
+    )
 
   const overlayPortal =
     overlayOpen &&
@@ -578,6 +635,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
 
   return (
     <>
+      {workzoneMapPortal}
       <div
         className={`w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 ring-1 ring-white/[0.04] shadow-xl shadow-black/30 overflow-hidden flex flex-col ${embeddedMax}`}
       >
