@@ -7,22 +7,31 @@ const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
  * Rental rates in this file are **retail** prices (50% markup on supplier-reference economics).
  * When adjusting reference costs, use `applyRetailMarkup` from `../utils/pricing` so daily / weekly / monthly tiers stay aligned.
  */
-/** Hosted under `public/images/catalog/` — replace files anytime with your own product photography. */
-const cone28img = '/images/catalog/cone.jpg'
-const cone36img = '/images/catalog/cone-36.jpg'
-const drumImg = '/images/catalog/drum.jpg'
-const signRWAimg = '/images/catalog/sign-road-work.jpg'
-const signFLGimg = '/images/catalog/sign-flagger.jpg'
-const signOLRimg = '/images/catalog/sign-one-lane.jpg'
-const signStandImg = '/images/catalog/sign-stand.jpg'
-const barT3img = '/images/catalog/barricade-type3.jpg'
-const barT2img = '/images/catalog/barricade-type2.jpg'
-const barWFimg = '/images/catalog/water-barrier.jpg'
+/** Traffic Safety Store CDN — product-matched photos (same transforms as `scripts/generate-tss-catalog.mjs`). */
+const cdn = (path: string) =>
+  `https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/${path}`
+const cone28img = cdn('i/orange-28in-7-0-lb-traffic-cone-jbc-safety-cone-construction-cone.webp')
+const cone36img = cdn('i/traffic-cones-jbc-36in-black-base-10-lbs-orange-safety-cone-construction-cone.webp')
+const drumImg = cdn(
+  'i/traffic-drum-with-6in-collars-and-tire-ring-base-high-intensity-hi-drum6hitire-construction-barrel.webp',
+)
+const signRWAimg = cdn('images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp')
+const signFLGimg = cdn('images/products/thumb/heavy-duty-roll-up-sign-flagger-ahead-text-hip-roll-up-sign-mutcd.webp')
+const signOLRimg = cdn('images/products/thumb/heavy-duty-roll-up-sign-one-lane-road-ahead-hip-roll-up-sign-mutcd.webp')
+const signStandImg = cdn(
+  'i/little-buster-dual-spring-telescoping-sign-stand-w-safesleeve-350-bracket-rigid-bracket.webp',
+)
+const barT3img = cdn(
+  'i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp',
+)
+const barT2img = cdn('i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp')
+const barWFimg = cdn('i/yodock-2001mb-barrier-orange-without-optional-fence-water-filled-barricade.webp')
 const arrowTrailerImg = 'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg'
 const arrowTruckImg = 'https://www.wanco.com/wp-content/uploads/2017/02/featr-prod-arrowbd-truck.jpg'
-const msgBoardImg = '/images/catalog/message-board.jpg'
-const flasherImg = '/images/catalog/barricade-flasher.jpg'
-const flareImg = '/images/catalog/road-flare.jpg'
+const msgBoardImg =
+  'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png'
+const flasherImg = cdn('i/economy-solar-assist-type-b-flasher-red.webp')
+const flareImg = cdn('i/orion-15-minute-road-flares-case-of-72-without-wire-stand.webp')
 
 const TRANS = 'Trans-Supply'
 const TSP = 'Traffic Safety Products'

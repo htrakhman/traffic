@@ -1,9 +1,6 @@
 import type { Category } from '../types'
 
-/**
- * Category hero images for the browse grid. Uses supplier CDN URLs so tiles match
- * each category; files in `public/images/catalog/` were duplicated placeholders.
- */
+/** Category hero images for the browse grid (supplier CDN). */
 export const categories: Category[] = [
   {
     id: 'cat-1',
@@ -74,7 +71,7 @@ export const categories: Category[] = [
     description: 'Tape, weights, brackets, clips, and general accessories',
     icon: '',
     imageUrl:
-      'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_auto//i/cone-bar-signs-danger-jbc-safety-cone-construction-cone-roll-up-sign.webp',
+      'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/cone-bar-signs-danger-jbc-safety-cone-construction-cone-roll-up-sign.webp',
   },
   {
     id: 'cat-9',

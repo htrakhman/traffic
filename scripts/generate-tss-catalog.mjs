@@ -79,7 +79,7 @@ const IMG_BY_CAT = {
   'cat-5': 'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png',
   'cat-6': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/economy-solar-assist-type-b-flasher-red.webp',
   'cat-7': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/urbanite-crowd-control-barricades-white-none-no-sheeting-water-filled-barricade.webp',
-  'cat-8': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_auto//i/cone-bar-signs-danger-jbc-safety-cone-construction-cone-roll-up-sign.webp',
+  'cat-8': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/cone-bar-signs-danger-jbc-safety-cone-construction-cone-roll-up-sign.webp',
   'cat-9': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/commercial-parking-block-3ft-blue-18-galv-steel-spikes-asphalt-gravel-or-dirt-rubber-wheel-stop-parking-curb-ada-compliant.webp',
   'cat-10': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/economy-rubber-speed-hump-middle-section-18-galv-steel-spikes-asphalt-gravel-or-dirt-traffic-calming.webp',
   'cat-11': 'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp',
@@ -263,22 +263,52 @@ const IMG_VEST_LIME =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp'
 const IMG_DRUM_ORANGE =
   'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/traffic-drum-with-6in-collars-and-tire-ring-base-high-intensity-hi-drum6hitire-construction-barrel.webp'
+const IMG_ORION_FLARE =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/orion-15-minute-road-flares-case-of-72-without-wire-stand.webp'
+const IMG_TYPE_B_FLASH =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/economy-solar-assist-type-b-flasher-red.webp'
+const IMG_TYPE2_BARRICADE =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp'
+const IMG_ROLL_ROAD_WORK = IMG_BY_CAT['cat-2']
+const IMG_ROLL_FLAGGER =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-flagger-ahead-text-hip-roll-up-sign-mutcd.webp'
+const IMG_ROLL_ONE_LANE =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-one-lane-road-ahead-hip-roll-up-sign-mutcd.webp'
 
 function pickHeroImage(categoryId, categorySlug, slugSeg, colorLabel) {
   const c = (colorLabel || '').toLowerCase()
   const s = slugSeg.toLowerCase()
-  if (categorySlug === 'cones-drums' || /cone|delineator|channelizer|looper|tube/.test(s)) {
-    if (c.includes('lime') || c.includes('fluorescent lime')) return IMG_CONE_LIME
-    if (c.includes('yellow')) return IMG_CONE_YELLOW
-    if (c.includes('orange')) return IMG_CONE_ORANGE
-    if (/drum|barrel/.test(s)) return IMG_DRUM_ORANGE
-    return IMG_CONE_ORANGE
-  }
-  if (/yodock|water-filled/.test(s)) {
+
+  if (/\borion\b|road-flare|\bflar(es)?\b/i.test(s)) return IMG_ORION_FLARE
+  if (/\bflasher\b|\bstrobe\b|\bbeacon\b|solar-assist|barricade-light|warning-light|led-barricade/i.test(s)) return IMG_TYPE_B_FLASH
+  if (/message-board|variable-message|PCMS|pcms|changeable-message|\bVMS\b/i.test(s)) return IMG_BY_CAT['cat-5']
+
+  if (/\bdrum\b|barrel|channelizing|construction-barrel/i.test(s)) return IMG_DRUM_ORANGE
+
+  if (/yodock|water-filled|jersey-style|plasticade/i.test(s)) {
     if (c.includes('white')) return IMG_YODOCK_WHITE
     return IMG_YODOCK_ORANGE
   }
-  if (categorySlug === 'safety-vests-hi-vis' || /vest|ansi/.test(s)) return IMG_VEST_LIME
+
+  if (/type-ii\b|type-2\b|type\s*ii\b/i.test(s)) return IMG_TYPE2_BARRICADE
+
+  if (/roll-up|rollup|roll\s*up/i.test(s)) {
+    if (/flagger|w20-7/i.test(s)) return IMG_ROLL_FLAGGER
+    if (/one-lane|w20-4|lane-closed/i.test(s)) return IMG_ROLL_ONE_LANE
+    return IMG_ROLL_ROAD_WORK
+  }
+
+  if (
+    categorySlug === 'cones-drums' ||
+    /\bcones?\b|delineator|channelizer|looper|\btube\b|grabber|enviro-cone|slimline|traffix/i.test(s)
+  ) {
+    if (c.includes('lime') || c.includes('fluorescent lime')) return IMG_CONE_LIME
+    if (c.includes('yellow')) return IMG_CONE_YELLOW
+    if (c.includes('orange')) return IMG_CONE_ORANGE
+    return IMG_CONE_ORANGE
+  }
+
+  if (categorySlug === 'safety-vests-hi-vis' || /vests?|hi-vis|ansi-class/i.test(s)) return IMG_VEST_LIME
   return IMG_BY_CAT[categoryId] ?? IMG_BY_CAT['cat-8']
 }
 
