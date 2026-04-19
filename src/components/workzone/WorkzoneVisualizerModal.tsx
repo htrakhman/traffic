@@ -44,11 +44,17 @@ const PLACEHOLDER_IMAGE = `data:image/svg+xml,${encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect fill="#1e293b" width="80" height="80" rx="10"/><path fill="#64748b" d="M28 52 L40 24 L52 52z"/></svg>',
 )}`
 
-/** Square marker width/height in CSS px — scales with zoom so the map stays legible after fitBounds. */
-function markerFramePx(zoom: number): number {
+/**
+ * Square marker width/height in CSS px — scales with zoom and thins when many devices
+ * so stacks remain readable (not full-size tiles on dense previews).
+ */
+function markerFramePx(zoom: number, placementCount: number): number {
   const z = Number.isFinite(zoom) ? zoom : 17
   const t = Math.min(1, Math.max(0, (z - 14) / 7))
-  return Math.min(76, Math.max(30, Math.round(32 + t * 38)))
+  let px = Math.min(76, Math.max(28, Math.round(30 + t * 38)))
+  const density = Math.min(1.15, Math.max(0.48, 22 / Math.sqrt(Math.max(placementCount, 10))))
+  px = Math.round(px * density)
+  return Math.min(62, Math.max(20, px))
 }
 
 function buildProductMarkerElement(placement: WorkzonePlacement, imageUrl: string): HTMLDivElement {
@@ -253,10 +259,11 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
       listeners.length = 0
     }
 
+    const nPlaced = plan.placements.length
     const applyMarkerSizes = (roots: HTMLDivElement[]) => {
       const m = mapInstanceRef.current
       if (!m) return
-      const px = markerFramePx(m.getZoom() ?? 17)
+      const px = markerFramePx(m.getZoom() ?? 17, nPlaced)
       for (const root of roots) root.style.width = `${px}px`
     }
 
