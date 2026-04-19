@@ -162,7 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setUser(null)
-    window.google?.accounts.id.cancel?.()
+    window.google?.accounts?.id?.cancel?.()
   }, [setUser])
 
   const updateUser = useCallback((updates: Partial<Omit<User, 'id' | 'passwordHash'>>) => {

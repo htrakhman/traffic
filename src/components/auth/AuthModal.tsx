@@ -78,7 +78,8 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
     if (!GOOGLE_CLIENT_ID) return
 
     const init = () => {
-      if (!window.google) return
+      // Maps API sets `window.google` without `accounts.id`; only GSI provides Sign-In.
+      if (!window.google?.accounts?.id) return
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCredential,
@@ -87,7 +88,7 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
       setGsiReady(true)
     }
 
-    if (window.google) {
+    if (window.google?.accounts?.id) {
       init()
       return
     }
@@ -102,10 +103,10 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
 
   // Render Google button — defer one frame so the modal is painted and offsetWidth is valid
   useEffect(() => {
-    if (!gsiReady || !googleBtnRef.current || !window.google) return
+    if (!gsiReady || !googleBtnRef.current || !window.google?.accounts?.id) return
     const el = googleBtnRef.current
     const id = requestAnimationFrame(() => {
-      if (!window.google || !el) return
+      if (!window.google?.accounts?.id || !el) return
       try {
         window.google.accounts.id.renderButton(el, {
           theme: 'outline',
