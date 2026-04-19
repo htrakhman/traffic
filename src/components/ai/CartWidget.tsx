@@ -367,8 +367,8 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
         <p className="text-[9px] text-slate-600 mt-1">Add lines from inventory; continue chatting below anytime.</p>
       </div>
 
-      <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
-        <div className="min-h-0 flex-1 divide-y divide-slate-800/60 overflow-y-auto overscroll-y-contain">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="flex min-h-[14rem] flex-1 flex-col divide-y divide-slate-800/60 overflow-y-auto overscroll-y-contain">
         {activeItems.map((item) => {
           const key = itemKey(item)
           const pc = priorityConfig[item.priority]
@@ -618,7 +618,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
           role="dialog"
           aria-modal="true"
           aria-labelledby="cart-quote-title"
-          className="relative z-[1] w-full sm:max-w-xl max-h-[92vh] sm:max-h-[min(90vh,760px)] flex flex-col rounded-t-[1.25rem] sm:rounded-2xl border border-slate-600/50 bg-slate-900/98 ring-1 ring-white/[0.06] shadow-2xl shadow-black/50 overflow-hidden animate-slide-up"
+          className="relative z-[1] flex h-[min(92dvh,760px)] max-h-[92vh] w-full min-h-0 flex-col overflow-hidden rounded-t-[1.25rem] border border-slate-600/50 bg-slate-900/98 shadow-2xl shadow-black/50 ring-1 ring-white/[0.06] animate-slide-up sm:max-h-[min(90vh,760px)] sm:max-w-xl sm:rounded-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <span id="cart-quote-title" className="sr-only">
@@ -637,7 +637,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
     <>
       {workzoneMapPortal}
       <div
-        className={`w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 ring-1 ring-white/[0.04] shadow-xl shadow-black/30 overflow-hidden flex flex-col ${embeddedMax}`}
+        className={`flex w-full flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-xl shadow-black/30 ring-1 ring-white/[0.04] ${embeddedMax}`}
       >
         {renderCartBody({ inOverlay: false })}
       </div>

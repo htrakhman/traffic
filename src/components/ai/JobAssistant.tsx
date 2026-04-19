@@ -16,7 +16,10 @@ import {
   PenLine,
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
-import { normalizeRecommendationPricing } from '../../utils/pricing'
+import {
+  normalizeRecommendationPricing,
+  type RecommendationFootprintGuard,
+} from '../../utils/pricing'
 import { tryParseTailAfterCartStart } from '../../utils/chatCartParse'
 import type { ChatMessage, JobDetails, AIRecommendation, MapArea } from '../../types'
 import {
@@ -62,7 +65,7 @@ function parseQASegments(content: string): Segment[] {
   return segments
 }
 
-function parseSegments(content: string): Segment[] {
+function parseSegments(content: string, mapFootprint?: RecommendationFootprintGuard): Segment[] {
   const cartRegex = /\[CART_START\]([\s\S]*?)\[CART_END\]/g
   const segments: Segment[] = []
   let lastIndex = 0
@@ -72,7 +75,10 @@ function parseSegments(content: string): Segment[] {
     const before = content.slice(lastIndex, match.index).trim()
     if (before) segments.push(...parseQASegments(before))
     try {
-      const rec = normalizeRecommendationPricing(JSON.parse(match[1].trim()) as AIRecommendation)
+      const rec = normalizeRecommendationPricing(
+        JSON.parse(match[1].trim()) as AIRecommendation,
+        mapFootprint,
+      )
       segments.push({ type: 'cart', recommendation: rec })
     } catch {
       segments.push({ type: 'text', content: match[0] })
@@ -86,7 +92,7 @@ function parseSegments(content: string): Segment[] {
     const beforeMarker = remaining.slice(0, openIdx).trim()
     if (beforeMarker) segments.push(...parseQASegments(beforeMarker))
     const afterOpen = remaining.slice(openIdx + '[CART_START]'.length)
-    const parsedOpen = tryParseTailAfterCartStart(afterOpen)
+    const parsedOpen = tryParseTailAfterCartStart(afterOpen, mapFootprint)
     if (parsedOpen) {
       segments.push({ type: 'cart', recommendation: parsedOpen.rec })
       if (parsedOpen.remainder.trim()) segments.push(...parseQASegments(parsedOpen.remainder.trim()))
@@ -152,6 +158,11 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [mapArea, setMapArea] = useState<MapArea | undefined>(() => persistedBoot?.mapArea)
+  /** Passed into cart normalization so cone/drum totals can be capped vs. a modest drawn footprint. */
+  const recommendationFootprintGuard = useMemo((): RecommendationFootprintGuard | undefined => {
+    if (!mapArea || mapArea.perimeterFt <= 0 || mapArea.areaFt2 <= 0) return undefined
+    return { perimeterFt: mapArea.perimeterFt, areaFt2: mapArea.areaFt2 }
+  }, [mapArea])
   /** User moved the pin via map search, suggestions, chat location, or geolocation — drives the setup checklist. */
   const [mapSiteLocated, setMapSiteLocated] = useState(() => persistedBoot?.mapSiteLocated ?? false)
   const handleMapSiteLocated = useCallback(() => setMapSiteLocated(true), [])
@@ -503,7 +514,9 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     .trim()
                   const afterCart =
                     cartIdx === -1 ? '' : msg.content.slice(cartIdx + '[CART_START]'.length)
-                  const streamingCart = afterCart ? tryParseTailAfterCartStart(afterCart)?.rec : undefined
+                  const streamingCart = afterCart
+                    ? tryParseTailAfterCartStart(afterCart, recommendationFootprintGuard)?.rec
+                    : undefined
                   return (
                     <div key={i} className="space-y-2 animate-slide-up">
                       <div className="flex gap-3">
@@ -527,7 +540,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                       {streamingCart && (
                         <div className="flex gap-3">
                           <div className="w-7 flex-shrink-0" aria-hidden />
-                          <div className="flex-1 min-w-0">
+                          <div className="min-h-0 flex-1 min-w-0">
                             <CartWidget recommendation={streamingCart} layout="modal" mapArea={mapArea} />
                           </div>
                         </div>
@@ -543,7 +556,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 }
 
                 // Parse segments for completed assistant messages
-                const segments = parseSegments(msg.content)
+                const segments = parseSegments(msg.content, recommendationFootprintGuard)
                 const nonCartSegs = segments.filter((s) => s.type !== 'cart')
                 const cartSegs = segments.filter((s) => s.type === 'cart') as { type: 'cart'; recommendation: AIRecommendation }[]
                 const choiceSegIndices = nonCartSegs
@@ -628,7 +641,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                           </div>
                         )}
                         {nonCartSegs.length > 0 && <div className="w-7 flex-shrink-0" />}
-                        <div className="flex-1 min-w-0">
+                        <div className="min-h-0 flex-1 min-w-0">
                           <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} layout="modal" mapArea={mapArea} />
                         </div>
                       </div>
