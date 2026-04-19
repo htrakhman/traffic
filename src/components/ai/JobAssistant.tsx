@@ -14,7 +14,6 @@ import {
   UnfoldVertical,
   FoldVertical,
   PenLine,
-  Check,
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
 import { normalizeRecommendationPricing } from '../../utils/pricing'
@@ -300,14 +299,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
 
   const isEmpty = messages.length === 0 && !recommendation
   const showReset = !isEmpty || mapArea !== undefined || mapSiteLocated
-  const setupSearchDone = mapSiteLocated || !!mapArea
-  const setupZoneDone = !!mapArea
-
-  const focusMapSearch = () => {
-    document.getElementById('map-area-search')?.focus()
-  }
-
-  const focusJobComposer = () => textareaRef.current?.focus()
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -731,76 +722,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 >
                   <PenLine size={13} className="shrink-0 opacity-90" aria-hidden />
                   <span className="truncate">{mapArea ? 'Redraw zone' : 'Draw zone'}</span>
-                </button>
-              </div>
-            </div>
-            <div className="px-2.5 py-2 border-b border-slate-800/90 bg-slate-950/50 space-y-1.5">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-brand-400/85">Suggested order</p>
-              <div className="grid grid-cols-1 min-[420px]:grid-cols-3 gap-1.5">
-                <button
-                  type="button"
-                  onClick={focusMapSearch}
-                  className={`text-left rounded-lg border px-2 py-1.5 transition-colors ${
-                    setupSearchDone
-                      ? 'border-emerald-500/30 bg-emerald-500/10'
-                      : 'border-sky-500/35 bg-sky-950/50 hover:bg-sky-500/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    {setupSearchDone ? (
-                      <Check size={14} className="text-emerald-400 shrink-0" aria-hidden />
-                    ) : (
-                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-sky-400/55 text-[9px] font-bold text-sky-200">
-                        1
-                      </span>
-                    )}
-                    <span className="text-[11px] font-semibold text-white">Search the site</span>
-                  </div>
-                  <p className="mt-0.5 pl-[22px] text-[10px] leading-snug text-slate-500">
-                    Address, milepost, or coordinates — then <span className="text-slate-400">Go</span>
-                  </p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => mapSelectorRef.current?.startWorkZoneDraw()}
-                  className={`text-left rounded-lg border px-2 py-1.5 transition-colors ${
-                    setupZoneDone
-                      ? 'border-emerald-500/30 bg-emerald-500/10'
-                      : 'border-brand-500/35 bg-brand-500/10 hover:bg-brand-500/15'
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    {setupZoneDone ? (
-                      <Check size={14} className="text-emerald-400 shrink-0" aria-hidden />
-                    ) : (
-                      <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-brand-400/55 text-[9px] font-bold text-brand-100">
-                        2
-                      </span>
-                    )}
-                    <span className="text-[11px] font-semibold text-white">Draw work zone</span>
-                  </div>
-                  <p className="mt-0.5 pl-[22px] text-[10px] leading-snug text-slate-500">
-                    Corners on the map — double-click last point to finish
-                  </p>
-                </button>
-                <button
-                  type="button"
-                  onClick={focusJobComposer}
-                  className={`text-left rounded-lg border px-2 py-1.5 transition-colors ${
-                    setupZoneDone
-                      ? 'border-slate-600/80 bg-slate-900/80 hover:bg-slate-800/90'
-                      : 'border-slate-700/80 bg-slate-900/60 opacity-90 hover:opacity-100'
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-slate-500/70 text-[9px] font-bold text-slate-300">
-                      3
-                    </span>
-                    <span className="text-[11px] font-semibold text-white">Describe job & send</span>
-                  </div>
-                  <p className="mt-0.5 pl-[22px] text-[10px] leading-snug text-slate-500">
-                    AI uses your outline for cone counts, tapers, and more
-                  </p>
                 </button>
               </div>
             </div>
