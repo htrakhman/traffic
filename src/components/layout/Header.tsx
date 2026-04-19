@@ -56,9 +56,9 @@ export default function Header() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 lg:h-18">
+          <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:py-0 lg:min-h-[4.25rem]">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2.5 flex-shrink-0 max-w-[calc(100vw-8rem)] sm:max-w-none">
+            <Link to="/" className="flex items-center gap-2.5 shrink-0 min-w-0 max-w-[calc(100vw-8rem)] sm:max-w-none">
               <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center shadow-lg shadow-brand-500/30">
                 <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white" stroke="currentColor" strokeWidth={2.5}>
                   <path d="M12 2L8 7h8L12 2z" fill="currentColor" stroke="none" />
@@ -70,16 +70,18 @@ export default function Header() {
               </span>
             </Link>
 
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-1">
+            {/* Desktop nav — centered in remaining space so gaps stay even */}
+            <nav className="hidden lg:flex flex-1 justify-center items-center min-w-0 px-2">
+              <div className="flex items-center gap-0.5">
               {/* Categories dropdown */}
-              <div className="relative" onMouseLeave={() => setIsCatOpen(false)}>
+              <div className="relative shrink-0" onMouseLeave={() => setIsCatOpen(false)}>
                 <button
+                  type="button"
                   onMouseEnter={() => setIsCatOpen(true)}
-                  className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150"
+                  className="inline-flex items-center justify-center gap-1 h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap"
                 >
                   Equipment
-                  <ChevronDown size={14} className={`transition-transform ${isCatOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown size={14} className={`shrink-0 transition-transform ${isCatOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {isCatOpen && (
                   <div className="absolute top-full left-0 mt-1 w-64 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-black/50 overflow-hidden animate-slide-up">
@@ -110,48 +112,73 @@ export default function Header() {
                 )}
               </div>
 
-              <Link to="/browse" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
+              <Link
+                to="/browse"
+                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+              >
                 Browse
               </Link>
-              <Link to="/assistant" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
+              <Link
+                to="/assistant"
+                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+              >
                 Job Planner
               </Link>
-              <Link to="/planner" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
-                Site map
-              </Link>
-              <Link to="/blog" className="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150">
-                Guides
-              </Link>
-            </nav>
-
-            {/* Desktop right side */}
-            <div className="hidden lg:flex items-center gap-3">
-              <a href="tel:+18005551234" className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors">
-                <Phone size={14} />
-                <span>1-800-555-1234</span>
-              </a>
-              <Link to="/browse" className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all">
-                <Search size={18} />
+              <Link
+                to="/planner"
+                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
+              >
+                Site Map
               </Link>
               <Link
-                to="/cart"
-                className="relative p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
-                aria-label={itemCount > 0 ? `Cart, ${itemCount} items` : 'Cart'}
+                to="/blog"
+                className="inline-flex items-center justify-center h-10 px-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0"
               >
-                <ShoppingCart size={18} />
-                {itemCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white">
-                    {itemCount > 99 ? '99+' : itemCount}
-                  </span>
-                )}
+                Guides
               </Link>
+              </div>
+            </nav>
+
+            {/* Desktop right — phone · icons · auth, with clear rhythm */}
+            <div className="hidden lg:flex items-center shrink-0 gap-0">
+              <a
+                href="tel:+18005551234"
+                aria-label="Call 1-800-555-1234"
+                title="1-800-555-1234"
+                className="inline-flex items-center justify-center gap-2 h-10 w-10 shrink-0 xl:w-auto xl:pr-3 xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
+              >
+                <Phone size={15} className="shrink-0 text-slate-500" aria-hidden />
+                <span className="hidden xl:inline">1-800-555-1234</span>
+              </a>
+              <div className="flex items-center gap-0.5 pr-3 mr-3 border-r border-slate-800">
+                <Link
+                  to="/browse"
+                  className="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
+                  aria-label="Search catalog"
+                >
+                  <Search size={18} />
+                </Link>
+                <Link
+                  to="/cart"
+                  className="relative inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-all"
+                  aria-label={itemCount > 0 ? `Cart, ${itemCount} items` : 'Cart'}
+                >
+                  <ShoppingCart size={18} />
+                  {itemCount > 0 && (
+                    <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white leading-none">
+                      {itemCount > 99 ? '99+' : itemCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
 
               {/* User / auth */}
               {user ? (
-                <div className="relative" ref={userDropRef}>
+                <div className="relative flex items-center gap-2 pl-1" ref={userDropRef}>
                   <button
+                    type="button"
                     onClick={() => setIsUserOpen(v => !v)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-sm"
+                    className="flex items-center gap-2 h-10 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-sm shrink-0"
                   >
                     {isMemberActive && <Crown size={13} className="text-amber-400" />}
                     <User size={15} className="text-slate-300" />
@@ -198,27 +225,36 @@ export default function Header() {
                       </div>
                     </div>
                   )}
+                  <Link
+                    to="/quote"
+                    className="btn-primary text-sm h-10 px-4 shrink-0 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                  >
+                    Book your rental
+                  </Link>
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
-                  <button onClick={openLogin} className="btn-secondary text-sm py-2 px-4">
+                <div className="flex items-center gap-2 shrink-0 pl-1">
+                  <button
+                    type="button"
+                    onClick={openLogin}
+                    className="btn-secondary text-sm h-10 px-4 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                  >
                     Sign in
                   </button>
-                  <button onClick={openSignup} className="btn-primary text-sm py-2 px-4">
+                  <button
+                    type="button"
+                    onClick={openSignup}
+                    className="btn-primary text-sm h-10 px-4 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                  >
                     Sign up
                   </button>
+                  <Link
+                    to="/quote"
+                    className="btn-primary text-sm h-10 px-4 whitespace-nowrap !shadow-none hover:!translate-y-0"
+                  >
+                    Book your rental
+                  </Link>
                 </div>
-              )}
-
-              {user && (
-                <Link to="/quote" className="btn-primary text-sm py-2 px-4">
-                  Book your rental
-                </Link>
-              )}
-              {!user && (
-                <Link to="/quote" className="btn-primary text-sm py-2 px-4">
-                  Book your rental
-                </Link>
               )}
             </div>
 
@@ -261,7 +297,7 @@ export default function Header() {
                   )}
                 </Link>
                 <Link to="/assistant" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Job Planner</Link>
-                <Link to="/planner" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Site map</Link>
+                <Link to="/planner" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Site Map</Link>
                 <Link to="/blog" className="block px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">Guides</Link>
               </div>
 
