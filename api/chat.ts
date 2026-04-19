@@ -1,10 +1,10 @@
-// Vercel serverless — proxies chat + job JSON to Google Gemini (AI Studio key).
-// Client still sends Anthropic-shaped JSON; we translate and stream SSE the UI already parses.
+// Vercel serverless — proxies chat to OpenAI / Gemini / Perplexity (see api/lib/chatProxyRouter.ts).
+// Client still sends Anthropic-shaped JSON; backends normalize to the same SSE / JSON the UI parses.
 //
-// Env: GEMINI_API_KEY (or GOOGLE_AI_API_KEY) in Vercel → Settings → Environment Variables.
+// Env: OPENAI_API_KEY, GEMINI_API_KEY (or GOOGLE_AI_API_KEY), PERPLEXITY_API_KEY — server only, never VITE_*.
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { handleChatRequest } from './lib/geminiChatProxy'
+import { handleChatRequest } from './lib/chatProxyRouter'
 
 export const config = { runtime: 'nodejs' }
 

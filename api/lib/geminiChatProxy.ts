@@ -4,6 +4,8 @@
  * generateContent fallback when streamGenerateContent is unavailable.
  */
 
+import { anthropicSseLine, sseFromFullText } from './chatSse'
+
 const GEMINI_HOST = 'https://generativelanguage.googleapis.com/v1beta'
 
 export const ALLOWED_CHAT_MODELS = new Set([
@@ -76,22 +78,6 @@ function extractCandidateText(json: unknown): string {
   const parts = o.candidates?.[0]?.content?.parts
   if (!parts?.length) return ''
   return parts.map((p) => (typeof p.text === 'string' ? p.text : '')).join('')
-}
-
-function anthropicSseLine(text: string): string {
-  return `data: ${JSON.stringify({ type: 'content_block_delta', delta: { text } })}\n\n`
-}
-
-/** Single-chunk SSE stream the client already understands. */
-function sseFromFullText(full: string): ReadableStream<Uint8Array> {
-  const encoder = new TextEncoder()
-  const chunk = anthropicSseLine(full)
-  return new ReadableStream({
-    start(controller) {
-      controller.enqueue(encoder.encode(chunk))
-      controller.close()
-    },
-  })
 }
 
 function geminiStreamToAnthropicSseStream(upstream: ReadableStream<Uint8Array>): ReadableStream<Uint8Array> {
@@ -168,7 +154,7 @@ async function fetchGemini(
   })
 }
 
-export async function handleChatRequest(incoming: Record<string, unknown>): Promise<Response> {
+export async function handleGeminiChatRequest(incoming: Record<string, unknown>): Promise<Response> {
   const key = getGeminiKey()
   if (!key) {
     return new Response(JSON.stringify({ error: 'Server misconfigured: GEMINI_API_KEY missing' }), {

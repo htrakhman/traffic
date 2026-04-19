@@ -3,8 +3,9 @@ import { curatedProducts, getProductById } from '../data/products'
 import { normalizeRecommendationPricing } from './pricing'
 import { SITE_NAME } from '../config/site'
 
-// Route chat through our serverless proxy at /api/chat (Gemini on the server).
-// Set GEMINI_API_KEY (or GOOGLE_AI_API_KEY) in Vercel / Netlify env — never VITE_*.
+// Route chat through our serverless proxy at /api/chat (OpenAI / Gemini / Perplexity on the server).
+// Set OPENAI_API_KEY, GEMINI_API_KEY (or GOOGLE_AI_API_KEY), and/or PERPLEXITY_API_KEY — never VITE_*.
+// Optional: CHAT_AI_FALLBACK_ORDER=openai,gemini,perplexity
 //
 // Demo mode (no live AI) is triggered by VITE_AI_DEMO_MODE=true in the client
 // env or by the proxy returning 500 (e.g. in previews where the key is absent).
@@ -158,9 +159,8 @@ export async function getJobRecommendation(
   })
 
   if (!response.ok) {
-    // If the proxy reports a misconfigured key (no GEMINI_API_KEY in env),
-    // fall back to the demo recommendation instead of surfacing an error.
-    if (response.status === 500) {
+    // If the proxy reports misconfiguration or all providers failed, use demo JSON.
+    if (response.status === 500 || response.status === 502) {
       return getDemoRecommendation(jobDetails, userMessage)
     }
     const err = await response.text()
@@ -303,13 +303,19 @@ ${STREAM_CART_PRODUCT_RATES}`,
 
   if (!response.ok) {
     const raw = await response.text()
-    if (response.status === 500) {
+    if (response.status === 500 || response.status === 502) {
       let note = 'AI is temporarily offline. Please try again shortly.'
       try {
         const j = JSON.parse(raw) as { error?: string }
-        if (typeof j.error === 'string' && j.error.includes('GEMINI_API_KEY')) {
+        if (typeof j.error === 'string' && j.error.includes('no chat API keys')) {
+          note =
+            'Chat is not configured: add OPENAI_API_KEY, GEMINI_API_KEY (Google AI Studio), and/or PERPLEXITY_API_KEY in your host environment variables, then redeploy.'
+        } else if (typeof j.error === 'string' && j.error.includes('GEMINI_API_KEY')) {
           note =
             'Chat is not configured: add GEMINI_API_KEY (Google AI Studio) in your host environment variables, then redeploy.'
+        } else if (typeof j.error === 'string' && j.error.includes('All configured chat providers failed')) {
+          note =
+            'Every AI backend returned an error. Check keys and billing in the host dashboard, or try again shortly.'
         } else if (typeof j.error === 'string' && j.error.includes('chat proxy failed')) {
           note = 'Chat failed on the server. Redeploy the latest build or check Vercel/Netlify function logs for /api/chat.'
         }
