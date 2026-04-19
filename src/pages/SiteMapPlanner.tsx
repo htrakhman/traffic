@@ -326,7 +326,7 @@ export default function SiteMapPlanner() {
     let cancelled = false
     let ro: ResizeObserver | null = null
     let idleListener: google.maps.MapsEventListener | null = null
-    let idlePersistTimer: ReturnType<typeof setTimeout> | null = null
+    let idlePersistTimer: number | null = null
 
     Promise.all([importLibrary('maps'), importLibrary('marker')])
       .then(([_, markerLib]) => {
