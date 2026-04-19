@@ -112,6 +112,24 @@ interface Props {
 
 type Mode = 'chat' | 'form'
 
+function ThinkingIndicator() {
+  return (
+    <div
+      className="flex items-center gap-2.5 min-h-[1.25rem]"
+      role="status"
+      aria-live="polite"
+      aria-label="Assistant is thinking"
+    >
+      <span className="text-sm font-medium text-slate-200">Thinking</span>
+      <div className="flex gap-1 items-center pt-0.5" aria-hidden>
+        <div className="typing-dot !bg-brand-400/90" />
+        <div className="typing-dot !bg-brand-400/90" />
+        <div className="typing-dot !bg-brand-400/90" />
+      </div>
+    </div>
+  )
+}
+
 export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLayoutChange }: Props) {
   const [mode, setMode] = useState<Mode>('chat')
   /** Taller map inside the planner card (still on the Job Planner page — not browser fullscreen). */
@@ -431,8 +449,17 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                           <Sparkles size={12} className="text-brand-400" />
                         </div>
                         <div className="max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed bg-slate-800/80 border border-slate-700 text-slate-200 rounded-tl-sm">
-                          <span className="whitespace-pre-wrap">{visibleText}</span>
-                          <span className="inline-block w-0.5 h-4 bg-brand-400 ml-0.5 align-middle animate-pulse" />
+                          {visibleText ? (
+                            <>
+                              <span className="whitespace-pre-wrap">{visibleText}</span>
+                              <span
+                                className="inline-block w-0.5 h-4 bg-brand-400 ml-0.5 align-middle animate-pulse"
+                                aria-hidden
+                              />
+                            </>
+                          ) : (
+                            <ThinkingIndicator />
+                          )}
                         </div>
                       </div>
                       {streamingCart && (
@@ -553,10 +580,8 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                   <div className="w-7 h-7 bg-brand-500/10 border border-brand-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Sparkles size={12} className="text-brand-400" />
                   </div>
-                  <div className="flex items-center gap-1.5 px-4 py-3 bg-slate-800/80 border border-slate-700 rounded-2xl rounded-tl-sm">
-                    <div className="typing-dot" />
-                    <div className="typing-dot" />
-                    <div className="typing-dot" />
+                  <div className="max-w-[85%] px-4 py-3 bg-slate-800/80 border border-slate-700 rounded-2xl rounded-tl-sm">
+                    <ThinkingIndicator />
                   </div>
                 </div>
               )}
