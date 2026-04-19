@@ -20,6 +20,8 @@ declare global {
             client_id: string
             callback: (resp: { credential: string }) => void
             ux_mode?: string
+            /** Avoid FedCM for One Tap; reduces odd failures while debugging origins. */
+            use_fedcm_for_prompt?: boolean
           }) => void
           prompt: () => void
           renderButton: (el: HTMLElement, cfg: object) => void
@@ -84,6 +86,7 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
         client_id: GOOGLE_CLIENT_ID,
         callback: handleGoogleCredential,
         ux_mode: 'popup',
+        use_fedcm_for_prompt: false,
       })
       setGsiReady(true)
     }
@@ -173,6 +176,14 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
           {/* Google sign-in — only shown when client ID is configured */}
           {GOOGLE_CLIENT_ID && (
             <>
+              {import.meta.env.DEV && (
+                <p className="text-xs text-amber-200/90 bg-amber-500/15 border border-amber-500/25 rounded-lg px-3 py-2 leading-relaxed">
+                  Google Sign-In: add{' '}
+                  <code className="text-amber-100">{window.location.origin}</code>
+                  {' '}to <strong className="font-medium">Authorized JavaScript origins</strong> for this OAuth Web client
+                  (Google Cloud Console → Credentials). This dev server uses port <strong className="font-medium">3000</strong> by default.
+                </p>
+              )}
               <div ref={googleBtnRef} className="w-full flex justify-center [&>div]:!w-full" />
               <div className="flex items-center gap-3">
                 <div className="flex-1 h-px bg-slate-800" />

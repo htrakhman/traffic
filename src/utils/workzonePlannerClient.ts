@@ -288,7 +288,9 @@ function buildPlannerPrompt(mapArea: MapArea, items: CartItemInput[]): string {
       ? `Axis-aligned bounding box: ~${Math.round(footprintMinSpanFt)} ft (narrow) × ~${Math.round(footprintMaxSpanFt)} ft (long)`
       : ''
 
-  return `You are an expert certified Traffic Control Supervisor (TCS) with MUTCD Part 6 mastery and 20 years of field experience. A contractor has drawn their work zone on a map and has rental equipment in their cart. Your job is to produce a professional, MUTCD-compliant traffic control layout — placing every piece of equipment at the exact correct lat/lng position following applicable standards.
+  return `You are an expert Traffic Control Supervisor (TCS) with deep MUTCD Part 6 field experience. A contractor has drawn their work zone on a map and has rental equipment in their cart. Your job is to produce professional, MUTCD-informed traffic control layout guidance — placing every cart item at lat/lng positions consistent with typical Part 6 spacing patterns (state DOT / TCP requirements still prevail on real jobs).
+
+Regulatory stack: Treat output as planning visualization only — not a stamped TCP. If cart quantities look unrealistic for the drawn footprint (e.g. highway-scale channelization for a small patch), say so clearly in planningNotes instead of scattering devices arbitrarily.
 
 ## WORK ZONE DATA
 Centroid: {lat: ${center.lat.toFixed(7)}, lng: ${center.lng.toFixed(7)}}
@@ -312,8 +314,8 @@ At lat ${center.lat.toFixed(4)}°:
 ${itemsStr}
 
 ## YOUR TASK
-1. Examine the polygon shape to determine the road's long axis (north-south, east-west, etc.) and which end is upstream (where traffic approaches from).
-2. Apply MUTCD Part 6 spacing rules:
+1. Examine the polygon shape to determine the road's long axis (north-south, east-west, etc.) and which end is upstream (where traffic approaches from). Do not invent equipment beyond the cart list — place only the SKUs and quantities given. If counts clearly exceed what the polygon can support, explain the mismatch in planningNotes and still place units as logically as possible along the approach and footprint (do not add SKUs to "fix" the cart).
+2. Apply MUTCD Part 6 spacing patterns (heuristic — verify against applicable standards on site):
    - Advance warning signs: ${postedSpeedMph && postedSpeedMph >= 55 ? '1000–1500 ft' : postedSpeedMph && postedSpeedMph >= 45 ? '500–1000 ft' : postedSpeedMph && postedSpeedMph >= 25 ? '350–500 ft' : '100–350 ft'} upstream of the taper for the posted speed
    - Taper/transition cones or drums: at ${postedSpeedMph && postedSpeedMph >= 45 ? '40 ft' : '20 ft'} intervals along the taper diagonal
    - Buffer space cones/drums: ${postedSpeedMph && postedSpeedMph >= 45 ? '60 ft' : '40 ft'} spacing along work zone edges
@@ -403,7 +405,7 @@ export async function planWorkzoneLayout(
     body: JSON.stringify({
       model: 'gemini-2.5-flash',
       max_tokens: 8000,
-      system: `You are an expert certified Traffic Control Supervisor for ${SITE_NAME}. You output MUTCD-compliant equipment layout plans as valid JSON only. No markdown fences, no prose — pure JSON object.`,
+      system: `You are an expert Traffic Control Supervisor for ${SITE_NAME}. You output MUTCD-informed temporary traffic control layout guidance as valid JSON only. Federal MUTCD is general U.S. guidance; state/local supplements, permits, and project TCPs override this tool. Output is illustrative geometry for planning — not an approved Traffic Control Plan. No markdown fences, no prose — pure JSON object.`,
       messages: [{ role: 'user', content: prompt }],
     }),
   })

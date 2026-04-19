@@ -141,7 +141,17 @@ function buildJobPrompt(jobDetails: Partial<JobDetails>, userMessage?: string): 
   return parts.join('\n')
 }
 
-const SYSTEM_PROMPT = `You are the AI Work Zone Planner for ${SITE_NAME} — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to rent for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) requirements, ATSSA standards, and common work zone setups.
+/** Shared instructions for job JSON + streaming chat — single source of truth. */
+const TTC_EXPERT_DOCTRINE = `Expert doctrine (follow in every reply):
+- Regulatory stack: Treat the U.S. MUTCD as general national guidance. State DOT / municipal supplements, permits, and project-specific Traffic Control Plans (TCP), engineer-stamped layouts, and inspector direction always override generic app advice. Never present this output as legal sign-off or as a substitute for field-ready approvals.
+- Honest language: Describe setups as typical MUTCD-based practice or common state patterns unless the user supplied exact specs or code citations. Do not invent specific MUTCD table, figure, or section references.
+- Right-sizing: Default to the smallest professional equipment set that matches the described operation, drawn map footprint, posted speed, lane impact, and work time. Use priority "optional" aggressively for extras and redundant messaging hardware.
+- Answer discipline: Answer the user's actual question first in the fewest words that stay safe and useful. Ask clarifying questions only when blocking for safety or sizing—when collecting context, batch questions instead of ping-ponging.
+- Catalog honesty: Recommend catalog SKUs only where there is a clear operational need; omit unrelated categories instead of padding the list.`
+
+const SYSTEM_PROMPT = `You are the AI Work Zone Planner for ${SITE_NAME} — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to rent for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) frameworks, ATSSA guidance, and common work zone setups.
+
+${TTC_EXPERT_DOCTRINE}
 
 Your available rental equipment catalog (retail daily rental rates — already include our standard 50% markup on supplier-reference economics; copy dailyRate values exactly):
 ${CATALOG_PROMPT_LINES}
@@ -227,7 +237,10 @@ export async function getJobRecommendation(
   const jsonMatch = text.match(/\{[\s\S]*\}/)
   if (!jsonMatch) throw new Error('No JSON found in AI response')
 
-  return normalizeRecommendationPricing(JSON.parse(jsonMatch[0]) as AIRecommendation)
+  const mapFootprint = jobDetails.mapArea
+    ? { perimeterFt: jobDetails.mapArea.perimeterFt, areaFt2: jobDetails.mapArea.areaFt2 }
+    : undefined
+  return normalizeRecommendationPricing(JSON.parse(jsonMatch[0]) as AIRecommendation, mapFootprint)
 }
 
 export async function streamJobChat(
@@ -316,6 +329,12 @@ ${JSON.stringify(rec)}
       max_tokens: 4096,
       stream: true,
       system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
+
+${TTC_EXPERT_DOCTRINE}
+
+Chat output discipline:
+- Outside [Q]/[A] blocks and the single cart lead-in sentence ("Here's your recommended equipment setup."), avoid long essays, markdown tables, and generic MUTCD lectures.
+- Never duplicate a full equipment list in free text when a [CART_START]…[CART_END] JSON block is the right output.
 
 The UI shows a Google Map directly above the chat input with a search field: users can jump to an address, highway + milepost (Geocoder resolves natural language), or decimal lat/lng. In chat they can also type "Location: …" / "Address: …" or a coordinate pair such as 40.7128, -74.0060 — the client recenters the map when they send. They still need a drawn polygon for the [Map work zone] block (area/perimeter); search only moves the map view.
 

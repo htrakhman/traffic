@@ -5,6 +5,36 @@ to = "/.netlify/functions/chat"
 status = 200
 force = true
 
+[[redirects]]
+from = "/api/checkout-notify"
+to = "/.netlify/functions/checkout-notify"
+status = 200
+force = true
+
+[[redirects]]
+from = "/api/create-membership-checkout"
+to = "/.netlify/functions/create-membership-checkout"
+status = 200
+force = true
+
+[[redirects]]
+from = "/api/membership-complete"
+to = "/.netlify/functions/membership-complete"
+status = 200
+force = true
+
+[[redirects]]
+from = "/api/membership-sync"
+to = "/.netlify/functions/membership-sync"
+status = 200
+force = true
+
+[[redirects]]
+from = "/api/stripe-portal"
+to = "/.netlify/functions/stripe-portal"
+status = 200
+force = true
+
 # Same-origin proxy for Google Roads REST (avoids browser CORS on roads.googleapis.com).
 [[redirects]]
 from = "/roads-api/*"

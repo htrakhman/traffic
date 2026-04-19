@@ -11,6 +11,8 @@ export default function Checkout() {
   const { lines, clearCart } = useCart()
   const { isMember } = useMembership()
   const [done, setDone] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -42,10 +44,56 @@ export default function Checkout() {
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
   const grandTotal = rentalGrandTotal + deliveryPickupCombined
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    clearCart()
-    setDone(true)
+    setSubmitError(null)
+    setSubmitting(true)
+    try {
+      const payload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        company: form.company,
+        jobSite: form.jobSite,
+        notes: form.notes,
+        deliveryNeeded: form.deliveryNeeded,
+        lines: resolved.map(({ line, product }) => ({
+          productId: product.id,
+          productName: product.name,
+          quantity: line.quantity,
+          rentalDays: line.rentalDays,
+          dailyRate: product.dailyRate,
+          lineTotal: product.dailyRate * line.quantity * line.rentalDays,
+        })),
+        totals: {
+          totalDaily,
+          rentalGrandTotal,
+          deliveryPickupCombined,
+          grandTotal,
+        },
+      }
+      const res = await fetch('/api/checkout-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = (await res.json().catch(() => ({}))) as { error?: string }
+      if (!res.ok) {
+        const msg =
+          data.error ||
+          (res.status === 0
+            ? 'Could not reach the server. Use “vercel dev” locally or deploy with checkout email env vars set.'
+            : 'Checkout could not be submitted. Please try again or call us.')
+        setSubmitError(msg)
+        return
+      }
+      clearCart()
+      setDone(true)
+    } catch {
+      setSubmitError('Network error. Check your connection and try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (done) {
@@ -60,8 +108,8 @@ export default function Checkout() {
             Thanks, <strong className="text-white">{form.name}</strong>. We received your rental checkout.
           </p>
           <p className="text-slate-400 mb-8">
-            You will get a confirmation and payment link at{' '}
-            <strong className="text-white">{form.email}</strong> shortly. Questions? Call{' '}
+            We will contact you at <strong className="text-white">{form.email}</strong> to confirm availability,
+            delivery, and pickup. Questions? Call{' '}
             <a href="tel:+18005551234" className="text-brand-400">
               1-800-555-1234
             </a>
@@ -238,9 +286,19 @@ export default function Checkout() {
                   <span className="text-sm text-slate-300">I need delivery to the job site</span>
                 </label>
 
-                <button type="submit" className="w-full btn-primary py-3 justify-center text-base gap-2">
+                {submitError ? (
+                  <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+                    {submitError}
+                  </p>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full btn-primary py-3 justify-center text-base gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
                   <CreditCard size={18} />
-                  Submit checkout
+                  {submitting ? 'Submitting…' : 'Submit checkout'}
                 </button>
 
                 <p className="text-xs text-slate-500 text-center">

@@ -26,8 +26,6 @@ export const articleTrafficControlRentalGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-18',
   readMinutes: 9,
-  heroImage:
-    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp',
   body: h(
     Fragment,
     null,

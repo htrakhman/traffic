@@ -3,6 +3,21 @@
     "api/chat.ts": {
       "maxDuration": 60,
       "memory": 1024
+    },
+    "api/checkout-notify.ts": {
+      "maxDuration": 15
+    },
+    "api/create-membership-checkout.ts": {
+      "maxDuration": 15
+    },
+    "api/membership-complete.ts": {
+      "maxDuration": 15
+    },
+    "api/membership-sync.ts": {
+      "maxDuration": 15
+    },
+    "api/stripe-portal.ts": {
+      "maxDuration": 15
     }
   },
   "rewrites": [

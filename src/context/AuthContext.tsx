@@ -18,6 +18,9 @@ export type User = {
   isMember: boolean
   memberSince?: string
   memberExpiry?: string
+  /** Set after Stripe Checkout subscription; used for portal + renewal sync. */
+  stripeCustomerId?: string
+  stripeSubscriptionId?: string
 }
 
 type GoogleProfile = { googleId: string; email: string; name: string; picture?: string }
@@ -29,9 +32,13 @@ type AuthContextValue = {
   loginWithGoogle: (profile: GoogleProfile) => { ok: boolean; error?: string }
   logout: () => void
   updateUser: (updates: Partial<Omit<User, 'id' | 'passwordHash'>>) => void
-  activateMembership: () => void
+  /** Clears local membership only (legacy accounts without Stripe). Stripe subscribers use the billing portal. */
   cancelMembership: () => void
   isMemberActive: boolean
+  startStripeMembershipCheckout: () => Promise<{ ok: boolean; error?: string }>
+  completeStripeMembershipCheckout: (sessionId: string) => Promise<{ ok: boolean; error?: string }>
+  refreshStripeMembership: () => Promise<void>
+  openStripeCustomerPortal: () => Promise<{ ok: boolean; error?: string }>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -92,7 +99,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(() => {
     const s = loadSession()
     if (!s) return null
-    // Re-hydrate from users store in case it was updated
     const users = loadUsers()
     return users[s.email] ?? s
   })
@@ -138,7 +144,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const key = profile.email.toLowerCase()
     let found = users[key]
     if (!found) {
-      // Auto-create account on first Google sign-in
       found = {
         id: crypto.randomUUID(),
         email: key,
@@ -151,7 +156,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       users[key] = found
       saveUsers(users)
     } else {
-      // Update google fields
       found = { ...found, googleId: profile.googleId, picture: profile.picture }
       users[key] = found
       saveUsers(users)
@@ -174,36 +178,168 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(updated)
   }, [user, setUser])
 
-  const activateMembership = useCallback(() => {
+  const cancelMembership = useCallback(() => {
     if (!user) return
-    const now = new Date()
-    const expiry = new Date(now)
-    expiry.setMonth(expiry.getMonth() + 1)
+    if (user.stripeCustomerId) return
     const users = loadUsers()
     const updated: User = {
       ...user,
-      isMember: true,
-      memberSince: user.memberSince ?? now.toISOString(),
-      memberExpiry: expiry.toISOString(),
+      isMember: false,
+      memberExpiry: undefined,
+      memberSince: undefined,
     }
     users[user.email] = updated
     saveUsers(users)
     setUser(updated)
   }, [user, setUser])
 
-  const cancelMembership = useCallback(() => {
-    if (!user) return
-    const users = loadUsers()
-    const updated: User = { ...user, isMember: false, memberExpiry: undefined }
-    users[user.email] = updated
-    saveUsers(users)
-    setUser(updated)
+  const startStripeMembershipCheckout = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
+    if (!user) return { ok: false, error: 'Sign in to subscribe.' }
+    try {
+      const res = await fetch('/api/create-membership-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email, name: user.name }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string; detail?: string }
+      if (!res.ok) {
+        const msg = data.error || data.detail || 'Checkout could not be started.'
+        return { ok: false, error: msg }
+      }
+      if (!data.url) return { ok: false, error: 'No checkout URL returned.' }
+      window.location.assign(data.url)
+      return { ok: true }
+    } catch {
+      return { ok: false, error: 'Network error. Use “vercel dev” locally so /api routes exist, or try again.' }
+    }
+  }, [user])
+
+  const completeStripeMembershipCheckout = useCallback(
+    async (sessionId: string): Promise<{ ok: boolean; error?: string }> => {
+      if (!user) return { ok: false, error: 'Not signed in.' }
+      try {
+        const res = await fetch('/api/membership-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, email: user.email }),
+        })
+        const data = (await res.json().catch(() => ({}))) as {
+          stripeCustomerId?: string
+          stripeSubscriptionId?: string
+          memberExpiry?: string
+          error?: string
+          detail?: string
+        }
+        if (!res.ok) {
+          return { ok: false, error: data.error || data.detail || 'Could not verify payment.' }
+        }
+        const { stripeCustomerId, stripeSubscriptionId, memberExpiry } = data
+        if (!stripeCustomerId || !memberExpiry) {
+          return { ok: false, error: 'Invalid response from server.' }
+        }
+        const users = loadUsers()
+        const now = new Date().toISOString()
+        const updated: User = {
+          ...user,
+          isMember: true,
+          memberSince: user.memberSince ?? now,
+          memberExpiry,
+          stripeCustomerId,
+          stripeSubscriptionId: stripeSubscriptionId || user.stripeSubscriptionId,
+        }
+        users[user.email] = updated
+        saveUsers(users)
+        setUser(updated)
+        return { ok: true }
+      } catch {
+        return { ok: false, error: 'Network error.' }
+      }
+    },
+    [user, setUser],
+  )
+
+  const refreshStripeMembership = useCallback(async () => {
+    if (!user?.stripeCustomerId) return
+    try {
+      const res = await fetch('/api/membership-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerId: user.stripeCustomerId }),
+      })
+      const data = (await res.json().catch(() => ({}))) as {
+        active?: boolean
+        stripeSubscriptionId?: string
+        memberExpiry?: string
+      }
+      if (!res.ok) return
+
+      const users = loadUsers()
+      if (data.active && data.memberExpiry) {
+        const updated: User = {
+          ...user,
+          isMember: true,
+          memberExpiry: data.memberExpiry,
+          stripeSubscriptionId: data.stripeSubscriptionId || user.stripeSubscriptionId,
+        }
+        users[user.email] = updated
+        saveUsers(users)
+        setUser(updated)
+      } else {
+        const updated: User = {
+          ...user,
+          isMember: false,
+          memberExpiry: undefined,
+          stripeSubscriptionId: undefined,
+        }
+        users[user.email] = updated
+        saveUsers(users)
+        setUser(updated)
+      }
+    } catch {
+      /* ignore transient errors */
+    }
   }, [user, setUser])
+
+  const openStripeCustomerPortal = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
+    if (!user?.stripeCustomerId) return { ok: false, error: 'No Stripe billing profile on this account.' }
+    const returnUrl = `${window.location.origin}/account`
+    try {
+      const res = await fetch('/api/stripe-portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerId: user.stripeCustomerId, returnUrl }),
+      })
+      const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string; detail?: string }
+      if (!res.ok) {
+        return { ok: false, error: data.error || data.detail || 'Could not open billing portal.' }
+      }
+      if (!data.url) return { ok: false, error: 'No portal URL returned.' }
+      window.location.assign(data.url)
+      return { ok: true }
+    } catch {
+      return { ok: false, error: 'Network error.' }
+    }
+  }, [user])
 
   const isMemberActive = user ? memberIsActive(user) : false
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, loginWithGoogle, logout, updateUser, activateMembership, cancelMembership, isMemberActive }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        signup,
+        loginWithGoogle,
+        logout,
+        updateUser,
+        cancelMembership,
+        isMemberActive,
+        startStripeMembershipCheckout,
+        completeStripeMembershipCheckout,
+        refreshStripeMembership,
+        openStripeCustomerPortal,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )

@@ -1,5 +1,5 @@
 import type { AIRecommendation } from '../types'
-import { normalizeRecommendationPricing } from './pricing'
+import { normalizeRecommendationPricing, type RecommendationFootprintGuard } from './pricing'
 
 /** First `{` … matching `}` span, respecting JSON string escapes. */
 export function extractFirstBalancedJson(source: string): string | null {
@@ -39,13 +39,16 @@ export function extractFirstBalancedJson(source: string): string | null {
  * Parse recommendation JSON after `[CART_START]` (with or without `[CART_END]`).
  * Used for completed messages and for streaming previews once JSON is balanced.
  */
-export function tryParseTailAfterCartStart(afterOpen: string): { rec: AIRecommendation; remainder: string } | null {
+export function tryParseTailAfterCartStart(
+  afterOpen: string,
+  mapFootprint?: RecommendationFootprintGuard,
+): { rec: AIRecommendation; remainder: string } | null {
   const endMarker = afterOpen.indexOf('[CART_END]')
   const bodyForJson = endMarker === -1 ? afterOpen : afterOpen.slice(0, endMarker)
   const jsonStr = extractFirstBalancedJson(bodyForJson)
   if (!jsonStr) return null
   try {
-    const rec = normalizeRecommendationPricing(JSON.parse(jsonStr) as AIRecommendation)
+    const rec = normalizeRecommendationPricing(JSON.parse(jsonStr) as AIRecommendation, mapFootprint)
     if (!Array.isArray(rec.items)) return null
     const remainder =
       endMarker === -1
