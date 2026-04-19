@@ -24,8 +24,7 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 8,
-  heroImage:
-    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_1200/i/economy-solar-assist-type-b-flasher-red.webp',
+  heroImage: '/images/catalog/sign-flagger.jpg',
   body: h(
     Fragment,
     null,

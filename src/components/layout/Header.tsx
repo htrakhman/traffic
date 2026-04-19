@@ -212,12 +212,12 @@ export default function Header() {
 
               {user && (
                 <Link to="/quote" className="btn-primary text-sm py-2 px-4">
-                  Get a Quote
+                  Book your rental
                 </Link>
               )}
               {!user && (
                 <Link to="/quote" className="btn-primary text-sm py-2 px-4">
-                  Get a Quote
+                  Book your rental
                 </Link>
               )}
             </div>
@@ -301,7 +301,7 @@ export default function Header() {
               </div>
 
               <div className="border-t border-slate-800 pt-3 mt-3">
-                <Link to="/quote" className="btn-primary w-full justify-center">Get a Quote</Link>
+                <Link to="/quote" className="btn-primary w-full justify-center">Book your rental</Link>
               </div>
             </div>
           </div>

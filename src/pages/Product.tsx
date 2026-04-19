@@ -171,13 +171,13 @@ export default function Product() {
         '@type': 'HowTo',
         '@id': `${pageUrl}#howto-rent`,
         name: `How to rent ${product.name} from ${SITE_NAME}`,
-        description: `Request a quote, confirm dates, and schedule delivery or pickup for ${product.name}.`,
+        description: `Book your rental, confirm dates, and schedule delivery or pickup for ${product.name}.`,
         step: [
           {
             '@type': 'HowToStep',
             position: 1,
-            name: 'Request a quote',
-            text: 'Add the item to your cart or submit a quote request with quantity and rental duration.',
+            name: 'Book your rental',
+            text: 'Add the item to your cart or go to book with your quantity, rental duration, and job site details.',
           },
           {
             '@type': 'HowToStep',
@@ -508,7 +508,7 @@ export default function Product() {
                 className="w-full btn-primary py-3 justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
               >
                 <Package size={18} />
-                Request Availability & Quote
+                Book with dates & job site
               </button>
               <a
                 href="tel:+18005551234"
@@ -705,8 +705,8 @@ export default function Product() {
               {[
                 {
                   step: '1',
-                  title: 'Request a Quote',
-                  desc: 'Select your quantity and rental dates, then submit a quote request. We respond within 2 hours on business days.',
+                  title: 'Book your rental',
+                  desc: 'You see live rates on the product. Select quantity and dates, add job site info, and send your booking. We respond within 2 hours on business days.',
                 },
                 {
                   step: '2',

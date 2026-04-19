@@ -38,7 +38,7 @@ export default function Cart() {
               Cart
             </h1>
             <p className="text-slate-400">
-              Review equipment, then check out, request a quote, or keep browsing.
+              Review equipment, then check out, book with job details, or keep browsing.
             </p>
           </div>
           {resolved.length > 0 && (
@@ -162,7 +162,7 @@ export default function Cart() {
                 <span>${grandTotal.toFixed(2)}</span>
               </div>
               <p className="text-xs text-slate-500">
-                Final pricing confirmed on your formal quote. Estimated total includes delivery and pickup as shown
+                Final total confirmed when you lock in your order. Estimated total includes delivery and pickup as shown
                 {isMember ? ' (member benefit).' : '.'}
               </p>
               <div className="flex flex-col sm:flex-row gap-2 pt-2">
@@ -171,7 +171,7 @@ export default function Cart() {
                   Checkout
                 </Link>
                 <Link to="/quote" className="btn-secondary flex-1 justify-center py-3">
-                  Request quote for cart
+                  Book with job details
                   <ArrowRight size={18} />
                 </Link>
                 <Link to="/browse" className="btn-secondary flex-1 justify-center py-3">

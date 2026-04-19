@@ -26,8 +26,7 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 10,
-  heroImage:
-    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_1200/i/economy-solar-assist-type-b-flasher-red.webp',
+  heroImage: '/images/catalog/barricade-flasher.jpg',
   body: h(
     Fragment,
     null,
@@ -110,13 +109,13 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
     h(
       'p',
       null,
-      'Learn more at the ',
+      'The crash-test criteria every manufacturer is measured against are published by AASHTO in MASH and by the ',
       h(
         'a',
-        { href: 'https://roadsystems.com/mash-and-nchrp-350/', target: '_blank', rel: 'noopener noreferrer' },
-        'RSI MASH & NCHRP 350 overview',
+        { href: 'https://safety.fhwa.dot.gov/roadway_dept/countermeasures/reduce_crash_severity/', target: '_blank', rel: 'noopener noreferrer' },
+        'FHWA Office of Safety roadside hardware program',
       ),
-      '.',
+      ', which is the reference state DOTs and federal-aid inspectors check before approving a device.',
     ),
     h('h2', null, 'When should I use portable devices instead of permanent solutions?'),
     h(

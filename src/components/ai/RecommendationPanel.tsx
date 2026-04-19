@@ -128,7 +128,7 @@ export default function RecommendationPanel({ recommendation }: Props) {
           className="btn-secondary justify-center py-3 gap-2"
         >
           <ShoppingCart size={16} />
-          Request quote for this equipment
+          Book with this list
         </Link>
         <Link to="/browse" className="btn-secondary justify-center text-sm py-2.5">
           Browse & Customize

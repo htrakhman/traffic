@@ -25,7 +25,7 @@ export const articleArrowBoardRentalGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 9,
-  heroImage: 'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg',
+  heroImage: '/images/catalog/message-board.jpg',
   body: h(
     Fragment,
     null,
@@ -43,13 +43,13 @@ export const articleArrowBoardRentalGuide: Article = {
     h(
       'p',
       null,
-      'See the ',
+      'The full federal requirement, with minimum panel sizes, lamp configurations, and visibility distances by speed limit, sits in ',
       h(
         'a',
-        { href: 'https://up.codes/s/arrow-boards', target: '_blank', rel: 'noopener noreferrer' },
-        'UpCodes MUTCD Arrow Boards section',
+        { href: 'https://mutcd.fhwa.dot.gov/', target: '_blank', rel: 'noopener noreferrer' },
+        'MUTCD Section 6L.06',
       ),
-      ' for the full standard.',
+      ' and is what most state DOT plan reviewers cite when they approve or reject a traffic-control plan.',
     ),
     h('h2', null, 'What are the three MUTCD arrow board types?'),
     h(

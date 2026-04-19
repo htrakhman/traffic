@@ -111,7 +111,7 @@ export default function Article() {
             </div>
             <div className="mt-5 pt-5 border-t border-slate-800 flex flex-wrap gap-3">
               <Link to="/quote" className="btn-primary text-sm py-2 px-4">
-                Get a quote
+                Book your rental
               </Link>
               <Link
                 to="/assistant"

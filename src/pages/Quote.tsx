@@ -107,12 +107,12 @@ export default function Quote() {
           <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <CheckCircle size={28} className="text-emerald-400" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-3">Quote Request Sent!</h1>
+          <h1 className="text-3xl font-bold text-white mb-3">Booking request sent</h1>
           <p className="text-slate-400 mb-2">
-            Thanks, <strong className="text-white">{form.name}</strong>. We've received your quote request.
+            Thanks, <strong className="text-white">{form.name}</strong>. We've received your rental booking request.
           </p>
           <p className="text-slate-400 mb-8">
-            You'll receive a formal quote at <strong className="text-white">{form.email}</strong> within a few hours. For urgent needs, call <a href="tel:+18005551234" className="text-brand-400">1-800-555-1234</a>.
+            We’ll follow up at <strong className="text-white">{form.email}</strong> to confirm details—usually within a few hours. For urgent needs, call <a href="tel:+18005551234" className="text-brand-400">1-800-555-1234</a>.
           </p>
           <div className="flex gap-3 justify-center">
             <Link to="/" className="btn-secondary">Back to Home</Link>
@@ -127,8 +127,10 @@ export default function Quote() {
     <main className="min-h-screen pt-20">
       <div className="border-b border-slate-800/60 bg-slate-900/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-          <h1 className="text-3xl font-bold text-white mb-1">Request a Quote</h1>
-          <p className="text-slate-400">We'll confirm availability and send you a formal quote.</p>
+          <h1 className="text-3xl font-bold text-white mb-1">Book your rental</h1>
+          <p className="text-slate-400">
+            Rates and estimates are on this page. We’ll confirm availability, dates, and delivery or pickup.
+          </p>
         </div>
       </div>
 
@@ -217,8 +219,8 @@ export default function Quote() {
                     <span>${grandTotal.toFixed(2)}</span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    Final pricing will be confirmed in the formal quote. Totals include delivery and pickup as shown
-                    {isMember ? ' (member benefit).' : '.'}
+                    We confirm the final total in writing when your rental is scheduled. Totals include delivery and pickup
+                    as shown{isMember ? ' (member benefit).' : '.'}
                   </p>
                 </div>
               </div>
@@ -281,7 +283,7 @@ export default function Quote() {
                 disabled={items.length === 0}
                 className="w-full btn-primary py-3 justify-center text-base disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
               >
-                Submit Quote Request
+                Submit booking request
               </button>
 
               <p className="text-xs text-slate-500 text-center">

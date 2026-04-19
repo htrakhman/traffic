@@ -24,8 +24,7 @@ export const articleUniformTrafficControlDevicesMutcdGuide: Article = {
   targetVolume: 50000,
   datePublished: '2026-04-19',
   readMinutes: 13,
-  heroImage:
-    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_1200/i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp',
+  heroImage: '/images/catalog/sign-road-work.jpg',
   body: h(
     Fragment,
     null,
@@ -177,13 +176,13 @@ export const articleUniformTrafficControlDevicesMutcdGuide: Article = {
     h(
       'p',
       null,
-      'Learn more at the ',
+      'The federal handoff from NCHRP Report 350 to the newer AASHTO MASH criteria is tracked by the ',
       h(
         'a',
-        { href: 'https://roadsystems.com/mash-and-nchrp-350/', target: '_blank', rel: 'noopener noreferrer' },
-        'MASH & NCHRP 350 Overview',
+        { href: 'https://safety.fhwa.dot.gov/roadway_dept/countermeasures/reduce_crash_severity/', target: '_blank', rel: 'noopener noreferrer' },
+        'FHWA Office of Safety roadside hardware program',
       ),
-      '.',
+      ', which maintains the current list of federally eligible barriers, crash cushions, and end treatments for use on the National Highway System.',
     ),
     h('h2', null, 'What is the role of flaggers and flagger PPE?'),
     h(

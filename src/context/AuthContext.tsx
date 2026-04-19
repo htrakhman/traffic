@@ -13,15 +13,20 @@ export type User = {
   company?: string
   phone?: string
   passwordHash: string
+  googleId?: string
+  picture?: string
   isMember: boolean
   memberSince?: string
   memberExpiry?: string
 }
 
+type GoogleProfile = { googleId: string; email: string; name: string; picture?: string }
+
 type AuthContextValue = {
   user: User | null
   login: (email: string, password: string) => { ok: boolean; error?: string }
   signup: (name: string, email: string, password: string) => { ok: boolean; error?: string }
+  loginWithGoogle: (profile: GoogleProfile) => { ok: boolean; error?: string }
   logout: () => void
   updateUser: (updates: Partial<Omit<User, 'id' | 'passwordHash'>>) => void
   activateMembership: () => void
@@ -128,8 +133,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { ok: true }
   }, [setUser])
 
+  const loginWithGoogle = useCallback((profile: GoogleProfile) => {
+    const users = loadUsers()
+    const key = profile.email.toLowerCase()
+    let found = users[key]
+    if (!found) {
+      // Auto-create account on first Google sign-in
+      found = {
+        id: crypto.randomUUID(),
+        email: key,
+        name: profile.name,
+        passwordHash: '',
+        googleId: profile.googleId,
+        picture: profile.picture,
+        isMember: false,
+      }
+      users[key] = found
+      saveUsers(users)
+    } else {
+      // Update google fields
+      found = { ...found, googleId: profile.googleId, picture: profile.picture }
+      users[key] = found
+      saveUsers(users)
+    }
+    setUser(found)
+    return { ok: true }
+  }, [setUser])
+
   const logout = useCallback(() => {
     setUser(null)
+    window.google?.accounts.id.cancel?.()
   }, [setUser])
 
   const updateUser = useCallback((updates: Partial<Omit<User, 'id' | 'passwordHash'>>) => {
@@ -170,7 +203,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isMemberActive = user ? memberIsActive(user) : false
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, updateUser, activateMembership, cancelMembership, isMemberActive }}>
+    <AuthContext.Provider value={{ user, login, signup, loginWithGoogle, logout, updateUser, activateMembership, cancelMembership, isMemberActive }}>
       {children}
     </AuthContext.Provider>
   )

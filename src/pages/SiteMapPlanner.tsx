@@ -594,7 +594,7 @@ export default function SiteMapPlanner() {
             <h1 className="text-2xl sm:text-3xl font-bold text-white mt-1">Site map planner</h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl leading-relaxed">
               Drag catalog items onto the map to place cones, barricades, signs, and other gear. Drag pins to fine-tune. Export JSON to
-              share coordinates with your crew or attach to a quote. While this tab stays open, your placements, pan/zoom, and search are
+              share coordinates with your crew or attach to a rental booking. While this tab stays open, your placements, pan/zoom, and search are
               remembered as you move around the site; a work zone from the AI Job Planner shows as an outline, and a brand-new layout picks
               up your cart automatically once.
             </p>

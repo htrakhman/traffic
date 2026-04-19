@@ -15,15 +15,15 @@ const steps = [
     icon: Package,
     title: 'Get a recommendation',
     description:
-      'The AI recommends equipment types and estimated quantities based on your job details. You can adjust before requesting.',
+      'The AI recommends equipment types and estimated quantities based on your job details. You can adjust before you book.',
     color: 'amber',
   },
   {
     number: '03',
     icon: CheckCircle,
-    title: 'Request a quote',
+    title: 'Book your rental',
     description:
-      'Review your equipment list and request pricing. Our team confirms availability and sends a formal quote, typically within a few hours.',
+      'Pricing is already on the site. Review your list, send job details, and we confirm availability and final paperwork—typically within a few hours.',
     color: 'green',
   },
   {

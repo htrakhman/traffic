@@ -25,8 +25,7 @@ export const articleBarricadeRentalNearMeGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 9,
-  heroImage:
-    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp',
+  heroImage: '/images/catalog/barricade-type3.jpg',
   body: h(
     Fragment,
     null,
@@ -102,13 +101,13 @@ export const articleBarricadeRentalNearMeGuide: Article = {
     h(
       'p',
       null,
-      'See the ',
+      'The federal rail widths, reflective-sheeting grades, and minimum heights each barricade type has to meet before it goes on a public road are spelled out in ',
       h(
         'a',
-        { href: 'https://www.trafficsafetystore.com/blog/type-i-type-ii-and-type-iii-barricades-explained/', target: '_blank', rel: 'noopener noreferrer' },
-        'Traffic Safety Store barricade comparison',
+        { href: 'https://mutcd.fhwa.dot.gov/pdfs/2009r1r2/part6.pdf', target: '_blank', rel: 'noopener noreferrer' },
+        'MUTCD Part 6F',
       ),
-      ' for detailed specs.',
+      ', which is the standard state DOTs and federal-aid projects inspect against.',
     ),
     h('h2', null, 'What materials are barricades made from?'),
     h(

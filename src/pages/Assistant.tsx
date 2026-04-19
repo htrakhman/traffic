@@ -20,7 +20,7 @@ export default function Assistant() {
             <div>
               <h1 className="text-3xl font-bold text-white">AI Work Zone Planner</h1>
               <p className="text-slate-400 mt-1 max-w-xl leading-relaxed">
-                Describe your job and get a customized traffic control equipment recommendation — quantities, setup notes, and a direct path to requesting a quote.
+                Describe your job and get a customized traffic control equipment recommendation — quantities, setup notes, and a direct path to book your rental.
               </p>
             </div>
           </div>

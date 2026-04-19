@@ -261,7 +261,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-semibold text-white">Equipment quote</span>
+              <span className="text-sm font-semibold text-white">Equipment list & estimate</span>
               <span className="inline-flex items-center px-1.5 py-0.5 bg-brand-500 text-white text-[10px] font-bold rounded-full">
                 {activeItems.length}
               </span>
@@ -288,7 +288,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
               type="button"
               onClick={() => setOverlayOpen(false)}
               className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors"
-              aria-label="Close full screen quote"
+              aria-label="Close full screen equipment list"
             >
               <X size={16} />
             </button>
@@ -297,7 +297,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
               type="button"
               onClick={() => setOverlayOpen(true)}
               title="Full screen"
-              aria-label="Open equipment quote full screen"
+              aria-label="Open equipment list full screen"
               className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors border border-slate-700/80"
             >
               <Maximize2 size={16} />
@@ -565,7 +565,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           onClick={(e) => e.stopPropagation()}
         >
           <span id="cart-quote-title" className="sr-only">
-            Equipment quote cart
+            Equipment list and rental estimate
           </span>
           {renderCartBody({ inOverlay: true })}
         </div>
