@@ -4,7 +4,15 @@ import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package } f
 import type { Product } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
+import { useCart } from '../context/CartContext'
 import { parseLatLngPlain } from '../utils/locationParse'
+import { getLatestJobAssistantPersisted } from '../utils/jobAssistantSessionStorage'
+import {
+  readSiteMapPlannerSession,
+  writeSiteMapPlannerSession,
+  seedPlacementsFromCart,
+  type SiteMapPlacedRow,
+} from '../utils/siteMapPlannerSessionStorage'
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
 const MAP_ID =
@@ -16,13 +24,6 @@ const DEFAULT_ZOOM = 4
 const DRAG_MIME = 'application/x-traffickit-product'
 
 type MapsAuthWindow = Window & { gm_authFailure?: () => void }
-
-type PlacedRow = {
-  id: string
-  productId: string
-  lat: number
-  lng: number
-}
 
 type MarkerMeta = {
   marker: google.maps.marker.AdvancedMarkerElement
@@ -113,7 +114,30 @@ function buildMarkerShell(product: Product, selected: boolean): HTMLDivElement {
 
 export default function SiteMapPlanner() {
   const { tick } = useCatalogSync()
+  const { lines: cartLines } = useCart()
   const catalog = useMemo(() => getProducts(), [tick])
+
+  /** Cart lines at first paint — used only when no saved planner session (avoid resetting layout when cart changes). */
+  const seedCartLinesRef = useRef<typeof cartLines | null>(null)
+  if (seedCartLinesRef.current === null) seedCartLinesRef.current = cartLines
+
+  const plannerBoot = useMemo(() => {
+    const persisted = readSiteMapPlannerSession()
+    const ja = getLatestJobAssistantPersisted()?.mapArea
+    const seedLines = seedCartLinesRef.current ?? []
+    const center = ja?.center ?? DEFAULT_CENTER
+    const placements =
+      persisted?.v === 1
+        ? persisted.placements
+        : seedPlacementsFromCart(seedLines, center)
+    const searchDraftInit =
+      persisted?.v === 1 ? (persisted.searchDraft ?? ja?.address ?? '') : (ja?.address ?? '')
+    let initialMapView: { lat: number; lng: number; zoom: number } | undefined
+    if (persisted?.v === 1 && persisted.mapView) initialMapView = persisted.mapView
+    else if (ja?.center) initialMapView = { lat: ja.center.lat, lng: ja.center.lng, zoom: 16 }
+    const workZonePath = ja?.path && ja.path.length >= 3 ? ja.path : []
+    return { placements, searchDraftInit, initialMapView, workZonePath }
+  }, [])
 
   const mapDivRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<google.maps.Map | null>(null)
@@ -121,13 +145,17 @@ export default function SiteMapPlanner() {
   const overlayRef = useRef<google.maps.OverlayView | null>(null)
   const markersRef = useRef<Map<string, MarkerMeta>>(new Map())
   const advancedMarkerCtorRef = useRef<typeof google.maps.marker.AdvancedMarkerElement | null>(null)
+  const workZonePolyRef = useRef<google.maps.Polygon | null>(null)
+  const initialMapViewRef = useRef(plannerBoot.initialMapView)
+  const placedRef = useRef(plannerBoot.placements)
+  const searchDraftRef = useRef(plannerBoot.searchDraftInit)
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle')
   const [noKey, setNoKey] = useState(false)
-  const [searchDraft, setSearchDraft] = useState('')
+  const [searchDraft, setSearchDraft] = useState(plannerBoot.searchDraftInit)
   const [searchError, setSearchError] = useState<string | null>(null)
   const [paletteQuery, setPaletteQuery] = useState('')
-  const [placed, setPlaced] = useState<PlacedRow[]>([])
+  const [placed, setPlaced] = useState<SiteMapPlacedRow[]>(plannerBoot.placements)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Tap-to-place: pick a product, then click the map (mobile-friendly). */
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)
@@ -174,7 +202,7 @@ export default function SiteMapPlanner() {
   }, [])
 
   const upsertMarker = useCallback(
-    (row: PlacedRow, product: Product) => {
+    (row: SiteMapPlacedRow, product: Product) => {
       const AdvancedMarkerElement = advancedMarkerCtorRef.current
       const map = mapRef.current
       if (!AdvancedMarkerElement || !map) return
@@ -228,6 +256,55 @@ export default function SiteMapPlanner() {
     })
   }, [placed, status, upsertMarker])
 
+  placedRef.current = placed
+  searchDraftRef.current = searchDraft
+
+  const schedulePersistSession = useCallback(() => {
+    const map = mapRef.current
+    let mapView: { lat: number; lng: number; zoom: number } | undefined
+    if (map) {
+      const c = map.getCenter()
+      const z = map.getZoom()
+      if (c && z != null) mapView = { lat: c.lat(), lng: c.lng(), zoom: z }
+    }
+    writeSiteMapPlannerSession({
+      v: 1,
+      placements: placedRef.current,
+      searchDraft: searchDraftRef.current,
+      mapView,
+    })
+  }, [])
+
+  useEffect(() => {
+    const t = window.setTimeout(() => schedulePersistSession(), 400)
+    return () => window.clearTimeout(t)
+  }, [placed, searchDraft, schedulePersistSession])
+
+  /** Work zone polygon from AI Job Planner (read-only overlay). */
+  useEffect(() => {
+    if (status !== 'ready' || !mapRef.current) return
+    workZonePolyRef.current?.setMap(null)
+    workZonePolyRef.current = null
+    const path = plannerBoot.workZonePath
+    if (!path.length) return
+    const poly = new google.maps.Polygon({
+      paths: path,
+      map: mapRef.current,
+      fillColor: '#f97316',
+      fillOpacity: 0.18,
+      strokeColor: '#f97316',
+      strokeWeight: 2,
+      clickable: false,
+      editable: false,
+      zIndex: 1,
+    })
+    workZonePolyRef.current = poly
+    return () => {
+      poly.setMap(null)
+      if (workZonePolyRef.current === poly) workZonePolyRef.current = null
+    }
+  }, [status, plannerBoot])
+
   useEffect(() => {
     if (!MAPS_KEY) {
       setNoKey(true)
@@ -242,19 +319,23 @@ export default function SiteMapPlanner() {
     setOptions({
       key: MAPS_KEY,
       v: 'weekly',
-      libraries: ['marker', 'places'],
+      libraries: ['marker'],
       mapIds: [MAP_ID],
     })
 
     let cancelled = false
+    let ro: ResizeObserver | null = null
+    let idleListener: google.maps.MapsEventListener | null = null
+    let idlePersistTimer: ReturnType<typeof setTimeout> | null = null
 
-    Promise.all([importLibrary('maps'), importLibrary('marker'), importLibrary('places')])
+    Promise.all([importLibrary('maps'), importLibrary('marker')])
       .then(([_, markerLib]) => {
         if (cancelled || !mapDivRef.current) return
         advancedMarkerCtorRef.current = markerLib.AdvancedMarkerElement
+        const boot = initialMapViewRef.current
         const map = new google.maps.Map(mapDivRef.current, {
-          center: DEFAULT_CENTER,
-          zoom: DEFAULT_ZOOM,
+          center: boot ? { lat: boot.lat, lng: boot.lng } : DEFAULT_CENTER,
+          zoom: boot?.zoom ?? DEFAULT_ZOOM,
           mapId: MAP_ID,
           mapTypeId: 'roadmap',
           streetViewControl: false,
@@ -269,7 +350,7 @@ export default function SiteMapPlanner() {
         overlayRef.current = attachPixelToLatLngOverlay(map)
         geocoderRef.current = new google.maps.Geocoder()
 
-        if (navigator.geolocation) {
+        if (navigator.geolocation && !boot) {
           navigator.geolocation.getCurrentPosition(
             (pos) => {
               const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
@@ -280,22 +361,39 @@ export default function SiteMapPlanner() {
           )
         }
 
-        const ro = new ResizeObserver(() => {
+        ro = new ResizeObserver(() => {
           window.requestAnimationFrame(() => {
             if (mapRef.current) google.maps.event.trigger(mapRef.current, 'resize')
           })
         })
         ro.observe(mapDivRef.current)
 
+        idleListener = map.addListener('idle', () => {
+          if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
+          idlePersistTimer = window.setTimeout(() => {
+            idlePersistTimer = null
+            schedulePersistSession()
+          }, 900)
+        })
+
         setStatus('ready')
 
-        return () => ro.disconnect()
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (mapRef.current) google.maps.event.trigger(mapRef.current, 'resize')
+          })
+        })
       })
       .catch(() => setStatus('error'))
 
     return () => {
       cancelled = true
       w.gm_authFailure = prevAuthFailure
+      if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
+      idleListener?.remove()
+      ro?.disconnect()
+      workZonePolyRef.current?.setMap(null)
+      workZonePolyRef.current = null
       markersRef.current.forEach((m) => {
         m.marker.map = null
       })
@@ -305,7 +403,7 @@ export default function SiteMapPlanner() {
       geocoderRef.current = null
       mapRef.current = null
     }
-  }, [])
+  }, [schedulePersistSession])
 
   const runSearch = useCallback(async () => {
     const q = searchDraft.trim()
@@ -323,6 +421,7 @@ export default function SiteMapPlanner() {
     if (plain) {
       map.setCenter(plain)
       map.setZoom(17)
+      window.setTimeout(() => schedulePersistSession(), 100)
       return
     }
     if (!geocoderRef.current) {
@@ -338,10 +437,11 @@ export default function SiteMapPlanner() {
       }
       map.setCenter(first.geometry.location)
       map.setZoom(15)
+      window.setTimeout(() => schedulePersistSession(), 100)
     } catch {
       setSearchError('Search failed.')
     }
-  }, [searchDraft])
+  }, [searchDraft, schedulePersistSession])
 
   const latLngFromDropEvent = useCallback((e: React.DragEvent) => {
     const map = mapRef.current
@@ -494,7 +594,9 @@ export default function SiteMapPlanner() {
             <h1 className="text-2xl sm:text-3xl font-bold text-white mt-1">Site map planner</h1>
             <p className="text-slate-400 text-sm mt-1 max-w-2xl leading-relaxed">
               Drag catalog items onto the map to place cones, barricades, signs, and other gear. Drag pins to fine-tune. Export JSON to
-              share coordinates with your crew or attach to a quote.
+              share coordinates with your crew or attach to a quote. While this tab stays open, your placements, pan/zoom, and search are
+              remembered as you move around the site; a work zone from the AI Job Planner shows as an outline, and a brand-new layout picks
+              up your cart automatically once.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

@@ -8,6 +8,8 @@ export function jobAssistantStorageKey(embedded: boolean | undefined): string {
 
 export interface JobAssistantPersistedV1 {
   v: 1
+  /** ISO time — used to merge home embed vs full-page assistant sessions */
+  savedAt?: string
   mode: 'chat' | 'form'
   messages: { role: 'user' | 'assistant'; content: string; timestamp: string }[]
   input: string
@@ -81,6 +83,32 @@ export function clearJobAssistantSession(embedded: boolean | undefined): void {
   }
 }
 
+function readPersistedBlob(embedded: boolean): JobAssistantPersistedV1 | null {
+  try {
+    const raw = sessionStorage.getItem(jobAssistantStorageKey(embedded))
+    if (!raw) return null
+    const p = JSON.parse(raw) as JobAssistantPersistedV1
+    if (p.v !== 1) return null
+    return p
+  } catch {
+    return null
+  }
+}
+
+/** Newest of embed vs full-page job assistant blob (by `savedAt`, then full-page on tie). */
+export function getLatestJobAssistantPersisted(): JobAssistantPersistedV1 | null {
+  const embed = readPersistedBlob(true)
+  const page = readPersistedBlob(false)
+  if (!embed && !page) return null
+  if (!embed) return page
+  if (!page) return embed
+  const te = embed.savedAt ? Date.parse(embed.savedAt) : 0
+  const tp = page.savedAt ? Date.parse(page.savedAt) : 0
+  if (tp > te) return page
+  if (te > tp) return embed
+  return page
+}
+
 export function buildPersistPayload(params: {
   mode: 'chat' | 'form'
   messages: ChatMessage[]
@@ -94,6 +122,7 @@ export function buildPersistPayload(params: {
 }): JobAssistantPersistedV1 {
   return {
     v: 1,
+    savedAt: new Date().toISOString(),
     mode: params.mode,
     messages: params.messages.map((m) => ({
       role: m.role,
