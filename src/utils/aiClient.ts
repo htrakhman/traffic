@@ -12,6 +12,55 @@ import { SITE_NAME } from '../config/site'
 const CHAT_PROXY_URL = '/api/chat'
 const DEMO_MODE = (import.meta.env.VITE_AI_DEMO_MODE as string | undefined) === 'true'
 
+/** Collapse HTML-ish bodies (e.g. Vercel error pages) into readable text */
+function stripHtmlish(s: string): string {
+  return s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
+/** Avoid echoing common API key shapes into the chat transcript */
+function redactLikelySecrets(s: string): string {
+  return s
+    .replace(/\bsk-[a-zA-Z0-9_-]{12,}\b/g, '[redacted]')
+    .replace(/\bAIza[a-zA-Z0-9_-]{20,}\b/g, '[redacted]')
+    .replace(/\bpplx-[a-zA-Z0-9_-]{12,}\b/g, '[redacted]')
+    .replace(/\bsk-ant-[a-zA-Z0-9_-]{12,}\b/g, '[redacted]')
+}
+
+/** User-visible explanation when /api/chat returns a non-2xx body */
+function formatChatHttpError(status: number, rawBody: string): string {
+  let err = ''
+  let detail = ''
+  let hint = ''
+  try {
+    const j = JSON.parse(rawBody) as { error?: unknown; detail?: unknown; hint?: unknown }
+    if (typeof j.error === 'string') err = j.error.trim()
+    if (typeof j.detail === 'string') detail = j.detail.trim()
+    if (typeof j.hint === 'string') hint = j.hint.trim()
+  } catch {
+    /* plain text / HTML */
+  }
+  const fallback = stripHtmlish(rawBody).slice(0, 1400)
+  const lines: string[] = [`Chat request failed (HTTP ${status}).`]
+  if (err) lines.push(redactLikelySecrets(err))
+  if (detail) lines.push(redactLikelySecrets(detail))
+  if (hint) lines.push(redactLikelySecrets(hint))
+  if (!err && !detail && !hint && fallback) lines.push(redactLikelySecrets(fallback))
+  if (status === 404) {
+    lines.push(
+      'Deploy check: the server must expose POST /api/chat (e.g. Vercel `api/chat.ts` at the repo root). A static-only build will not run this route.',
+    )
+  }
+  if (status >= 500) {
+    lines.push(
+      'Next step: Vercel → your project → Logs → filter by `/api/chat` or `chat` and open the failed invocation for the stack trace.',
+    )
+    lines.push(
+      'Env check: Production must have at least one of OPENAI_API_KEY, GEMINI_API_KEY (or GOOGLE_AI_API_KEY), PERPLEXITY_API_KEY — save variables, then redeploy.',
+    )
+  }
+  return lines.join('\n\n')
+}
+
 const CATALOG_PROMPT_LINES = curatedProducts
   .map(
     (p) =>
@@ -159,12 +208,14 @@ export async function getJobRecommendation(
   })
 
   if (!response.ok) {
-    // If the proxy reports misconfiguration or all providers failed, use demo JSON.
-    if (response.status === 500 || response.status === 502) {
+    const raw = await response.text()
+    const useDemo =
+      (response.status === 500 || response.status === 502) &&
+      /no chat API keys|GEMINI_API_KEY missing/i.test(raw)
+    if (useDemo) {
       return getDemoRecommendation(jobDetails, userMessage)
     }
-    const err = await response.text()
-    throw new Error(`API error: ${response.status} — ${err}`)
+    throw new Error(formatChatHttpError(response.status, raw))
   }
 
   const data = await response.json()
@@ -303,37 +354,13 @@ ${STREAM_CART_PRODUCT_RATES}`,
 
   if (!response.ok) {
     const raw = await response.text()
-    if (response.status === 500 || response.status === 502) {
-      let note = 'AI is temporarily offline. Please try again shortly.'
-      try {
-        const j = JSON.parse(raw) as { error?: string }
-        if (typeof j.error === 'string' && j.error.includes('no chat API keys')) {
-          note =
-            'Chat is not configured: add OPENAI_API_KEY, GEMINI_API_KEY (Google AI Studio), and/or PERPLEXITY_API_KEY in your host environment variables, then redeploy.'
-        } else if (typeof j.error === 'string' && j.error.includes('GEMINI_API_KEY')) {
-          note =
-            'Chat is not configured: add GEMINI_API_KEY (Google AI Studio) in your host environment variables, then redeploy.'
-        } else if (typeof j.error === 'string' && j.error.includes('All configured chat providers failed')) {
-          note =
-            'Every AI backend returned an error. Check keys and billing in the host dashboard, or try again shortly.'
-        } else if (typeof j.error === 'string' && j.error.includes('chat proxy failed')) {
-          note = 'Chat failed on the server. Redeploy the latest build or check Vercel/Netlify function logs for /api/chat.'
-        }
-      } catch {
-        /* ignore */
-      }
-      for (const char of note) {
-        onChunk(char)
-        await new Promise((r) => setTimeout(r, 6))
-      }
-      onDone()
-      return
+    const note = formatChatHttpError(response.status, raw)
+    for (const char of note) {
+      onChunk(char)
+      await new Promise((r) => setTimeout(r, 2))
     }
-    const hint =
-      response.status === 404
-        ? ' (deploy issue: /api/chat not found — add Vercel api/chat.ts or Netlify function + redirect)'
-        : ''
-    throw new Error(`Stream error: ${response.status}${hint} — ${raw.slice(0, 200)}`)
+    onDone()
+    return
   }
 
   const reader = response.body!.getReader()

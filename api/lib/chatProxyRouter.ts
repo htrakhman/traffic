@@ -104,6 +104,7 @@ export async function handleChatRequest(incoming: Record<string, unknown>): Prom
     JSON.stringify({
       error: 'All configured chat providers failed',
       detail: lastFailure ? `${lastFailure.status}: ${lastFailure.body}` : 'unknown',
+      hint: 'Open Vercel → Logs, filter /api/chat, and read the upstream error for each provider. Fix keys, model names, or billing, then redeploy.',
     }),
     { status: 502, headers: { 'content-type': 'application/json' } },
   )
