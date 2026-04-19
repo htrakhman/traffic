@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "catalog": "node scripts/generate-tss-catalog.mjs",
     "patch-catalog-images": "python3 scripts/patch-tss-catalog-images.py",

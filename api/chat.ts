@@ -2,6 +2,9 @@
 // Client still sends Anthropic-shaped JSON; backends normalize to the same SSE / JSON the UI parses.
 //
 // Env: OPENAI_API_KEY, GEMINI_API_KEY (or GOOGLE_AI_API_KEY), PERPLEXITY_API_KEY — server only, never VITE_*.
+//
+// Important: do not pipe Web ReadableStream chunks directly to VercelResponse — it often yields
+// FUNCTION_INVOCATION_FAILED. Buffer the upstream body first, then send once.
 
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { handleChatRequest } from './lib/chatProxyRouter'
@@ -31,29 +34,6 @@ function parseJsonBody(req: VercelRequest): Record<string, unknown> {
   return {}
 }
 
-/** Pipe WHATWG stream to Node response (Buffer.from view must use byteOffset/byteLength). */
-async function pipeWebStreamToNodeResponse(
-  body: ReadableStream<Uint8Array>,
-  res: VercelResponse,
-): Promise<void> {
-  const reader = body.getReader()
-  try {
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
-      if (value !== undefined && value.byteLength > 0) {
-        res.write(Buffer.from(value.buffer, value.byteOffset, value.byteLength))
-      }
-    }
-  } finally {
-    try {
-      reader.releaseLock()
-    } catch {
-      /* ignore */
-    }
-  }
-}
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method !== 'POST') {
@@ -81,17 +61,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.send(text)
     }
 
+    // Buffer SSE / text bodies entirely before touching Node response (Vercel stability).
+    let bodyBuf = Buffer.alloc(0)
+    if (inner.body) {
+      try {
+        bodyBuf = Buffer.from(await inner.arrayBuffer())
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : String(e)
+        console.error('[api/chat] buffer upstream body', msg)
+        return res.status(502).json({
+          error: 'chat upstream stream failed',
+          detail: msg,
+        })
+      }
+    }
+
     res.status(inner.status)
     for (const [k, v] of inner.headers.entries()) {
       const lk = k.toLowerCase()
       if (lk === 'transfer-encoding' || lk === 'content-length') continue
       res.setHeader(k, v)
     }
-
-    if (inner.body) {
-      await pipeWebStreamToNodeResponse(inner.body as ReadableStream<Uint8Array>, res)
+    if (bodyBuf.byteLength) {
+      res.end(bodyBuf)
+    } else {
+      res.end()
     }
-    return res.end()
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err)
     console.error('[api/chat]', msg)
