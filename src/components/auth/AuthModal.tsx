@@ -162,20 +162,17 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
         <div className="p-6 space-y-4">
           {/* Google sign-in */}
           {GOOGLE_CLIENT_ID ? (
-            <>
-              <div ref={googleBtnRef} className="w-full flex justify-center [&>div]:!w-full" />
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-slate-800" />
-                <span className="text-xs text-slate-500 shrink-0">or continue with email</span>
-                <div className="flex-1 h-px bg-slate-800" />
-              </div>
-            </>
+            <div ref={googleBtnRef} className="w-full flex justify-center [&>div]:!w-full" />
           ) : (
-            <button
-              type="button"
-              disabled
-              title="Add VITE_GOOGLE_CLIENT_ID to .env to enable"
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed text-gray-700 font-medium text-sm rounded-xl border border-gray-200 transition-colors"
+            <a
+              href="https://console.cloud.google.com/apis/credentials"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => {
+                e.preventDefault()
+                setError('To enable Google sign-in, add your VITE_GOOGLE_CLIENT_ID to the .env file. Get one at console.cloud.google.com → APIs & Services → Credentials → Create OAuth 2.0 Client ID.')
+              }}
+              className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm rounded-xl border border-gray-200 transition-colors cursor-pointer"
             >
               <svg width="18" height="18" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -184,8 +181,14 @@ export default function AuthModal({ defaultMode = 'login', onClose }: Props) {
                 <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
               </svg>
               {mode === 'login' ? 'Sign in with Google' : 'Sign up with Google'}
-            </button>
+            </a>
           )}
+
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-px bg-slate-800" />
+            <span className="text-xs text-slate-500 shrink-0">or continue with email</span>
+            <div className="flex-1 h-px bg-slate-800" />
+          </div>
 
           {/* Manual form */}
           <form onSubmit={handleSubmit} className="space-y-4">
