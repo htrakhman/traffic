@@ -24,7 +24,7 @@ import type { Product } from '../../types'
 
 interface Props {
   recommendation: AIRecommendation
-  /** `inline` = card inside chat (no fullscreen overlay). */
+  /** `modal` (default) = full quote in the chat column, scrollable, with a full-screen control. `inline` = same shell, alternate max-height. */
   layout?: 'modal' | 'inline'
 }
 
@@ -74,7 +74,8 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
   const [items, setItems] = useState<RecommendationItem[]>(recommendation.items)
   const [showNotes, setShowNotes] = useState(false)
   const [removed, setRemoved] = useState<Set<string>>(new Set())
-  const [modalOpen, setModalOpen] = useState(layout === 'modal')
+  /** Full-screen overlay (same UI as embedded, larger canvas). */
+  const [overlayOpen, setOverlayOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [searchOpen, setSearchOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
@@ -146,9 +147,9 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
   }, [search, tick])
 
   useEffect(() => {
-    if (layout !== 'modal' || !modalOpen) return
+    if (!overlayOpen) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setModalOpen(false)
+      if (e.key === 'Escape') setOverlayOpen(false)
     }
     document.addEventListener('keydown', onKey)
     const prev = document.body.style.overflow
@@ -157,7 +158,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
       document.removeEventListener('keydown', onKey)
       document.body.style.overflow = prev
     }
-  }, [layout, modalOpen])
+  }, [overlayOpen])
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -235,10 +236,11 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
     setSearchOpen(false)
   }
 
-  const cartBody = (
+  function renderCartBody({ inOverlay }: { inOverlay: boolean }) {
+    return (
     <div className="flex flex-col flex-1 min-h-0 max-h-full overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-brand-500/10 to-slate-800/60 border-b border-slate-700/60 flex-shrink-0">
-        <div className="flex items-center gap-2.5 min-w-0">
+      <div className="flex items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-brand-500/10 to-slate-800/60 border-b border-slate-700/60 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
           <div className="w-8 h-8 bg-brand-500/15 border border-brand-500/30 rounded-lg flex items-center justify-center flex-shrink-0">
             <ShoppingCart size={15} className="text-brand-400" />
           </div>
@@ -255,22 +257,32 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <div className="text-right hidden sm:block">
-            <div className="text-sm font-bold text-white">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+          <div className="text-right">
+            <div className="text-xs sm:text-sm font-bold text-white tabular-nums">
               ${totalDailyRate.toFixed(0)}
-              <span className="text-xs font-normal text-slate-400">/day</span>
+              <span className="text-[10px] sm:text-xs font-normal text-slate-400">/day</span>
             </div>
-            <div className="text-[10px] text-slate-500">~${estimatedTotal.toFixed(0)} total</div>
+            <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedTotal.toFixed(0)} total</div>
           </div>
-          {layout === 'modal' && (
+          {inOverlay ? (
             <button
               type="button"
-              onClick={() => setModalOpen(false)}
+              onClick={() => setOverlayOpen(false)}
               className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors"
-              aria-label="Close quote"
+              aria-label="Close full screen quote"
             >
               <X size={16} />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setOverlayOpen(true)}
+              title="Full screen"
+              aria-label="Open equipment quote full screen"
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors border border-slate-700/80"
+            >
+              <Maximize2 size={16} />
             </button>
           )}
         </div>
@@ -489,88 +501,22 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
               Continue shopping
             </Link>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={focusAddOptions}
-              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold text-brand-200 border border-brand-500/45 rounded-xl hover:bg-brand-500/12 transition-colors"
-            >
-              <Plus size={13} />
-              Add more options
-            </button>
-            <Link
-              to="/quote"
-              className="flex-1 min-w-[9rem] flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold text-slate-200 border border-slate-600 rounded-xl hover:bg-slate-800/90 transition-colors text-center"
-            >
-              Get quote
-            </Link>
-          </div>
+          <button
+            type="button"
+            onClick={focusAddOptions}
+            className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-semibold text-brand-200 border border-brand-500/45 rounded-xl hover:bg-brand-500/12 transition-colors"
+          >
+            <Plus size={13} />
+            Add more options
+          </button>
         </div>
       </div>
     </div>
-  )
+    )
+  }
 
-  const previewThumbs = activeItems.slice(0, 5).map((item) => {
-    const p = getProductById(item.productId)
-    return { key: itemKey(item), imageUrl: p?.imageUrl }
-  })
-
-  const teaser = (
-    <button
-      type="button"
-      onClick={() => setModalOpen(true)}
-      className="w-full rounded-2xl border border-brand-500/35 bg-gradient-to-br from-brand-500/18 via-slate-900/90 to-slate-950/95 p-3.5 sm:p-4 text-left shadow-lg shadow-black/30 hover:border-brand-500/55 hover:shadow-xl hover:shadow-brand-900/20 transition-all group"
-    >
-      {previewThumbs.length > 0 && (
-        <div className="flex items-center gap-1.5 mb-3 pl-0.5">
-          <div className="flex -space-x-2.5 sm:-space-x-2">
-            {previewThumbs.map((t) => (
-              <div
-                key={t.key}
-                className="relative z-0 h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 overflow-hidden rounded-lg border-2 border-slate-900/80 bg-slate-800 ring-1 ring-slate-700/80 shadow-md"
-              >
-                {t.imageUrl ? (
-                  <img
-                    src={t.imageUrl}
-                    alt=""
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    onError={(e) => {
-                      ;(e.target as HTMLImageElement).style.display = 'none'
-                    }}
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-slate-800/90">
-                    <Package size={14} className="text-slate-500" />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          {activeItems.length > 5 && (
-            <span className="ml-0.5 text-[10px] font-semibold text-slate-400">+{activeItems.length - 5}</span>
-          )}
-        </div>
-      )}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-brand-500/20 border border-brand-500/30 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-500/30 transition-colors">
-          <ShoppingCart size={18} className="text-brand-400" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-xs sm:text-sm font-semibold text-white">Equipment list ready</p>
-          <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
-            {activeItems.length} line{activeItems.length !== 1 ? 's' : ''} · {activeItems.reduce((a, b) => a + b.quantity, 0)} units
-            <span className="text-slate-500"> · </span>~${totalDailyRate.toFixed(0)}/day
-          </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">Open to adjust quantities, search the catalog, or add to your cart</p>
-        </div>
-        <Maximize2 size={16} className="text-slate-500 group-hover:text-brand-400 flex-shrink-0 transition-colors" />
-      </div>
-    </button>
-  )
-
-  const modal =
-    modalOpen &&
+  const overlayPortal =
+    overlayOpen &&
     createPortal(
       <div
         className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center sm:p-4"
@@ -580,7 +526,7 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           type="button"
           className="absolute inset-0 bg-black/80 backdrop-blur-md border-0 cursor-default w-full h-full"
           aria-label="Dismiss overlay"
-          onClick={() => setModalOpen(false)}
+          onClick={() => setOverlayOpen(false)}
         />
         <div
           role="dialog"
@@ -592,24 +538,23 @@ export default function CartWidget({ recommendation, layout = 'modal' }: Props) 
           <span id="cart-quote-title" className="sr-only">
             Equipment quote cart
           </span>
-          {cartBody}
+          {renderCartBody({ inOverlay: true })}
         </div>
       </div>,
       document.body,
     )
 
-  if (layout === 'inline') {
-    return (
-      <div className="w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 ring-1 ring-white/[0.04] shadow-xl shadow-black/30 overflow-hidden flex flex-col max-h-[min(520px,58svh)] min-h-[200px]">
-        {cartBody}
-      </div>
-    )
-  }
+  const embeddedMax =
+    layout === 'inline' ? 'max-h-[min(520px,58svh)] min-h-[200px]' : 'max-h-[min(560px,56vh)] min-h-[220px]'
 
   return (
-    <div className="w-full space-y-2">
-      {!modalOpen && teaser}
-      {modal}
-    </div>
+    <>
+      <div
+        className={`w-full rounded-2xl border border-slate-700/80 bg-slate-900/95 ring-1 ring-white/[0.04] shadow-xl shadow-black/30 overflow-hidden flex flex-col ${embeddedMax}`}
+      >
+        {renderCartBody({ inOverlay: false })}
+      </div>
+      {overlayPortal}
+    </>
   )
 }
