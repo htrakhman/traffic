@@ -107,8 +107,8 @@ export default function Browse() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex gap-8">
           {/* Desktop sidebar */}
-          <aside className="hidden lg:block w-56 flex-shrink-0">
-            <div className="sticky top-24 bg-slate-900 border border-slate-800 rounded-xl p-5">
+          <aside className="hidden lg:block w-56 flex-shrink-0 self-start">
+            <div className="sticky top-24 max-h-[calc(100dvh-6.5rem)] overflow-y-auto overscroll-y-contain bg-slate-900 border border-slate-800 rounded-xl p-5">
               <FilterSidebar filters={filters} onChange={applyFilters} />
             </div>
           </aside>
