@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { CheckCircle, CreditCard, Package, ArrowLeft, Crown } from 'lucide-react'
 import { useCart } from '../context/CartContext'
@@ -72,6 +72,11 @@ export default function Checkout() {
   )
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
   const grandTotal = rentalGrandTotal + deliveryPickupCombined
+
+  useLayoutEffect(() => {
+    if (!done && stripeResume !== 'working') return
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [done, stripeResume])
 
   const previewMemberFees = getDeliveryPickupFees(true)
   const previewGrandTotalIfMember = rentalGrandTotal + previewMemberFees.combined
