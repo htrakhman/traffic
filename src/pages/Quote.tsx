@@ -162,6 +162,7 @@ export default function Quote() {
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="font-medium text-white text-sm leading-snug">{item.product.name}</h4>
+                      <p className="text-xs text-slate-500 mt-0.5 font-mono">SKU {item.product.sku}</p>
                       <p className="text-xs text-slate-500 mt-0.5">${item.product.dailyRate.toFixed(2)}/{item.product.unit}/day</p>
                       <div className="flex items-center gap-4 mt-2">
                         <div className="flex items-center gap-2">

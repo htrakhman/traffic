@@ -11,6 +11,10 @@
 export type CheckoutLinePayload = {
   productId: string
   productName: string
+  /** Rental catalog SKU (site); included on new checkouts for fulfillment. */
+  sku?: string
+  /** OEM / supplier reorder SKU when present. */
+  supplierSku?: string
   quantity: number
   rentalDays: number
   dailyRate: number
@@ -60,9 +64,13 @@ function validatePayload(data: unknown): CheckoutNotifyPayload | null {
     ) {
       return null
     }
+    const sku = isNonEmptyString(r.sku) ? r.sku.trim() : undefined
+    const supplierSku = isNonEmptyString(r.supplierSku) ? r.supplierSku.trim() : undefined
     lines.push({
       productId: r.productId.trim(),
       productName: r.productName.trim(),
+      sku,
+      supplierSku,
       quantity: Math.max(1, Math.floor(r.quantity)),
       rentalDays: Math.max(1, Math.floor(r.rentalDays)),
       dailyRate: r.dailyRate,
@@ -110,11 +118,18 @@ function escapeHtml(s: string): string {
     .replace(/"/g, '&quot;')
 }
 
+function skuPlainSuffix(l: CheckoutLinePayload): string {
+  const parts: string[] = []
+  if (l.sku) parts.push(`SKU ${l.sku}`)
+  if (l.supplierSku) parts.push(`supplier ${l.supplierSku}`)
+  return parts.length ? ` · ${parts.join(' · ')}` : ''
+}
+
 function formatPlainText(p: CheckoutNotifyPayload): string {
   const lines = p.lines
     .map(
       (l) =>
-        `- ${l.productName} (id ${l.productId}) · qty ${l.quantity} · ${l.rentalDays}d · $${l.lineTotal.toFixed(2)} rental`,
+        `- ${l.productName} (id ${l.productId})${skuPlainSuffix(l)} · qty ${l.quantity} · ${l.rentalDays}d · $${l.lineTotal.toFixed(2)} rental`,
     )
     .join('\n')
   return [
@@ -143,10 +158,17 @@ function formatPlainText(p: CheckoutNotifyPayload): string {
 
 function formatHtml(p: CheckoutNotifyPayload): string {
   const rows = p.lines
-    .map(
-      (l) =>
-        `<tr><td>${escapeHtml(l.productName)}</td><td>${l.quantity}</td><td>${l.rentalDays}</td><td>$${l.lineTotal.toFixed(2)}</td></tr>`,
-    )
+    .map((l) => {
+      let skuCell = '—'
+      if (l.sku && l.supplierSku) {
+        skuCell = `<span style="font-family:ui-monospace,monospace">${escapeHtml(l.sku)}</span><br/><span style="font-size:12px;color:#555">Supplier: ${escapeHtml(l.supplierSku)}</span>`
+      } else if (l.sku) {
+        skuCell = `<span style="font-family:ui-monospace,monospace">${escapeHtml(l.sku)}</span>`
+      } else if (l.supplierSku) {
+        skuCell = `<span style="font-size:12px;color:#555">Supplier: ${escapeHtml(l.supplierSku)}</span>`
+      }
+      return `<tr><td>${escapeHtml(l.productName)}</td><td>${skuCell}</td><td>${l.quantity}</td><td>${l.rentalDays}</td><td>$${l.lineTotal.toFixed(2)}</td></tr>`
+    })
     .join('')
   return `<!DOCTYPE html><html><body style="font-family:sans-serif;line-height:1.5">
 <h2>New rental checkout</h2>
@@ -162,7 +184,7 @@ ${
       : ''
   }
 ${p.notes ? `<p><strong>Notes</strong><br/>${escapeHtml(p.notes).replace(/\n/g, '<br/>')}</p>` : ''}
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><thead><tr><th>Item</th><th>Qty</th><th>Days</th><th>Rental</th></tr></thead><tbody>${rows}</tbody></table>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><thead><tr><th>Item</th><th>SKU</th><th>Qty</th><th>Days</th><th>Rental</th></tr></thead><tbody>${rows}</tbody></table>
 <p><strong>Totals</strong><br/>
 Daily (all items): $${p.totals.totalDaily.toFixed(2)}/day<br/>
 Rental: $${p.totals.rentalGrandTotal.toFixed(2)}<br/>

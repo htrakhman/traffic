@@ -228,6 +228,8 @@ export default function Checkout() {
     lines: resolved.map(({ line, product }) => ({
       productId: product.id,
       productName: product.name,
+      sku: product.sku,
+      supplierSku: product.supplierSku,
       quantity: line.quantity,
       rentalDays: line.rentalDays,
       dailyRate: product.dailyRate,
@@ -408,6 +410,7 @@ export default function Checkout() {
                     />
                     <div className="flex-1 min-w-0">
                       <h3 className="font-medium text-white text-sm leading-snug">{product.name}</h3>
+                      <p className="text-xs text-slate-500 mt-0.5 font-mono">SKU {product.sku}</p>
                       <p className="text-xs text-slate-500 mt-0.5">
                         Qty {line.quantity} · {line.rentalDays} days · ${product.dailyRate.toFixed(2)}/{product.unit}/day
                       </p>

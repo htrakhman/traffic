@@ -11,6 +11,8 @@ export type PendingCheckoutNotifyPayload = {
   lines: Array<{
     productId: string
     productName: string
+    sku?: string
+    supplierSku?: string
     quantity: number
     rentalDays: number
     dailyRate: number
