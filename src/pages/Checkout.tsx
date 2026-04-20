@@ -423,7 +423,8 @@ export default function Checkout() {
                   <span className="tabular-nums">${totalDaily.toFixed(2)}/day</span>
                 </div>
                 <DeliveryPickupBreakdown
-                  isMember={isMember || addMembership}
+                  isMember={isMember}
+                  checkoutMembershipPreview={addMembership && !isMember}
                   className="pt-2 border-t border-slate-800"
                 />
                 <div className="flex justify-between font-semibold text-white text-base pt-2 border-t border-slate-800">
@@ -540,8 +541,9 @@ export default function Checkout() {
                             className="w-4 h-4 mt-0.5 accent-brand-500 rounded shrink-0"
                           />
                           <span className="text-sm text-slate-200 leading-snug">
-                            Add membership ($150/month on Stripe) — waives ${NON_MEMBER_DELIVERY_FEE_USD} delivery and $
-                            {NON_MEMBER_PICKUP_FEE_USD} pickup on rentals while subscribed.
+                            I want membership and the discounted rates — free delivery and free pickup (${NON_MEMBER_DELIVERY_FEE_USD} + $
+                            {NON_MEMBER_PICKUP_FEE_USD} waived) on rentals while subscribed. Billed{' '}
+                            <strong className="font-semibold text-white">$150/month</strong> on Stripe.
                           </span>
                         </label>
                         {addMembership && !user ? (
@@ -571,19 +573,19 @@ export default function Checkout() {
                   <CreditCard size={18} />
                   {submitting
                     ? addMembership && !isMember && user
-                      ? 'Starting membership checkout…'
+                      ? 'Opening Stripe…'
                       : 'Submitting…'
                     : addMembership && !isMember && user
-                      ? 'Pay membership on Stripe, then finish'
+                      ? 'Continue to Stripe — $150/mo membership'
                       : 'Submit checkout'}
                 </button>
 
                 <p className="text-xs text-slate-500 text-center">
                   {addMembership && !isMember && user
-                    ? 'You will pay for membership on Stripe. Your rental is still confirmed with us after you return — no rental card charge on this step.'
+                    ? 'Stripe Checkout collects only the $150/month subscription. After you subscribe, you’ll return here so we can email your rental details — no rental card charge on that step.'
                     : addMembership && !isMember
-                      ? 'Sign in to pay for membership from this page. Otherwise submit without the box to request a rental only (no payment on this step).'
-                      : 'By submitting you agree we may contact you about this order. No Stripe charge for rentals on this step — only membership uses Stripe if you choose it above.'}
+                      ? 'Sign in to open Stripe for the membership. Or uncheck the box to submit a rental-only request (no payment on this step).'
+                      : 'By submitting you agree we may contact you about this order. No Stripe charge for rentals on this step — membership uses Stripe only if you check the box above.'}
                 </p>
               </div>
             </div>

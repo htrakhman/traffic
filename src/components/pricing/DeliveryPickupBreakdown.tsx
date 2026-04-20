@@ -4,6 +4,8 @@ type Variant = 'default' | 'compact' | 'inline'
 
 type Props = {
   isMember: boolean
+  /** Checkout: user checked “join membership” — show waived delivery/pickup like a member, with copy for not-yet-subscribed. */
+  checkoutMembershipPreview?: boolean
   variant?: Variant
   className?: string
 }
@@ -16,10 +18,12 @@ function MemberFeeValue({
   guestAmount,
   isCompact,
   label,
+  benefitPhrase,
 }: {
   guestAmount: number
   isCompact: boolean
   label: 'delivery' | 'pickup'
+  benefitPhrase: string
 }) {
   const strikeSize = isCompact ? 'text-[9px]' : 'text-xs'
   const freeSize = isCompact ? 'text-[10px]' : 'text-sm'
@@ -31,7 +35,7 @@ function MemberFeeValue({
           ${guestAmount}
         </span>
         <span className={`${freeSize} font-semibold text-emerald-400 tabular-nums`}>Free</span>
-        <span className={`${membershipHint} font-medium text-emerald-400/85`}>with membership</span>
+        <span className={`${membershipHint} font-medium text-emerald-400/85`}>{benefitPhrase}</span>
       </span>
       <span className="sr-only">
         {label === 'delivery' ? 'Delivery' : 'Pickup'}: standard fee waived for members, no charge
@@ -76,7 +80,12 @@ function GuestFeeWithMembershipHint({
   )
 }
 
-export default function DeliveryPickupBreakdown({ isMember, variant = 'default', className = '' }: Props) {
+export default function DeliveryPickupBreakdown({
+  isMember,
+  checkoutMembershipPreview = false,
+  variant = 'default',
+  className = '',
+}: Props) {
   const guestFees = getDeliveryPickupFees(false)
   const isCompact = variant === 'compact'
   const isInline = variant === 'inline'
@@ -84,13 +93,22 @@ export default function DeliveryPickupBreakdown({ isMember, variant = 'default',
   const muted = isCompact ? 'text-slate-500' : 'text-slate-400'
   const strong = isCompact ? 'text-[10px] font-semibold text-slate-200' : 'text-sm font-medium text-slate-200'
 
+  const waivedFeesDisplay = isMember || checkoutMembershipPreview
+  const benefitPhrase = checkoutMembershipPreview && !isMember ? 'with $150/mo membership' : 'with membership'
+  const labelSuffix =
+    checkoutMembershipPreview && !isMember ? (
+      <span className="text-emerald-400/80"> · waived if you join</span>
+    ) : isMember ? (
+      <span className="text-emerald-400/80"> · membership</span>
+    ) : null
+
   const deliveryGuestText = `$${guestFees.delivery}`
   const pickupGuestText = `$${guestFees.pickup}`
 
   if (isInline) {
     return (
       <p className={`text-[10px] text-slate-500 leading-snug ${className}`}>
-        {isMember ? (
+        {waivedFeesDisplay ? (
           <>
             <span className="line-through decoration-slate-500 text-slate-500">
               ${guestFees.delivery} delivery + ${guestFees.pickup} pickup
@@ -119,10 +137,15 @@ export default function DeliveryPickupBreakdown({ isMember, variant = 'default',
       <div className={`flex justify-between gap-3 ${row}`}>
         <span className={muted}>
           Delivery
-          {isMember ? <span className="text-emerald-400/80"> · membership</span> : null}
+          {labelSuffix}
         </span>
-        {isMember ? (
-          <MemberFeeValue guestAmount={guestFees.delivery} isCompact={isCompact} label="delivery" />
+        {waivedFeesDisplay ? (
+          <MemberFeeValue
+            guestAmount={guestFees.delivery}
+            isCompact={isCompact}
+            label="delivery"
+            benefitPhrase={benefitPhrase}
+          />
         ) : (
           <GuestFeeWithMembershipHint
             guestAmount={guestFees.delivery}
@@ -135,10 +158,15 @@ export default function DeliveryPickupBreakdown({ isMember, variant = 'default',
       <div className={`flex justify-between gap-3 ${row}`}>
         <span className={muted}>
           Pickup
-          {isMember ? <span className="text-emerald-400/80"> · membership</span> : null}
+          {labelSuffix}
         </span>
-        {isMember ? (
-          <MemberFeeValue guestAmount={guestFees.pickup} isCompact={isCompact} label="pickup" />
+        {waivedFeesDisplay ? (
+          <MemberFeeValue
+            guestAmount={guestFees.pickup}
+            isCompact={isCompact}
+            label="pickup"
+            benefitPhrase={benefitPhrase}
+          />
         ) : (
           <GuestFeeWithMembershipHint
             guestAmount={guestFees.pickup}
@@ -153,7 +181,13 @@ export default function DeliveryPickupBreakdown({ isMember, variant = 'default',
           Standard one-time delivery & pickup fees are waived with your membership ($0).
         </p>
       )}
-      {!isMember && (
+      {checkoutMembershipPreview && !isMember && (
+        <p className={`${isCompact ? 'text-[9px]' : 'text-[11px]'} text-emerald-400/90 leading-snug`}>
+          Estimate shows $0 delivery & pickup after you complete the $150/month subscription on Stripe. Membership is
+          billed monthly; rental charges are still arranged separately.
+        </p>
+      )}
+      {!waivedFeesDisplay && (
         <p className={`${isCompact ? 'text-[9px]' : 'text-[11px]'} ${muted} leading-snug`}>
           One-time fees; not multiplied by rental days. Active members pay $0 for delivery & pickup (waived).
         </p>
