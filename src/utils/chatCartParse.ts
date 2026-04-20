@@ -39,6 +39,30 @@ export function extractFirstBalancedJson(source: string): string | null {
  * Parse recommendation JSON after `[CART_START]` (with or without `[CART_END]`).
  * Used for completed messages and for streaming previews once JSON is balanced.
  */
+/** First successfully parsed cart in the message, or null if none. */
+export function extractChatCartRecommendation(
+  content: string,
+  mapFootprint?: RecommendationFootprintGuard,
+): AIRecommendation | null {
+  const cartRegex = /\[CART_START\]([\s\S]*?)\[CART_END\]/g
+  let match: RegExpExecArray | null
+  while ((match = cartRegex.exec(content)) !== null) {
+    try {
+      const rec = normalizeRecommendationPricing(
+        JSON.parse(match[1].trim()) as AIRecommendation,
+        mapFootprint,
+      )
+      if (Array.isArray(rec.items)) return rec
+    } catch {
+      /* try next match */
+    }
+  }
+  const openIdx = content.indexOf('[CART_START]')
+  if (openIdx === -1) return null
+  const afterOpen = content.slice(openIdx + '[CART_START]'.length)
+  return tryParseTailAfterCartStart(afterOpen, mapFootprint)?.rec ?? null
+}
+
 export function tryParseTailAfterCartStart(
   afterOpen: string,
   mapFootprint?: RecommendationFootprintGuard,

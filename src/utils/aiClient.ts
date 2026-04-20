@@ -1,6 +1,7 @@
 import type { JobDetails, MapArea, RecommendationItem, AIRecommendation } from '../types'
 import { curatedProducts, getProductById } from '../data/products'
-import { normalizeRecommendationPricing } from './pricing'
+import { normalizeRecommendationPricing, type RecommendationFootprintGuard } from './pricing'
+import { extractChatCartRecommendation } from './chatCartParse'
 import { SITE_NAME } from '../config/site'
 
 // Route chat through our serverless proxy at /api/chat (OpenAI / Gemini / Perplexity on the server).
@@ -208,7 +209,7 @@ export async function getJobRecommendation(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'gemini-2.5-flash',
-      max_tokens: 2500,
+      max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages: [
         {
@@ -325,8 +326,8 @@ ${JSON.stringify(rec)}
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'gemini-2.5-flash',
-      /** Cart JSON + rationales for many SKUs needs headroom; 1024 often truncates mid-[CART_START]. */
-      max_tokens: 4096,
+      /** Cart JSON + rationales for many SKUs needs headroom; prefer recovery over user-visible truncation. */
+      max_tokens: 8192,
       stream: true,
       system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
 
@@ -414,6 +415,84 @@ ${STREAM_CART_PRODUCT_RATES}`,
   }
 
   onDone()
+}
+
+const CART_RECOVERY_USER = `Your previous reply in this thread started a [CART_START] equipment cart but the JSON was truncated or invalid before the UI could load it.
+
+Output a single repair message for the chat UI only:
+1) The exact line: Here's your recommended equipment setup.
+2) Then one [CART_START] line, one JSON object (no markdown fences) with: summary, items (productId, productName, category, quantity, rationale, priority, dailyRate), totalDailyRate, estimatedDurationDays, setupNotes, disclaimer — same schema as the main planner.
+3) Then [CART_END] on its own line.
+
+Do not repeat [Q]/[A] blocks or a plain-text equipment list. Keep the item list focused; use priority "optional" for extras. dailyRate must match the catalog list in the system message.`
+
+const CART_RECOVERY_SYSTEM = `You complete truncated work-zone equipment carts for ${SITE_NAME}.
+
+${TTC_EXPERT_DOCTRINE}
+
+Reply discipline: output only the lead sentence, [CART_START], one JSON object, [CART_END] — nothing else.
+
+Catalog product IDs and retail daily rates (copy dailyRate exactly):
+${STREAM_CART_PRODUCT_RATES}`
+
+/**
+ * Non-streaming follow-up when the streamed assistant reply contained [CART_START] but no loadable cart JSON.
+ * Returns full assistant message text (prefix before [CART_START] preserved, then a fresh cart block).
+ */
+export async function recoverJobChatCart(
+  priorMessages: { role: 'user' | 'assistant'; content: string }[],
+  truncatedAssistantReply: string,
+  options?: { mapArea?: MapArea; mapFootprint?: RecommendationFootprintGuard },
+): Promise<string> {
+  const openIdx = truncatedAssistantReply.indexOf('[CART_START]')
+  const head = (openIdx === -1 ? truncatedAssistantReply : truncatedAssistantReply.slice(0, openIdx)).trimEnd()
+
+  if (DEMO_MODE) {
+    const rec = normalizeRecommendationPricing(
+      getDemoRecommendation({
+        jobType: 'paving',
+        roadType: 'arterial',
+        speedLimit: 45,
+        laneImpact: 'one_lane_closed',
+        workTime: 'day',
+        durationDays: 5,
+        pedestrianExposure: 'low',
+      }),
+      options?.mapFootprint,
+    )
+    return `${head}\n\n[CART_START]\n${JSON.stringify(rec)}\n[CART_END]`
+  }
+
+  const recoveryMessages = augmentLastUserMessageWithMapArea(
+    [...priorMessages, { role: 'assistant' as const, content: truncatedAssistantReply }, { role: 'user' as const, content: CART_RECOVERY_USER }],
+    options?.mapArea,
+  )
+
+  const response = await fetch(CHAT_PROXY_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: 'gemini-2.5-flash',
+      max_tokens: 8192,
+      stream: false,
+      system: CART_RECOVERY_SYSTEM,
+      messages: recoveryMessages,
+    }),
+  })
+
+  if (!response.ok) {
+    const raw = await response.text()
+    throw new Error(formatChatHttpError(response.status, raw))
+  }
+
+  const data = (await response.json()) as { content?: Array<{ text?: string }> }
+  const text = data.content?.[0]?.text ?? ''
+  const rec = extractChatCartRecommendation(text, options?.mapFootprint)
+  if (!rec) {
+    throw new Error('Recovery model did not return a parseable equipment cart.')
+  }
+
+  return `${head}\n\n[CART_START]\n${JSON.stringify(rec)}\n[CART_END]`
 }
 
 function getDemoRecommendation(

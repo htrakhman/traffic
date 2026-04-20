@@ -15,12 +15,12 @@ import {
   FoldVertical,
   PenLine,
 } from 'lucide-react'
-import { streamJobChat, getJobRecommendation } from '../../utils/aiClient'
+import { streamJobChat, getJobRecommendation, recoverJobChatCart } from '../../utils/aiClient'
 import {
   normalizeRecommendationPricing,
   type RecommendationFootprintGuard,
 } from '../../utils/pricing'
-import { tryParseTailAfterCartStart } from '../../utils/chatCartParse'
+import { extractChatCartRecommendation, tryParseTailAfterCartStart } from '../../utils/chatCartParse'
 import type { ChatMessage, JobDetails, AIRecommendation, MapArea } from '../../types'
 import {
   buildPersistPayload,
@@ -101,7 +101,7 @@ function parseSegments(content: string, mapFootprint?: RecommendationFootprintGu
     segments.push({
       type: 'text',
       content:
-        'The equipment list did not finish loading (the reply was cut off or the cart JSON was incomplete). Use “Send answers to AI” again, or send a short follow-up such as “regenerate the equipment cart”. If this keeps happening, switch to Guided Form — it uses a non-streaming request with a larger output budget.',
+        'The equipment list still could not be loaded after an automatic retry. Send your message again, or use Guided Form for a fresh recommendation.',
     })
     return segments
   }
@@ -293,10 +293,12 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     setMessages([...newMessages, assistantMsg])
     scheduleScrollPanelToBottom()
 
+    let streamedAssistant = ''
     try {
       await streamJobChat(
         newMessages.map((m) => ({ role: m.role, content: m.content })),
         (chunk) => {
+          streamedAssistant += chunk
           setMessages((prev) => {
             const updated = [...prev]
             const last = updated[updated.length - 1]
@@ -306,15 +308,32 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
             return updated
           })
         },
-        () => {
-          setIsStreaming(false)
-        },
+        () => {},
         { mapArea },
       )
+
+      const cartOk = extractChatCartRecommendation(streamedAssistant, recommendationFootprintGuard)
+      if (streamedAssistant.includes('[CART_START]') && !cartOk) {
+        const merged = await recoverJobChatCart(
+          newMessages.map((m) => ({ role: m.role, content: m.content })),
+          streamedAssistant,
+          { mapArea, mapFootprint: recommendationFootprintGuard },
+        )
+        streamedAssistant = merged
+        setMessages((prev) => {
+          const updated = [...prev]
+          const last = updated[updated.length - 1]
+          if (last?.role === 'assistant') {
+            updated[updated.length - 1] = { ...last, content: merged }
+          }
+          return updated
+        })
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
-      setIsStreaming(false)
       throw err
+    } finally {
+      setIsStreaming(false)
     }
   }
 
