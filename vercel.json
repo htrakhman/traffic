@@ -20,10 +20,18 @@
       "maxDuration": 15
     }
   },
+  "redirects": [
+    { "source": "/guides", "destination": "/blog", "permanent": true },
+    { "source": "/guides/:slug", "destination": "/blog/:slug", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/roads-api/:path*",
       "destination": "https://roads.googleapis.com/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

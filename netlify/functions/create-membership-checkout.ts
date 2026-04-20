@@ -24,13 +24,14 @@ export const handler = async (event: NetlifyEvent) => {
   const email = typeof (incoming as { email?: unknown }).email === 'string' ? (incoming as { email: string }).email.trim() : ''
   const name =
     typeof (incoming as { name?: unknown }).name === 'string' ? (incoming as { name: string }).name.trim() : undefined
+  const returnToCheckout = (incoming as { returnToCheckout?: unknown }).returnToCheckout === true
 
   if (!email.includes('@')) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Valid email is required' }) }
   }
 
   try {
-    const { url } = await createMembershipCheckoutSession({ email, name })
+    const { url } = await createMembershipCheckoutSession({ email, name, returnToCheckout })
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },

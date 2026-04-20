@@ -155,6 +155,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
   }, [activeItems, recommendation.estimatedDurationDays])
   const rentalPeriodTotal = totalDailyRate * recommendation.estimatedDurationDays
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
+  const guestDeliveryPickupCombined = getDeliveryPickupFees(false).combined
   const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
 
   const filteredProducts = useMemo(() => {
@@ -297,7 +298,14 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
             </div>
             <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedGrandTotal.toFixed(0)} total</div>
             <div className="text-[8px] sm:text-[9px] text-slate-600 tabular-nums max-w-[9rem] sm:max-w-none leading-tight text-right">
-              {isMember ? 'Incl. delivery & pickup (member)' : 'Incl. $150 delivery + $150 pickup'}
+              {isMember ? (
+                <span>
+                  <span className="line-through decoration-slate-500 text-slate-500">${guestDeliveryPickupCombined}</span>
+                  <span className="text-emerald-400/90"> del. & pickup waived · member</span>
+                </span>
+              ) : (
+                'Incl. $150 delivery + $150 pickup'
+              )}
             </div>
           </div>
           {inOverlay ? (
@@ -368,7 +376,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div className="flex min-h-[14rem] flex-1 flex-col divide-y divide-slate-800/60 overflow-y-auto overscroll-y-contain">
+        <div className="flex min-h-0 flex-1 flex-col divide-y divide-slate-800/60 overflow-y-auto overscroll-y-contain">
         {activeItems.map((item) => {
           const key = itemKey(item)
           const pc = priorityConfig[item.priority]
@@ -630,14 +638,18 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
       document.body,
     )
 
-  const embeddedMax =
-    layout === 'inline' ? 'max-h-[min(520px,58svh)] min-h-[200px]' : 'max-h-[min(560px,56vh)] min-h-[220px]'
+  /** Definite height so the inner flex column can shrink the list (`flex-1` + `min-h-0`) instead of
+   * growing to full content height and getting clipped by `max-h` (which hid checkout / map actions). */
+  const embeddedShell =
+    layout === 'inline'
+      ? 'h-[min(520px,58svh)] min-h-[200px]'
+      : 'h-[min(560px,56svh)] min-h-[220px]'
 
   return (
     <>
       {workzoneMapPortal}
       <div
-        className={`flex w-full flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-xl shadow-black/30 ring-1 ring-white/[0.04] ${embeddedMax}`}
+        className={`flex min-h-0 w-full flex-col overflow-hidden rounded-2xl border border-slate-700/80 bg-slate-900/95 shadow-xl shadow-black/30 ring-1 ring-white/[0.04] ${embeddedShell}`}
       >
         {renderCartBody({ inOverlay: false })}
       </div>

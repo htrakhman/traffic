@@ -12,25 +12,102 @@ type Props = {
  * Delivery & pickup fee lines for quote/cart/product summaries.
  * Members: $0 with explanatory copy. Guests: $150 + $150 one-time.
  */
+function MemberFeeValue({
+  guestAmount,
+  isCompact,
+  label,
+}: {
+  guestAmount: number
+  isCompact: boolean
+  label: 'delivery' | 'pickup'
+}) {
+  const strikeSize = isCompact ? 'text-[9px]' : 'text-xs'
+  const freeSize = isCompact ? 'text-[10px]' : 'text-sm'
+  const membershipHint = isCompact ? 'text-[9px]' : 'text-[11px]'
+  return (
+    <span className="tabular-nums flex flex-col items-end gap-0.5 text-right">
+      <span className="flex items-center justify-end gap-1.5 flex-wrap">
+        <span className={`${strikeSize} font-normal text-slate-500 line-through decoration-slate-500`}>
+          ${guestAmount}
+        </span>
+        <span className={`${freeSize} font-semibold text-emerald-400 tabular-nums`}>Free</span>
+        <span className={`${membershipHint} font-medium text-emerald-400/85`}>with membership</span>
+      </span>
+      <span className="sr-only">
+        {label === 'delivery' ? 'Delivery' : 'Pickup'}: standard fee waived for members, no charge
+      </span>
+    </span>
+  )
+}
+
+/** Guest estimate: show standard fee struck through + member benefit; actual fee still applies to this quote. */
+function GuestFeeWithMembershipHint({
+  guestAmount,
+  isCompact,
+  label,
+  strongClass,
+}: {
+  guestAmount: number
+  isCompact: boolean
+  label: 'delivery' | 'pickup'
+  strongClass: string
+}) {
+  const strikeSize = isCompact ? 'text-[9px]' : 'text-xs'
+  const hintSize = isCompact ? 'text-[9px]' : 'text-[11px]'
+  return (
+    <span className="tabular-nums flex flex-col items-end gap-0.5 text-right">
+      <span className="flex items-center justify-end gap-1.5 flex-wrap">
+        <span className={`${strikeSize} font-normal text-slate-500 line-through decoration-slate-500`}>
+          ${guestAmount}
+        </span>
+        <span className={`${isCompact ? 'text-[10px]' : 'text-sm'} font-semibold text-emerald-400 tabular-nums`}>
+          Free
+        </span>
+        <span className={`${hintSize} font-medium text-emerald-400/85`}>with membership</span>
+      </span>
+      <span className={`${hintSize} text-slate-500`}>
+        This estimate:{' '}
+        <span className={`tabular-nums ${strongClass}`}>${guestAmount}</span>
+      </span>
+      <span className="sr-only">
+        {label === 'delivery' ? 'Delivery' : 'Pickup'}: ${guestAmount} included on this guest estimate; waived for members
+      </span>
+    </span>
+  )
+}
+
 export default function DeliveryPickupBreakdown({ isMember, variant = 'default', className = '' }: Props) {
-  const { delivery, pickup } = getDeliveryPickupFees(isMember)
+  const guestFees = getDeliveryPickupFees(false)
   const isCompact = variant === 'compact'
   const isInline = variant === 'inline'
   const row = isCompact ? 'text-[10px]' : 'text-xs'
   const muted = isCompact ? 'text-slate-500' : 'text-slate-400'
   const strong = isCompact ? 'text-[10px] font-semibold text-slate-200' : 'text-sm font-medium text-slate-200'
 
-  const deliveryText = isMember ? 'Free' : `$${delivery}`
-  const pickupText = isMember ? 'Free' : `$${pickup}`
+  const deliveryGuestText = `$${guestFees.delivery}`
+  const pickupGuestText = `$${guestFees.pickup}`
 
   if (isInline) {
     return (
       <p className={`text-[10px] text-slate-500 leading-snug ${className}`}>
         {isMember ? (
-          <>Delivery & pickup included at no charge with membership.</>
+          <>
+            <span className="line-through decoration-slate-500 text-slate-500">
+              ${guestFees.delivery} delivery + ${guestFees.pickup} pickup
+            </span>{' '}
+            <span className="text-emerald-400/90">waived</span> — included with membership (one-time fees, not per
+            day).
+          </>
         ) : (
           <>
-            Delivery {deliveryText} + pickup {pickupText} (one-time, not per day), in addition to rental.
+            <span className="line-through decoration-slate-500 text-slate-500">
+              {deliveryGuestText} delivery + {pickupGuestText} pickup
+            </span>{' '}
+            <span className="text-emerald-400/90">Free with membership</span>
+            <span className="text-slate-500">
+              {' '}
+              — this estimate includes {deliveryGuestText} + {pickupGuestText} (one-time, not per day).
+            </span>
           </>
         )}
       </p>
@@ -40,21 +117,45 @@ export default function DeliveryPickupBreakdown({ isMember, variant = 'default',
   return (
     <div className={`space-y-1 ${className}`}>
       <div className={`flex justify-between gap-3 ${row}`}>
-        <span className={muted}>Delivery {isMember ? '(member)' : ''}</span>
-        <span className={`tabular-nums ${strong}`}>{deliveryText}</span>
+        <span className={muted}>
+          Delivery
+          {isMember ? <span className="text-emerald-400/80"> · membership</span> : null}
+        </span>
+        {isMember ? (
+          <MemberFeeValue guestAmount={guestFees.delivery} isCompact={isCompact} label="delivery" />
+        ) : (
+          <GuestFeeWithMembershipHint
+            guestAmount={guestFees.delivery}
+            isCompact={isCompact}
+            label="delivery"
+            strongClass={strong}
+          />
+        )}
       </div>
       <div className={`flex justify-between gap-3 ${row}`}>
-        <span className={muted}>Pickup {isMember ? '(member)' : ''}</span>
-        <span className={`tabular-nums ${strong}`}>{pickupText}</span>
+        <span className={muted}>
+          Pickup
+          {isMember ? <span className="text-emerald-400/80"> · membership</span> : null}
+        </span>
+        {isMember ? (
+          <MemberFeeValue guestAmount={guestFees.pickup} isCompact={isCompact} label="pickup" />
+        ) : (
+          <GuestFeeWithMembershipHint
+            guestAmount={guestFees.pickup}
+            isCompact={isCompact}
+            label="pickup"
+            strongClass={strong}
+          />
+        )}
       </div>
       {isMember && (
         <p className={`${isCompact ? 'text-[9px]' : 'text-[11px]'} text-emerald-400/90 leading-snug`}>
-          Delivery and pickup are free with your membership.
+          Standard one-time delivery & pickup fees are waived with your membership ($0).
         </p>
       )}
       {!isMember && (
         <p className={`${isCompact ? 'text-[9px]' : 'text-[11px]'} ${muted} leading-snug`}>
-          One-time delivery and pickup fees; not multiplied by rental days.
+          One-time fees; not multiplied by rental days. Active members pay $0 for delivery & pickup (waived).
         </p>
       )}
     </div>

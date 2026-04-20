@@ -112,7 +112,12 @@ export default function Quote() {
             Thanks, <strong className="text-white">{form.name}</strong>. We've received your rental booking request.
           </p>
           <p className="text-slate-400 mb-8">
-            We’ll follow up at <strong className="text-white">{form.email}</strong> to confirm details—usually within a few hours. For urgent needs, call <a href="tel:+18005551234" className="text-brand-400">1-800-555-1234</a>.
+            Someone from our team will reach out soon at <strong className="text-white">{form.email}</strong> to
+            confirm details—usually within a few hours. For urgent needs, call{' '}
+            <a href="tel:+18005551234" className="text-brand-400">
+              1-800-555-1234
+            </a>
+            .
           </p>
           <div className="flex gap-3 justify-center">
             <Link to="/" className="btn-secondary">Back to Home</Link>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { usePostHog } from '@posthog/react'
 import type { Product } from './types'
@@ -28,6 +28,12 @@ function ScrollToTop() {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [pathname])
   return null
+}
+
+function GuidesSlugRedirect() {
+  const { slug } = useParams()
+  if (!slug) return <Navigate to="/blog" replace />
+  return <Navigate to={`/blog/${slug}`} replace />
 }
 
 /** SPA route changes: capture $pageview when PostHog is enabled (see `main.tsx`). */
@@ -82,6 +88,8 @@ function AppLayout() {
           <Route path="/planner" element={<SiteMapPlanner />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<Article />} />
+          <Route path="/guides" element={<Navigate to="/blog" replace />} />
+          <Route path="/guides/:slug" element={<GuidesSlugRedirect />} />
           <Route path="/account" element={<Account />} />
           {/* Fallback */}
           <Route path="*" element={<Home />} />

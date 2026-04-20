@@ -26,6 +26,7 @@ export const articleTrafficControlRentalGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-18',
   readMinutes: 9,
+  heroImage: '/catalog/channelizing-drum-6in-hi-tire-base.webp',
   body: h(
     Fragment,
     null,

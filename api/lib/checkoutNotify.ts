@@ -32,6 +32,8 @@ export type CheckoutNotifyPayload = {
     deliveryPickupCombined: number
     grandTotal: number
   }
+  /** True when they paid for membership via Stripe during this checkout flow. */
+  membershipSubscribedAtCheckout?: boolean
 }
 
 function isNonEmptyString(v: unknown): v is string {
@@ -78,6 +80,9 @@ function validatePayload(data: unknown): CheckoutNotifyPayload | null {
   ) {
     return null
   }
+  const membershipSubscribedAtCheckout =
+    o.membershipSubscribedAtCheckout === true ? true : undefined
+
   return {
     name: o.name.trim(),
     email: o.email.trim(),
@@ -93,6 +98,7 @@ function validatePayload(data: unknown): CheckoutNotifyPayload | null {
       deliveryPickupCombined: tr.deliveryPickupCombined,
       grandTotal: tr.grandTotal,
     },
+    membershipSubscribedAtCheckout,
   }
 }
 
@@ -120,6 +126,9 @@ function formatPlainText(p: CheckoutNotifyPayload): string {
     p.company ? `Company: ${p.company}` : 'Company: (not provided)',
     p.jobSite ? `Job site / delivery: ${p.jobSite}` : 'Job site: (not provided)',
     `Delivery to job site: ${p.deliveryNeeded ? 'Yes' : 'No'}`,
+    ...(p.membershipSubscribedAtCheckout
+      ? ['Membership: customer subscribed to $150/mo during checkout (Stripe).']
+      : []),
     p.notes ? `Notes:\n${p.notes}` : 'Notes: (none)',
     '',
     'Line items:',
@@ -147,6 +156,11 @@ function formatHtml(p: CheckoutNotifyPayload): string {
 <strong>Company:</strong> ${p.company ? escapeHtml(p.company) : '—'}<br/>
 <strong>Job site / delivery:</strong> ${p.jobSite ? escapeHtml(p.jobSite) : '—'}<br/>
 <strong>Delivery needed:</strong> ${p.deliveryNeeded ? 'Yes' : 'No'}</p>
+${
+    p.membershipSubscribedAtCheckout
+      ? '<p><strong>Membership:</strong> Customer subscribed to $150/mo during checkout (Stripe).</p>'
+      : ''
+  }
 ${p.notes ? `<p><strong>Notes</strong><br/>${escapeHtml(p.notes).replace(/\n/g, '<br/>')}</p>` : ''}
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><thead><tr><th>Item</th><th>Qty</th><th>Days</th><th>Rental</th></tr></thead><tbody>${rows}</tbody></table>
 <p><strong>Totals</strong><br/>

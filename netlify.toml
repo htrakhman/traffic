@@ -40,3 +40,9 @@ force = true
 from = "/roads-api/*"
 to = "https://roads.googleapis.com/:splat"
 status = 200
+
+# SPA fallback (must be last): client routes like /blog load index.html.
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

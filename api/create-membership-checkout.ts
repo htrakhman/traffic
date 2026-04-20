@@ -39,13 +39,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const email = typeof (body as { email?: unknown }).email === 'string' ? (body as { email: string }).email.trim() : ''
   const name = typeof (body as { name?: unknown }).name === 'string' ? (body as { name: string }).name.trim() : undefined
+  const returnToCheckout = (body as { returnToCheckout?: unknown }).returnToCheckout === true
 
   if (!email.includes('@')) {
     return res.status(400).json({ error: 'Valid email is required' })
   }
 
   try {
-    const { url } = await createMembershipCheckoutSession({ email, name })
+    const { url } = await createMembershipCheckoutSession({ email, name, returnToCheckout })
     return res.status(200).json({ url })
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e)

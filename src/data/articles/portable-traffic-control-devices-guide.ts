@@ -26,6 +26,7 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
   targetVolume: 500,
   datePublished: '2026-04-19',
   readMinutes: 10,
+  heroImage: '/catalog/cone-28-orange-7lb.webp',
   body: h(
     Fragment,
     null,

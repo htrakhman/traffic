@@ -26,6 +26,13 @@ export interface SEOProps {
 
 const SITE_ORIGIN = 'https://trafficcontrolrental.com'
 
+function absoluteOgImage(url: string | undefined): string | undefined {
+  if (!url) return undefined
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  if (url.startsWith('/')) return SITE_ORIGIN + url
+  return url
+}
+
 function upsertMeta(attr: 'name' | 'property', key: string, content: string) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
   if (!el) {
@@ -81,9 +88,10 @@ export default function SEO(props: SEOProps) {
     tags.push(upsertMeta('name', 'twitter:card', 'summary_large_image'))
     tags.push(upsertMeta('name', 'twitter:title', title))
     tags.push(upsertMeta('name', 'twitter:description', description))
-    if (ogImage) {
-      tags.push(upsertMeta('property', 'og:image', ogImage))
-      tags.push(upsertMeta('name', 'twitter:image', ogImage))
+    const ogImageResolved = absoluteOgImage(ogImage)
+    if (ogImageResolved) {
+      tags.push(upsertMeta('property', 'og:image', ogImageResolved))
+      tags.push(upsertMeta('name', 'twitter:image', ogImageResolved))
     }
     if (publishedTime) tags.push(upsertMeta('property', 'article:published_time', publishedTime))
     if (modifiedTime) tags.push(upsertMeta('property', 'article:modified_time', modifiedTime))

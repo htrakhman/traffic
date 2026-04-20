@@ -35,7 +35,10 @@ type AuthContextValue = {
   /** Clears local membership only (legacy accounts without Stripe). Stripe subscribers use the billing portal. */
   cancelMembership: () => void
   isMemberActive: boolean
-  startStripeMembershipCheckout: () => Promise<{ ok: boolean; error?: string }>
+  startStripeMembershipCheckout: (options?: {
+    /** Return URL after Stripe; use when membership is started from cart checkout. */
+    returnToCheckout?: boolean
+  }) => Promise<{ ok: boolean; error?: string }>
   completeStripeMembershipCheckout: (sessionId: string) => Promise<{ ok: boolean; error?: string }>
   refreshStripeMembership: () => Promise<void>
   openStripeCustomerPortal: () => Promise<{ ok: boolean; error?: string }>
@@ -193,13 +196,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(updated)
   }, [user, setUser])
 
-  const startStripeMembershipCheckout = useCallback(async (): Promise<{ ok: boolean; error?: string }> => {
+  const startStripeMembershipCheckout = useCallback(
+    async (options?: { returnToCheckout?: boolean }): Promise<{ ok: boolean; error?: string }> => {
     if (!user) return { ok: false, error: 'Sign in to subscribe.' }
     try {
       const res = await fetch('/api/create-membership-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user.email, name: user.name }),
+        body: JSON.stringify({
+          email: user.email,
+          name: user.name,
+          returnToCheckout: options?.returnToCheckout === true,
+        }),
       })
       const data = (await res.json().catch(() => ({}))) as { url?: string; error?: string; detail?: string }
       if (!res.ok) {
@@ -212,7 +220,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       return { ok: false, error: 'Network error. Use “vercel dev” locally so /api routes exist, or try again.' }
     }
-  }, [user])
+  },
+  [user],
+)
 
   const completeStripeMembershipCheckout = useCallback(
     async (sessionId: string): Promise<{ ok: boolean; error?: string }> => {

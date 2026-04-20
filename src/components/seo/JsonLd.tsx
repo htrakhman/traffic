@@ -86,7 +86,15 @@ export const schema = {
       name: 'Traffic Control Rental',
       logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}/cone.svg` },
     },
-    image: a.image ? [a.image] : undefined,
+    image: a.image
+      ? [
+          a.image.startsWith('http://') || a.image.startsWith('https://')
+            ? a.image
+            : a.image.startsWith('/')
+              ? SITE_ORIGIN + a.image
+              : a.image,
+        ]
+      : undefined,
     keywords: a.keywords?.join(', '),
   }),
   faqPage: (qas: { q: string; a: string }[]) => ({

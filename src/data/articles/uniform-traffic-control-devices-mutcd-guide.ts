@@ -24,6 +24,8 @@ export const articleUniformTrafficControlDevicesMutcdGuide: Article = {
   targetVolume: 50000,
   datePublished: '2026-04-19',
   readMinutes: 13,
+  heroImage:
+    'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_900/images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp',
   body: h(
     Fragment,
     null,

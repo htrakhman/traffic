@@ -25,15 +25,22 @@ export function membershipPriceId(): string {
 export async function createMembershipCheckoutSession(params: {
   email: string
   name?: string
+  /** After payment, send the customer back to checkout to finish the rental submission. */
+  returnToCheckout?: boolean
 }): Promise<{ url: string }> {
   const stripe = getStripe()
   const origin = siteOrigin()
+  const resumeCheckout = Boolean(params.returnToCheckout)
+  const successPath = resumeCheckout
+    ? '/checkout?session_id={CHECKOUT_SESSION_ID}'
+    : '/account?session_id={CHECKOUT_SESSION_ID}'
+  const cancelPath = resumeCheckout ? '/checkout?membership=cancelled' : '/account?membership=cancelled'
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     customer_email: params.email,
     line_items: [{ price: membershipPriceId(), quantity: 1 }],
-    success_url: `${origin}/account?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/account?membership=cancelled`,
+    success_url: `${origin}${successPath}`,
+    cancel_url: `${origin}${cancelPath}`,
     allow_promotion_codes: true,
     metadata: { userEmail: params.email.toLowerCase() },
     subscription_data: {
