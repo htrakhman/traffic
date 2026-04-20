@@ -20,6 +20,7 @@ vite.config.ts.timestamp-*.mjs
 
 # Local tooling
 .claude
+.cache
 
 # Python
 __pycache__/

@@ -8,6 +8,7 @@ import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdo
 import { getProductById } from '../data/products'
 import WorkzoneVisualizerModal from '../components/workzone/WorkzoneVisualizerModal'
 import { getLatestJobAssistantPersisted } from '../utils/jobAssistantSessionStorage'
+import { productSkuLabel } from '../utils/productSkuLabel'
 import type { MapArea } from '../types'
 
 export default function Cart() {
@@ -96,7 +97,7 @@ export default function Cart() {
                         {product.name}
                       </h2>
                       <p className="text-xs text-slate-500 mt-1">
-                        ${product.dailyRate.toFixed(2)}/{product.unit}/day · SKU {product.sku}
+                        ${product.dailyRate.toFixed(2)}/{product.unit}/day · {productSkuLabel(product)}
                       </p>
                     </div>
                   </Link>

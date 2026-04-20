@@ -8,6 +8,9 @@
   },
   "scripts": {
     "catalog": "node scripts/generate-tss-catalog.mjs",
+    "catalog:titles": "node scripts/enrich-tss-catalog-titles.mjs",
+    "catalog:full": "npm run catalog && npm run catalog:titles",
+    "verify-catalog": "node scripts/verify-tss-catalog.mjs",
     "patch-catalog-images": "python3 scripts/patch-tss-catalog-images.py",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "rss": "node scripts/generate-rss.mjs",
@@ -33,6 +36,7 @@
     "@vercel/node": "^5.7.11",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
+    "node-html-parser": "^6.1.13",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.3",
