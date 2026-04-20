@@ -21,6 +21,39 @@ export interface JobAssistantPersistedV1 {
   mapExpanded: boolean
 }
 
+export interface JobAssistantChatTabPersistedV2 {
+  id: string
+  title: string
+  messages: { role: 'user' | 'assistant'; content: string; timestamp: string }[]
+  input: string
+  choiceSelections: [string, string][]
+  lockedQuestionIndices: number[]
+}
+
+export interface JobAssistantPersistedV2 {
+  v: 2
+  savedAt?: string
+  mode: 'chat' | 'form'
+  activeChatTabId: string
+  chatTabs: JobAssistantChatTabPersistedV2[]
+  mapArea?: MapArea
+  mapSiteLocated: boolean
+  recommendation: AIRecommendation | null
+  mapExpanded: boolean
+}
+
+export type JobAssistantPersistedBlob = JobAssistantPersistedV1 | JobAssistantPersistedV2
+
+/** In-memory shape for one chat tab (Job Assistant UI). */
+export type JobAssistantChatTabState = {
+  id: string
+  title: string
+  messages: ChatMessage[]
+  input: string
+  choiceSelections: Map<string, string>
+  lockedQuestionMessages: Set<number>
+}
+
 function reviveMessages(
   rows: JobAssistantPersistedV1['messages'] | undefined,
 ): ChatMessage[] {
@@ -32,32 +65,90 @@ function reviveMessages(
   }))
 }
 
-export function readJobAssistantSession(embedded: boolean | undefined): Partial<{
+function migrateV1ToTabState(p: JobAssistantPersistedV1): {
+  chatTabs: JobAssistantChatTabState[]
+  activeChatTabId: string
+} {
+  const id = `tab-migrated-${Date.now().toString(36)}`
+  return {
+    chatTabs: [
+      {
+        id,
+        title: 'Chat 1',
+        messages: reviveMessages(p.messages),
+        input: typeof p.input === 'string' ? p.input : '',
+        choiceSelections: new Map(p.choiceSelections ?? []),
+        lockedQuestionMessages: new Set(p.lockedQuestionIndices ?? []),
+      },
+    ],
+    activeChatTabId: id,
+  }
+}
+
+/**
+ * Full boot state for Job Assistant (v1 session migrated to tabs in memory).
+ */
+export function readJobAssistantSession(embedded: boolean | undefined): {
   mode: JobAssistantPersistedV1['mode']
-  messages: ChatMessage[]
-  input: string
+  chatTabs: JobAssistantChatTabState[]
+  activeChatTabId: string
   mapArea: MapArea | undefined
   mapSiteLocated: boolean
   recommendation: AIRecommendation | null
-  choiceSelections: Map<string, string>
-  lockedQuestionMessages: Set<number>
   mapExpanded: boolean
-}> | null {
+} | null {
   try {
     const raw = sessionStorage.getItem(jobAssistantStorageKey(embedded))
     if (!raw) return null
-    const p = JSON.parse(raw) as JobAssistantPersistedV1
+    const p = JSON.parse(raw) as JobAssistantPersistedBlob
+    if (p.v === 2) {
+      const v2 = p as JobAssistantPersistedV2
+      let chatTabs: JobAssistantChatTabState[] = (v2.chatTabs ?? []).map((t) => ({
+        id: typeof t.id === 'string' ? t.id : `tab-${Math.random().toString(36).slice(2, 9)}`,
+        title: typeof t.title === 'string' ? t.title : 'Chat',
+        messages: reviveMessages(t.messages),
+        input: typeof t.input === 'string' ? t.input : '',
+        choiceSelections: new Map(t.choiceSelections ?? []),
+        lockedQuestionMessages: new Set(t.lockedQuestionIndices ?? []),
+      }))
+      if (!chatTabs.length) {
+        const id = `tab-${Date.now().toString(36)}`
+        chatTabs = [
+          {
+            id,
+            title: 'Chat 1',
+            messages: [],
+            input: '',
+            choiceSelections: new Map(),
+            lockedQuestionMessages: new Set(),
+          },
+        ]
+      }
+      const active =
+        typeof v2.activeChatTabId === 'string' && chatTabs.some((t) => t.id === v2.activeChatTabId)
+          ? v2.activeChatTabId
+          : chatTabs[0]!.id
+      return {
+        mode: v2.mode === 'form' ? 'form' : 'chat',
+        chatTabs,
+        activeChatTabId: active,
+        mapArea: v2.mapArea,
+        mapSiteLocated: Boolean(v2.mapSiteLocated),
+        recommendation: v2.recommendation ?? null,
+        mapExpanded: Boolean(v2.mapExpanded),
+      }
+    }
     if (p.v !== 1) return null
+    const v1 = p as JobAssistantPersistedV1
+    const { chatTabs, activeChatTabId } = migrateV1ToTabState(v1)
     return {
-      mode: p.mode === 'form' ? 'form' : 'chat',
-      messages: reviveMessages(p.messages),
-      input: typeof p.input === 'string' ? p.input : '',
-      mapArea: p.mapArea,
-      mapSiteLocated: Boolean(p.mapSiteLocated),
-      recommendation: p.recommendation ?? null,
-      choiceSelections: new Map(p.choiceSelections ?? []),
-      lockedQuestionMessages: new Set(p.lockedQuestionIndices ?? []),
-      mapExpanded: Boolean(p.mapExpanded),
+      mode: v1.mode === 'form' ? 'form' : 'chat',
+      chatTabs,
+      activeChatTabId,
+      mapArea: v1.mapArea,
+      mapSiteLocated: Boolean(v1.mapSiteLocated),
+      recommendation: v1.recommendation ?? null,
+      mapExpanded: Boolean(v1.mapExpanded),
     }
   } catch {
     return null
@@ -66,7 +157,7 @@ export function readJobAssistantSession(embedded: boolean | undefined): Partial<
 
 export function writeJobAssistantSession(
   embedded: boolean | undefined,
-  payload: JobAssistantPersistedV1,
+  payload: JobAssistantPersistedV2,
 ): void {
   try {
     sessionStorage.setItem(jobAssistantStorageKey(embedded), JSON.stringify(payload))
@@ -83,20 +174,20 @@ export function clearJobAssistantSession(embedded: boolean | undefined): void {
   }
 }
 
-function readPersistedBlob(embedded: boolean): JobAssistantPersistedV1 | null {
+function readPersistedBlob(embedded: boolean): JobAssistantPersistedBlob | null {
   try {
     const raw = sessionStorage.getItem(jobAssistantStorageKey(embedded))
     if (!raw) return null
-    const p = JSON.parse(raw) as JobAssistantPersistedV1
-    if (p.v !== 1) return null
-    return p
+    const p = JSON.parse(raw) as JobAssistantPersistedBlob
+    if (p.v === 2 || p.v === 1) return p
+    return null
   } catch {
     return null
   }
 }
 
 /** Newest of embed vs full-page job assistant blob (by `savedAt`, then full-page on tie). */
-export function getLatestJobAssistantPersisted(): JobAssistantPersistedV1 | null {
+export function getLatestJobAssistantPersisted(): JobAssistantPersistedBlob | null {
   const embed = readPersistedBlob(true)
   const page = readPersistedBlob(false)
   if (!embed && !page) return null
@@ -111,31 +202,34 @@ export function getLatestJobAssistantPersisted(): JobAssistantPersistedV1 | null
 
 export function buildPersistPayload(params: {
   mode: 'chat' | 'form'
-  messages: ChatMessage[]
-  input: string
+  chatTabs: JobAssistantChatTabState[]
+  activeChatTabId: string
   mapArea: MapArea | undefined
   mapSiteLocated: boolean
   recommendation: AIRecommendation | null
-  choiceSelections: Map<string, string>
-  lockedQuestionMessages: Set<number>
   mapExpanded: boolean
-}): JobAssistantPersistedV1 {
+}): JobAssistantPersistedV2 {
   return {
-    v: 1,
+    v: 2,
     savedAt: new Date().toISOString(),
     mode: params.mode,
-    messages: params.messages.map((m) => ({
-      role: m.role,
-      content: m.content,
-      timestamp:
-        m.timestamp instanceof Date ? m.timestamp.toISOString() : String(m.timestamp),
+    activeChatTabId: params.activeChatTabId,
+    chatTabs: params.chatTabs.map((t) => ({
+      id: t.id,
+      title: t.title,
+      messages: t.messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+        timestamp:
+          m.timestamp instanceof Date ? m.timestamp.toISOString() : String(m.timestamp),
+      })),
+      input: t.input,
+      choiceSelections: [...t.choiceSelections.entries()],
+      lockedQuestionIndices: [...t.lockedQuestionMessages],
     })),
-    input: params.input,
     mapArea: params.mapArea,
     mapSiteLocated: params.mapSiteLocated,
     recommendation: params.recommendation,
-    choiceSelections: [...params.choiceSelections.entries()],
-    lockedQuestionIndices: [...params.lockedQuestionMessages],
     mapExpanded: params.mapExpanded,
   }
 }

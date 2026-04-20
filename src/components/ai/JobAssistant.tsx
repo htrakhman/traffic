@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo, type SetStateAction } from 'react'
 import { extractGeocodeQueryFromMessage, parseLatLngFromMessage } from '../../utils/locationParse'
 import {
   Sparkles,
@@ -14,6 +14,8 @@ import {
   UnfoldVertical,
   FoldVertical,
   PenLine,
+  Plus,
+  Eraser,
 } from 'lucide-react'
 import { streamJobChat, getJobRecommendation, recoverJobChatCart } from '../../utils/aiClient'
 import {
@@ -27,6 +29,7 @@ import {
   clearJobAssistantSession,
   readJobAssistantSession,
   writeJobAssistantSession,
+  type JobAssistantChatTabState,
 } from '../../utils/jobAssistantSessionStorage'
 import CartWidget from './CartWidget'
 import JobForm from './JobForm'
@@ -123,6 +126,21 @@ interface Props {
 
 type Mode = 'chat' | 'form'
 
+function newChatTabId(): string {
+  return `tab-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+function emptyChatTab(title: string, id: string): JobAssistantChatTabState {
+  return {
+    id,
+    title,
+    messages: [],
+    input: '',
+    choiceSelections: new Map(),
+    lockedQuestionMessages: new Set(),
+  }
+}
+
 function ThinkingIndicator() {
   return (
     <div
@@ -142,38 +160,121 @@ function ThinkingIndicator() {
 }
 
 export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLayoutChange }: Props) {
-  const [persistedBoot] = useState(() => readJobAssistantSession(embedded))
+  const [boot] = useState(() => {
+    const session = readJobAssistantSession(embedded)
+    let tabs: JobAssistantChatTabState[]
+    let activeId: string
+    if (session?.chatTabs?.length) {
+      tabs = session.chatTabs.map((t) => ({
+        ...t,
+        choiceSelections: new Map(t.choiceSelections),
+        lockedQuestionMessages: new Set(t.lockedQuestionMessages),
+      }))
+      activeId =
+        session.activeChatTabId && tabs.some((t) => t.id === session.activeChatTabId)
+          ? session.activeChatTabId
+          : tabs[0]!.id
+    } else {
+      const id = newChatTabId()
+      const t0 = emptyChatTab('Chat 1', id)
+      tabs = [{ ...t0, input: initialPrompt?.trim() ? initialPrompt : '' }]
+      activeId = id
+    }
+    return { session, tabs, activeId }
+  })
 
-  const [mode, setMode] = useState<Mode>(() => persistedBoot?.mode ?? 'chat')
+  const [chatTabs, setChatTabs] = useState(boot.tabs)
+  const [activeChatTabId, setActiveChatTabId] = useState(boot.activeId)
+  const activeChatTabIdRef = useRef(activeChatTabId)
+  useLayoutEffect(() => {
+    activeChatTabIdRef.current = activeChatTabId
+  }, [activeChatTabId])
+
+  const activeTab = useMemo(
+    () => chatTabs.find((t) => t.id === activeChatTabId) ?? chatTabs[0]!,
+    [chatTabs, activeChatTabId],
+  )
+  const messages = activeTab.messages
+  const input = activeTab.input
+  const choiceSelections = activeTab.choiceSelections
+  const lockedQuestionMessages = activeTab.lockedQuestionMessages
+
+  const setMessages = useCallback((action: SetStateAction<ChatMessage[]>) => {
+    const id = activeChatTabIdRef.current
+    setChatTabs((prev) =>
+      prev.map((t) =>
+        t.id !== id
+          ? t
+          : {
+              ...t,
+              messages: typeof action === 'function' ? (action as (m: ChatMessage[]) => ChatMessage[])(t.messages) : action,
+            },
+      ),
+    )
+  }, [])
+
+  const setInput = useCallback((value: SetStateAction<string>) => {
+    const id = activeChatTabIdRef.current
+    setChatTabs((prev) =>
+      prev.map((t) =>
+        t.id !== id
+          ? t
+          : {
+              ...t,
+              input: typeof value === 'function' ? (value as (s: string) => string)(t.input) : value,
+            },
+      ),
+    )
+  }, [])
+
+  const setChoiceSelections = useCallback((action: SetStateAction<Map<string, string>>) => {
+    const id = activeChatTabIdRef.current
+    setChatTabs((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t
+        const next =
+          typeof action === 'function'
+            ? (action as (m: Map<string, string>) => Map<string, string>)(new Map(t.choiceSelections))
+            : action
+        return { ...t, choiceSelections: next }
+      }),
+    )
+  }, [])
+
+  const setLockedQuestionMessages = useCallback((action: SetStateAction<Set<number>>) => {
+    const id = activeChatTabIdRef.current
+    setChatTabs((prev) =>
+      prev.map((t) => {
+        if (t.id !== id) return t
+        const next =
+          typeof action === 'function'
+            ? (action as (s: Set<number>) => Set<number>)(new Set(t.lockedQuestionMessages))
+            : action
+        return { ...t, lockedQuestionMessages: next }
+      }),
+    )
+  }, [])
+
+  const [mode, setMode] = useState<Mode>(() => boot.session?.mode ?? 'chat')
   /** Taller map inside the planner card (still on the Job Planner page — not browser fullscreen). */
-  const [mapExpanded, setMapExpanded] = useState(() => persistedBoot?.mapExpanded ?? false)
+  const [mapExpanded, setMapExpanded] = useState(() => boot.session?.mapExpanded ?? false)
   const [mapPanelFullscreen, setMapPanelFullscreen] = useState(false)
-  const [messages, setMessages] = useState<ChatMessage[]>(() => persistedBoot?.messages ?? [])
-  const [input, setInput] = useState(() => persistedBoot?.input ?? (initialPrompt ?? ''))
   const [isStreaming, setIsStreaming] = useState(false)
   const [recommendation, setRecommendation] = useState<AIRecommendation | null>(
-    () => persistedBoot?.recommendation ?? null,
+    () => boot.session?.recommendation ?? null,
   )
   const imageFileRef = useRef<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [mapArea, setMapArea] = useState<MapArea | undefined>(() => persistedBoot?.mapArea)
+  const [mapArea, setMapArea] = useState<MapArea | undefined>(() => boot.session?.mapArea)
   /** Passed into cart normalization so cone/drum totals can be capped vs. a modest drawn footprint. */
   const recommendationFootprintGuard = useMemo((): RecommendationFootprintGuard | undefined => {
     if (!mapArea || mapArea.perimeterFt <= 0 || mapArea.areaFt2 <= 0) return undefined
     return { perimeterFt: mapArea.perimeterFt, areaFt2: mapArea.areaFt2 }
   }, [mapArea])
   /** User moved the pin via map search, suggestions, chat location, or geolocation — drives the setup checklist. */
-  const [mapSiteLocated, setMapSiteLocated] = useState(() => persistedBoot?.mapSiteLocated ?? false)
+  const [mapSiteLocated, setMapSiteLocated] = useState(() => boot.session?.mapSiteLocated ?? false)
   const handleMapSiteLocated = useCallback(() => setMapSiteLocated(true), [])
-  /** `${assistantMsgIndex}-${segmentIndex}` → selected option (batch-sent together per assistant message) */
-  const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(
-    () => persistedBoot?.choiceSelections ?? new Map(),
-  )
-  /** Assistant message indices whose Q&A batch was already submitted */
-  const [lockedQuestionMessages, setLockedQuestionMessages] = useState<Set<number>>(
-    () => persistedBoot?.lockedQuestionMessages ?? new Set(),
-  )
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -201,28 +302,31 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     () =>
       JSON.stringify({
         mode,
-        messages: messages.map((m) => ({
-          role: m.role,
-          content: m.content,
-          t: m.timestamp instanceof Date ? m.timestamp.getTime() : 0,
+        activeChatTabId,
+        chatTabs: chatTabs.map((t) => ({
+          id: t.id,
+          title: t.title,
+          messages: t.messages.map((m) => ({
+            role: m.role,
+            content: m.content,
+            t: m.timestamp instanceof Date ? m.timestamp.getTime() : 0,
+          })),
+          input: t.input,
+          cs: [...t.choiceSelections.entries()].sort((a, b) => a[0].localeCompare(b[0])),
+          lq: [...t.lockedQuestionMessages].sort((a, b) => a - b),
         })),
-        input,
         mapArea,
         mapSiteLocated,
         recommendation,
-        cs: [...choiceSelections.entries()].sort((a, b) => a[0].localeCompare(b[0])),
-        lq: [...lockedQuestionMessages].sort((a, b) => a - b),
         mapExpanded,
       }),
     [
       mode,
-      messages,
-      input,
+      activeChatTabId,
+      chatTabs,
       mapArea,
       mapSiteLocated,
       recommendation,
-      choiceSelections,
-      lockedQuestionMessages,
       mapExpanded,
     ],
   )
@@ -234,13 +338,11 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
         embedded,
         buildPersistPayload({
           mode,
-          messages,
-          input,
+          chatTabs,
+          activeChatTabId,
           mapArea,
           mapSiteLocated,
           recommendation,
-          choiceSelections,
-          lockedQuestionMessages,
           mapExpanded,
         }),
       )
@@ -261,10 +363,11 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     })
   }
 
+  const initialHadChatMessages = Boolean(boot.session?.chatTabs?.some((t) => t.messages.length > 0))
+
   useEffect(() => {
-    if (initialPrompt && messages.length === 0) {
-      void sendMessage(initialPrompt).catch(() => {})
-    }
+    if (!initialPrompt || initialHadChatMessages) return
+    void sendMessage(initialPrompt).catch(() => {})
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const sendMessage = async (text: string) => {
@@ -395,14 +498,13 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
 
   const handleReset = () => {
     clearJobAssistantSession(embedded)
-    setMessages([])
-    setInput('')
+    const id = newChatTabId()
+    setChatTabs([emptyChatTab('Chat 1', id)])
+    setActiveChatTabId(id)
     setRecommendation(null)
     imageFileRef.current = null
     setImagePreview(null)
     setError(null)
-    setChoiceSelections(new Map())
-    setLockedQuestionMessages(new Set())
     setMapArea(undefined)
     setMapSiteLocated(false)
     setMapExpanded(false)
@@ -411,8 +513,60 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     }
   }
 
+  const handleClearChat = useCallback(() => {
+    if (isStreaming) return
+    const id = activeChatTabIdRef.current
+    setChatTabs((prev) =>
+      prev.map((t) =>
+        t.id !== id
+          ? t
+          : {
+              ...t,
+              messages: [],
+              input: '',
+              choiceSelections: new Map(),
+              lockedQuestionMessages: new Set(),
+            },
+      ),
+    )
+    setError(null)
+    imageFileRef.current = null
+    setImagePreview(null)
+  }, [isStreaming])
+
+  const handleNewChatTab = useCallback(() => {
+    if (isStreaming) return
+    const id = newChatTabId()
+    const title = `Chat ${chatTabs.length + 1}`
+    setChatTabs((prev) => [...prev, emptyChatTab(title, id)])
+    setActiveChatTabId(id)
+    setError(null)
+    imageFileRef.current = null
+    setImagePreview(null)
+  }, [isStreaming, chatTabs.length])
+
+  const handleCloseChatTab = useCallback(
+    (tabId: string) => {
+      if (isStreaming) return
+      setChatTabs((prev) => {
+        if (prev.length <= 1) return prev
+        const idx = prev.findIndex((t) => t.id === tabId)
+        if (idx === -1) return prev
+        const filtered = prev.filter((t) => t.id !== tabId)
+        if (activeChatTabIdRef.current === tabId) {
+          const pick = filtered[Math.max(0, idx - 1)] ?? filtered[0]!
+          setActiveChatTabId(pick.id)
+        }
+        return filtered
+      })
+    },
+    [isStreaming],
+  )
+
   const isEmpty = messages.length === 0 && !recommendation
-  const showReset = !isEmpty || mapArea !== undefined || mapSiteLocated
+  const anyTabHasChat = chatTabs.some((t) => t.messages.length > 0 || t.input.trim().length > 0)
+  const showReset =
+    anyTabHasChat || Boolean(recommendation) || mapArea !== undefined || mapSiteLocated || chatTabs.length > 1
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -470,6 +624,63 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
         {/* Chat mode */}
         {mode === 'chat' && (
           <div className="p-4">
+            <div className="flex items-stretch gap-1.5 mb-3 -mt-0.5 min-h-0">
+              <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto pb-0.5 [scrollbar-width:thin]">
+                {chatTabs.map((tab) => {
+                  const isActive = tab.id === activeChatTabId
+                  return (
+                    <div
+                      key={tab.id}
+                      className={`flex shrink-0 items-stretch rounded-lg border text-left text-xs font-medium transition-colors ${
+                        isActive
+                          ? 'border-slate-600 bg-slate-700 text-white shadow-sm'
+                          : 'border-slate-700/80 bg-slate-800/50 text-slate-400 hover:border-slate-600 hover:bg-slate-800 hover:text-slate-200'
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        disabled={isStreaming}
+                        onClick={() => setActiveChatTabId(tab.id)}
+                        className="max-w-[9rem] truncate px-2.5 py-1.5 text-left disabled:opacity-50"
+                        title={tab.title}
+                      >
+                        {tab.title}
+                      </button>
+                      {chatTabs.length > 1 && (
+                        <button
+                          type="button"
+                          disabled={isStreaming}
+                          onClick={() => handleCloseChatTab(tab.id)}
+                          className="flex items-center border-l border-slate-600/60 px-1.5 text-slate-500 hover:bg-slate-600/40 hover:text-slate-200 disabled:opacity-40 rounded-r-lg"
+                          aria-label={`Close ${tab.title}`}
+                        >
+                          <X size={12} strokeWidth={2.5} />
+                        </button>
+                      )}
+                    </div>
+                  )
+                })}
+                <button
+                  type="button"
+                  disabled={isStreaming}
+                  onClick={handleNewChatTab}
+                  title="New chat tab"
+                  className="flex shrink-0 items-center justify-center rounded-lg border border-dashed border-slate-600 bg-slate-800/40 px-2 py-1.5 text-slate-400 hover:border-brand-500/50 hover:bg-brand-500/10 hover:text-brand-200 disabled:opacity-40"
+                >
+                  <Plus size={14} />
+                </button>
+              </div>
+              <button
+                type="button"
+                disabled={isStreaming || (messages.length === 0 && !input.trim())}
+                onClick={handleClearChat}
+                title="Clear messages in this tab (map is unchanged)"
+                className="flex shrink-0 items-center gap-1 self-center rounded-lg border border-slate-700 bg-slate-800/50 px-2 py-1.5 text-[11px] font-medium text-slate-400 hover:border-slate-600 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-35 disabled:cursor-not-allowed"
+              >
+                <Eraser size={12} />
+                <span className="hidden sm:inline">Clear chat</span>
+              </button>
+            </div>
             {isEmpty && !isStreaming && (
               <div className={`text-center ${embedded ? 'py-5' : 'py-8'}`}>
                 {!embedded && (
