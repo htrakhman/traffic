@@ -1,4 +1,4 @@
-import { Shield, Clock, Headphones, MapPin } from 'lucide-react'
+import { Shield, Truck, Headphones, MapPin } from 'lucide-react'
 
 const items = [
   {
@@ -7,9 +7,10 @@ const items = [
     description: 'All equipment meets federal and state traffic-control standards.',
   },
   {
-    icon: Clock,
-    title: 'Same-Day Delivery',
-    description: 'Order by noon for same-day delivery to your job site.',
+    icon: Truck,
+    title: 'Scheduled delivery',
+    description:
+      'Pickup and job-site delivery booked around your timeline—we confirm the window before dispatch.',
   },
   {
     icon: Headphones,

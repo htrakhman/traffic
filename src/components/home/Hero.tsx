@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Sparkles, Search, Zap, ExternalLink } from 'lucide-react'
+import { Sparkles, Search, ExternalLink } from 'lucide-react'
 import JobAssistant from '../ai/JobAssistant'
 
 export default function Hero() {
@@ -17,12 +17,6 @@ export default function Hero() {
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-500/8 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-4">
-          <Zap size={10} className="fill-current" />
-          AI-Powered Work Zone Planning
-        </div>
-
         {/* Headline — single line */}
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
           Rent the gear.{' '}

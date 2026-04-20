@@ -17,13 +17,13 @@ import {
   Plus,
   Eraser,
 } from 'lucide-react'
-import { streamJobChat, getJobRecommendation, recoverJobChatCart } from '../../utils/aiClient'
+import { streamJobChat, recoverJobChatCart } from '../../utils/aiClient'
 import {
   normalizeRecommendationPricing,
   type RecommendationFootprintGuard,
 } from '../../utils/pricing'
 import { extractChatCartRecommendation, tryParseTailAfterCartStart } from '../../utils/chatCartParse'
-import type { ChatMessage, JobDetails, AIRecommendation, MapArea } from '../../types'
+import type { ChatMessage, AIRecommendation, MapArea } from '../../types'
 import {
   buildPersistPayload,
   clearJobAssistantSession,
@@ -32,7 +32,6 @@ import {
   type JobAssistantChatTabState,
 } from '../../utils/jobAssistantSessionStorage'
 import CartWidget from './CartWidget'
-import JobForm from './JobForm'
 import MapAreaSelector, { type MapAreaSelectorHandle } from './MapAreaSelector'
 
 type Segment =
@@ -104,7 +103,7 @@ function parseSegments(content: string, mapFootprint?: RecommendationFootprintGu
     segments.push({
       type: 'text',
       content:
-        'The equipment list still could not be loaded after an automatic retry. Send your message again, or use Guided Form for a fresh recommendation.',
+        'The equipment list still could not be loaded after an automatic retry. Send your message again.',
     })
     return segments
   }
@@ -123,8 +122,6 @@ interface Props {
    */
   onMapExpandedLayoutChange?: (expanded: boolean) => void
 }
-
-type Mode = 'chat' | 'form'
 
 function newChatTabId(): string {
   return `tab-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
@@ -255,7 +252,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     )
   }, [])
 
-  const [mode, setMode] = useState<Mode>(() => boot.session?.mode ?? 'chat')
   /** Taller map inside the planner card (still on the Job Planner page — not browser fullscreen). */
   const [mapExpanded, setMapExpanded] = useState(() => boot.session?.mapExpanded ?? false)
   const [mapPanelFullscreen, setMapPanelFullscreen] = useState(false)
@@ -281,16 +277,14 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   const mapSelectorRef = useRef<MapAreaSelectorHandle>(null)
   const mapPanelRef = useRef<HTMLDivElement>(null)
 
-  const mapUsesExtraHeight = mapPanelFullscreen || mapExpanded || mode === 'chat'
+  const mapUsesExtraHeight = true
 
   useLayoutEffect(() => {
-    onMapExpandedLayoutChange?.(
-      Boolean((mapExpanded && !mapPanelFullscreen) || mode === 'chat'),
-    )
+    onMapExpandedLayoutChange?.(true)
     return () => {
       onMapExpandedLayoutChange?.(false)
     }
-  }, [mapExpanded, mapPanelFullscreen, mode, onMapExpandedLayoutChange])
+  }, [onMapExpandedLayoutChange])
 
   useEffect(() => {
     const syncFs = () => setMapPanelFullscreen(document.fullscreenElement === mapPanelRef.current)
@@ -301,7 +295,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   const persistSig = useMemo(
     () =>
       JSON.stringify({
-        mode,
         activeChatTabId,
         chatTabs: chatTabs.map((t) => ({
           id: t.id,
@@ -321,7 +314,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
         mapExpanded,
       }),
     [
-      mode,
       activeChatTabId,
       chatTabs,
       mapArea,
@@ -337,7 +329,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
       writeJobAssistantSession(
         embedded,
         buildPersistPayload({
-          mode,
+          mode: 'chat',
           chatTabs,
           activeChatTabId,
           mapArea,
@@ -435,19 +427,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong')
       throw err
-    } finally {
-      setIsStreaming(false)
-    }
-  }
-
-  const handleFormSubmit = async (jobDetails: JobDetails) => {
-    setError(null)
-    setIsStreaming(true)
-    try {
-      const rec = await getJobRecommendation(jobDetails)
-      setRecommendation(rec)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not generate recommendation')
     } finally {
       setIsStreaming(false)
     }
@@ -570,26 +549,10 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      {/* Mode toggle */}
       <div className="flex items-center gap-2 p-4 border-b border-slate-800">
-        <div className="flex items-center bg-slate-800/60 rounded-lg p-0.5 flex-1">
-          <button
-            onClick={() => setMode('chat')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-md text-xs font-medium transition-all duration-150 ${
-              mode === 'chat' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <Sparkles size={12} />
-            Chat with AI
-          </button>
-          <button
-            onClick={() => setMode('form')}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-md text-xs font-medium transition-all duration-150 ${
-              mode === 'form' ? 'bg-slate-700 text-white shadow' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            Guided Form
-          </button>
+        <div className="flex flex-1 items-center gap-1.5 text-xs font-medium text-slate-300">
+          <Sparkles size={12} className="text-brand-400" aria-hidden />
+          Chat with AI
         </div>
         {showReset && (
           <button
@@ -603,26 +566,11 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
       </div>
 
       {(() => {
-        const splitViewActive = mode === 'chat'
         const scrollAreaClassName =
           'min-h-0 overflow-y-auto overscroll-y-contain flex-1'
 
         const inner = (
           <>
-        {/* Guided form */}
-        {mode === 'form' && (
-          <div className="p-4">
-            <JobForm
-              onSubmit={handleFormSubmit}
-              isLoading={isStreaming}
-              mapArea={mapArea}
-              onMapAreaChange={setMapArea}
-            />
-          </div>
-        )}
-
-        {/* Chat mode */}
-        {mode === 'chat' && (
           <div className="p-4">
             <div className="flex items-stretch gap-1.5 mb-3 -mt-0.5 min-h-0">
               <div className="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto pb-0.5 [scrollbar-width:thin]">
@@ -893,9 +841,8 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
 
             </div>
           </div>
-        )}
 
-            {/* Recommendation result (from form mode) */}
+            {/* Recommendation result (legacy session from older guided form) */}
             {recommendation && (
               <div className="p-4 border-t border-slate-800">
                 <CartWidget key="cart-form" recommendation={recommendation} layout="modal" mapArea={mapArea} />
@@ -1079,17 +1026,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
             <p className="text-xs text-red-300">{error}</p>
           </div>
         ) : null
-
-        if (!splitViewActive) {
-          return (
-            <>
-              <div ref={scrollContainerRef} className={scrollAreaClassName}>
-                {inner}
-              </div>
-              {errorBlock}
-            </>
-          )
-        }
 
         return (
           <div className="flex min-h-0 flex-1 flex-row gap-3">
