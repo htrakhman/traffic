@@ -45,14 +45,22 @@ function CatalogLoader() {
   const { bump } = useCatalogSync()
   useEffect(() => {
     fetch('/tss-catalog.json')
-      .then((r) => (r.ok ? (r.json() as Promise<Product[]>) : Promise.resolve(null)))
+      .then((r) => {
+        if (!r.ok) {
+          console.warn('[CatalogLoader] /tss-catalog.json HTTP', r.status)
+          return null
+        }
+        return r.json() as Promise<Product[]>
+      })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           registerExtendedCatalog(data)
           bump()
         }
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.warn('[CatalogLoader] Failed to load or parse /tss-catalog.json:', err)
+      })
   }, [bump])
   return null
 }

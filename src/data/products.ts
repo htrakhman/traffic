@@ -1,7 +1,17 @@
 import type { Product } from '../types'
 import { SITE_NAME } from '../config/site'
+import { applyRetailMarkup, roundMoney } from '../utils/pricing'
 
 const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
+
+function retailRates(refDaily: number): Pick<Product, 'dailyRate' | 'weeklyRate' | 'monthlyRate'> {
+  const dailyRate = applyRetailMarkup(refDaily)
+  return {
+    dailyRate,
+    weeklyRate: roundMoney(dailyRate * 4),
+    monthlyRate: roundMoney(dailyRate * 12),
+  }
+}
 
 /**
  * Rental rates in this file are **retail** prices (50% markup on supplier-reference economics).
@@ -31,6 +41,21 @@ const msgBoardImg =
   'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png'
 const flasherImg = cdn('i/economy-solar-assist-type-b-flasher-red.webp')
 const flareImg = cdn('i/orion-15-minute-road-flares-case-of-72-without-wire-stand.webp')
+const urbanitePedImg = cdn('i/urbanite-crowd-control-barricades-white-none-no-sheeting-water-filled-barricade.webp')
+const parkingBlueImg = cdn(
+  'i/commercial-parking-block-3ft-blue-18-galv-steel-spikes-asphalt-gravel-or-dirt-rubber-wheel-stop-parking-curb-ada-compliant.webp',
+)
+const speedHumpImg = cdn(
+  'i/economy-rubber-speed-hump-middle-section-18-galv-steel-spikes-asphalt-gravel-or-dirt-traffic-calming.webp',
+)
+const vestMeshImg =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp'
+const kaskZenithImg =
+  'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/kask-zenith-x2-helmets-white.webp'
+const aervoePaintImg = cdn('i/blue-construction-marking-paint-case-of-12-aervoe.webp')
+const fenceBridgeImg = cdn('i/galv-steel-crowd-control-fence-bridge-feet.webp')
+const harnessImg = cdn('i/radians-high-visibility-breakaway-by-back-safety-harness-lime.webp')
+const bollardCoverImg = cdn('i/tall-bollard-cover-5-inch-diameter-52in-blue.webp')
 
 const TRANS = 'Trans-Supply'
 const TSP = 'Traffic Safety Products'
@@ -1131,8 +1156,8 @@ export const curatedProducts: Product[] = [
   },
   {
     id: 'prod-15',
-    categoryId: 'cat-6',
-    categorySlug: 'safety-lighting',
+    categoryId: 'cat-17',
+    categorySlug: 'flares-markers-wands-flags',
     name: 'Orion 30-Minute Road Flares — Pack of 6',
     slug: 'road-flares-6-pack',
     description: 'Six Orion 30-minute waxed road flares in nylon carrying case with orange safety vest',
@@ -1197,7 +1222,7 @@ export const curatedProducts: Product[] = [
     inStock: true,
     stockCount: 60,
     popular: false,
-    sku: 'LGT-FLR-6PK',
+    sku: 'FLR-ORI-6PK',
     supplierSku: 'ORION6030',
     supplierUrl: '',
     supplier: 'Orion Safety Products',
@@ -1207,9 +1232,1662 @@ export const curatedProducts: Product[] = [
     metaTitle: titleBrand('Rent Road Flares | Orion 30-Min 6-Pack DOT Approved'),
     metaDescription: 'Rent Orion 30-minute DOT-approved road flares (6-pack) from $18/day. Weather-resistant waxed construction, nylon case and safety vest included. Ideal for emergency delineation.',
   },
+
+  // --- Safety Lighting (additional) ---
+  {
+    id: 'prod-16',
+    categoryId: 'cat-6',
+    categorySlug: 'safety-lighting',
+    name: 'Solar-Assist LED Barricade Warning Light — High-Output Amber',
+    slug: 'solar-led-barricade-warning-light-high-output',
+    description: 'Solar-charged amber LED barricade light with dusk-to-dawn operation for drums, barricades, and sign stands',
+    longDescription:
+      'Exact product line: solar-assist LED barricade warning light (amber lens). High-output LEDs for MUTCD nighttime conspicuity on channelizing devices. Integrated photocell, sealed housing, and rechargeable battery pack reduce D-cell swaps vs. traditional flashers. Mounts to Type I–III barricades, drums, and compatible sign hardware.',
+    ...retailRates(3),
+    unit: 'each',
+    imageUrl: flasherImg,
+    images: [flasherImg, drumImg, barT2img],
+    specs: {
+      Lens: 'Amber LED',
+      Power: 'Solar assist + sealed rechargeable battery',
+      Mount: 'Universal barricade / drum top clip',
+      Modes: 'Steady / flash (model dependent)',
+      'Photo-Cell': 'Yes — dusk-to-dawn',
+    },
+    features: [
+      'Solar assist extends runtime between charges',
+      'High-intensity amber LEDs for lane-edge devices',
+      'Sealed weather-resistant housing',
+      'Photocell for automatic night activation',
+      'Fits common barricade and drum mounts',
+    ],
+    compliance: ['MUTCD', 'FHWA'],
+    useCases: [
+      {
+        title: 'Long-Duration Night Work',
+        description: 'Solar-assist lights reduce battery swaps on multi-night lane closures while keeping barricades and drums visible from dusk to dawn.',
+      },
+      {
+        title: 'Drum and Channelizer Lighting',
+        description: 'Mount on channelizing drums at merge points and lane drops where continuous flashing improves driver guidance.',
+      },
+      {
+        title: 'Backup to Type B D-Cell Flashers',
+        description: 'Pair with or substitute for D-cell flashers on projects that prioritize lower battery handling and sealed electronics.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is this the same as a MUTCD Type B flasher?',
+        answer: 'Type A/B classifications describe intensity and application. This unit is positioned for barricade and channelizer lighting similar to Type B applications; confirm your state DOT or TCP for specific device approval and photometric requirements.',
+      },
+      {
+        question: 'Does it need direct sunlight every day?',
+        answer: 'Solar-assist models charge during daylight and run overnight. Extended overcast periods may shorten runtime—plan spare units or D-cell Type B flashers for critical redundancy.',
+      },
+      {
+        question: 'What is the minimum rental period?',
+        answer: 'Minimum rental is 1 day. Weekly and monthly rates apply the same ×4 / ×12 retail tiering used across our catalog.',
+      },
+      {
+        question: 'Can it mount on traffic cones?',
+        answer: 'Many models include adapters for cone tops and drum lids. Specify cone height and collar type in your quote so we ship the correct mounting hardware.',
+      },
+    ],
+    tags: ['barricade light', 'solar', 'LED', 'night work', 'drum'],
+    inStock: true,
+    stockCount: 220,
+    popular: false,
+    sku: 'LGT-SOL-HO',
+    supplierSku: 'SOLAR-LED-BARR',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~2 lbs',
+    dimensions: 'Compact drum / barricade mount',
+    metaTitle: titleBrand('Rent Solar LED Barricade Lights | Amber High-Output'),
+    metaDescription: 'Rent solar-assist amber LED barricade warning lights with photocell operation. Ideal for drums and barricades on night work. Retail rental rates include 50% markup.',
+  },
+
+  // --- Pedestrian & Crowd Control ---
+  {
+    id: 'prod-17',
+    categoryId: 'cat-7',
+    categorySlug: 'pedestrian-control',
+    name: 'Urbanite Water-Filled Pedestrian Barricade — White',
+    slug: 'urbanite-water-filled-pedestrian-barricade',
+    description: 'Low-profile water-filled pedestrian barricade for crowd lines, festivals, and sidewalk closures',
+    longDescription:
+      'Exact product family: Urbanite-style water-filled pedestrian barricade (white shell, interlocking feet). Ballast with water on site for stability without heavy steel barriers. Common for sidewalk detours, outdoor retail queues, stadium ingress, and short-term pedestrian channelization adjacent to low-speed traffic.',
+    ...retailRates(5),
+    unit: 'each',
+    imageUrl: urbanitePedImg,
+    images: [urbanitePedImg, barWFimg, barT2img],
+    specs: {
+      Style: 'Water-filled pedestrian barricade',
+      Color: 'White (high-visibility shell)',
+      Ballast: 'Water-filled on site',
+      Connection: 'Interlocking ends',
+      Typical: 'Crowd control / ped channelization',
+    },
+    features: [
+      'Water ballast for stable pedestrian lines',
+      'Interlocking layout for continuous runs',
+      'Reusable across events and closures',
+      'Lower trip profile than highway drums',
+      'Fast deploy and strike for short-duration work',
+    ],
+    compliance: ['Local ped / event ordinances'],
+    useCases: [
+      {
+        title: 'Sidewalk Detours',
+        description: 'Create continuous pedestrian routes past building entrances, café seating, and construction facades while keeping walkers separated from adjacent curb lane.',
+      },
+      {
+        title: 'Event Perimeters',
+        description: 'Define ingress and egress chutes for concerts, races, and street fairs where controlled pedestrian flow matters more than vehicle impact performance.',
+      },
+      {
+        title: 'Queue Management',
+        description: 'Straight runs and gentle corners for ticketing, security screening, and valet staging without permanent bollards.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Do I fill the units on site?',
+        answer: 'Yes. Units ship empty for transport efficiency; fill with water after placement. Drain before pickup unless your contract specifies otherwise.',
+      },
+      {
+        question: 'Are these MUTCD highway barriers?',
+        answer: 'Urbanite-style barriers are primarily for pedestrian and low-speed control. For vehicle lane closures on traveled roadways, use MUTCD-tested longitudinal barriers and approved channelizing devices from our barricades category.',
+      },
+      {
+        question: 'How many do I need for a run?',
+        answer: 'Interlocking length and corner geometry drive counts. Send a sketch or call with footage — we can estimate a layout and delivery windows.',
+      },
+      {
+        question: 'What is the minimum rental period?',
+        answer: 'Minimum rental is 1 day. Weekly and monthly tiers follow standard catalog pricing.',
+      },
+    ],
+    tags: ['pedestrian', 'crowd control', 'water filled', 'urbanite', 'event'],
+    inStock: true,
+    stockCount: 140,
+    popular: false,
+    sku: 'PED-URB-WHT',
+    supplierSku: 'URBANITE-WHT',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: 'Empty — fills on site',
+    dimensions: 'Low-profile ped barricade module',
+    metaTitle: titleBrand('Rent Urbanite Pedestrian Barricades | Water-Filled'),
+    metaDescription: 'Rent white Urbanite-style water-filled pedestrian barricades for events and sidewalk detours. Stable interlocking runs. Retail rates with 50% markup.',
+  },
+  {
+    id: 'prod-18',
+    categoryId: 'cat-7',
+    categorySlug: 'pedestrian-control',
+    name: 'Economy Pedestrian Barricade — Orange, EG Reflective',
+    slug: 'economy-pedestrian-barricade-orange-eg',
+    description: 'Folding-style economy pedestrian barricade with engineer-grade reflective sheeting',
+    longDescription:
+      'Exact product line: economy pedestrian barricade (orange frame) with red/white engineer-grade reflective panels. Lightweight A-frame style for quick setup at sidewalk closures, parking garage entrances, and short-term ped routes. Pairs with ballast or sandbags in wind-exposed locations.',
+    ...retailRates(2.5),
+    unit: 'each',
+    imageUrl: barT2img,
+    images: [barT2img, urbanitePedImg, signStandImg],
+    specs: {
+      Frame: 'Orange folding pedestrian barricade',
+      Sheeting: 'Engineer-grade red / white',
+      Weight: 'Lightweight — ballast as needed',
+      Use: 'Sidewalk / lot ped control',
+    },
+    features: [
+      'Fast setup and strike',
+      'EG reflective panels for night visibility',
+      'Compact nesting for transport',
+      'Compatible with sandbags for ballast',
+      'Cost-effective for short closures',
+    ],
+    compliance: ['MUTCD-style ped channelization (verify locally)'],
+    useCases: [
+      {
+        title: 'Sidewalk Work Adjacent to Pedestrians',
+        description: 'Short closures for utility vaults, tree pits, and façade repair where a clear ped path must remain obvious.',
+      },
+      {
+        title: 'Parking Structure Ramps',
+        description: 'Temporary ped routing at garage entrances during sensor or gate maintenance.',
+      },
+      {
+        title: 'Retail and Campus Events',
+        description: 'Low-speed environments where lightweight barriers define lines without full crash-rated systems.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Do I need sandbags?',
+        answer: 'In wind or narrow channels, ballast the legs with sandbags or weights. We stock empty sandbags and ballast kits in Accessories & Hardware.',
+      },
+      {
+        question: 'Is engineer-grade enough at night?',
+        answer: 'EG is suitable for many low-speed ped environments. For high-contrast night needs near traffic, consider high-intensity sheeting upgrades or supplemental warning lights.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum; weekly and monthly discounts apply.',
+      },
+      {
+        question: 'Can these block vehicles?',
+        answer: 'They are pedestrian-class devices—not longitudinal vehicle barriers. Use water-filled or crash-tested barriers for vehicle lane protection.',
+      },
+    ],
+    tags: ['pedestrian barricade', 'A-frame', 'reflective', 'sidewalk'],
+    inStock: true,
+    stockCount: 200,
+    popular: false,
+    sku: 'PED-AFR-EG',
+    supplierSku: 'PED-BARR-EG',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~12–18 lbs (typical)',
+    dimensions: 'Folding barricade panel',
+    metaTitle: titleBrand('Rent Economy Pedestrian Barricades | EG Reflective'),
+    metaDescription: 'Rent orange economy pedestrian barricades with engineer-grade reflective sheeting. Fast setup for sidewalk and lot ped control.',
+  },
+
+  // --- Accessories & Hardware ---
+  {
+    id: 'prod-19',
+    categoryId: 'cat-8',
+    categorySlug: 'accessories-hardware',
+    name: 'Empty Polypropylene Traffic Sandbag — 14" × 26"',
+    slug: 'traffic-sandbag-14x26-empty',
+    description: 'Woven polypropylene empty sandbag for ballasting signs, stands, and lightweight barricades',
+    longDescription:
+      'Exact product: standard 14" × 26" woven polypropylene traffic sandbag (empty). UV-treated fabric resists tearing when filled. Tie or clip closure. Used for sign stand ballast, pedestrian barricade legs, and temporary message board anchoring in moderate wind.',
+    ...retailRates(1.5),
+    unit: 'each',
+    imageUrl: signStandImg,
+    images: [signStandImg, barT2img, cone28img],
+    specs: {
+      Size: '14" × 26" (empty)',
+      Material: 'Woven polypropylene',
+      Fill: 'Sand or gravel (customer-supplied on site)',
+      Closure: 'Tie top',
+    },
+    features: ['UV-stabilized fabric', 'High tear strength when filled', 'Reusable across jobs', 'Stackable when empty'],
+    compliance: [],
+    useCases: [
+      {
+        title: 'Sign Stand Ballast',
+        description: 'Place filled bags on roll-up sign stand legs and tripod feet to resist gusts along open roadways.',
+      },
+      {
+        title: 'Pedestrian Barricade Leg Ballast',
+        description: 'Stabilize folding pedestrian barricades in breezy parking lots and plaza work.',
+      },
+      {
+        title: 'Temporary Anchor Weights',
+        description: 'Low-profile anchoring where water-filled barriers are impractical.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is sand included?',
+        answer: 'Bags rent empty; source clean dry sand or gravel on site. Return empty bags at end of rental unless otherwise agreed.',
+      },
+      {
+        question: 'How many bags per stand?',
+        answer: 'Wind exposure and stand height drive counts—two to four filled bags per leg is common in moderate wind.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Can I buy instead of rent?',
+        answer: 'Yes—ask for purchase pricing on high-consumption projects.',
+      },
+    ],
+    tags: ['sandbag', 'ballast', 'sign stand', 'weight'],
+    inStock: true,
+    stockCount: 800,
+    popular: true,
+    sku: 'ACC-SB-1426',
+    supplierSku: 'SB-14X26-PP',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~0.2 lb empty',
+    dimensions: '14" × 26" flat',
+    metaTitle: titleBrand('Rent Traffic Sandbags | 14×26 Polypropylene'),
+    metaDescription: 'Rent empty 14×26 woven polypropylene traffic sandbags for sign stand and barricade ballast. Durable UV-treated fabric.',
+  },
+  {
+    id: 'prod-20',
+    categoryId: 'cat-8',
+    categorySlug: 'accessories-hardware',
+    name: 'Rubber Sign Stand Base Weight — Dual-Handle',
+    slug: 'rubber-sign-stand-base-weight',
+    description: 'Recycled-rubber donut weight for telescoping sign stands and roll-up hardware',
+    longDescription:
+      'Exact product line: recycled rubber sign stand base weight with dual handles. Slides over common telescoping mast tubes to lower center of gravity for roll-up signs in wind. Faster reposition than sandbags alone for crews that strike and reset layouts daily.',
+    ...retailRates(1.5),
+    unit: 'each',
+    imageUrl: signStandImg,
+    images: [signStandImg, cone28img, drumImg],
+    specs: {
+      Material: 'Recycled rubber',
+      Interface: 'Common telescoping mast / stand families',
+      Handles: 'Dual lift handles',
+      Use: 'Roll-up and rigid sign stands',
+    },
+    features: ['Adds low-center ballast', 'Tool-free slide-on (compatible models)', 'Durable rubber compound', 'Dual handles for faster moves'],
+    compliance: [],
+    useCases: [
+      {
+        title: 'Windy Roll-Up Sign Placement',
+        description: 'Combine rubber weights with sandbags on gusty arterials for redundant ballast.',
+      },
+      {
+        title: 'Lane Closure Tapers',
+        description: 'Crews resetting advance warning signs nightly benefit from quicker weight handling vs. bags alone.',
+      },
+      {
+        title: 'Parking Lot Messaging',
+        description: 'Stabilize temporary directional signs at retail and logistics sites.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Will it fit my stand?',
+        answer: 'Compatibility varies by mast diameter and foot design. Send your stand model or a photo of the foot plate—we match weights to common Traffic Safety Store stand families.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Do I still need sandbags?',
+        answer: 'In extreme wind, yes—layer sandbags in addition to rubber weights.',
+      },
+      {
+        question: 'Weight of the unit?',
+        answer: 'Typical recycled rubber weights range ~28–40 lb depending on SKU—confirm on quote.',
+      },
+    ],
+    tags: ['sign stand', 'ballast', 'rubber weight', 'roll-up'],
+    inStock: true,
+    stockCount: 350,
+    popular: false,
+    sku: 'ACC-RSW-DH',
+    supplierSku: 'STAND-RUB-WT',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~28–40 lb (SKU dependent)',
+    dimensions: 'Fits common mast tubes',
+    metaTitle: titleBrand('Rent Sign Stand Rubber Weights | Dual-Handle'),
+    metaDescription: 'Rent recycled rubber base weights for telescoping sign stands. Faster ballast handling for roll-up signs in wind.',
+  },
+
+  // --- Parking Blocks ---
+  {
+    id: 'prod-21',
+    categoryId: 'cat-9',
+    categorySlug: 'parking-blocks',
+    name: 'Commercial Rubber Parking Block — 6 ft, Blue, Spiked',
+    slug: 'commercial-rubber-parking-block-6ft-blue',
+    description: 'Six-foot recycled rubber wheel stop with galvanized spikes for asphalt installs',
+    longDescription:
+      'Exact product line: commercial recycled rubber parking block, 6 ft length, blue with pre-drilled galvanized spike holes. Low-profile design for cars and light trucks in lots and garages. Spikes anchor into asphalt; alternate hardware available for concrete (request in quote).',
+    ...retailRates(2.25),
+    unit: 'each',
+    imageUrl: parkingBlueImg,
+    images: [parkingBlueImg, cone28img, barT2img],
+    specs: {
+      Length: '6 ft',
+      Material: 'Recycled rubber',
+      Color: 'Blue',
+      Anchoring: 'Galvanized spikes (asphalt typical)',
+      Profile: 'ADA-friendly low profile (verify layout)',
+    },
+    features: ['UV-stable rubber compound', 'Reflective tape options available', 'Spiked asphalt install', 'Reusable across lot projects', 'High visibility blue shell'],
+    compliance: ['ADA layout review recommended'],
+    useCases: [
+      {
+        title: 'Retail and Office Lots',
+        description: 'Define stall noses and end-of-aisle stops to reduce bumper strikes and pedestrian pinch points.',
+      },
+      {
+        title: 'Distribution Centers',
+        description: 'Protect dock doors and pedestrian walkways inside yards with repeated truck traffic.',
+      },
+      {
+        title: 'Temporary Lot Re-striping Projects',
+        description: 'Hold stall geometry while new striping cures or while phased paving completes.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can these install in concrete?',
+        answer: 'Yes with wedge anchors or epoxy—specify substrate in your quote so we ship the correct fastener kit.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum; weekly and monthly tiers available.',
+      },
+      {
+        question: 'Do you deliver and place?',
+        answer: 'Delivery is available; placement labor can be quoted separately.',
+      },
+      {
+        question: 'Are blue blocks required anywhere?',
+        answer: 'Some owners and EV charging layouts specify color for visibility. Confirm with your architect or municipal guidance.',
+      },
+    ],
+    tags: ['parking block', 'wheel stop', 'rubber', 'asphalt'],
+    inStock: true,
+    stockCount: 260,
+    popular: false,
+    sku: 'PRK-BLK-6BL',
+    supplierSku: 'PK-BLK-6-BLU',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~34 lb (typical)',
+    dimensions: '6 ft × ~7–8 in height (typical)',
+    metaTitle: titleBrand('Rent 6 ft Rubber Parking Blocks | Blue Wheel Stops'),
+    metaDescription: 'Rent 6 ft commercial recycled rubber parking blocks with asphalt spikes. High-visibility blue for lots and garages.',
+  },
+  {
+    id: 'prod-22',
+    categoryId: 'cat-9',
+    categorySlug: 'parking-blocks',
+    name: 'Recycled Rubber Wheel Stop — 4 ft, Yellow Stripes',
+    slug: 'rubber-wheel-stop-4ft-yellow-stripes',
+    description: 'Four-foot recycled rubber wheel stop with molded yellow chevron or stripe visibility',
+    longDescription:
+      'Exact product line: 4 ft recycled rubber wheel stop with high-visibility yellow stripe or chevron molding. Shorter length fits compact stalls and angled parking. Pre-drilled for mechanical anchoring; specify asphalt vs. concrete in your quote.',
+    ...retailRates(2.25),
+    unit: 'each',
+    imageUrl: parkingBlueImg,
+    images: [parkingBlueImg, parkingBlueImg, cone28img],
+    specs: {
+      Length: '4 ft',
+      Material: 'Recycled rubber',
+      Visibility: 'Molded yellow stripes / chevrons',
+      Anchoring: 'Mechanical fasteners (substrate-specific)',
+    },
+    features: ['Shorter length for tight stalls', 'High daytime conspicuity', 'Impact-resistant rubber', 'Pre-drilled fastener pattern', 'Reusable'],
+    compliance: [],
+    useCases: [
+      {
+        title: 'Compact Parking Stalls',
+        description: 'Shorter stops reduce interference with curbs and planters in tight geometry.',
+      },
+      {
+        title: 'Garage Level Transitions',
+        description: 'Mark maximum forward point before slope changes or speed bumps.',
+      },
+      {
+        title: 'Loading Zones',
+        description: 'Hold box trucks short of overhead doors without oversized 6 ft hardware.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Yellow vs. blue—does it matter?',
+        answer: 'Both improve visibility vs. plain black. Pick based on owner standards and contrast with pavement color.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Do I return damaged units?',
+        answer: 'Normal wear is expected; cracked or cut units should be noted at pickup for fair billing.',
+      },
+      {
+        question: 'Spacing from the wall?',
+        answer: 'Follow your civil details—typical nose clearance is project-specific.',
+      },
+    ],
+    tags: ['wheel stop', 'parking curb', '4 ft', 'yellow'],
+    inStock: true,
+    stockCount: 310,
+    popular: false,
+    sku: 'PRK-BLK-4YL',
+    supplierSku: 'PK-BLK-4-YL',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~22–28 lb (typical)',
+    dimensions: '4 ft length',
+    metaTitle: titleBrand('Rent 4 ft Rubber Wheel Stops | Yellow Stripes'),
+    metaDescription: 'Rent 4 ft recycled rubber wheel stops with yellow visibility stripes. Ideal for compact stalls and garages.',
+  },
+
+  // --- Speed Bumps & Humps ---
+  {
+    id: 'prod-23',
+    categoryId: 'cat-10',
+    categorySlug: 'speed-bumps-humps',
+    name: 'Economy Rubber Speed Hump — Middle Section',
+    slug: 'economy-rubber-speed-hump-middle',
+    description: 'Modular rubber speed hump middle section with asphalt spikes for traffic calming',
+    longDescription:
+      'Exact product line: economy modular rubber speed hump middle section with integrated cable channels (model dependent) and galvanized spikes for asphalt. Combine with end caps to create full-width humps on private drives, logistics yards, and temporary lot controls.',
+    ...retailRates(4),
+    unit: 'each',
+    imageUrl: speedHumpImg,
+    images: [speedHumpImg, parkingBlueImg, cone28img],
+    specs: {
+      Type: 'Modular rubber speed hump — middle',
+      Anchoring: 'Galvanized spikes (asphalt)',
+      System: 'Requires matching end caps',
+      Use: 'Private roads / lots (verify public ROW rules)',
+    },
+    features: ['Modular layout for any road width', 'Durable rubber compound', 'Asphalt spike pattern', 'Reflective tape options', 'Repeatable rental inventory'],
+    compliance: ['Local fire / EMS clearance rules apply'],
+    useCases: [
+      {
+        title: 'Distribution Yard Internal Roads',
+        description: 'Calm forklift and truck speeds between buildings without cast-in-place concrete.',
+      },
+      {
+        title: 'Event Parking Fields',
+        description: 'Temporary humps for gravel or asphalt lanes during festivals and fairs.',
+      },
+      {
+        title: 'School and Campus Service Drives',
+        description: 'Reduce cut-through speeds on private campus loops.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Can I install this on a public street?',
+        answer: 'Public roadway installations require engineering, fire/EMS clearance, and municipal approval. Many rentals are for private property only—confirm jurisdiction.',
+      },
+      {
+        question: 'Do I need end caps?',
+        answer: 'Yes. Middle sections alone are incomplete—quote end caps for tapered entry geometry.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Removal marks?',
+        answer: 'Spike holes remain in asphalt—plan patch or sealcoat after removal.',
+      },
+    ],
+    tags: ['speed hump', 'rubber', 'traffic calming', 'modular'],
+    inStock: true,
+    stockCount: 120,
+    popular: false,
+    sku: 'SPD-HMP-MID',
+    supplierSku: 'HUMP-ECO-MID',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~45–60 lb (section dependent)',
+    dimensions: 'Modular middle section',
+    metaTitle: titleBrand('Rent Rubber Speed Hump Sections | Modular'),
+    metaDescription: 'Rent economy modular rubber speed hump middle sections with asphalt spikes. Pair with end caps for full-width calming.',
+  },
+  {
+    id: 'prod-24',
+    categoryId: 'cat-10',
+    categorySlug: 'speed-bumps-humps',
+    name: 'Portable Rubber Speed Bump — 6 ft, Portable Kit',
+    slug: 'portable-rubber-speed-bump-6ft',
+    description: 'Six-foot portable rubber speed bump for temporary lot and lane speed reduction',
+    longDescription:
+      'Exact product line: 6 ft portable rubber speed bump kit with carry handles and cat’s-eye reflectors (model dependent). Designed for repeated deploy/strike on lots where permanent asphalt milling is not allowed. Anchor with spikes or lag bolts per substrate.',
+    ...retailRates(4),
+    unit: 'each',
+    imageUrl: speedHumpImg,
+    images: [speedHumpImg, barT2img, cone28img],
+    specs: {
+      Length: '6 ft (typical kit)',
+      Material: 'Recycled / composite rubber',
+      Reflectors: 'Molded or adhesive reflectors',
+      Portable: 'Handles for two-person carry',
+    },
+    features: ['Portable for events and seasonal lots', 'High visibility reflectors', 'Asphalt or concrete anchoring options', 'Durable rubber wear surface', 'Reusable rental inventory'],
+    compliance: ['Private property typical—verify public ROW'],
+    useCases: [
+      {
+        title: 'Seasonal Campgrounds and Parks',
+        description: 'Install for peak season, remove for winter maintenance access.',
+      },
+      {
+        title: 'Film and Production Bases',
+        description: 'Temporary traffic calming on private base camps.',
+      },
+      {
+        title: 'School Pickup Lanes',
+        description: 'Short-term calming during construction detours.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'How is it different from a hump system?',
+        answer: 'Portable bumps are often single-piece or two-piece kits for narrower paths; modular humps span full road widths with middle + end geometry.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Fire lane concerns?',
+        answer: 'Do not block required fire lanes—confirm AHJ requirements before placement.',
+      },
+      {
+        question: 'Snow plow compatibility?',
+        answer: 'Temporary bumps may conflict with plowing—remove before winter ops unless designed for snow routes.',
+      },
+    ],
+    tags: ['speed bump', 'portable', 'rubber', 'lot'],
+    inStock: true,
+    stockCount: 95,
+    popular: false,
+    sku: 'SPD-BMP-6PT',
+    supplierSku: 'BUMP-6-PORT',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~50–70 lb (typical)',
+    dimensions: '6 ft length',
+    metaTitle: titleBrand('Rent Portable Rubber Speed Bumps | 6 ft'),
+    metaDescription: 'Rent 6 ft portable rubber speed bumps for temporary lot and lane calming. Reflectors and handles for crew handling.',
+  },
+
+  // --- Safety Vests & Hi-Vis ---
+  {
+    id: 'prod-25',
+    categoryId: 'cat-11',
+    categorySlug: 'safety-vests-hi-vis',
+    name: 'ANSI Class 2 Mesh Safety Vest — Orange, Contrasting Trim',
+    slug: 'ansi-class-2-mesh-vest-orange',
+    description: 'ANSI/ISEA 107 Class 2 mesh vest with contrasting trim for roadway work',
+    longDescription:
+      'Exact product line: ANSI/ISEA 107 Class 2 mesh safety vest, fluorescent orange with contrasting silver reflective trim. Breathable mesh for warm climates. Sized for roadway workers in 25 mph+ applications where Class 2 minimum applies—confirm your state hi-vis rules.',
+    ...retailRates(2),
+    unit: 'each',
+    imageUrl: vestMeshImg,
+    images: [vestMeshImg, cone36img, signFLGimg],
+    specs: {
+      Class: 'ANSI/ISEA 107 Class 2',
+      Color: 'Fluorescent orange',
+      Material: 'Polyester mesh',
+      Reflective: 'Contrasting silver trim',
+    },
+    features: ['ANSI Class 2 visibility minimum (speed-dependent)', 'Breathable mesh body', 'Front hook/zip closure (model dependent)', 'Multiple pocket options on some SKUs', 'Launderable for multi-week crews'],
+    compliance: ['ANSI/ISEA 107 Type R Class 2 (verify label)'],
+    useCases: [
+      {
+        title: 'Lane Closure Flagging',
+        description: 'Equip flaggers and TCPs with Class 2 or higher as required by speed and risk assessment.',
+      },
+      {
+        title: 'Utility and Distribution Crews',
+        description: 'Daytime shoulder and lot work with mixed equipment traffic.',
+      },
+      {
+        title: 'Survey and Layout',
+        description: 'Hi-vis for short stops along active shoulders.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'When do I need Class 3 instead of Class 2?',
+        answer: 'Class 3 adds more background and reflective square inches for higher speeds and complex backgrounds. Use your TCP or ANSI risk assessment to pick Class 2 vs. 3.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum; volume pricing for large crews.',
+      },
+      {
+        question: 'Do you rent laundered sets?',
+        answer: 'Yes—ask for laundered multi-week crew packs.',
+      },
+      {
+        question: 'Sizing?',
+        answer: 'Provide chest size ranges—we ship SM–5XL mixes to match rosters.',
+      },
+    ],
+    tags: ['vest', 'ANSI Class 2', 'hi-vis', 'mesh', 'orange'],
+    inStock: true,
+    stockCount: 900,
+    popular: true,
+    sku: 'HVY-C2-ORG',
+    supplierSku: 'VEST-C2-MESH-ORG',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~0.4 lb',
+    dimensions: 'Sized garment',
+    metaTitle: titleBrand('Rent ANSI Class 2 Safety Vests | Orange Mesh'),
+    metaDescription: 'Rent ANSI/ISEA Class 2 orange mesh safety vests with reflective trim. Ideal for roadway and utility crews.',
+  },
+  {
+    id: 'prod-26',
+    categoryId: 'cat-11',
+    categorySlug: 'safety-vests-hi-vis',
+    name: 'ANSI Class 3 Surveyors Vest — Lime, Silver Stripes',
+    slug: 'ansi-class-3-surveyors-vest-lime',
+    description: 'Class 3 hi-vis surveyors vest with expanded reflective for high-speed or complex backgrounds',
+    longDescription:
+      'Exact product line: ANSI/ISEA 107 Class 3 surveyors vest, fluorescent lime with silver reflective stripes on torso and shoulders. Additional background material for complex visual environments. Common for highway work, night operations, and layouts requiring maximum conspicuity.',
+    ...retailRates(2),
+    unit: 'each',
+    imageUrl: vestMeshImg,
+    images: [vestMeshImg, vestMeshImg, signRWAimg],
+    specs: {
+      Class: 'ANSI/ISEA 107 Class 3',
+      Color: 'Fluorescent lime',
+      Style: 'Surveyors / engineer (multi-pocket layouts vary)',
+      Reflective: 'Silver striping',
+    },
+    features: ['Class 3 background and reflective coverage', 'High-contrast lime shell', 'Pockets for field notes and radios (SKU dependent)', 'Compatible with fall-harness openings on select models', 'Durable polyester shell'],
+    compliance: ['ANSI/ISEA 107 Type R Class 3 (verify label)'],
+    useCases: [
+      {
+        title: 'High-Speed Highway Work',
+        description: 'Class 3 vests improve recognition when drivers scan complex work zones.',
+      },
+      {
+        title: 'Night Striping and Layout',
+        description: 'Extra reflective for low-angle headlight glare.',
+      },
+      {
+        title: 'Survey Crews Near Live Traffic',
+        description: 'Maximum hi-vis for short-duration measurements on shoulders.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Does Class 3 replace a harness?',
+        answer: 'No—fall protection requires an ANSI Z359 harness system. Some vests include harness pass-throughs; verify compatibility.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Lime vs. orange?',
+        answer: 'Both are common; lime often contrasts against orange work zone devices—pick per company standard.',
+      },
+      {
+        question: 'Laundry?',
+        answer: 'Industrial laundry extends garment life—ask for laundered rental packs.',
+      },
+    ],
+    tags: ['Class 3', 'surveyors vest', 'lime', 'hi-vis'],
+    inStock: true,
+    stockCount: 420,
+    popular: false,
+    sku: 'HVY-C3-LIM',
+    supplierSku: 'VEST-C3-SURV-LIM',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~0.7 lb',
+    dimensions: 'Sized garment',
+    metaTitle: titleBrand('Rent ANSI Class 3 Surveyors Vests | Lime Hi-Vis'),
+    metaDescription: 'Rent ANSI Class 3 lime surveyors vests with expanded reflective for highway and night operations.',
+  },
+
+  // --- PPE ---
+  {
+    id: 'prod-27',
+    categoryId: 'cat-12',
+    categorySlug: 'ppe-helmets-gloves-shoes',
+    name: 'Kask Zenith X2 Safety Helmet — White, Vented',
+    slug: 'kask-zenith-x2-helmet-white',
+    description: 'ANSI Z89.1 Type I safety helmet with wheel ratchet suspension and vented shell',
+    longDescription:
+      'Exact product line: Kask Zenith X2 safety helmet, vented ABS shell, wheel ratchet harness, chin strap included. ANSI Z89.1 Type I for top-of-head protection. Popular upgrade from hard hats for crews wanting improved retention, accessory mounts, and comfort padding.',
+    ...retailRates(3.5),
+    unit: 'each',
+    imageUrl: kaskZenithImg,
+    images: [kaskZenithImg, vestMeshImg, cone28img],
+    specs: {
+      Standard: 'ANSI Z89.1 Type I (verify label)',
+      Shell: 'ABS — vented',
+      Suspension: 'Wheel ratchet',
+      Color: 'White',
+    },
+    features: ['Accessory-ready mounts (SKU dependent)', 'Improved side and rear coverage vs. cap-style hats', 'Moisture-wicking harness padding', 'Chin strap for retention', 'Premium brand support and parts'],
+    compliance: ['ANSI Z89.1'],
+    useCases: [
+      {
+        title: 'Utility Climb and Bucket Work',
+        description: 'Better retention and accessory integration for aerial devices.',
+      },
+      {
+        title: 'General Construction Supervisors',
+        description: 'Comfort for all-day site walks and inspections.',
+      },
+      {
+        title: 'DOT-Style Inspection Teams',
+        description: 'Professional appearance and standardized PPE photos for submittals.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is a helmet the same as a hard hat?',
+        answer: 'Helmets often add lateral coverage and accessory integration beyond traditional cap-style hard hats. Both must meet ANSI Z89.1 when used as head protection PPE.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum; disinfect between users per your safety plan.',
+      },
+      {
+        question: 'Do you rent visors and earmuffs?',
+        answer: 'Yes—request faceshield and hearing protection bundles in your quote.',
+      },
+      {
+        question: 'Sizing?',
+        answer: 'Wheel ratchet fits a wide head range—confirm if you need XL pads.',
+      },
+    ],
+    tags: ['Kask', 'helmet', 'ANSI Z89.1', 'white', 'vented'],
+    inStock: true,
+    stockCount: 85,
+    popular: true,
+    sku: 'PPE-HEL-KZX2',
+    supplierSku: 'KASK-ZENITH-X2-WHT',
+    supplierUrl: '',
+    supplier: 'Kask',
+    minimumRentalDays: 1,
+    weight: '~1.3 lb',
+    dimensions: 'Universal shell sizes',
+    metaTitle: titleBrand('Rent Kask Zenith X2 Safety Helmets | ANSI Z89.1'),
+    metaDescription: 'Rent Kask Zenith X2 vented safety helmets (white). ANSI Z89.1 Type I head protection with wheel ratchet fit.',
+  },
+  {
+    id: 'prod-28',
+    categoryId: 'cat-12',
+    categorySlug: 'ppe-helmets-gloves-shoes',
+    name: 'High-Dexterity Work Gloves — Nitrile Palm, Cut Level A4',
+    slug: 'work-gloves-nitrile-cut-a4',
+    description: '13-gauge HPPE shell with sandy nitrile palm for grip and ANSI A4 cut resistance',
+    longDescription:
+      'Exact product line: 13-gauge HPPE knit shell with sandy nitrile palm coating, ANSI/ISEA 105 cut level A4 (label verified per SKU). Touchscreen-compatible fingertips on select models. For material handling, sign hardware, and general construction where cut and abrasion risks exist.',
+    ...retailRates(1.4),
+    unit: 'pair',
+    imageUrl: kaskZenithImg,
+    images: [kaskZenithImg, vestMeshImg, signStandImg],
+    specs: {
+      Liner: '13-gauge HPPE',
+      Coating: 'Sandy nitrile palm',
+      'Cut Level': 'ANSI A4 (verify glove label)',
+      Closure: 'Knit cuff',
+    },
+    features: ['High dexterity for hardware and tools', 'Oil-resistant nitrile palm', 'Breathable knit back', 'Touchscreen variants available', 'Launderable limited cycles'],
+    compliance: ['ANSI/ISEA 105 cut resistance (label)'],
+    useCases: [
+      {
+        title: 'Sign and Stand Hardware',
+        description: 'Protect hands from sharp edges on brackets and sheeting.',
+      },
+      {
+        title: 'Material Handling',
+        description: 'Grip banding and stakes with cut protection vs. bare hands.',
+      },
+      {
+        title: 'Striping and Paint Crews',
+        description: 'Chemical and abrasion resistance for solvent handling (verify chemical compatibility).',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What does A4 mean?',
+        answer: 'ANSI/ISEA 105 assigns A1–A9 cut scores. A4 is mid-high protection—match to your JHA.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum; box quantities for large crews.',
+      },
+      {
+        question: 'Latex allergies?',
+        answer: 'Nitrile coatings are latex-free—confirm if you need powder-free liners.',
+      },
+      {
+        question: 'Disposable vs. reusable?',
+        answer: 'These are reusable coated gloves with finite life—replace when coating wears through.',
+      },
+    ],
+    tags: ['gloves', 'cut resistant', 'nitrile', 'ANSI 105'],
+    inStock: true,
+    stockCount: 600,
+    popular: false,
+    sku: 'PPE-GLV-A4',
+    supplierSku: 'GLV-HPPE-A4-NIT',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~0.15 lb / pair',
+    dimensions: 'SM–2XL mixes',
+    metaTitle: titleBrand('Rent Cut-Resistant Work Gloves | ANSI A4 Nitrile'),
+    metaDescription: 'Rent ANSI A4 cut-level work gloves with sandy nitrile palms for grip and durability on job sites.',
+  },
+  {
+    id: 'prod-29',
+    categoryId: 'cat-12',
+    categorySlug: 'ppe-helmets-gloves-shoes',
+    name: 'Clear Anti-Fog Safety Glasses — UV400, Scratch-Resistant',
+    slug: 'safety-glasses-clear-antifog',
+    description: 'Polycarbonate wraparound safety glasses with anti-fog and UV400 protection',
+    longDescription:
+      'Exact product line: polycarbonate wraparound safety glasses, clear lens, anti-fog coating (model dependent), UV400 protection, scratch-resistant hardcoat. For dust, wind, and incidental impact hazards during daytime flagging and utility work.',
+    ...retailRates(1.25),
+    unit: 'each',
+    imageUrl: vestMeshImg,
+    images: [vestMeshImg, kaskZenithImg, signStandImg],
+    specs: {
+      Lens: 'Clear polycarbonate',
+      Coatings: 'Anti-fog + hardcoat (SKU dependent)',
+      UV: 'UV400',
+      Standard: 'ANSI Z87.1+ (verify label)',
+    },
+    features: ['Wide field of view', 'Lightweight for all-day wear', 'Compatible with many helmets', 'UV protection for outdoor crews', 'Bulk rental packs'],
+    compliance: ['ANSI Z87.1+ (verify label)'],
+    useCases: [
+      {
+        title: 'Dusty Mowing and Shoulder Work',
+        description: 'Eye protection from debris thrown by adjacent mowing operations.',
+      },
+      {
+        title: 'Flagging in Blowing Rain',
+        description: 'Anti-fog coatings help when humidity and temperature swing.',
+      },
+      {
+        title: 'Warehouse and Yard Walks',
+        description: 'General-purpose impact protection for supervisors.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Do these work over prescription glasses?',
+        answer: 'Some crews need OTG (over-the-glass) models—request OTG in your quote if needed.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Anti-fog lifetime?',
+        answer: 'Coatings wear with cleaning—replace when fogging returns.',
+      },
+      {
+        question: 'Tinted lenses?',
+        answer: 'Yes—ask for gray or mirror outdoor lenses.',
+      },
+    ],
+    tags: ['safety glasses', 'Z87', 'anti-fog', 'polycarbonate'],
+    inStock: true,
+    stockCount: 750,
+    popular: false,
+    sku: 'PPE-EYE-AF',
+    supplierSku: 'GLS-Z87-AF-CLR',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~1 oz',
+    dimensions: 'One size fits most',
+    metaTitle: titleBrand('Rent ANSI Z87 Safety Glasses | Clear Anti-Fog'),
+    metaDescription: 'Rent clear anti-fog polycarbonate safety glasses with UV400. ANSI Z87.1+ eye protection for crews.',
+  },
+
+  // --- Striping, Paint & Pavement Marking ---
+  {
+    id: 'prod-30',
+    categoryId: 'cat-13',
+    categorySlug: 'striping-pavement-paint',
+    name: 'Aervoe Water-Based Construction Marking Paint — Case of 12',
+    slug: 'aervoe-construction-marking-paint-case-12',
+    description: 'Case of 12 aerosol marking paint cans for layout, utility locate, and temp marks',
+    longDescription:
+      'Exact product line: Aervoe-style water-based construction marking paint, case of 12 aerosol cans. Bright colors for survey layout, utility locates, and short-duration pavement marks that wear with traffic. VOC and color availability vary by SKU—specify color in quote.',
+    ...retailRates(2.5),
+    unit: 'case',
+    imageUrl: aervoePaintImg,
+    images: [aervoePaintImg, cone28img, speedHumpImg],
+    specs: {
+      Pack: '12 aerosol cans / case',
+      Chemistry: 'Water-based construction marking (SKU dependent)',
+      Colors: 'White / yellow / blue / red / orange (request)',
+      Application: 'Upside-down spray tips on many SKUs',
+    },
+    features: ['Case pricing for crew efficiency', 'Bright temporary marks', 'Upside-down capable tips (model dependent)', 'Common for locate and layout', 'Store cool and dry'],
+    compliance: ['MSDS / SDS provided at delivery'],
+    useCases: [
+      {
+        title: 'Utility Locate Marking',
+        description: 'Paint proposed trench lines and vault corners before hydrovac or open cut.',
+      },
+      {
+        title: 'Layout for Temporary Striping',
+        description: 'Snap lines and hash previews before thermoplastic or tape crews arrive.',
+      },
+      {
+        title: 'Parking Lot Reconfiguration Sketches',
+        description: 'Low-cost color trials before permanent striping.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is this the same as traffic enamel?',
+        answer: 'Construction marking paints are often formulated for temporary marks; long-life traffic enamels differ. Tell us expected wear life and we match chemistry.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum per case.',
+      },
+      {
+        question: 'Returns on partial cases?',
+        answer: 'We bill per opened case; unopened cans may credit depending on contract.',
+      },
+      {
+        question: 'Cold weather?',
+        answer: 'Aerosol performance drops near freezing—plan storage above 50°F before use.',
+      },
+    ],
+    tags: ['marking paint', 'aerosol', 'layout', 'locate'],
+    inStock: true,
+    stockCount: 180,
+    popular: false,
+    sku: 'STR-PNT-12',
+    supplierSku: 'AERVOE-MARK-12',
+    supplierUrl: '',
+    supplier: 'Aervoe',
+    minimumRentalDays: 1,
+    weight: '~18 lb / case (approx.)',
+    dimensions: '12 cans',
+    metaTitle: titleBrand('Rent Construction Marking Paint | Case of 12'),
+    metaDescription: 'Rent Aervoe-style water-based construction marking paint by the case. Ideal for layout and utility locates.',
+  },
+  {
+    id: 'prod-31',
+    categoryId: 'cat-13',
+    categorySlug: 'striping-pavement-paint',
+    name: 'Temporary Pavement Marking Tape — White, High-Adhesion',
+    slug: 'temporary-pavement-marking-tape-white',
+    description: 'Roll of temporary white pavement marking tape for short-duration lane lines and symbols',
+    longDescription:
+      'Exact product line: temporary pavement marking tape roll, white, high-adhesion rubberized backing for asphalt and concrete (primer may be required). Used for short work zones, pilot lines, and experimental lane shifts before permanent thermoplastic.',
+    ...retailRates(2),
+    unit: 'roll',
+    imageUrl: aervoePaintImg,
+    images: [aervoePaintImg, speedHumpImg, parkingBlueImg],
+    specs: {
+      Color: 'White (other colors on request)',
+      Width: '4 in typical (SKU dependent)',
+      Length: 'Roll length per SKU',
+      Adhesive: 'High-tack pressure sensitive',
+    },
+    features: ['Rapid line installation vs. paint cure', 'Reflective beads embedded on many SKUs', 'Clean removal window when properly primed', 'Compatible with temp symbol layouts', 'Night visibility with retroreflectivity'],
+    compliance: ['MUTCD layouts require engineer approval'],
+    useCases: [
+      {
+        title: 'Pilot Lane Shifts',
+        description: 'Test driver behavior before milling permanent markings.',
+      },
+      {
+        title: 'Short Utility Cuts',
+        description: 'Restore line visibility overnight across trench patches.',
+      },
+      {
+        title: 'Event Traffic Plans',
+        description: 'Temporary channelization on closed courses.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Do I need primer?',
+        answer: 'Many high-performance tapes require primer on asphalt—specify substrate and expected duration.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum per roll.',
+      },
+      {
+        question: 'Removal?',
+        answer: 'Heat or grind removal may be needed if left too long—follow manufacturer limits.',
+      },
+      {
+        question: 'Rain?',
+        answer: 'Initial tack times vary—avoid wet installs.',
+      },
+    ],
+    tags: ['pavement tape', 'temporary marking', 'white', 'reflective'],
+    inStock: true,
+    stockCount: 95,
+    popular: false,
+    sku: 'STR-TPE-W4',
+    supplierSku: 'TAPE-TEMP-WHT-4',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~15–25 lb / roll (SKU dependent)',
+    dimensions: '4 in × roll length',
+    metaTitle: titleBrand('Rent Temporary Pavement Marking Tape | White'),
+    metaDescription: 'Rent temporary white pavement marking tape for short-duration lines and pilot layouts.',
+  },
+
+  // --- Fencing, Cable Covers & Site Safety ---
+  {
+    id: 'prod-32',
+    categoryId: 'cat-14',
+    categorySlug: 'fencing-site-safety',
+    name: 'Galvanized Crowd Control Fence Panel — 6 ft × 10 ft',
+    slug: 'galvanized-crowd-control-fence-panel-6x10',
+    description: 'Interlocking steel crowd control fence panel with bridge feet for events and sites',
+    longDescription:
+      'Exact product line: galvanized steel crowd control fence panel, ~6 ft × 10 ft mesh panel with tubular frame and interlocking hooks. Bridge feet distribute load on turf, asphalt, and concrete. Common for concerts, parades, construction laydown yards, and secured pedestrian corridors.',
+    ...retailRates(4.5),
+    unit: 'each',
+    imageUrl: fenceBridgeImg,
+    images: [fenceBridgeImg, urbanitePedImg, barWFimg],
+    specs: {
+      Panel: '~6 ft × 10 ft (SKU dependent)',
+      Frame: 'Galvanized steel tube',
+      Feet: 'Bridge feet (ballast as needed)',
+      Mesh: 'Welded wire mesh',
+    },
+    features: ['Fast interlocking install', 'Galvanized corrosion resistance', 'Reusable rental inventory', 'Compatible with privacy screens (request)', 'Stable on varied surfaces with ballast'],
+    compliance: ['Event and fire code reviews required'],
+    useCases: [
+      {
+        title: 'Concert Pit and Stage Lines',
+        description: 'Create performer and crew separation from public zones.',
+      },
+      {
+        title: 'Construction Laydown Yards',
+        description: 'Perimeter control for materials and equipment overnight.',
+      },
+      {
+        title: 'Parade Routes',
+        description: 'Channel spectators at intersections and VIP crossings.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'How many panels per 100 ft?',
+        answer: 'Panel width drives counts—roughly ten 10 ft panels per 100 ft of run before corners.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Wind bracing?',
+        answer: 'Add ballast or angled braces per engineer or venue requirements.',
+      },
+      {
+        question: 'Gates?',
+        answer: 'Yes—request swing gate panels for equipment access.',
+      },
+    ],
+    tags: ['fence', 'crowd control', 'galvanized', 'event'],
+    inStock: true,
+    stockCount: 220,
+    popular: false,
+    sku: 'FNC-CCP-610',
+    supplierSku: 'FENCE-CC-6X10',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~55–75 lb / panel (typical)',
+    dimensions: '6 ft × 10 ft panel',
+    metaTitle: titleBrand('Rent Crowd Control Fence Panels | Galvanized 6×10'),
+    metaDescription: 'Rent galvanized steel crowd control fence panels with bridge feet for events and secured sites.',
+  },
+  {
+    id: 'prod-33',
+    categoryId: 'cat-14',
+    categorySlug: 'fencing-site-safety',
+    name: 'Drop-Over Cable Protector — 2-Channel, Black/Yellow',
+    slug: 'drop-over-cable-protector-2-channel',
+    description: 'Two-channel drop-over cable guard for hoses and cords up to ~2 in OD in work zones',
+    longDescription:
+      'Exact product line: economy two-channel drop-over cable protector, black lid with yellow lid hinges / sides (brand varies). Protects extension cords, ethernet, and small hoses from cart and vehicle crush in lots and indoor venues. Modular end caps available for tapered entries.',
+    ...retailRates(2.8),
+    unit: 'each',
+    imageUrl: fenceBridgeImg,
+    images: [fenceBridgeImg, parkingBlueImg, speedHumpImg],
+    specs: {
+      Channels: '2',
+      'Typical OD': '~1.0–2.0 in per channel (SKU dependent)',
+      Material: 'Polyurethane / rubber composite',
+      Style: 'Drop-over modular',
+    },
+    features: ['Fast deploy for live events', 'High-visibility yellow/black pattern', 'Modular connection (SKU dependent)', 'Indoor/outdoor use', 'Reduces trip hazards vs. loose cords'],
+    compliance: ['NFPA and venue rules may require covers in public aisles'],
+    useCases: [
+      {
+        title: 'Film and Broadcast Sets',
+        description: 'Protect camera tether and power across pedestrian aisles.',
+      },
+      {
+        title: 'Warehouse Retrofits',
+        description: 'Cover temporary power drops during rack moves.',
+      },
+      {
+        title: 'Outdoor Festivals',
+        description: 'Guard feeder cords in vendor rows.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What OD fits?',
+        answer: 'Measure your bundle diameter—channels vary by SKU. Oversized bundles need 3- or 5-channel models.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'ADA aisles?',
+        answer: 'Covers change rolling resistance—confirm slope and width with your accessibility reviewer.',
+      },
+      {
+        question: 'End caps?',
+        answer: 'Request end caps for smooth vehicle transitions.',
+      },
+    ],
+    tags: ['cable protector', 'hose bridge', 'drop over', 'two channel'],
+    inStock: true,
+    stockCount: 160,
+    popular: false,
+    sku: 'FNC-CBL-2CH',
+    supplierSku: 'CABLE-GUARD-2',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~18–28 lb / section (typical)',
+    dimensions: 'Modular length per SKU',
+    metaTitle: titleBrand('Rent 2-Channel Cable Protectors | Drop-Over'),
+    metaDescription: 'Rent two-channel drop-over cable protectors for cords and hoses in lots, venues, and work zones.',
+  },
+
+  // --- Fall Protection ---
+  {
+    id: 'prod-34',
+    categoryId: 'cat-15',
+    categorySlug: 'fall-protection',
+    name: 'Radians Hi-Vis Full-Body Harness — Breakaway Chest, D-Ring Back',
+    slug: 'radians-hivis-full-body-harness-back-d-ring',
+    description: 'ANSI Z359.11-style full-body harness with hi-vis webbing and pass-through buckles',
+    longDescription:
+      'Exact product line: Radians-style hi-vis full-body harness with dorsal D-ring, pass-through leg and chest buckles, and breakaway / friction chest styles (SKU dependent). For fall arrest systems when paired with an approved anchor, lanyard, and competent person inspection per OSHA 1926 Subpart M.',
+    ...retailRates(5.5),
+    unit: 'each',
+    imageUrl: harnessImg,
+    images: [harnessImg, vestMeshImg, kaskZenithImg],
+    specs: {
+      Standard: 'ANSI Z359.11 (verify label)',
+      Webbing: 'Hi-vis polyester',
+      'D-Ring': 'Dorsal back',
+      Buckles: 'Pass-through (SKU dependent)',
+    },
+    features: ['Hi-vis web for supervisor visibility', 'Adjustable shoulder and leg straps', 'Dorsal D-ring for fall arrest', 'Compatible with many lanyards', 'Inspection log card included'],
+    compliance: ['OSHA 1926 Subpart M when used as system', 'ANSI Z359.11 (verify label)'],
+    useCases: [
+      {
+        title: 'Aerial Lift Work',
+        description: '100% tie-off with appropriate lanyards and shorter connection lengths.',
+      },
+      {
+        title: 'Bridge Inspection Platforms',
+        description: 'Harness baseline for crews near unprotected edges.',
+      },
+      {
+        title: 'Rigging and Steel Erection Support',
+        description: 'Baseline PPE when combined with qualified rigging plans.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Is a harness alone enough?',
+        answer: 'No. You need an approved anchor capable of 5,000 lb per worker (typical rule of thumb), a shock-absorbing lanyard or SRL, clearance calculations, and rescue planning.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum; inspection required before each use.',
+      },
+      {
+        question: 'Sizing?',
+        answer: 'Universal fits many workers—XL harnesses available on request.',
+      },
+      {
+        question: 'Can I rent without training?',
+        answer: 'Employers must provide competent person oversight—rental does not replace training.',
+      },
+    ],
+    tags: ['harness', 'fall protection', 'ANSI Z359', 'hi-vis'],
+    inStock: true,
+    stockCount: 110,
+    popular: false,
+    sku: 'FAL-HAR-RAD',
+    supplierSku: 'HAR-RAD-HV-D',
+    supplierUrl: '',
+    supplier: 'Radians',
+    minimumRentalDays: 1,
+    weight: '~3 lb',
+    dimensions: 'Universal adjustable',
+    metaTitle: titleBrand('Rent Hi-Vis Full-Body Harnesses | ANSI Z359'),
+    metaDescription: 'Rent Radians-style hi-vis ANSI Z359.11 full-body harnesses with dorsal D-ring. Pair with approved anchors and lanyards.',
+  },
+  {
+    id: 'prod-35',
+    categoryId: 'cat-15',
+    categorySlug: 'fall-protection',
+    name: 'Shock-Absorbing Lanyard — 6 ft, Single Leg, Snap Hooks',
+    slug: 'shock-absorbing-lanyard-6ft-single-leg',
+    description: '6 ft single-leg shock-absorbing lanyard with steel snap hooks for fall arrest systems',
+    longDescription:
+      'Exact product line: 6 ft single-leg shock-absorbing lanyard with rebar hooks or steel snap hooks (SKU dependent). Integrates with full-body harness and approved anchor points. Inspect before each use; retire after deployment or per manufacturer limits.',
+    ...retailRates(3),
+    unit: 'each',
+    imageUrl: harnessImg,
+    images: [harnessImg, harnessImg, kaskZenithImg],
+    specs: {
+      Length: '6 ft including shock pack',
+      Legs: 'Single-leg',
+      Hooks: 'Steel snaps / rebar hooks (SKU dependent)',
+      Standard: 'ANSI Z359.12 / Z359.13 elements (verify label)',
+    },
+    features: ['Shock pack limits arrest forces', 'Single-leg simplicity', 'Compatible with dorsal D-rings', 'Visual stitch indicators on many models', 'Serialized inspection tracking'],
+    compliance: ['ANSI Z359 series (verify label)', 'OSHA 1926 Subpart M when used as system'],
+    useCases: [
+      {
+        title: 'Steel Erection Connectors',
+        description: '6 ft lanyards common when working at fixed anchor spacing—verify free fall and clearance.',
+      },
+      {
+        title: 'Precast Panel Setting',
+        description: 'Short connections while near leading edges.',
+      },
+      {
+        title: 'Maintenance on Open Grating',
+        description: 'Pair with harness for elevated walkways.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'What is clearance to obstruction?',
+        answer: 'Calculate total fall distance including sag, deceleration, harness stretch, and safety margin—competent person required.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Twin-leg needed?',
+        answer: '100% tie-off while moving anchors often needs a twin-leg Y lanyard or SRL—request upgrade.',
+      },
+      {
+        question: 'After a fall?',
+        answer: 'Remove from service and replace per manufacturer—never reuse after arrest event.',
+      },
+    ],
+    tags: ['lanyard', 'shock absorber', 'fall arrest', 'Z359'],
+    inStock: true,
+    stockCount: 140,
+    popular: false,
+    sku: 'FAL-LAN-6SL',
+    supplierSku: 'LAN-6-SA-SNAP',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~2.5 lb',
+    dimensions: '6 ft single leg',
+    metaTitle: titleBrand('Rent Shock-Absorbing Lanyards | 6 ft Single Leg'),
+    metaDescription: 'Rent 6 ft single-leg shock-absorbing lanyards with steel snap hooks. Use only as part of a complete fall protection system.',
+  },
+
+  // --- Bollards, Chocks & Corner Guards ---
+  {
+    id: 'prod-36',
+    categoryId: 'cat-16',
+    categorySlug: 'bollards-chocks-corners',
+    name: 'Tall Polyethylene Bollard Cover — 5" × 52", Blue',
+    slug: 'tall-bollard-cover-5in-blue-52in',
+    description: 'Sleeve-style HDPE bollard cover for steel pipe bollards in lots and storefronts',
+    longDescription:
+      'Exact product line: tall polyethylene bollard cover, ~5 in inner diameter × 52 in height, blue HDPE shell. Slips over installed steel pipe bollards to improve visibility and reduce maintenance painting. UV-stabilized resin for outdoor lots.',
+    ...retailRates(3),
+    unit: 'each',
+    imageUrl: bollardCoverImg,
+    images: [bollardCoverImg, parkingBlueImg, cone28img],
+    specs: {
+      'Inner Diameter': '~5 in (verify post size)',
+      Height: '52 in',
+      Material: 'HDPE',
+      Color: 'Blue',
+    },
+    features: ['UV-stabilized colorfast resin', 'Tool-free slip fit over posts', 'Bright color for lot visibility', 'Reduces scrape rust bleed', 'Multiple colors on request'],
+    compliance: [],
+    useCases: [
+      {
+        title: 'Retail Storefront Curb Lines',
+        description: 'Refresh appearance without sandblasting steel posts.',
+      },
+      {
+        title: 'EV Charger Islands',
+        description: 'High-visibility sleeves around charging pedestal bollards.',
+      },
+      {
+        title: 'Warehouse Door Protection',
+        description: 'Visual cues for dock door corners.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'How do I size to my post?',
+        answer: 'Measure outside diameter and squareness—covers are slightly oversized for slip fit. Ask for sizing chart.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Reflective tape?',
+        answer: 'Yes—request reflective collar kits.',
+      },
+      {
+        question: 'Do covers provide crash rating?',
+        answer: 'No—covers are cosmetic and visibility aids, not vehicle barriers.',
+      },
+    ],
+    tags: ['bollard cover', 'HDPE', 'blue', 'parking lot'],
+    inStock: true,
+    stockCount: 190,
+    popular: false,
+    sku: 'BOL-CVR-5BL',
+    supplierSku: 'BOLL-CVR-5-BLU',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~3 lb',
+    dimensions: '5" ID × 52" H',
+    metaTitle: titleBrand('Rent Bollard Covers | 5" Blue HDPE Sleeves'),
+    metaDescription: 'Rent tall blue polyethylene bollard covers for 5 in posts. UV-stable sleeves for lots and storefronts.',
+  },
+  {
+    id: 'prod-37',
+    categoryId: 'cat-16',
+    categorySlug: 'bollards-chocks-corners',
+    name: 'Urethane Wheel Chock — Truck / Trailer Size',
+    slug: 'urethane-wheel-chock-truck-trailer',
+    description: 'Heavy urethane wheel chock with grip base for service trucks and trailers on grade',
+    longDescription:
+      'Exact product line: heavy urethane wheel chock, truck/trailer class, aggressive grip base for asphalt and concrete. For DOT-style chocking of unattended trailers on shallow grades when paired with proper procedures and secondary brakes.',
+    ...retailRates(1.5),
+    unit: 'each',
+    imageUrl: bollardCoverImg,
+    images: [bollardCoverImg, parkingBlueImg, drumImg],
+    specs: {
+      Material: 'Urethane',
+      Class: 'Truck / trailer (verify GVWR guidance)',
+      Base: 'Serrated grip pattern',
+      Color: 'Safety orange or black (SKU dependent)',
+    },
+    features: ['Oil and chemical resistant', 'Lightweight vs. steel chocks', 'High visibility options', 'Grip base for smooth surfaces', 'Chaining holes on many models'],
+    compliance: ['FMCSA / DOT chocking rules apply to CMVs'],
+    useCases: [
+      {
+        title: 'Delivery Box Trucks',
+        description: 'Chock both sides on grade during hand unload.',
+      },
+      {
+        title: 'Construction Equipment Trailers',
+        description: 'Stabilize ramps while detached from tow vehicle.',
+      },
+      {
+        title: 'Rail and Yard Intermodal Lots',
+        description: 'Supplemental chocking per site rules.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'One chock or two?',
+        answer: 'Best practice is chocking both sides of a tire set on grade—ask your safety officer.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Ice and snow?',
+        answer: 'Grip decreases on ice—clean surface or use grit.',
+      },
+      {
+        question: 'GVWR limits?',
+        answer: 'Match chock size to tire diameter and gross weight—provide tire section height in quote.',
+      },
+    ],
+    tags: ['wheel chock', 'urethane', 'truck', 'trailer'],
+    inStock: true,
+    stockCount: 260,
+    popular: false,
+    sku: 'BOL-CHK-TK',
+    supplierSku: 'CHOCK-URE-TK',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~8–12 lb (typical)',
+    dimensions: 'Truck class chock',
+    metaTitle: titleBrand('Rent Truck Wheel Chocks | Urethane'),
+    metaDescription: 'Rent heavy urethane truck and trailer wheel chocks with aggressive grip bases for lot and yard use.',
+  },
+
+  // --- Flares, Markers, Wands & Flags (additional) ---
+  {
+    id: 'prod-38',
+    categoryId: 'cat-17',
+    categorySlug: 'flares-markers-wands-flags',
+    name: 'Flexible Surface-Mounted Delineator Post — 42", White HI',
+    slug: 'flexible-delineator-post-42-white-hi',
+    description: 'Spring-return delineator post with high-intensity sheeting for bike lanes and gore markings',
+    longDescription:
+      'Exact product line: flexible surface-mounted delineator post, ~42 in height, white post with high-intensity reflective bands. Spring-return base reduces damage from occasional tire strikes while keeping lane edge cues visible for bikes and low-speed traffic.',
+    ...retailRates(2.2),
+    unit: 'each',
+    imageUrl: drumImg,
+    images: [drumImg, cone36img, flareImg],
+    specs: {
+      Height: '~42 in above grade',
+      Sheeting: 'High-intensity reflective bands',
+      Base: 'Surface mount spring-return (SKU dependent)',
+      Color: 'White post (typical)',
+    },
+    features: ['Flexible post reduces knockdown damage', 'HI reflective for night bike lanes', 'Surface anchor kits available', 'Repeatable rental inventory', 'Pairs with pavement epoxy anchors'],
+    compliance: ['MUTCD bike facility markings (verify design)'],
+    useCases: [
+      {
+        title: 'Buffered Bike Lanes',
+        description: 'Edge delineation between parking and bike travel paths.',
+      },
+      {
+        title: 'Gore Area Rebuilds',
+        description: 'Temporary edge definition during pavement replacement.',
+      },
+      {
+        title: 'Parking Lot Ped Channels',
+        description: 'Low-speed separation between ped and vehicle aisles.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Anchor type?',
+        answer: 'Asphalt epoxy vs. mechanical anchors depend on substrate—specify in quote.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Snow plow hits?',
+        answer: 'Spring-return helps but is not immune—inspect after storms.',
+      },
+      {
+        question: 'Spacing?',
+        answer: 'Follow MUTCD or local bike design guide spacing for your speed class.',
+      },
+    ],
+    tags: ['delineator', 'flexible post', 'bike lane', 'HI reflective'],
+    inStock: true,
+    stockCount: 170,
+    popular: false,
+    sku: 'FLR-DEL-FLX',
+    supplierSku: 'DEL-POST-42-HI',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~4–6 lb',
+    dimensions: '42 in post typical',
+    metaTitle: titleBrand('Rent Flexible Delineator Posts | 42" White HI'),
+    metaDescription: 'Rent 42 in flexible surface-mounted delineator posts with high-intensity reflective sheeting.',
+  },
+  {
+    id: 'prod-39',
+    categoryId: 'cat-17',
+    categorySlug: 'flares-markers-wands-flags',
+    name: 'LED Traffic Wand — 21", Amber Flashlight Mode',
+    slug: 'led-traffic-wand-21-amber',
+    description: '21-inch amber LED traffic wand with steady, flash, and flashlight modes for flagging',
+    longDescription:
+      'Exact product line: 21 in amber LED traffic wand with wrist lanyard, steady / flash modes, and flashlight tip (SKU dependent). For night flagging, tapers, and parking direction where illuminated paddles improve motorist recognition beyond handheld flashlights alone.',
+    ...retailRates(1.8),
+    unit: 'each',
+    imageUrl: flasherImg,
+    images: [flasherImg, flareImg, vestMeshImg],
+    specs: {
+      Length: '21 in',
+      LED: 'Amber',
+      Modes: 'Steady / flash / flashlight (SKU dependent)',
+      Power: 'AA or rechargeable (SKU dependent)',
+    },
+    features: ['High visibility amber LEDs', 'Wrist lanyard reduces drops', 'Multiple flash patterns on some models', 'Lightweight for long shifts', 'Bulk rental for large flagging teams'],
+    compliance: ['MUTCD flagger illumination supplements (verify TCP)'],
+    useCases: [
+      {
+        title: 'Night Lane Closures',
+        description: 'Supplement STOP/SLOW paddles with active illumination.',
+      },
+      {
+        title: 'Parking and Venue Traffic',
+        description: 'Direct ingress in low light without flare open flame.',
+      },
+      {
+        title: 'Emergency Detours',
+        description: 'Rapid deployment for law enforcement assist roles when approved.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'Batteries included?',
+        answer: 'We ship ready-to-use with fresh cells or charged packs—specify rechargeable preference.',
+      },
+      {
+        question: 'Minimum rental?',
+        answer: '1 day minimum.',
+      },
+      {
+        question: 'Does this replace a paddle?',
+        answer: 'No—wands supplement proper STOP/SLOW procedures per MUTCD and agency training.',
+      },
+      {
+        question: 'Colors?',
+        answer: 'Amber is standard for traffic; red/green available for specialized roles on request.',
+      },
+    ],
+    tags: ['traffic wand', 'LED', 'flagging', 'amber'],
+    inStock: true,
+    stockCount: 320,
+    popular: true,
+    sku: 'FLR-WND-21AM',
+    supplierSku: 'WAND-LED-21-AM',
+    supplierUrl: '',
+    supplier: TSP,
+    minimumRentalDays: 1,
+    weight: '~0.4 lb',
+    dimensions: '21 in length',
+    metaTitle: titleBrand('Rent LED Traffic Wands | 21" Amber'),
+    metaDescription: 'Rent 21 in amber LED traffic wands with flash and flashlight modes for night flagging and parking control.',
+  },
 ]
 
-const curatedSupplierUrls = new Set(curatedProducts.map((p) => p.supplierUrl))
+const curatedSupplierUrls = new Set(curatedProducts.map((p) => p.supplierUrl).filter(Boolean))
 const curatedSlugs = new Set(curatedProducts.map((p) => p.slug))
 let extendedProducts: Product[] = []
 

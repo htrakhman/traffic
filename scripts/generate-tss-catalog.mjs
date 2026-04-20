@@ -5,7 +5,7 @@
  * public/tss-catalog.json with rental rates at 50% retail markup (×1.5).
  */
 import { createHash } from 'node:crypto'
-import { writeFileSync, mkdirSync } from 'node:fs'
+import { writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -473,7 +473,24 @@ async function main() {
   attachVariantGroups(products)
 
   mkdirSync(dirname(OUT), { recursive: true })
-  writeFileSync(OUT, JSON.stringify(products), 'utf8')
+  const tmp = `${OUT}.tmp`
+  const payload = JSON.stringify(products)
+  try {
+    JSON.parse(payload)
+  } catch (e) {
+    throw new Error(`Catalog JSON self-check failed: ${e}`)
+  }
+  writeFileSync(tmp, payload, 'utf8')
+  try {
+    renameSync(tmp, OUT)
+  } catch (e) {
+    try {
+      unlinkSync(tmp)
+    } catch {
+      /* ignore */
+    }
+    throw e
+  }
   console.log('Wrote', products.length, 'products →', OUT)
 }
 
