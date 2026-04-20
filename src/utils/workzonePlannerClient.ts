@@ -109,6 +109,73 @@ function nearestPointOnSegmentXY(
   return { x: ax + t * abx, y: ay + t * aby }
 }
 
+/** Ray-cast point-in-polygon (lng ≈ x, lat ≈ y). Works for typical small work-zone geoms. */
+export function pointInPolygon(lat: number, lng: number, path: LL[]): boolean {
+  if (path.length < 3) return false
+  let c = false
+  for (let i = 0, j = path.length - 1; i < path.length; j = i++) {
+    const yi = path[i]!.lat
+    const xi = path[i]!.lng
+    const yj = path[j]!.lat
+    const xj = path[j]!.lng
+    const denom = yj - yi
+    const intersect =
+      (yi > lat) !== (yj > lat) && lng < ((xj - xi) * (lat - yi)) / (Math.abs(denom) < 1e-12 ? 1e-12 : denom) + xi
+    if (intersect) c = !c
+  }
+  return c
+}
+
+function findInteriorAnchor(path: LL[]): LL {
+  let minLat = Infinity
+  let maxLat = -Infinity
+  let minLng = Infinity
+  let maxLng = -Infinity
+  for (const v of path) {
+    minLat = Math.min(minLat, v.lat)
+    maxLat = Math.max(maxLat, v.lat)
+    minLng = Math.min(minLng, v.lng)
+    maxLng = Math.max(maxLng, v.lng)
+  }
+  for (let gy = 1; gy < 12; gy++) {
+    for (let gx = 1; gx < 12; gx++) {
+      const lat = minLat + ((maxLat - minLat) * gy) / 13
+      const lng = minLng + ((maxLng - minLng) * gx) / 13
+      if (pointInPolygon(lat, lng, path)) return { lat, lng }
+    }
+  }
+  return polygonCentroid(path)
+}
+
+/**
+ * Snap any lat/lng to a point inside the closed polygon (for visualization).
+ * Points already inside are unchanged.
+ */
+export function clampLatLngToPolygonInterior(p: LL, path: LL[]): LL {
+  if (path.length < 3) return p
+  if (pointInPolygon(p.lat, p.lng, path)) return p
+  const anchor = findInteriorAnchor(path)
+  if (!pointInPolygon(anchor.lat, anchor.lng, path)) {
+    const origin = polygonCentroid(path)
+    return nearestOnPolygonBoundaryFt(p, path, origin).point
+  }
+  let lo = 0
+  let hi = 1
+  for (let k = 0; k < 24; k++) {
+    const mid = (lo + hi) / 2
+    const t = {
+      lat: anchor.lat + mid * (p.lat - anchor.lat),
+      lng: anchor.lng + mid * (p.lng - anchor.lng),
+    }
+    if (pointInPolygon(t.lat, t.lng, path)) lo = mid
+    else hi = mid
+  }
+  return {
+    lat: anchor.lat + lo * (p.lat - anchor.lat),
+    lng: anchor.lng + lo * (p.lng - anchor.lng),
+  }
+}
+
 function nearestOnPolygonBoundaryFt(p: LL, path: LL[], origin: LL): { point: LL; distFt: number } {
   const xyP = llDeltaToFt(p, origin)
   let bestD = Infinity
@@ -189,38 +256,12 @@ function normalizeXY(v: { x: number; y: number }): { x: number; y: number } {
   return { x: v.x / h, y: v.y / h }
 }
 
-/** Pull rogue coordinates back toward the drawn polygon so previews stay on the job site. */
-function clampPlacementsToDrawnZone(mapArea: MapArea, placements: WorkzonePlacement[]): void {
-  const path = mapArea.path
-  if (!path?.length) return
-  const origin = polygonCentroid(path)
-  const perim = mapArea.perimeterFt > 0 ? mapArea.perimeterFt : perimeterLengthFt(path, origin)
-
+function clampAllPlacementsInsidePolygon(path: LL[], placements: WorkzonePlacement[]): void {
+  if (path.length < 3) return
   for (const pl of placements) {
-    const p = { lat: pl.lat, lng: pl.lng }
-    const { point: q, distFt } = nearestOnPolygonBoundaryFt(p, path, origin)
-
-    const isUpstream = pl.zone === 'advance_warning'
-    const maxBand = isUpstream
-      ? Math.min(1400, Math.max(380, perim * 0.55))
-      : Math.min(220, Math.max(50, perim * 0.11 + 40))
-
-    if (distFt <= maxBand) continue
-
-    const xyP = llDeltaToFt(p, origin)
-    const xyQ = llDeltaToFt(q, origin)
-    const vx = xyP.x - xyQ.x
-    const vy = xyP.y - xyQ.y
-    const h = Math.hypot(vx, vy)
-    if (h < 1e-9) {
-      pl.lat = q.lat
-      pl.lng = q.lng
-      continue
-    }
-    const xyN = { x: xyQ.x + (vx / h) * maxBand, y: xyQ.y + (vy / h) * maxBand }
-    const nxt = ftDeltaToLl(xyN, origin)
-    pl.lat = nxt.lat
-    pl.lng = nxt.lng
+    const q = clampLatLngToPolygonInterior({ lat: pl.lat, lng: pl.lng }, path)
+    pl.lat = q.lat
+    pl.lng = q.lng
   }
 }
 
@@ -253,12 +294,20 @@ function spreadCollidingPlacements(mapArea: MapArea, placements: WorkzonePlaceme
   }
 }
 
-/** Post-process AI or demo layouts: keep devices hugging the drawn footprint and separate pile-ups. */
+/** Post-process AI or demo layouts: every device stays inside the polygon; spread overlaps gently. */
 export function finalizeWorkzonePlan(mapArea: MapArea, plan: WorkzonePlan): WorkzonePlan {
   const placements = plan.placements.map((p) => ({ ...p }))
-  clampPlacementsToDrawnZone(mapArea, placements)
-  spreadCollidingPlacements(mapArea, placements, 26)
-  clampPlacementsToDrawnZone(mapArea, placements)
+  const path = mapArea.path
+  if (!path?.length) return { ...plan, placements }
+
+  const n = placements.length
+  const minSep = Math.max(8, Math.min(22, 180 / Math.sqrt(Math.max(n, 4))))
+
+  for (let iter = 0; iter < 5; iter++) {
+    clampAllPlacementsInsidePolygon(path, placements)
+    spreadCollidingPlacements(mapArea, placements, minSep)
+  }
+  clampAllPlacementsInsidePolygon(path, placements)
   return { ...plan, placements }
 }
 
@@ -323,10 +372,10 @@ ${itemsStr}
    - Arrow board (if present): at the upstream end of the taper
    - Termination: downstream end, channelizing back to full lanes
 3. Generate a lat/lng position for EVERY individual unit of each item (if quantity=20 cones, produce 20 separate placement entries).
-4. Keep placement coordinates within a logical distance from the polygon — advance warning signs may be 500–1500 ft upstream but should not be miles away.
-5. Spread equipment realistically — do not stack all items on the centroid.
-6. CRITICAL — stay on the job geometry: channelizing devices (cones, drums, barricades, water barriers, delineators) and buffer/work-zone lights MUST lie within about 200 ft of the drawn polygon boundary OR inside the polygon—place them along the polygon edges and realistic taper legs, never in a single vertical/horizontal pile far from the outline (e.g. not on adjacent buildings or parking lots). Consecutive like devices along one edge should be spaced roughly 20–40 ft apart unless forming a continuous barrier line.
-7. Use the polygon vertices to infer where the roadway runs; advance-warning signs may sit farther upstream along that approach axis, but still on/near the same road centerline—not offset hundreds of feet sideways into unrelated parcels.
+4. Keep EVERY placement lat/lng strictly INSIDE the closed polygon (including advance-warning signs and arrow boards). This tool visualizes only the drawn footprint — do not place anything outside the polygon boundary, not even “upstream” along the road. Pack signs along the inside of the upstream edge of the polygon instead.
+5. Spread equipment realistically inside the footprint — do not stack all items on one pixel, but overlap is acceptable when dense.
+6. CRITICAL: all devices MUST have coordinates that fall inside the polygon when tested with a point-in-polygon check. Never on rooftops, parking lots, or yards beside the road unless that area is inside the drawn outline.
+7. Use the polygon shape to infer roadway direction; still keep every lat/lng inside the vertices listed above.
 
 ## OUTPUT FORMAT
 Respond with VALID JSON ONLY — no markdown, no prose before or after, no code fences. Schema:

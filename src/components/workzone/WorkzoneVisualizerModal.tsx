@@ -17,6 +17,7 @@ import { getProductById } from '../../data/products'
 import {
   planWorkzoneLayout,
   buildDemoPlan,
+  clampLatLngToPolygonInterior,
   type WorkzonePlan,
   type WorkzonePlacement,
 } from '../../utils/workzonePlannerClient'
@@ -44,17 +45,101 @@ const PLACEHOLDER_IMAGE = `data:image/svg+xml,${encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect fill="#1e293b" width="80" height="80" rx="10"/><path fill="#64748b" d="M28 52 L40 24 L52 52z"/></svg>',
 )}`
 
+function markerCategoryScale(productId: string): number {
+  const p = getProductById(productId)
+  const slug = (p?.categorySlug ?? '').toLowerCase()
+  const name = (p?.name ?? '').toLowerCase()
+  if (slug.includes('light') || name.includes('light') || name.includes('flash') || slug.includes('flag')) return 0.56
+  if (slug.includes('cone') || slug.includes('drum') || name.includes('drum')) return 0.9
+  if (slug.includes('barricade') || slug.includes('barrier') || slug.includes('sign')) return 0.85
+  return 0.72
+}
+
 /**
- * Square marker width/height in CSS px — scales with zoom and thins when many devices
- * so stacks remain readable (not full-size tiles on dense previews).
+ * Square marker width/height in CSS px — shrinks when zoomed out / many devices;
+ * categoryScale makes lights/flags smaller than cones or drums at the same zoom.
  */
-function markerFramePx(zoom: number, placementCount: number): number {
+function markerFramePx(zoom: number, placementCount: number, categoryScale: number): number {
   const z = Number.isFinite(zoom) ? zoom : 17
-  const t = Math.min(1, Math.max(0, (z - 14) / 7))
-  let px = Math.min(76, Math.max(28, Math.round(30 + t * 38)))
-  const density = Math.min(1.15, Math.max(0.48, 22 / Math.sqrt(Math.max(placementCount, 10))))
-  px = Math.round(px * density)
-  return Math.min(62, Math.max(20, px))
+  const t = Math.min(1, Math.max(0, (z - 12) / 8.5))
+  let px = Math.min(76, Math.max(20, Math.round(26 + t * 46)))
+  const density = Math.min(1, Math.max(0.28, 34 / Math.sqrt(Math.max(placementCount, 6))))
+  px = Math.round(px * density * categoryScale)
+  return Math.min(64, Math.max(16, px))
+}
+
+function clusterFramePx(zoom: number): number {
+  const z = Number.isFinite(zoom) ? zoom : 16
+  return Math.round(Math.min(54, Math.max(26, 30 + (z - 13) * 3.5)))
+}
+
+type DisplayEntry =
+  | { kind: 'single'; placement: WorkzonePlacement }
+  | { kind: 'cluster'; lat: number; lng: number; count: number }
+
+function buildDisplayEntries(
+  zoom: number,
+  placements: WorkzonePlacement[],
+  path: { lat: number; lng: number }[] | undefined,
+): DisplayEntry[] {
+  const n = placements.length
+  const pathOk = path && path.length >= 3
+  const clusterMode = pathOk && n > 10 && zoom <= 16
+  if (!clusterMode) {
+    return placements.map((placement) => ({ kind: 'single', placement }))
+  }
+  const cell = 0.00009 * Math.pow(2, Math.min(5, Math.max(0, 17 - zoom)))
+  const buckets = new Map<string, WorkzonePlacement[]>()
+  for (const p of placements) {
+    const gx = Math.floor(p.lat / cell)
+    const gy = Math.floor(p.lng / cell)
+    const key = `${gx}|${gy}`
+    if (!buckets.has(key)) buckets.set(key, [])
+    buckets.get(key)!.push(p)
+  }
+  const out: DisplayEntry[] = []
+  for (const group of buckets.values()) {
+    if (group.length <= 1) {
+      out.push({ kind: 'single', placement: group[0]! })
+      continue
+    }
+    let slat = 0
+    let slng = 0
+    for (const g of group) {
+      slat += g.lat
+      slng += g.lng
+    }
+    const raw = { lat: slat / group.length, lng: slng / group.length }
+    const q = clampLatLngToPolygonInterior(raw, path!)
+    out.push({ kind: 'cluster', lat: q.lat, lng: q.lng, count: group.length })
+  }
+  return out
+}
+
+function buildClusterMarkerElement(count: number): HTMLDivElement {
+  const root = document.createElement('div')
+  root.dataset.wzCluster = '1'
+  root.style.cssText =
+    'transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:auto;cursor:pointer;'
+  const disc = document.createElement('div')
+  disc.textContent = String(count)
+  disc.style.cssText = [
+    'box-sizing:border-box',
+    'min-width:2.25rem',
+    'min-height:2.25rem',
+    'padding:0 6px',
+    'border-radius:9999px',
+    'background:linear-gradient(145deg,rgba(251,146,60,0.95),rgba(234,88,12,0.92))',
+    'border:2px solid rgba(255,255,255,0.35)',
+    'box-shadow:0 4px 18px rgba(0,0,0,0.45)',
+    'font:700 13px/1 system-ui,sans-serif',
+    'color:#0f172a',
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+  ].join(';')
+  root.appendChild(disc)
+  return root
 }
 
 function buildProductMarkerElement(placement: WorkzonePlacement, imageUrl: string): HTMLDivElement {
@@ -134,6 +219,8 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
   const [errorMsg, setErrorMsg] = useState('')
   const [notesOpen, setNotesOpen] = useState(true)
   const [mapsReady, setMapsReady] = useState(false)
+  /** Bumps only when zoom crosses cluster vs individual marker layout. */
+  const [layoutNonce, setLayoutNonce] = useState(0)
 
   // Resolve cart items with product data
   const resolvedItems = cartLines
@@ -246,7 +333,7 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
     }
   }, [mapsReady, planStatus, runPlanning])
 
-  /* ── Place markers on map once plan is ready (catalog photos + zoom-scaled frames) ── */
+  /* ── Place markers on map once plan is ready (cluster when zoomed out, LOD sizing) ── */
   useEffect(() => {
     if (!plan || !mapInstanceRef.current || !mapsReady || !mapArea) return
 
@@ -260,11 +347,23 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
     }
 
     const nPlaced = plan.placements.length
-    const applyMarkerSizes = (roots: HTMLDivElement[]) => {
+
+    type Sizeable = { root: HTMLDivElement; mode: 'product' | 'cluster'; productId?: string }
+
+    const applyMarkerSizes = (items: Sizeable[]) => {
       const m = mapInstanceRef.current
       if (!m) return
-      const px = markerFramePx(m.getZoom() ?? 17, nPlaced)
-      for (const root of roots) root.style.width = `${px}px`
+      const z = m.getZoom() ?? 17
+      for (const it of items) {
+        if (it.mode === 'cluster') {
+          const s = clusterFramePx(z)
+          it.root.style.width = `${s}px`
+          it.root.style.height = `${s}px`
+        } else {
+          const px = markerFramePx(z, nPlaced, markerCategoryScale(it.productId ?? ''))
+          it.root.style.width = `${px}px`
+        }
+      }
     }
 
     ;(async () => {
@@ -274,18 +373,51 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
       const { AdvancedMarkerElement } = await importLibrary('marker') as google.maps.MarkerLibrary
       if (cancelled) return
 
-      const markerRoots: HTMLDivElement[] = []
-      const allBounds = new google.maps.LatLngBounds()
-      for (const pt of mapArea.path) allBounds.extend(pt)
+      const sizeables: Sizeable[] = []
+      const zForLayout = map.getZoom() ?? 17
+      const display = buildDisplayEntries(zForLayout, plan.placements, mapArea.path)
+      let displayLen = display.length
 
-      for (const placement of plan.placements) {
+      const polyBounds = new google.maps.LatLngBounds()
+      for (const pt of mapArea.path) polyBounds.extend(pt)
+
+      for (const entry of display) {
         if (cancelled) return
-        const pos = { lat: placement.lat, lng: placement.lng }
-        allBounds.extend(pos)
+        if (entry.kind === 'cluster') {
+          const root = buildClusterMarkerElement(entry.count)
+          sizeables.push({ root, mode: 'cluster' })
+          root.addEventListener('mouseenter', () => {
+            root.style.filter = 'brightness(1.05) drop-shadow(0 6px 18px rgba(0,0,0,0.45))'
+          })
+          root.addEventListener('mouseleave', () => {
+            root.style.filter = ''
+          })
+          const marker = new AdvancedMarkerElement({
+            map,
+            position: { lat: entry.lat, lng: entry.lng },
+            content: root,
+            title: `${entry.count} devices in this area`,
+            zIndex: 4,
+          })
+          marker.addListener('click', () => {
+            const iw = infoWindowRef.current!
+            iw.setContent(`
+              <div style="font-family:system-ui,sans-serif;padding:6px 4px;max-width:220px">
+                <div style="font-weight:600;font-size:13px;color:#1e293b;margin-bottom:4px">${entry.count} rentals</div>
+                <div style="font-size:11px;color:#475569">Zoom in to see cones, drums, signs, and smaller lights separately.</div>
+              </div>
+            `)
+            iw.open({ map, anchor: marker })
+          })
+          markersRef.current.push(marker)
+          continue
+        }
 
+        const placement = entry.placement
+        const pos = { lat: placement.lat, lng: placement.lng }
         const product = getProductById(placement.productId)
         const root = buildProductMarkerElement(placement, product?.imageUrl ?? '')
-        markerRoots.push(root)
+        sizeables.push({ root, mode: 'product', productId: placement.productId })
 
         root.addEventListener('mouseenter', () => {
           root.style.filter = 'brightness(1.06) drop-shadow(0 6px 18px rgba(0,0,0,0.5))'
@@ -322,10 +454,18 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
 
       if (cancelled) return
 
-      map.fitBounds(allBounds, { top: 80, bottom: 120, left: 60, right: 60 })
-      applyMarkerSizes(markerRoots)
+      map.fitBounds(polyBounds, { top: 80, bottom: 120, left: 60, right: 60 })
+      applyMarkerSizes(sizeables)
 
-      const onZoomOrIdle = () => applyMarkerSizes(markerRoots)
+      const onZoomOrIdle = () => {
+        applyMarkerSizes(sizeables)
+        const z = map.getZoom() ?? 17
+        const nextLen = buildDisplayEntries(z, plan.placements, mapArea.path).length
+        if (nextLen !== displayLen) {
+          displayLen = nextLen
+          setLayoutNonce((n) => n + 1)
+        }
+      }
       listeners.push(google.maps.event.addListener(map, 'zoom_changed', onZoomOrIdle))
       listeners.push(google.maps.event.addListener(map, 'idle', onZoomOrIdle))
     })()
@@ -336,7 +476,7 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
       for (const mk of markersRef.current) mk.map = null
       markersRef.current = []
     }
-  }, [plan, mapsReady, mapArea])
+  }, [plan, mapsReady, mapArea, layoutNonce])
 
   /* ── Cleanup ── */
   useEffect(() => {

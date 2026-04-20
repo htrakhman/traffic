@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
 import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package } from 'lucide-react'
 import type { Product } from '../types'
@@ -13,6 +13,7 @@ import {
   seedPlacementsFromCart,
   type SiteMapPlacedRow,
 } from '../utils/siteMapPlannerSessionStorage'
+import { clampLatLngToPolygonInterior } from '../utils/workzonePlannerClient'
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
 const MAP_ID =
@@ -146,6 +147,7 @@ export default function SiteMapPlanner() {
   const markersRef = useRef<Map<string, MarkerMeta>>(new Map())
   const advancedMarkerCtorRef = useRef<typeof google.maps.marker.AdvancedMarkerElement | null>(null)
   const workZonePolyRef = useRef<google.maps.Polygon | null>(null)
+  const workZonePathRef = useRef(plannerBoot.workZonePath)
   const initialMapViewRef = useRef(plannerBoot.initialMapView)
   const placedRef = useRef(plannerBoot.placements)
   const searchDraftRef = useRef(plannerBoot.searchDraftInit)
@@ -191,6 +193,20 @@ export default function SiteMapPlanner() {
     applySelectionStyles(selectedId)
   }, [selectedId, placed, applySelectionStyles])
 
+  useLayoutEffect(() => {
+    const path = plannerBoot.workZonePath
+    if (path.length < 3) return
+    setPlaced((prev) => {
+      let changed = false
+      const next = prev.map((r) => {
+        const c = clampLatLngToPolygonInterior({ lat: r.lat, lng: r.lng }, path)
+        if (Math.abs(c.lat - r.lat) > 1e-9 || Math.abs(c.lng - r.lng) > 1e-9) changed = true
+        return { ...r, lat: c.lat, lng: c.lng }
+      })
+      return changed ? next : prev
+    })
+  }, [plannerBoot.workZonePath])
+
   const removePlacement = useCallback((id: string) => {
     const meta = markersRef.current.get(id)
     if (meta) {
@@ -226,7 +242,16 @@ export default function SiteMapPlanner() {
         google.maps.event.addListener(marker, 'dragend', () => {
           const ll = readLatLng(marker.position)
           if (!ll) return
-          setPlaced((prev) => prev.map((r) => (r.id === row.id ? { ...r, ...ll } : r)))
+          const path = workZonePathRef.current
+          let lat = ll.lat
+          let lng = ll.lng
+          if (path.length >= 3) {
+            const c = clampLatLngToPolygonInterior({ lat, lng }, path)
+            lat = c.lat
+            lng = c.lng
+            marker.position = { lat, lng }
+          }
+          setPlaced((prev) => prev.map((r) => (r.id === row.id ? { ...r, lat, lng } : r)))
         })
 
         meta = { marker, shell }
@@ -459,8 +484,11 @@ export default function SiteMapPlanner() {
   const addPlacementAt = useCallback((productId: string, lat: number, lng: number) => {
     const product = getProductById(productId)
     if (!product) return
+    const path = workZonePathRef.current
+    let ll = { lat, lng }
+    if (path.length >= 3) ll = clampLatLngToPolygonInterior(ll, path)
     const id = crypto.randomUUID()
-    setPlaced((prev) => [...prev, { id, productId, lat, lng }])
+    setPlaced((prev) => [...prev, { id, productId, lat: ll.lat, lng: ll.lng }])
     setSelectedId(id)
   }, [])
 
