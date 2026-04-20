@@ -99,6 +99,8 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
   const compact = variant === 'compact'
   const onUserLocateRef = useRef(onUserRecenteredMap)
   onUserLocateRef.current = onUserRecenteredMap
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
   const stretch = compact && fillHeight
   const stretchMapMin =
     tallFrame
@@ -261,63 +263,61 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
     roadsFetchGen.current += 1
     polygonRef.current?.setMap(null)
     polygonRef.current = null
-    onChange(undefined)
+    onChangeRef.current(undefined)
     setDrawing(false)
     drawingRef.current?.setDrawingMode(null)
-  }, [onChange])
+  }, [])
 
-  const buildArea = useCallback(
-    async (polygon: google.maps.Polygon) => {
-      const path = polygon.getPath().getArray()
-      const areaM2 = computeAreaM2(path)
-      const perimeterM = computePerimeterM(path)
-      const areaFt2 = areaM2 * M_TO_FT * M_TO_FT
-      const perimeterFt = perimeterM * M_TO_FT
+  /** Stable across renders; reads latest parent handler via {@link onChangeRef} so map init is mount-once safe. */
+  const buildArea = useCallback(async (polygon: google.maps.Polygon) => {
+    const path = polygon.getPath().getArray()
+    const areaM2 = computeAreaM2(path)
+    const perimeterM = computePerimeterM(path)
+    const areaFt2 = areaM2 * M_TO_FT * M_TO_FT
+    const perimeterFt = perimeterM * M_TO_FT
 
-      const latLngs = path.map((p) => ({ lat: p.lat(), lng: p.lng() }))
-      const center = centroid(latLngs)
-      const { minSpanFt, maxSpanFt } = axisAlignedFootprintSpansFt(latLngs)
+    const latLngs = path.map((p) => ({ lat: p.lat(), lng: p.lng() }))
+    const center = centroid(latLngs)
+    const { minSpanFt, maxSpanFt } = axisAlignedFootprintSpansFt(latLngs)
 
-      let address: string | undefined
-      if (geocoderRef.current) {
-        try {
-          const result = await geocoderRef.current.geocode({ location: center })
-          address = result.results[0]?.formatted_address
-        } catch {
-          // ignore geocoder errors
-        }
+    let address: string | undefined
+    if (geocoderRef.current) {
+      try {
+        const result = await geocoderRef.current.geocode({ location: center })
+        address = result.results[0]?.formatted_address
+      } catch {
+        // ignore geocoder errors
       }
+    }
 
-      const gen = ++roadsFetchGen.current
-      const basePayload: MapArea = {
-        path: latLngs,
-        areaFt2,
-        perimeterFt,
-        areaLabel: fmt(areaFt2, 'sq ft'),
-        perimeterLabel: fmt(perimeterFt, 'ft'),
-        address,
-        center,
-        footprintMinSpanFt: minSpanFt,
-        footprintMaxSpanFt: maxSpanFt,
-      }
-      onChange(basePayload)
+    const gen = ++roadsFetchGen.current
+    const basePayload: MapArea = {
+      path: latLngs,
+      areaFt2,
+      perimeterFt,
+      areaLabel: fmt(areaFt2, 'sq ft'),
+      perimeterLabel: fmt(perimeterFt, 'ft'),
+      address,
+      center,
+      footprintMinSpanFt: minSpanFt,
+      footprintMaxSpanFt: maxSpanFt,
+    }
+    onChangeRef.current(basePayload)
 
-      if (MAPS_KEY) {
-        try {
-          const road = await fetchPostedSpeedNearPoint(center.lat, center.lng, MAPS_KEY)
-          if (gen !== roadsFetchGen.current || !road) return
-          onChange({
-            ...basePayload,
-            postedSpeedMph: road.postedSpeedMph,
-            postedSpeedLabel: road.postedSpeedLabel,
-          })
-        } catch {
-          // Posted speed optional (Google license / OSM coverage)
-        }
+    if (MAPS_KEY) {
+      try {
+        const road = await fetchPostedSpeedNearPoint(center.lat, center.lng, MAPS_KEY)
+        if (gen !== roadsFetchGen.current || !road) return
+        onChangeRef.current({
+          ...basePayload,
+          postedSpeedMph: road.postedSpeedMph,
+          postedSpeedLabel: road.postedSpeedLabel,
+        })
+      } catch {
+        // Posted speed optional (Google license / OSM coverage)
       }
-    },
-    [onChange],
-  )
+    }
+  }, [])
 
   const startDrawing = useCallback(() => {
     if (!drawingRef.current) return
@@ -471,6 +471,8 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
       mapIds: [MAP_ID],
     })
 
+    let cancelled = false
+
     Promise.all([
       importLibrary('maps'),
       importLibrary('drawing'),
@@ -479,7 +481,11 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
       importLibrary('places'),
     ])
       .then((libs) => {
-        if (!containerRef.current) return
+        if (cancelled) return
+        if (!containerRef.current) {
+          setStatus('error')
+          return
+        }
 
         const { AdvancedMarkerElement } = libs[3] as google.maps.MarkerLibrary
 
@@ -510,6 +516,7 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (pos) => {
+              if (cancelled) return
               const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
               map.setCenter(here)
               map.setZoom(15)
@@ -543,10 +550,10 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
           polygonRef.current = poly
           dm.setDrawingMode(null)
           setDrawing(false)
-          buildArea(poly)
+          void buildArea(poly)
 
           // Re-build area whenever the polygon is edited
-          const updateArea = () => buildArea(poly)
+          const updateArea = () => void buildArea(poly)
           google.maps.event.addListener(poly.getPath(), 'set_at', updateArea)
           google.maps.event.addListener(poly.getPath(), 'insert_at', updateArea)
           google.maps.event.addListener(poly.getPath(), 'remove_at', updateArea)
@@ -554,9 +561,12 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
 
         setStatus('ready')
       })
-      .catch(() => setStatus('error'))
+      .catch(() => {
+        if (!cancelled) setStatus('error')
+      })
 
     return () => {
+      cancelled = true
       w.gm_authFailure = prevAuthFailure
       if (markerRef.current) {
         markerRef.current.map = null
@@ -570,12 +580,15 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
       sessionTokenRef.current = null
       mapRef.current = null
     }
-  }, [buildArea])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps -- mount-only map init (buildArea uses onChangeRef)
 
   const valuePathSerialized = useMemo(
     () => (value?.path && value.path.length >= 3 ? JSON.stringify(value.path) : ''),
     [value?.path],
   )
+
+  const valueRef = useRef(value)
+  valueRef.current = value
 
   /** Restore polygon from parent `value` (e.g. sessionStorage) and drop overlay when `value` is cleared. */
   useEffect(() => {
@@ -638,10 +651,11 @@ const MapAreaSelector = forwardRef<MapAreaSelectorHandle, Props>(function MapAre
     const bounds = new google.maps.LatLngBounds()
     pathPts.forEach((c) => bounds.extend(c))
     map.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 })
-    if (markerRef.current && value?.center) {
-      markerRef.current.position = value.center
+    const v = valueRef.current
+    if (markerRef.current && v?.center) {
+      markerRef.current.position = v.center
     }
-  }, [status, valuePathSerialized, value, buildArea])
+  }, [status, valuePathSerialized])
 
   if (noKey) {
     return (
