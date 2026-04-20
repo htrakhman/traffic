@@ -2915,18 +2915,20 @@ export const getProductById = (id: string): Product | undefined =>
 export const getFeaturedProducts = (): Product[] =>
   curatedProducts.filter((p) => p.popular)
 
-export const searchProducts = (query: string): Product[] => {
-  const list = getProducts()
+/** Text search within a product list (used after category / price filters so results are not wiped by empty intersections). */
+export function filterProductsBySearchQuery(products: Product[], query: string): Product[] {
   const q = query.trim().toLowerCase()
-  if (!q) return [...list]
+  if (!q) return [...products]
   const variants = [q]
   if (q.endsWith('s') && q.length > 2) variants.push(q.slice(0, -1))
   const matchesField = (field: string) =>
     variants.some((v) => field.toLowerCase().includes(v))
-  return list.filter(
+  return products.filter(
     (p) =>
       matchesField(p.name) ||
       matchesField(p.description) ||
       p.tags.some((t) => variants.some((v) => t.toLowerCase().includes(v))),
   )
 }
+
+export const searchProducts = (query: string): Product[] => filterProductsBySearchQuery(getProducts(), query)

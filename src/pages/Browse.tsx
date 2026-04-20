@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
-import { getProducts, searchProducts } from '../data/products'
+import { getProducts, filterProductsBySearchQuery } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
 import ProductCard from '../components/marketplace/ProductCard'
 import FilterSidebar from '../components/marketplace/FilterSidebar'
@@ -44,13 +44,14 @@ export default function Browse() {
   }, [setSearchParams])
 
   const filteredProducts = useMemo(() => {
-    let list = query.trim() ? searchProducts(query) : [...getProducts()]
-
+    // Apply category and price filters first, then search text within that subset.
+    // (Global search ∩ category is often empty, e.g. q="cone" + Pedestrian — users expect in-category search.)
+    let list = [...getProducts()]
     if (filters.category) list = list.filter((p) => p.categorySlug === filters.category)
     if (filters.maxDailyRate < 200) list = list.filter((p) => p.dailyRate <= filters.maxDailyRate)
     if (filters.inStockOnly) list = list.filter((p) => p.inStock)
     if (filters.popular) list = list.filter((p) => p.popular)
-
+    list = filterProductsBySearchQuery(list, query)
     return list
   }, [query, filters, tick])
 
