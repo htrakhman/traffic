@@ -10,8 +10,12 @@ type Props = {
 export default function BrandLogoLink({ size, className = '' }: Props) {
   const imgClass =
     size === 'header'
-      ? 'h-8 w-auto max-h-9 sm:h-[2.125rem] max-w-[min(240px,calc(100vw-7rem))]'
+      ? 'h-12 w-auto sm:h-14 max-w-[min(320px,calc(100vw-6rem))]'
       : 'h-11 w-auto sm:h-12 max-w-[min(280px,100%)]'
+  const frameClass =
+    size === 'header'
+      ? 'rounded-md bg-white ring-1 ring-white/20 shadow-sm shadow-black/25'
+      : 'rounded-md bg-white px-1 py-0.5 ring-1 ring-white/20 shadow-sm shadow-black/25'
 
   return (
     <Link
@@ -21,7 +25,7 @@ export default function BrandLogoLink({ size, className = '' }: Props) {
       <img
         src={SITE_LOGO_PATH}
         alt=""
-        className={`${imgClass} object-contain object-left rounded-md bg-white px-1 py-0.5 ring-1 ring-white/20 shadow-sm shadow-black/25`}
+        className={`${imgClass} object-contain object-left ${frameClass}`}
         decoding="async"
       />
       <span className="sr-only">{SITE_NAME}</span>
