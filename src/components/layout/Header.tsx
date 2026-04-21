@@ -5,6 +5,7 @@ import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { categories } from '../../data/categories'
 import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../../config/site'
+import BrandLogoLink from './BrandLogoLink'
 import AuthModal from '../auth/AuthModal'
 
 export default function Header() {
@@ -58,18 +59,11 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-normal lg:gap-x-3 xl:gap-x-5 lg:py-0 lg:min-h-[4.25rem]">
-            {/* Logo — slightly smaller wordmark lg–xl so the nav column keeps enough width */}
-            <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0 max-w-[calc(100vw-8rem)] sm:max-w-none xl:gap-2.5">
-              <div className="w-8 h-8 shrink-0 bg-brand-500 rounded-lg flex items-center justify-center shadow-lg shadow-brand-500/30">
-                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white" stroke="currentColor" strokeWidth={2.5}>
-                  <path d="M12 2L8 7h8L12 2z" fill="currentColor" stroke="none" />
-                  <path d="M9 9h6l1.5 11H7.5L9 9z" fill="currentColor" stroke="none" />
-                </svg>
-              </div>
-              <span className="font-bold text-white tracking-tight leading-snug text-sm sm:text-base lg:text-sm xl:text-lg">
-                Traffic Control <span className="text-brand-400">Rental</span>
-              </span>
-            </Link>
+            {/* Logo — PNG wordmark (public/brand); sr-only site name for assistive tech */}
+            <BrandLogoLink
+              size="header"
+              className="max-w-[calc(100vw-8rem)] sm:max-w-none mr-1 xl:mr-2"
+            />
 
             {/* Desktop nav — no horizontal clip (that hid "Equipment" / "Guides"); compact lg–xl instead */}
             <nav className="hidden lg:flex justify-center items-center min-w-0 w-full px-0.5 xl:px-1">

@@ -6,6 +6,9 @@ export const SITE_ORIGIN = `https://${SITE_DOMAIN}`
 /** Brand / legal line — matches public domain. */
 export const SITE_NAME = 'Traffic Control Rental'
 
+/** Logo asset (served from `public/brand/`). */
+export const SITE_LOGO_PATH = '/brand/traffic-control-rental-logo.png'
+
 /** Primary homepage SERP title (HTML `<title>` / Google title link). */
 export const DEFAULT_PAGE_TITLE = 'Traffic Control & Safety Equipment Rentals'
 

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { SITE_LOGO_PATH, SITE_ORIGIN } from '../../config/site'
 
 /**
  * Injects a JSON-LD script tag into <head>. Each instance renders one block.
@@ -25,15 +26,13 @@ export default function JsonLd({ data }: { data: Record<string, unknown> | Recor
   return null
 }
 
-const SITE_ORIGIN = 'https://trafficcontrolrental.com'
-
 export const schema = {
   organization: () => ({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Traffic Control Rental',
     url: SITE_ORIGIN,
-    logo: `${SITE_ORIGIN}/cone.svg`,
+    logo: `${SITE_ORIGIN}${SITE_LOGO_PATH}`,
     sameAs: [] as string[],
   }),
   website: () => ({
@@ -84,7 +83,7 @@ export const schema = {
     publisher: {
       '@type': 'Organization',
       name: 'Traffic Control Rental',
-      logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}/cone.svg` },
+      logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}${SITE_LOGO_PATH}` },
     },
     image: a.image
       ? [

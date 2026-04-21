@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react'
 import { SITE_CONTACT_EMAIL, SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
+import BrandLogoLink from './BrandLogoLink'
 
 export default function Footer() {
   return (
@@ -9,16 +10,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 text-white">
-                  <path d="M12 2L8 7h8L12 2z" fill="currentColor" stroke="none" />
-                  <path d="M9 9h6l1.5 11H7.5L9 9z" fill="currentColor" stroke="none" />
-                </svg>
-              </div>
-              <span className="font-bold text-lg text-white">
-                Traffic Control <span className="text-brand-400">Rental</span>
-              </span>
+            <div className="mb-4">
+              <BrandLogoLink size="footer" />
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-6">
               The modern traffic control equipment rental marketplace. AI-powered job planning for contractors and work-zone operators.
