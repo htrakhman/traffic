@@ -11,6 +11,9 @@ const roadsProxy = {
 } as const
 
 export default defineConfig({
+  // Default is `VITE_` only. PostHog / Vercel often use `NEXT_PUBLIC_*`; without this those
+  // values never reach `import.meta.env` in the built client bundle.
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   plugins: [react()],
   server: {
     port: 3000,

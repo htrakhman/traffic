@@ -5,9 +5,13 @@ import { PostHogProvider } from '@posthog/react'
 import './index.css'
 import App from './App'
 
-const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN
+const posthogKey =
+  import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN ??
+  import.meta.env.NEXT_PUBLIC_POSTHOG_KEY
 const posthogHost =
-  import.meta.env.VITE_PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com'
+  import.meta.env.VITE_PUBLIC_POSTHOG_HOST ??
+  import.meta.env.NEXT_PUBLIC_POSTHOG_HOST ??
+  'https://us.i.posthog.com'
 
 if (posthogKey) {
   posthog.init(posthogKey, {

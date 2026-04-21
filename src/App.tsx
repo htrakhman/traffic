@@ -101,6 +101,10 @@ function AppLayout() {
 }
 
 export default function App() {
+  const hasPostHogToken = Boolean(
+    import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN ?? import.meta.env.NEXT_PUBLIC_POSTHOG_KEY
+  )
+
   return (
     <BrowserRouter>
       <CatalogSyncProvider>
@@ -109,7 +113,7 @@ export default function App() {
         <MembershipProvider>
           <CartProvider>
             <ScrollToTop />
-            {import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN ? <PostHogPageview /> : null}
+            {hasPostHogToken ? <PostHogPageview /> : null}
             <AppLayout />
           </CartProvider>
         </MembershipProvider>
