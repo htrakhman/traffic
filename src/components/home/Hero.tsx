@@ -1,9 +1,19 @@
 import { useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Sparkles, Search, ExternalLink } from 'lucide-react'
+import { Sparkles, Search, ExternalLink, X } from 'lucide-react'
 import JobAssistant from '../ai/JobAssistant'
 
-export default function Hero() {
+type HeroProps = {
+  browseSearchQuery: string
+  onBrowseSearchQueryChange: (q: string) => void
+  onBrowseSearchClear: () => void
+}
+
+export default function Hero({
+  browseSearchQuery,
+  onBrowseSearchQueryChange,
+  onBrowseSearchClear,
+}: HeroProps) {
   const [activeTab, setActiveTab] = useState<'ai' | 'browse'>('ai')
   const [plannerMapBoost, setPlannerMapBoost] = useState(false)
   const navigate = useNavigate()
@@ -30,7 +40,10 @@ export default function Hero() {
         {/* Tabs */}
         <div className="inline-flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 mb-4">
           <button
-            onClick={() => setActiveTab('ai')}
+            onClick={() => {
+              setActiveTab('ai')
+              onBrowseSearchClear()
+            }}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
               activeTab === 'ai' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/25' : 'text-slate-400 hover:text-white'
             }`}
@@ -97,12 +110,28 @@ export default function Hero() {
               <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="text"
+                value={browseSearchQuery}
+                onChange={(e) => onBrowseSearchQueryChange(e.target.value)}
                 placeholder="Search cones, signs, arrow boards, barricades..."
-                className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500/50 transition-all"
+                className="w-full pl-10 pr-11 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500/50 transition-all"
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') navigate(`/browse?q=${encodeURIComponent((e.target as HTMLInputElement).value)}`)
+                  if (e.key === 'Enter') {
+                    const t = browseSearchQuery.trim()
+                    navigate(t ? `/browse?q=${encodeURIComponent(t)}` : '/browse')
+                  }
                 }}
+                aria-label="Search equipment catalog"
               />
+              {browseSearchQuery ? (
+                <button
+                  type="button"
+                  onClick={onBrowseSearchClear}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-300 rounded"
+                  aria-label="Clear search"
+                >
+                  <X size={14} />
+                </button>
+              ) : null}
             </div>
             <div className="flex flex-wrap justify-center gap-1.5">
               {(

@@ -2927,6 +2927,8 @@ export function filterProductsBySearchQuery(products: Product[], query: string):
     (p) =>
       matchesField(p.name) ||
       matchesField(p.description) ||
+      matchesField(p.sku) ||
+      matchesField(p.supplierSku) ||
       p.tags.some((t) => variants.some((v) => t.toLowerCase().includes(v))),
   )
 }
