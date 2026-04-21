@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Sparkles, Search, ExternalLink, X } from 'lucide-react'
 import JobAssistant from '../ai/JobAssistant'
+import { useCatalogSync } from '../../context/CatalogSyncContext'
+import { getBrowseQuickChips } from '../../utils/browseQuickChips'
 
 type HeroProps = {
   browseSearchQuery: string
@@ -14,11 +16,18 @@ export default function Hero({
   onBrowseSearchQueryChange,
   onBrowseSearchClear,
 }: HeroProps) {
+  const { tick } = useCatalogSync()
   const [activeTab, setActiveTab] = useState<'ai' | 'browse'>('ai')
   const [plannerMapBoost, setPlannerMapBoost] = useState(false)
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const plannerQuery = searchParams.get('q')?.trim() || undefined
+
+  const browseChips = useMemo(
+    () => getBrowseQuickChips(browseSearchQuery),
+    [browseSearchQuery, tick],
+  )
+  const browseQ = browseSearchQuery.trim()
 
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-20 pb-10">
@@ -133,21 +142,16 @@ export default function Hero({
                 </button>
               ) : null}
             </div>
-            <div className="flex flex-wrap justify-center gap-1.5">
-              {(
-                [
-                  { label: 'Traffic Cones', category: 'cones-drums' },
-                  { label: 'Arrow Boards', category: 'arrow-boards' },
-                  { label: 'Roll-Up Signs', category: 'signs-sign-stands' },
-                  { label: 'Barricades', category: 'barricades-barriers' },
-                  { label: 'Message Boards', category: 'message-boards' },
-                  { label: 'Warning Lights', category: 'safety-lighting' },
-                ] as const
-              ).map(({ label, category }) => (
+            <div className="flex flex-wrap justify-center gap-1.5 transition-opacity duration-150">
+              {browseChips.map(({ label, category }) => (
                 <Link
                   key={category}
-                  to={`/browse?category=${encodeURIComponent(category)}`}
-                  className="px-2.5 py-1 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 hover:border-brand-500/30 text-slate-400 hover:text-brand-300 text-xs rounded-full transition-all"
+                  to={
+                    browseQ
+                      ? `/browse?category=${encodeURIComponent(category)}&q=${encodeURIComponent(browseQ)}`
+                      : `/browse?category=${encodeURIComponent(category)}`
+                  }
+                  className="px-2.5 py-1 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 hover:border-brand-500/30 text-slate-400 hover:text-brand-300 text-xs rounded-full transition-colors duration-150"
                 >
                   {label}
                 </Link>

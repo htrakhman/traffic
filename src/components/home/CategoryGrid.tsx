@@ -7,12 +7,21 @@ import { getProducts, filterProductsBySearchQuery } from '../../data/products'
 import ProductCard from '../marketplace/ProductCard'
 
 type CategoryGridProps = {
-  /** When set, category tiles are replaced by live-matching products as the user types (home hero Browse). */
+  /**
+   * Debounced search text used to compute matches (avoids repainting the grid every keystroke).
+   * Pass `liveSearchDisplayQuery` so headings can show the latest typed text.
+   */
   liveSearchQuery?: string
+  /** Latest input value for UI copy (e.g. quoted search). Defaults to `liveSearchQuery`. */
+  liveSearchDisplayQuery?: string
 }
 
-export default function CategoryGrid({ liveSearchQuery = '' }: CategoryGridProps) {
+export default function CategoryGrid({
+  liveSearchQuery = '',
+  liveSearchDisplayQuery,
+}: CategoryGridProps) {
   const { tick } = useCatalogSync()
+  const displayQ = (liveSearchDisplayQuery ?? liveSearchQuery).trim()
   const liveQ = liveSearchQuery.trim()
   const countsBySlug = useMemo(() => {
     const m: Record<string, number> = {}
@@ -33,13 +42,17 @@ export default function CategoryGrid({ liveSearchQuery = '' }: CategoryGridProps
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>
           <div className="text-xs font-semibold text-brand-400 uppercase tracking-widest mb-2">Equipment Catalog</div>
-          {liveQ ? (
+          {displayQ ? (
             <>
               <h2 className="section-title">Matching equipment</h2>
-              <p className="section-subtitle">
-                <span className="text-white font-semibold tabular-nums">{liveMatches.length}</span>{' '}
-                {liveMatches.length === 1 ? 'item' : 'items'} for &ldquo;{liveQ}&rdquo; — refine in the search box above or open the full catalog.
-              </p>
+              {!liveQ ? (
+                <p className="section-subtitle">Finding matches for &ldquo;{displayQ}&rdquo;…</p>
+              ) : (
+                <p className="section-subtitle">
+                  <span className="text-white font-semibold tabular-nums">{liveMatches.length}</span>{' '}
+                  {liveMatches.length === 1 ? 'item' : 'items'} for &ldquo;{liveQ}&rdquo; — refine in the search box above or open the full catalog.
+                </p>
+              )}
             </>
           ) : (
             <>
@@ -49,27 +62,31 @@ export default function CategoryGrid({ liveSearchQuery = '' }: CategoryGridProps
           )}
         </div>
         <Link
-          to={liveQ ? `/browse?q=${encodeURIComponent(liveQ)}` : '/browse'}
+          to={displayQ ? `/browse?q=${encodeURIComponent(displayQ)}` : '/browse'}
           className="btn-ghost text-sm flex-shrink-0"
         >
-          {liveQ ? 'Open full results' : 'View all equipment'}
+          {displayQ ? 'Open full results' : 'View all equipment'}
           <ArrowRight size={14} />
         </Link>
       </div>
 
-      {liveQ ? (
-        liveMatches.length === 0 ? (
+      {displayQ ? (
+        !liveQ ? (
+          <div className="min-h-[280px] flex flex-col items-center justify-center rounded-xl border border-slate-800/80 bg-slate-900/30 text-slate-500 text-sm">
+            Updating results…
+          </div>
+        ) : liveMatches.length === 0 ? (
           <div className="text-center py-14 rounded-xl border border-slate-800 bg-slate-900/40">
-            <p className="text-slate-300 font-medium mb-1">No matches for &ldquo;{liveQ}&rdquo;</p>
+            <p className="text-slate-300 font-medium mb-1">No matches for &ldquo;{displayQ}&rdquo;</p>
             <p className="text-slate-500 text-sm mb-4">Try another term or browse by category after clearing the search.</p>
-            <Link to={`/browse?q=${encodeURIComponent(liveQ)}`} className="btn-secondary text-sm inline-flex">
+            <Link to={`/browse?q=${encodeURIComponent(displayQ)}`} className="btn-secondary text-sm inline-flex">
               Search on Browse page
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {liveMatches.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 min-h-[240px]">
+            {liveMatches.map((product) => (
+              <ProductCard key={product.id} product={product} suppressEntryAnimation />
             ))}
           </div>
         )

@@ -6,10 +6,13 @@ import FeaturedProducts from '../components/home/FeaturedProducts'
 import TrustBar from '../components/home/TrustBar'
 import HowItWorks from '../components/home/HowItWorks'
 import { DEFAULT_PAGE_TITLE, SITE_DOMAIN } from '../config/site'
+import { useDebouncedString } from '../hooks/useDebouncedString'
 
 export default function Home() {
   const [browseSearchQuery, setBrowseSearchQuery] = useState('')
   const onBrowseSearchClear = useCallback(() => setBrowseSearchQuery(''), [])
+  /** Debounced filter text keeps the product grid from repainting on every keystroke. */
+  const debouncedBrowseSearch = useDebouncedString(browseSearchQuery, 100)
 
   return (
     <main>
@@ -24,7 +27,10 @@ export default function Home() {
         onBrowseSearchClear={onBrowseSearchClear}
       />
       {/* Marketplace visible immediately on load — categories right below hero */}
-      <CategoryGrid liveSearchQuery={browseSearchQuery} />
+      <CategoryGrid
+        liveSearchQuery={debouncedBrowseSearch}
+        liveSearchDisplayQuery={browseSearchQuery}
+      />
       {browseSearchQuery.trim() ? null : <FeaturedProducts />}
       <TrustBar />
       <HowItWorks />

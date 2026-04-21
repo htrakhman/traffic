@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Star, Package } from 'lucide-react'
 import type { Product } from '../../types'
@@ -5,14 +6,16 @@ import type { Product } from '../../types'
 interface Props {
   product: Product
   index?: number
+  /** Skip staggered fade-in (smoother for live search grids that update often). */
+  suppressEntryAnimation?: boolean
 }
 
-export default function ProductCard({ product, index = 0 }: Props) {
+function ProductCard({ product, index = 0, suppressEntryAnimation = false }: Props) {
   return (
     <Link
       to={`/product/${product.slug}`}
-      className="group card-hover flex flex-col animate-fade-in"
-      style={{ animationDelay: `${index * 60}ms` }}
+      className={`group card-hover flex flex-col ${suppressEntryAnimation ? '' : 'animate-fade-in'}`}
+      style={suppressEntryAnimation ? undefined : { animationDelay: `${index * 60}ms` }}
     >
       {/* Image */}
       <div className="relative h-44 overflow-hidden bg-slate-800">
@@ -106,3 +109,5 @@ export default function ProductCard({ product, index = 0 }: Props) {
     </Link>
   )
 }
+
+export default memo(ProductCard)
