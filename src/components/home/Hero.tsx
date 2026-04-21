@@ -38,8 +38,8 @@ export default function Hero({
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
         {/* Headline — single line */}
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
-          Rent the gear.{' '}
-          <span className="gradient-text">Plan the job.</span>
+          Plan the job.{' '}
+          <span className="gradient-text">Rent the gear.</span>
         </h1>
 
         <p className="text-slate-400 max-w-lg mx-auto mb-6 text-sm sm:text-base leading-relaxed">
