@@ -19,6 +19,7 @@ import {
   readCheckoutSuccessContact,
   clearCheckoutSuccessContact,
 } from '../utils/pendingCheckoutAfterMembership'
+import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../config/site'
 import { productSkuLabel } from '../utils/productSkuLabel'
 
 export default function Checkout() {
@@ -318,8 +319,8 @@ export default function Checkout() {
               <>Someone from our team will reach out soon to confirm availability, delivery, and pickup. </>
             )}
             Questions? Call{' '}
-            <a href="tel:+18005551234" className="text-brand-400">
-              1-800-555-1234
+            <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="text-brand-400">
+              {SITE_CONTACT_PHONE_DISPLAY}
             </a>
             .
           </p>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Sparkles, AlertCircle } from 'lucide-react'
 import JobAssistant from '../components/ai/JobAssistant'
+import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../config/site'
 
 export default function Assistant() {
   const [searchParams] = useSearchParams()
@@ -109,8 +110,8 @@ export default function Assistant() {
               <p className="text-xs text-slate-400 mb-4">
                 Our team includes experienced traffic control professionals who can help you plan your work zone.
               </p>
-              <a href="tel:+18005551234" className="btn-secondary w-full justify-center text-sm py-2.5">
-                Call 1-800-555-1234
+              <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="btn-secondary w-full justify-center text-sm py-2.5">
+                Call {SITE_CONTACT_PHONE_DISPLAY}
               </a>
             </div>
           </div>

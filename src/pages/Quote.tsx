@@ -9,6 +9,7 @@ import { getDeliveryPickupFees } from '../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { getProductById } from '../data/products'
 import { readQuoteAiDraft, clearQuoteAiDraft } from '../utils/quoteAiDraftStorage'
+import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../config/site'
 import { productSkuLabel } from '../utils/productSkuLabel'
 
 interface QuoteItem {
@@ -115,8 +116,8 @@ export default function Quote() {
           <p className="text-slate-400 mb-8">
             Someone from our team will reach out soon at <strong className="text-white">{form.email}</strong> to
             confirm details—usually within a few hours. For urgent needs, call{' '}
-            <a href="tel:+18005551234" className="text-brand-400">
-              1-800-555-1234
+            <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="text-brand-400">
+              {SITE_CONTACT_PHONE_DISPLAY}
             </a>
             .
           </p>

@@ -43,7 +43,7 @@ export default function Hero({
         </h1>
 
         <p className="text-slate-400 max-w-lg mx-auto mb-6 text-sm sm:text-base leading-relaxed">
-          Traffic-control equipment rental for contractors — with an AI assistant that tells you exactly what you need.
+          Traffic control and safety equipment rental for contractors — with AI that recommends the right setup for your job.
         </p>
 
         {/* Tabs */}

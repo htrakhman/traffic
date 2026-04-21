@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react'
-import { SITE_CONTACT_EMAIL, SITE_NAME } from '../../config/site'
+import { SITE_CONTACT_EMAIL, SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
 
 export default function Footer() {
   return (
@@ -24,9 +24,12 @@ export default function Footer() {
               The modern traffic control equipment rental marketplace. AI-powered job planning for contractors and work-zone operators.
             </p>
             <div className="space-y-2.5">
-              <a href="tel:+18005551234" className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
+              <a
+                href={`tel:${SITE_CONTACT_PHONE_E164}`}
+                className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+              >
                 <Phone size={14} className="text-brand-400" />
-                1-800-555-1234
+                {SITE_CONTACT_PHONE_DISPLAY}
               </a>
               <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
                 <Mail size={14} className="text-brand-400" />

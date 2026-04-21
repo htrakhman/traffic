@@ -10,3 +10,9 @@ export const SITE_NAME = 'Traffic Control Rental'
 export const DEFAULT_PAGE_TITLE = 'Traffic Control & Safety Equipment Rentals'
 
 export const SITE_CONTACT_EMAIL = `rent@${SITE_DOMAIN}`
+
+/** E.164 for `href="tel:..."` (include country code). */
+export const SITE_CONTACT_PHONE_E164 = '+17326752499'
+
+/** Shown in UI next to phone icon / in copy. */
+export const SITE_CONTACT_PHONE_DISPLAY = '(732) 675-2499'

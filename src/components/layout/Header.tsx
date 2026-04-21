@@ -4,6 +4,7 @@ import { Menu, X, Search, Phone, ChevronDown, ShoppingCart, User, LogOut, Crown 
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { categories } from '../../data/categories'
+import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../../config/site'
 import AuthModal from '../auth/AuthModal'
 
 export default function Header() {
@@ -142,13 +143,13 @@ export default function Header() {
             {/* Desktop right — phone · icons · auth */}
             <div className="hidden lg:relative lg:z-10 lg:flex lg:items-center lg:shrink-0 lg:gap-0 lg:min-w-0">
               <a
-                href="tel:+18005551234"
-                aria-label="Call 1-800-555-1234"
-                title="1-800-555-1234"
-                className="inline-flex items-center justify-center gap-2 h-9 min-w-9 shrink-0 px-0 xl:h-10 xl:min-w-10 2xl:min-w-0 2xl:gap-2.5 2xl:pr-3 2xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
+                href={`tel:${SITE_CONTACT_PHONE_E164}`}
+                aria-label={`Call ${SITE_CONTACT_PHONE_DISPLAY}`}
+                title={SITE_CONTACT_PHONE_DISPLAY}
+                className="inline-flex items-center justify-center gap-2 h-9 shrink-0 px-2 xl:h-10 xl:gap-2.5 xl:pr-3 xl:mr-3 border-r border-slate-800 text-slate-400 hover:text-white transition-colors whitespace-nowrap tabular-nums text-sm"
               >
                 <Phone size={15} className="shrink-0 text-slate-500" aria-hidden />
-                <span className="hidden 2xl:inline">1-800-555-1234</span>
+                <span className="text-slate-300">{SITE_CONTACT_PHONE_DISPLAY}</span>
               </a>
               <div className="flex items-center gap-0.5 pl-1.5 pr-2 mr-2 border-r border-slate-800 shrink-0 xl:pl-2 xl:pr-3 xl:mr-3">
                 <Link
@@ -338,8 +339,17 @@ export default function Header() {
                 )}
               </div>
 
-              <div className="border-t border-slate-800 pt-3 mt-3">
-                <Link to="/quote" className="btn-primary w-full justify-center">Book your rental</Link>
+              <div className="border-t border-slate-800 pt-3 mt-3 space-y-2">
+                <a
+                  href={`tel:${SITE_CONTACT_PHONE_E164}`}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border border-slate-700 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors"
+                >
+                  <Phone size={16} className="text-slate-500" aria-hidden />
+                  {SITE_CONTACT_PHONE_DISPLAY}
+                </a>
+                <Link to="/quote" className="btn-primary w-full justify-center">
+                  Book your rental
+                </Link>
               </div>
             </div>
           </div>

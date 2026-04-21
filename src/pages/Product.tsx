@@ -22,7 +22,7 @@ import { useCatalogSync } from '../context/CatalogSyncContext'
 import { getProductBySlug, getProductsByCategory } from '../data/products'
 import { categories } from '../data/categories'
 import ProductCard from '../components/marketplace/ProductCard'
-import { SITE_NAME } from '../config/site'
+import { SITE_CONTACT_PHONE_E164, SITE_NAME } from '../config/site'
 
 export default function Product() {
   const { tick } = useCatalogSync()
@@ -511,7 +511,7 @@ export default function Product() {
                 Book with dates & job site
               </button>
               <a
-                href="tel:+18005551234"
+                href={`tel:${SITE_CONTACT_PHONE_E164}`}
                 className="w-full btn-secondary py-3 mt-2 justify-center text-sm"
               >
                 <Phone size={14} />
