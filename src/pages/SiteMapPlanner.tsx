@@ -310,8 +310,8 @@ export default function SiteMapPlanner() {
     if (status !== 'ready' || !mapRef.current) return
     workZonePolyRef.current?.setMap(null)
     workZonePolyRef.current = null
-    const path = plannerBoot.workZonePath
-    if (!path.length) return
+    const path = workZonePathRef.current
+    if (path.length < 3) return
     const poly = new google.maps.Polygon({
       paths: path,
       map: mapRef.current,
@@ -328,7 +328,7 @@ export default function SiteMapPlanner() {
       poly.setMap(null)
       if (workZonePolyRef.current === poly) workZonePolyRef.current = null
     }
-  }, [status, plannerBoot])
+  }, [status])
 
   useEffect(() => {
     if (!MAPS_KEY) {
@@ -350,6 +350,9 @@ export default function SiteMapPlanner() {
 
     let cancelled = false
     let ro: ResizeObserver | null = null
+    let roDebounceTimer: number | null = null
+    let lastROw = 0
+    let lastROh = 0
     let idleListener: google.maps.MapsEventListener | null = null
     let idlePersistTimer: number | null = null
 
@@ -386,12 +389,35 @@ export default function SiteMapPlanner() {
           )
         }
 
-        ro = new ResizeObserver(() => {
+        // Debounce + size threshold + brief disconnect: firing `resize` on every RO callback
+        // can re-layout the map and retrigger ResizeObserver, freezing the main thread (tight loop).
+        const RO_DEBOUNCE_MS = 150
+        const onMapContainerResize = () => {
+          const el = mapDivRef.current
+          if (!el || !mapRef.current) return
+          const r = el.getBoundingClientRect()
+          const w = Math.round(r.width)
+          const h = Math.round(r.height)
+          if (w < 8 || h < 8) return
+          if (Math.abs(w - lastROw) < 2 && Math.abs(h - lastROh) < 2) return
+          lastROw = w
+          lastROh = h
+          ro?.disconnect()
+          google.maps.event.trigger(mapRef.current, 'resize')
           window.requestAnimationFrame(() => {
-            if (mapRef.current) google.maps.event.trigger(mapRef.current, 'resize')
+            if (cancelled || !mapDivRef.current) return
+            ro?.observe(mapDivRef.current)
           })
+        }
+        ro = new ResizeObserver(() => {
+          if (roDebounceTimer != null) window.clearTimeout(roDebounceTimer)
+          roDebounceTimer = window.setTimeout(() => {
+            roDebounceTimer = null
+            onMapContainerResize()
+          }, RO_DEBOUNCE_MS)
         })
-        ro.observe(mapDivRef.current)
+        const div = mapDivRef.current
+        if (div) ro.observe(div)
 
         idleListener = map.addListener('idle', () => {
           if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
@@ -403,11 +429,7 @@ export default function SiteMapPlanner() {
 
         setStatus('ready')
 
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (mapRef.current) google.maps.event.trigger(mapRef.current, 'resize')
-          })
-        })
+        window.setTimeout(() => onMapContainerResize(), 0)
       })
       .catch(() => setStatus('error'))
 
@@ -415,6 +437,7 @@ export default function SiteMapPlanner() {
       cancelled = true
       w.gm_authFailure = prevAuthFailure
       if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
+      if (roDebounceTimer != null) window.clearTimeout(roDebounceTimer)
       idleListener?.remove()
       ro?.disconnect()
       workZonePolyRef.current?.setMap(null)
