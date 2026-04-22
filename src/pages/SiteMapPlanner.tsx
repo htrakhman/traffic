@@ -162,15 +162,40 @@ export default function SiteMapPlanner() {
   /** Tap-to-place: pick a product, then click the map (mobile-friendly). */
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)
 
-  const filteredCatalog = useMemo(() => {
+  const { paletteItems, paletteNote } = useMemo(() => {
     const q = paletteQuery.trim().toLowerCase()
-    if (!q) return catalog
-    return catalog.filter(
+    if (!q) {
+      const featured = getFeaturedProducts()
+      if (featured.length >= 6) {
+        return {
+          paletteItems: featured,
+          paletteNote:
+            catalog.length > featured.length
+              ? `Search to find any of ${catalog.length.toLocaleString()} products.`
+              : null,
+        }
+      }
+      return {
+        paletteItems: catalog.slice(0, 150),
+        paletteNote:
+          catalog.length > 150
+            ? `Search to find any of ${catalog.length.toLocaleString()} products.`
+            : null,
+      }
+    }
+    const matches = catalog.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.sku.toLowerCase().includes(q) ||
         p.tags.some((t) => t.toLowerCase().includes(q)),
     )
+    if (matches.length > 500) {
+      return {
+        paletteItems: matches.slice(0, 500),
+        paletteNote: `Showing 500 of ${matches.length} matches — refine your search.`,
+      }
+    }
+    return { paletteItems: matches, paletteNote: null }
   }, [catalog, paletteQuery])
 
   /** Quick strip on the map: popular gear first so icons sit *on* the map, not only in the sidebar. */
@@ -349,10 +374,9 @@ export default function SiteMapPlanner() {
     })
 
     let cancelled = false
-    let ro: ResizeObserver | null = null
-    let roDebounceTimer: number | null = null
-    let lastROw = 0
-    let lastROh = 0
+    let winResizeDebounce: number | null = null
+    let layoutRetryTimer: number | null = null
+    let windowResizeHandler: (() => void) | undefined
     let idleListener: google.maps.MapsEventListener | null = null
     let idlePersistTimer: number | null = null
 
@@ -389,35 +413,27 @@ export default function SiteMapPlanner() {
           )
         }
 
-        // Debounce + size threshold + brief disconnect: firing `resize` on every RO callback
-        // can re-layout the map and retrigger ResizeObserver, freezing the main thread (tight loop).
-        const RO_DEBOUNCE_MS = 150
-        const onMapContainerResize = () => {
-          const el = mapDivRef.current
-          if (!el || !mapRef.current) return
-          const r = el.getBoundingClientRect()
-          const w = Math.round(r.width)
-          const h = Math.round(r.height)
-          if (w < 8 || h < 8) return
-          if (Math.abs(w - lastROw) < 2 && Math.abs(h - lastROh) < 2) return
-          lastROw = w
-          lastROh = h
-          ro?.disconnect()
+        // Avoid ResizeObserver on the map div: Google Maps' resize + flex layout can retrigger the
+        // observer in a loop and freeze the tab. Use window resize + delayed layout passes only.
+        const triggerMapResize = () => {
+          if (!mapRef.current) return
           google.maps.event.trigger(mapRef.current, 'resize')
-          window.requestAnimationFrame(() => {
-            if (cancelled || !mapDivRef.current) return
-            ro?.observe(mapDivRef.current)
-          })
         }
-        ro = new ResizeObserver(() => {
-          if (roDebounceTimer != null) window.clearTimeout(roDebounceTimer)
-          roDebounceTimer = window.setTimeout(() => {
-            roDebounceTimer = null
-            onMapContainerResize()
-          }, RO_DEBOUNCE_MS)
-        })
-        const div = mapDivRef.current
-        if (div) ro.observe(div)
+        windowResizeHandler = () => {
+          if (winResizeDebounce != null) window.clearTimeout(winResizeDebounce)
+          winResizeDebounce = window.setTimeout(() => {
+            winResizeDebounce = null
+            if (!cancelled) triggerMapResize()
+          }, 200)
+        }
+        window.addEventListener('resize', windowResizeHandler)
+        window.setTimeout(() => {
+          if (!cancelled) triggerMapResize()
+        }, 0)
+        layoutRetryTimer = window.setTimeout(() => {
+          layoutRetryTimer = null
+          if (!cancelled) triggerMapResize()
+        }, 320)
 
         idleListener = map.addListener('idle', () => {
           if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
@@ -428,8 +444,6 @@ export default function SiteMapPlanner() {
         })
 
         setStatus('ready')
-
-        window.setTimeout(() => onMapContainerResize(), 0)
       })
       .catch(() => setStatus('error'))
 
@@ -437,9 +451,10 @@ export default function SiteMapPlanner() {
       cancelled = true
       w.gm_authFailure = prevAuthFailure
       if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
-      if (roDebounceTimer != null) window.clearTimeout(roDebounceTimer)
+      if (winResizeDebounce != null) window.clearTimeout(winResizeDebounce)
+      if (layoutRetryTimer != null) window.clearTimeout(layoutRetryTimer)
+      if (windowResizeHandler) window.removeEventListener('resize', windowResizeHandler)
       idleListener?.remove()
-      ro?.disconnect()
       workZonePolyRef.current?.setMap(null)
       workZonePolyRef.current = null
       markersRef.current.forEach((m) => {
@@ -690,6 +705,7 @@ export default function SiteMapPlanner() {
               placeholder="Filter cones, barricades…"
               className="w-full rounded-lg border border-slate-700 bg-slate-800/90 px-3 py-2 text-xs text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500/50"
             />
+            {paletteNote && <p className="text-[10px] text-slate-500 leading-snug px-0.5">{paletteNote}</p>}
             {pendingProductId && (
               <div className="flex items-start justify-between gap-2 rounded-lg bg-brand-500/15 border border-brand-500/25 px-2.5 py-2">
                 <p className="text-[10px] text-brand-100/90 leading-snug">
@@ -709,10 +725,10 @@ export default function SiteMapPlanner() {
             )}
           </div>
           <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
-            {filteredCatalog.length === 0 && (
+            {paletteItems.length === 0 && (
               <p className="text-xs text-slate-500 px-2 py-4 text-center">No products match that filter.</p>
             )}
-            {filteredCatalog.map((p) => (
+            {paletteItems.map((p) => (
               <PaletteItem key={p.id} product={p} onPick={() => setPendingProductId(p.id)} />
             ))}
           </div>

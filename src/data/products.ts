@@ -2891,16 +2891,31 @@ const curatedSupplierUrls = new Set(curatedProducts.map((p) => p.supplierUrl).fi
 const curatedSlugs = new Set(curatedProducts.map((p) => p.slug))
 let extendedProducts: Product[] = []
 
+/** Merged list + id index — rebuilt when `registerExtendedCatalog` runs. */
+let mergedProducts: Product[] | null = null
+let productById: Map<string, Product> | null = null
+
+function rebuildExtendedIndexes() {
+  mergedProducts = [...curatedProducts, ...extendedProducts]
+  const m = new Map<string, Product>()
+  for (const p of mergedProducts) m.set(p.id, p)
+  productById = m
+}
+
 /** Merge extended catalog from `public/tss-catalog.json` (generated; see `scripts/generate-tss-catalog.mjs`). */
 export function registerExtendedCatalog(raw: Product[]) {
   extendedProducts = raw.filter(
     (p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug),
   )
+  mergedProducts = null
+  productById = null
+  if (extendedProducts.length) rebuildExtendedIndexes()
 }
 
 export function getProducts(): Product[] {
   if (extendedProducts.length === 0) return curatedProducts
-  return [...curatedProducts, ...extendedProducts]
+  if (!mergedProducts) rebuildExtendedIndexes()
+  return mergedProducts
 }
 
 export const getProductsByCategory = (categorySlug: string): Product[] =>
@@ -2909,8 +2924,11 @@ export const getProductsByCategory = (categorySlug: string): Product[] =>
 export const getProductBySlug = (slug: string): Product | undefined =>
   getProducts().find((p) => p.slug === slug)
 
-export const getProductById = (id: string): Product | undefined =>
-  getProducts().find((p) => p.id === id)
+export const getProductById = (id: string): Product | undefined => {
+  if (extendedProducts.length === 0) return curatedProducts.find((p) => p.id === id)
+  if (!productById) rebuildExtendedIndexes()
+  return productById.get(id)
+}
 
 export const getFeaturedProducts = (): Product[] =>
   curatedProducts.filter((p) => p.popular)
