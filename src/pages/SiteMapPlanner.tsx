@@ -374,9 +374,6 @@ export default function SiteMapPlanner() {
     })
 
     let cancelled = false
-    let winResizeDebounce: number | null = null
-    let layoutRetryTimer: number | null = null
-    let windowResizeHandler: (() => void) | undefined
     let idleListener: google.maps.MapsEventListener | null = null
     let idlePersistTimer: number | null = null
 
@@ -413,27 +410,10 @@ export default function SiteMapPlanner() {
           )
         }
 
-        // Avoid ResizeObserver on the map div: Google Maps' resize + flex layout can retrigger the
-        // observer in a loop and freeze the tab. Use window resize + delayed layout passes only.
-        const triggerMapResize = () => {
-          if (!mapRef.current) return
-          google.maps.event.trigger(mapRef.current, 'resize')
-        }
-        windowResizeHandler = () => {
-          if (winResizeDebounce != null) window.clearTimeout(winResizeDebounce)
-          winResizeDebounce = window.setTimeout(() => {
-            winResizeDebounce = null
-            if (!cancelled) triggerMapResize()
-          }, 200)
-        }
-        window.addEventListener('resize', windowResizeHandler)
-        window.setTimeout(() => {
-          if (!cancelled) triggerMapResize()
-        }, 0)
-        layoutRetryTimer = window.setTimeout(() => {
-          layoutRetryTimer = null
-          if (!cancelled) triggerMapResize()
-        }, 320)
+        // Google Maps Weekly manages its own internal ResizeObserver — do NOT call
+        // google.maps.event.trigger(map, 'resize') manually. Doing so causes Google Maps to
+        // re-measure its container, which can reflux the flex layout, which fires Google Maps'
+        // own observer again, creating a tight loop that freezes the tab.
 
         idleListener = map.addListener('idle', () => {
           if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
@@ -451,9 +431,6 @@ export default function SiteMapPlanner() {
       cancelled = true
       w.gm_authFailure = prevAuthFailure
       if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
-      if (winResizeDebounce != null) window.clearTimeout(winResizeDebounce)
-      if (layoutRetryTimer != null) window.clearTimeout(layoutRetryTimer)
-      if (windowResizeHandler) window.removeEventListener('resize', windowResizeHandler)
       idleListener?.remove()
       workZonePolyRef.current?.setMap(null)
       workZonePolyRef.current = null
