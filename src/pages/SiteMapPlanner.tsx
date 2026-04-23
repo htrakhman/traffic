@@ -1,6 +1,26 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
-import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Square, Circle, Hexagon, GripVertical, Sparkles, Pencil } from 'lucide-react'
+import {
+  Download,
+  MapPin,
+  Navigation,
+  Search,
+  Trash2,
+  X,
+  MousePointer2,
+  Layers,
+  Package,
+  Square,
+  Circle,
+  Hexagon,
+  GripVertical,
+  Sparkles,
+  Pencil,
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -23,6 +43,9 @@ const MAP_ID =
 
 const DEFAULT_CENTER = { lat: 39.8283, lng: -98.5795 }
 const DEFAULT_ZOOM = 4
+const GEOLOC_ZOOM = 16
+/** Pixels per click for on-screen pan arrows (Google `panBy`: +x → east, +y → south). */
+const MAP_PAN_STEP_PX = 140
 
 const DRAG_MIME = 'application/x-traffickit-product'
 
@@ -378,9 +401,14 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
   const mapDivRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<google.maps.Map | null>(null)
   const geocoderRef = useRef<google.maps.Geocoder | null>(null)
+  const autocompleteServiceRef = useRef<google.maps.places.AutocompleteService | null>(null)
+  const sessionTokenRef = useRef<google.maps.places.AutocompleteSessionToken | null>(null)
+  const suggestDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const searchWrapRef = useRef<HTMLDivElement>(null)
   const overlayRef = useRef<google.maps.OverlayView | null>(null)
   const markersRef = useRef<Map<string, MarkerMeta>>(new Map())
   const advancedMarkerCtorRef = useRef<typeof google.maps.marker.AdvancedMarkerElement | null>(null)
+  const userLocationMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null)
   const workZonePolyRef = useRef<google.maps.Polygon | null>(null)
   const workZonePathRef = useRef(plannerBoot.workZonePath)
   const initialMapViewRef = useRef(plannerBoot.initialMapView)
@@ -391,6 +419,10 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
   const [noKey, setNoKey] = useState(false)
   const [searchDraft, setSearchDraft] = useState(plannerBoot.searchDraftInit)
   const [searchError, setSearchError] = useState<string | null>(null)
+  const [placePredictions, setPlacePredictions] = useState<google.maps.places.AutocompletePrediction[]>([])
+  const [suggestLoading, setSuggestLoading] = useState(false)
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false)
+  const [highlightIdx, setHighlightIdx] = useState(-1)
   const [paletteQuery, setPaletteQuery] = useState('')
   const [placed, setPlaced] = useState<SiteMapPlacedRow[]>(plannerBoot.placements)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -582,6 +614,10 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
   drawModeRef.current = drawMode
   pendingProductIdRef.current = pendingProductId
 
+  const panMapByPixels = useCallback((dx: number, dy: number) => {
+    mapRef.current?.panBy(dx, dy)
+  }, [])
+
   const schedulePersistSession = useCallback(() => {
     const map = mapRef.current
     let mapView: { lat: number; lng: number; zoom: number } | undefined
@@ -642,7 +678,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     setOptions({
       key: MAPS_KEY,
       v: 'weekly',
-      libraries: ['marker', 'drawing'],
+      libraries: ['marker', 'drawing', 'places'],
       mapIds: [MAP_ID],
     })
 
@@ -650,7 +686,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     let idleListener: google.maps.MapsEventListener | null = null
     let idlePersistTimer: number | null = null
 
-    Promise.all([importLibrary('maps'), importLibrary('marker'), importLibrary('drawing')])
+    Promise.all([importLibrary('maps'), importLibrary('marker'), importLibrary('drawing'), importLibrary('places')])
       .then(([_, markerLib]) => {
         if (cancelled || !mapDivRef.current) return
         advancedMarkerCtorRef.current = markerLib.AdvancedMarkerElement
@@ -671,6 +707,8 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
         mapRef.current = map
         overlayRef.current = attachPixelToLatLngOverlay(map)
         geocoderRef.current = new google.maps.Geocoder()
+        autocompleteServiceRef.current = new google.maps.places.AutocompleteService()
+        sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
 
         // Set up drawing manager
         const drawingMgr = new google.maps.drawing.DrawingManager({
@@ -721,14 +759,38 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
           })
         })
 
-        if (navigator.geolocation && !boot) {
+        if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (pos) => {
+              if (cancelled || !mapRef.current) return
+              const m = mapRef.current
               const here = { lat: pos.coords.latitude, lng: pos.coords.longitude }
-              map.setCenter(here)
-              map.setZoom(16)
+              m.setCenter(here)
+              m.setZoom(GEOLOC_ZOOM)
+
+              const AdvancedMarkerElement = advancedMarkerCtorRef.current
+              if (!AdvancedMarkerElement) return
+              userLocationMarkerRef.current?.map = null
+              const dot = document.createElement('div')
+              dot.style.cssText = [
+                'width:16px',
+                'height:16px',
+                'border-radius:999px',
+                'background:#2563eb',
+                'border:2px solid #fff',
+                'box-shadow:0 2px 8px rgba(0,0,0,0.45)',
+              ].join(';')
+              dot.title = 'Your location'
+              userLocationMarkerRef.current = new AdvancedMarkerElement({
+                map: m,
+                position: here,
+                content: dot,
+                zIndex: 200,
+                title: 'Your location',
+              })
             },
             () => {},
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 30_000 },
           )
         }
 
@@ -753,9 +815,15 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       cancelled = true
       w.gm_authFailure = prevAuthFailure
       if (idlePersistTimer) window.clearTimeout(idlePersistTimer)
+      if (suggestDebounceRef.current) {
+        clearTimeout(suggestDebounceRef.current)
+        suggestDebounceRef.current = null
+      }
       idleListener?.remove()
       workZonePolyRef.current?.setMap(null)
       workZonePolyRef.current = null
+      userLocationMarkerRef.current?.map = null
+      userLocationMarkerRef.current = null
       markersRef.current.forEach((m) => {
         m.marker.map = null
       })
@@ -765,6 +833,8 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       drawingMgrRef.current = null
       advancedMarkerCtorRef.current = null
       overlayRef.current = null
+      autocompleteServiceRef.current = null
+      sessionTokenRef.current = null
       geocoderRef.current = null
       mapRef.current = null
     }
@@ -806,6 +876,9 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     if (plain) {
       map.setCenter(plain)
       map.setZoom(17)
+      setSuggestionsOpen(false)
+      setPlacePredictions([])
+      setHighlightIdx(-1)
       window.setTimeout(() => schedulePersistSession(), 100)
       return
     }
@@ -822,11 +895,130 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       }
       map.setCenter(first.geometry.location)
       map.setZoom(15)
+      setSuggestionsOpen(false)
+      setPlacePredictions([])
+      setHighlightIdx(-1)
       window.setTimeout(() => schedulePersistSession(), 100)
     } catch {
       setSearchError('Search failed.')
     }
   }, [searchDraft, schedulePersistSession])
+
+  const selectPlacePrediction = useCallback(
+    (prediction: google.maps.places.AutocompletePrediction) => {
+      if (!geocoderRef.current) return
+      geocoderRef.current.geocode({ placeId: prediction.place_id }, (results, geostatus) => {
+        if (geostatus !== 'OK' || !results?.[0]?.geometry?.location) {
+          setSearchError('Could not resolve that place. Try another result or press Go.')
+          return
+        }
+        const m = mapRef.current
+        if (!m) return
+        const loc = results[0].geometry.location
+        m.setCenter(loc)
+        m.setZoom(15)
+        setSearchDraft(results[0].formatted_address ?? prediction.description)
+        setSearchError(null)
+        setSuggestionsOpen(false)
+        setPlacePredictions([])
+        setHighlightIdx(-1)
+        sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
+        window.setTimeout(() => schedulePersistSession(), 100)
+      })
+    },
+    [schedulePersistSession],
+  )
+
+  const pickSuggestionByFlatIndex = useCallback(
+    (idx: number) => {
+      const q = searchDraft.trim()
+      const coord = parseLatLngPlain(q)
+      let at = 0
+      if (coord) {
+        if (idx === at) {
+          const m = mapRef.current
+          if (!m) return
+          m.setCenter(coord)
+          m.setZoom(17)
+          setSearchError(null)
+          setSuggestionsOpen(false)
+          setPlacePredictions([])
+          setHighlightIdx(-1)
+          sessionTokenRef.current = new google.maps.places.AutocompleteSessionToken()
+          window.setTimeout(() => schedulePersistSession(), 100)
+          return
+        }
+        at += 1
+      }
+      const pi = idx - at
+      if (pi >= 0 && pi < placePredictions.length) {
+        selectPlacePrediction(placePredictions[pi])
+      }
+    },
+    [searchDraft, placePredictions, selectPlacePrediction, schedulePersistSession],
+  )
+
+  useEffect(() => {
+    setHighlightIdx(-1)
+  }, [searchDraft])
+
+  useEffect(() => {
+    if (status !== 'ready') return
+    const onDoc = (e: MouseEvent) => {
+      if (!searchWrapRef.current?.contains(e.target as Node)) {
+        setSuggestionsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onDoc)
+    return () => document.removeEventListener('mousedown', onDoc)
+  }, [status])
+
+  /** Debounced Places address suggestions while typing (same service as Job Assistant map search). */
+  useEffect(() => {
+    if (status !== 'ready' || !autocompleteServiceRef.current) return
+    const q = searchDraft.trim()
+    if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
+
+    if (q.length < 2) {
+      setPlacePredictions([])
+      setSuggestLoading(false)
+      setHighlightIdx(-1)
+      return
+    }
+
+    setSuggestLoading(true)
+    suggestDebounceRef.current = setTimeout(() => {
+      void (async () => {
+        const m = mapRef.current
+        const coordDirect = parseLatLngPlain(q)
+
+        if (!coordDirect) {
+          sessionTokenRef.current ??= new google.maps.places.AutocompleteSessionToken()
+          const preds = await new Promise<google.maps.places.AutocompletePrediction[]>((resolve) => {
+            autocompleteServiceRef.current!.getPlacePredictions(
+              {
+                input: q,
+                sessionToken: sessionTokenRef.current!,
+                bounds: m?.getBounds() ?? undefined,
+              },
+              (predictions, st) => {
+                if (st !== 'OK' && st !== 'ZERO_RESULTS') resolve([])
+                else resolve(predictions?.slice(0, 8) ?? [])
+              },
+            )
+          })
+          setPlacePredictions(preds)
+        } else {
+          setPlacePredictions([])
+        }
+        setSuggestLoading(false)
+      })()
+    }, 280)
+
+    return () => {
+      if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
+    }
+  }, [searchDraft, status])
 
   const latLngFromDropEvent = useCallback((e: React.DragEvent) => {
     const map = mapRef.current
@@ -1117,7 +1309,8 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     const errBody = (
       <p className="text-sm text-red-200/90 leading-relaxed">
         Google Maps did not load. Confirm your API key, billing, and that the{' '}
-        <strong className="text-red-100">Maps JavaScript API</strong> is enabled for this origin.
+        <strong className="text-red-100">Maps JavaScript API</strong>, <strong className="text-red-100">Places API</strong>, and{' '}
+        <strong className="text-red-100">Geocoding API</strong> are enabled for this origin.
       </p>
     )
     if (embedded) {
@@ -1147,6 +1340,11 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     ? ({ role: 'region' as const, 'aria-label': 'Site map planner' as const } as const)
     : ({} as const)
 
+  const searchTrim = searchDraft.trim()
+  const coordHint = parseLatLngPlain(searchTrim)
+  const suggestionCount = (coordHint ? 1 : 0) + placePredictions.length
+  const showSuggestDropdown = suggestionsOpen && searchTrim.length >= 2 && status === 'ready'
+
   return (
     <PlannerShell className={rootClass} {...plannerShellProps}>
       {/* Compact single-row toolbar */}
@@ -1160,14 +1358,118 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
           className="flex flex-1 gap-1.5 min-w-0 max-w-sm"
           onSubmit={(e) => { e.preventDefault(); void runSearch() }}
         >
-          <div className="relative flex-1 min-w-0">
-            <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+          <div ref={searchWrapRef} className="relative flex-1 min-w-0 z-50">
+            <Search size={12} className="absolute left-2 top-1/2 z-[1] -translate-y-1/2 text-slate-500 pointer-events-none" />
             <input
+              id="planner-address-search"
+              type="text"
               value={searchDraft}
-              onChange={(e) => setSearchDraft(e.target.value)}
+              onChange={(e) => {
+                setSearchDraft(e.target.value)
+                setSuggestionsOpen(true)
+              }}
+              onFocus={() => setSuggestionsOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setSuggestionsOpen(false)
+                  setHighlightIdx(-1)
+                  return
+                }
+                if (!showSuggestDropdown) return
+                if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && suggestionCount === 0) return
+                if (e.key === 'ArrowDown') {
+                  e.preventDefault()
+                  setHighlightIdx((i) => (i < 0 ? 0 : Math.min(i + 1, Math.max(suggestionCount - 1, 0))))
+                } else if (e.key === 'ArrowUp') {
+                  e.preventDefault()
+                  setHighlightIdx((i) => {
+                    if (suggestionCount <= 0) return -1
+                    if (i <= 0) return suggestionCount - 1
+                    return i - 1
+                  })
+                } else if (e.key === 'Enter' && highlightIdx >= 0 && suggestionCount > 0) {
+                  e.preventDefault()
+                  pickSuggestionByFlatIndex(highlightIdx)
+                }
+              }}
               placeholder="Search address or lat, lng"
+              role="combobox"
+              aria-expanded={showSuggestDropdown}
+              aria-controls="planner-search-suggestions"
+              autoComplete="off"
               className="w-full rounded-md border border-slate-700 bg-slate-800/90 py-1 pl-6 pr-2 text-xs text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500/50"
             />
+            {showSuggestDropdown && (
+              <div
+                id="planner-search-suggestions"
+                role="listbox"
+                className="absolute left-0 right-0 top-full z-[60] mt-0.5 max-h-64 overflow-y-auto rounded-md border border-slate-600 bg-slate-900 shadow-xl"
+              >
+                {suggestLoading && suggestionCount === 0 && (
+                  <div className="px-2.5 py-2 text-xs text-slate-400">Searching addresses…</div>
+                )}
+                {coordHint && (
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={highlightIdx === 0}
+                    onMouseDown={(ev) => ev.preventDefault()}
+                    onClick={() => pickSuggestionByFlatIndex(0)}
+                    className={`flex w-full items-start gap-2 px-2.5 py-2 text-left text-xs transition-colors ${
+                      highlightIdx === 0 ? 'bg-brand-500/25 text-white' : 'text-slate-200 hover:bg-slate-800'
+                    }`}
+                  >
+                    <MapPin size={13} className="mt-0.5 shrink-0 text-brand-400" aria-hidden />
+                    <span>
+                      <span className="block font-medium text-slate-100">Coordinates</span>
+                      <span className="text-[10px] text-slate-500">
+                        {coordHint.lat.toFixed(5)}, {coordHint.lng.toFixed(5)}
+                      </span>
+                    </span>
+                  </button>
+                )}
+                {placePredictions.length > 0 && (
+                  <>
+                    <div
+                      className={`px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-slate-500 ${
+                        coordHint ? 'border-t border-slate-700/80' : ''
+                      }`}
+                    >
+                      Addresses
+                    </div>
+                    {placePredictions.map((p, i) => {
+                      const idx = (coordHint ? 1 : 0) + i
+                      const main = p.structured_formatting?.main_text ?? p.description
+                      const sec = p.structured_formatting?.secondary_text
+                      return (
+                        <button
+                          key={p.place_id}
+                          type="button"
+                          role="option"
+                          aria-selected={highlightIdx === idx}
+                          onMouseDown={(ev) => ev.preventDefault()}
+                          onClick={() => pickSuggestionByFlatIndex(idx)}
+                          className={`flex w-full items-start gap-2 px-2.5 py-2 text-left text-xs transition-colors ${
+                            highlightIdx === idx ? 'bg-brand-500/25 text-white' : 'text-slate-200 hover:bg-slate-800'
+                          }`}
+                        >
+                          <Navigation size={13} className="mt-0.5 shrink-0 text-sky-400/90" aria-hidden />
+                          <span>
+                            <span className="block text-slate-100">{main}</span>
+                            {sec && <span className="text-[10px] text-slate-500">{sec}</span>}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </>
+                )}
+                {!suggestLoading && !coordHint && placePredictions.length === 0 && (
+                  <div className="px-2.5 py-2 text-xs leading-snug text-slate-500">
+                    No matches yet. Press <span className="text-slate-400">Go</span> to search, or keep typing.
+                  </div>
+                )}
+              </div>
+            )}
           </div>
           <button type="submit" className="shrink-0 rounded-md border border-slate-600 bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-200 hover:bg-slate-700">Go</button>
         </form>
@@ -1316,6 +1618,48 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
                     </button>
                   </>
                 )}
+              </div>
+            )}
+            {status === 'ready' && (
+              <div
+                className="absolute top-14 right-2 z-30 flex flex-col items-center gap-0.5 rounded-xl border border-slate-600/70 bg-slate-900/95 p-1 shadow-xl backdrop-blur-sm pointer-events-auto"
+                role="group"
+                aria-label="Pan map with arrow buttons"
+              >
+                <button
+                  type="button"
+                  onClick={() => panMapByPixels(0, -MAP_PAN_STEP_PX)}
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                  aria-label="Pan map north"
+                >
+                  <ChevronUp size={16} strokeWidth={2.25} />
+                </button>
+                <div className="flex gap-0.5">
+                  <button
+                    type="button"
+                    onClick={() => panMapByPixels(-MAP_PAN_STEP_PX, 0)}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                    aria-label="Pan map west"
+                  >
+                    <ChevronLeft size={16} strokeWidth={2.25} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => panMapByPixels(MAP_PAN_STEP_PX, 0)}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                    aria-label="Pan map east"
+                  >
+                    <ChevronRight size={16} strokeWidth={2.25} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => panMapByPixels(0, MAP_PAN_STEP_PX)}
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                  aria-label="Pan map south"
+                >
+                  <ChevronDown size={16} strokeWidth={2.25} />
+                </button>
               </div>
             )}
             {status === 'loading' && (
