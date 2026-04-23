@@ -2915,7 +2915,7 @@ export function registerExtendedCatalog(raw: Product[]) {
 export function getProducts(): Product[] {
   if (extendedProducts.length === 0) return curatedProducts
   if (!mergedProducts) rebuildExtendedIndexes()
-  return mergedProducts
+  return mergedProducts!
 }
 
 export const getProductsByCategory = (categorySlug: string): Product[] =>
@@ -2927,7 +2927,7 @@ export const getProductBySlug = (slug: string): Product | undefined =>
 export const getProductById = (id: string): Product | undefined => {
   if (extendedProducts.length === 0) return curatedProducts.find((p) => p.id === id)
   if (!productById) rebuildExtendedIndexes()
-  return productById.get(id)
+  return productById!.get(id)
 }
 
 export const getFeaturedProducts = (): Product[] =>
