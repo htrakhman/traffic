@@ -228,8 +228,8 @@ export default function Header() {
                     to="/quote"
                     className="btn-primary text-sm h-9 px-3 shrink-0 whitespace-nowrap !shadow-none hover:!translate-y-0 xl:h-10 xl:px-4"
                   >
-                    <span className="xl:hidden">Book rental</span>
-                    <span className="hidden xl:inline">Book your rental</span>
+                    <span className="xl:hidden">Quote</span>
+                    <span className="hidden xl:inline">Request quote</span>
                   </Link>
                 </div>
               ) : (
@@ -252,8 +252,8 @@ export default function Header() {
                     to="/quote"
                     className="btn-primary text-sm h-9 px-3 whitespace-nowrap !shadow-none hover:!translate-y-0 xl:h-10 xl:px-4"
                   >
-                    <span className="xl:hidden">Book rental</span>
-                    <span className="hidden xl:inline">Book your rental</span>
+                    <span className="xl:hidden">Quote</span>
+                    <span className="hidden xl:inline">Request quote</span>
                   </Link>
                 </div>
               )}
@@ -340,7 +340,7 @@ export default function Header() {
                   {SITE_CONTACT_PHONE_DISPLAY}
                 </a>
                 <Link to="/quote" className="btn-primary w-full justify-center">
-                  Book your rental
+                  Request quote
                 </Link>
               </div>
             </div>

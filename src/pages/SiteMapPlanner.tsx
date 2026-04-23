@@ -36,6 +36,13 @@ import {
 import { clampLatLngToPolygonInterior, buildMapAreaFromPath, planWorkzoneLayout, buildDemoPlan } from '../utils/workzonePlannerClient'
 import { parseQASegments } from '../utils/chatQAParse'
 import type { MutableRefObject } from 'react'
+import {
+  getLowestRetailUnitPrice,
+  getMinimumOrderQuantity,
+  getPurchaseLineSubtotal,
+  getRetailUnitPriceForQty,
+  normalizeRecommendationPricing,
+} from '../utils/pricing'
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
 const MAP_ID =
@@ -770,7 +777,8 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
 
               const AdvancedMarkerElement = advancedMarkerCtorRef.current
               if (!AdvancedMarkerElement) return
-              userLocationMarkerRef.current?.map = null
+              const prevUserLoc = userLocationMarkerRef.current
+              if (prevUserLoc) prevUserLoc.map = null
               const dot = document.createElement('div')
               dot.style.cssText = [
                 'width:16px',
@@ -822,7 +830,8 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       idleListener?.remove()
       workZonePolyRef.current?.setMap(null)
       workZonePolyRef.current = null
-      userLocationMarkerRef.current?.map = null
+      const userLocMarker = userLocationMarkerRef.current
+      if (userLocMarker) userLocMarker.map = null
       userLocationMarkerRef.current = null
       markersRef.current.forEach((m) => {
         m.marker.map = null
@@ -1786,16 +1795,20 @@ function ZoneRecommendationCard({ rec, onAddToCart }: { rec: AIRecommendation; o
   return (
     <div className="mt-1.5 rounded-xl border border-brand-500/30 bg-slate-900/80 overflow-hidden text-[10px]">
       <div className="divide-y divide-slate-800/60 max-h-44 overflow-y-auto">
-        {rec.items.map((item, i) => (
+        {rec.items.map((item, i) => {
+          const p = getProductById(item.productId)
+          const line = p ? getPurchaseLineSubtotal(p, item.quantity) : item.unitPrice * item.quantity
+          return (
           <div key={i} className="flex items-start gap-2 px-2.5 py-1.5">
             <span className={`mt-0.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
               item.priority === 'required' ? 'bg-brand-400' :
               item.priority === 'recommended' ? 'bg-amber-400' : 'bg-slate-500'
             }`} />
             <span className="flex-1 text-slate-200 leading-snug">{item.quantity}× {item.productName}</span>
-            <span className="text-slate-500 whitespace-nowrap">${(item.dailyRate * item.quantity).toFixed(0)}/day</span>
+            <span className="text-slate-500 whitespace-nowrap">${line.toFixed(0)} line</span>
           </div>
-        ))}
+          )
+        })}
       </div>
       {rec.setupNotes.length > 0 && (
         <div className="px-2.5 py-1.5 border-t border-slate-800/60 bg-slate-950/30">
@@ -1806,7 +1819,7 @@ function ZoneRecommendationCard({ rec, onAddToCart }: { rec: AIRecommendation; o
       )}
       <div className="flex items-center justify-between gap-2 px-2.5 py-2 bg-slate-800/60 border-t border-slate-700/60">
         <div className="text-slate-300 font-semibold">
-          ${rec.totalDailyRate.toFixed(0)}<span className="text-slate-500 font-normal">/day</span>
+          ${rec.estimatedMerchandiseSubtotal.toFixed(0)}<span className="text-slate-500 font-normal"> merch</span>
         </div>
         <button
           type="button"
@@ -1990,7 +2003,11 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
         .slice(0, 50)
 
       const catalogStr = catalog
-        .map((p) => `  id:"${p.id}" name:"${p.name}" cat:"${p.categorySlug}" rate:$${p.dailyRate}/day`)
+        .map((p) => {
+          const moq = getMinimumOrderQuantity(p)
+          const low = getLowestRetailUnitPrice(p)
+          return `  id:"${p.id}" name:"${p.name}" cat:"${p.categorySlug}" minQty:${moq} lowestTierUnit:$${low.toFixed(2)}`
+        })
         .join('\n')
 
       const speedNote = mapArea.postedSpeedMph
@@ -2046,7 +2063,7 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
       "quantity": number,
       "rationale": "specific reason + NJDOT/MUTCD rule reference",
       "priority": "required|recommended|optional",
-      "dailyRate": number (from catalog)
+      "unitPrice": number (retail $ per unit at this line's quantity — must match catalog tier for that quantity)
     }
   ],
   "setupNotes": [
@@ -2082,24 +2099,38 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
           quantity: number
           rationale: string
           priority: 'required' | 'recommended' | 'optional'
-          dailyRate: number
+          unitPrice: number
         }>
         setupNotes: string[]
         estimatedDurationDays: number
         disclaimer: string
       }
 
-      const rec: AIRecommendation = {
+      const rec: AIRecommendation = normalizeRecommendationPricing({
         summary: parsed.summary,
-        items: parsed.items.map((item) => ({
-          ...item,
-          category: getProductById(item.productId)?.categorySlug ?? 'equipment',
-        })),
-        totalDailyRate: parsed.items.reduce((s, i) => s + i.dailyRate * i.quantity, 0),
+        items: parsed.items.map((item) => {
+          const legacy = item as { unitPrice?: number; dailyRate?: number }
+          const unitPriceGuess =
+            typeof legacy.unitPrice === 'number'
+              ? legacy.unitPrice
+              : typeof legacy.dailyRate === 'number'
+                ? legacy.dailyRate
+                : 0
+          return {
+            productId: item.productId,
+            productName: item.productName,
+            category: getProductById(item.productId)?.categorySlug ?? 'equipment',
+            quantity: item.quantity,
+            rationale: item.rationale,
+            priority: item.priority,
+            unitPrice: unitPriceGuess,
+          }
+        }),
+        estimatedMerchandiseSubtotal: 0,
         estimatedDurationDays: parsed.estimatedDurationDays,
         setupNotes: parsed.setupNotes,
         disclaimer: parsed.disclaimer,
-      }
+      })
 
       // Auto-place on map
       const cartItems = parsed.items.map((item) => {
@@ -2167,8 +2198,8 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
           quantity: number
           rationale: string
           priority: 'required' | 'recommended' | 'optional'
-          dailyRate: number
           category: string
+          unitPrice: number
         }> = []
         const allProducts = getProducts()
         const findBy = (predicate: (p: ReturnType<typeof getProducts>[number]) => boolean) =>
@@ -2186,8 +2217,8 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
             quantity: qty,
             rationale,
             priority,
-            dailyRate: p.dailyRate,
             category: p.categorySlug,
+            unitPrice: getRetailUnitPriceForQty(p, qty),
           })
         }
         const cone = findBy((p) => p.categorySlug === 'cones-drums' && /cone/i.test(p.name))
@@ -2202,17 +2233,17 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
         push(arrowBoard, speed >= 45 || fullClosure || twoLanes ? 1 : 0, `Arrow board required for lane closures at ${speed} mph per NJDOT.`, 'required')
         push(messageBoard, speed >= 45 ? 1 : 0, 'PCMS advised for ≥45 mph arterials/expressways.', 'recommended')
         push(vest, 2, 'ANSI Class 2/3 PPE for workers.', 'required')
-        const rec: AIRecommendation = {
+        const rec: AIRecommendation = normalizeRecommendationPricing({
           summary: `Rules-based NJDOT fallback for ~${Math.round(mapArea.perimeterFt)} ft perimeter at ${speed} mph${fullClosure ? ', full closure' : twoLanes ? ', two-lane closure' : ''}. AI service was unavailable — these quantities follow NJDOT SDTTC and MUTCD Part 6 spacing tables.`,
           items: fallbackItems,
-          totalDailyRate: fallbackItems.reduce((s, i) => s + i.dailyRate * i.quantity, 0),
+          estimatedMerchandiseSubtotal: 0,
           estimatedDurationDays: 1,
           setupNotes: [
             'Verify against your approved TCP and NJDOT permit conditions.',
             'Field conditions govern — adjust taper length and device spacing as required.',
           ],
           disclaimer: 'Rules-based fallback (AI service unavailable). Verify against your approved TCP and NJDOT permit.',
-        }
+        })
         // Auto-place fallback items on the map.
         try {
           const cartItems = fallbackItems.map((i) => ({
@@ -2668,10 +2699,9 @@ INSTRUCTIONS
                   <ZoneRecommendationCard
                     rec={m.recommendation}
                     onAddToCart={() => {
-                      const days = Math.max(1, Math.floor(m.recommendation!.estimatedDurationDays))
                       for (const item of m.recommendation!.items) {
                         const p = getProductById(item.productId)
-                        if (p) addItem(p, item.quantity, days)
+                        if (p) addItem(p, item.quantity)
                       }
                     }}
                   />

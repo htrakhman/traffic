@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { usePostHog } from '@posthog/react'
-import type { Product } from './types'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { MembershipProvider } from './context/MembershipContext'

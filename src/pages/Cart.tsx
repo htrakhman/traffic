@@ -10,14 +10,14 @@ import WorkzoneVisualizerModal from '../components/workzone/WorkzoneVisualizerMo
 import { getLatestJobAssistantPersisted } from '../utils/jobAssistantSessionStorage'
 import { productSkuLabel } from '../utils/productSkuLabel'
 import type { MapArea } from '../types'
+import { getMinimumOrderQuantity, getPurchaseLineSubtotal, getRetailUnitPriceForQty } from '../utils/pricing'
 
 export default function Cart() {
-  const { lines, setLineQuantity, setLineRentalDays, removeLine, clearCart } = useCart()
+  const { lines, setLineQuantity, removeLine, clearCart } = useCart()
   const { isMember } = useMembership()
   const [showVisualizer, setShowVisualizer] = useState(false)
   const [savedMapArea, setSavedMapArea] = useState<MapArea | null>(null)
 
-  // Load saved workzone from Job Assistant session storage
   useEffect(() => {
     const session = getLatestJobAssistantPersisted()
     if (session?.mapArea) setSavedMapArea(session.mapArea)
@@ -30,16 +30,12 @@ export default function Cart() {
     })
     .filter(Boolean) as { line: (typeof lines)[0]; product: NonNullable<ReturnType<typeof getProductById>> }[]
 
-  const totalDaily = resolved.reduce(
-    (s, { line, product }) => s + product.dailyRate * line.quantity,
-    0,
-  )
-  const rentalGrandTotal = resolved.reduce(
-    (s, { line, product }) => s + product.dailyRate * line.quantity * line.rentalDays,
+  const merchandiseSubtotal = resolved.reduce(
+    (s, { line, product }) => s + getPurchaseLineSubtotal(product, line.quantity),
     0,
   )
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
-  const grandTotal = rentalGrandTotal + deliveryPickupCombined
+  const grandTotal = merchandiseSubtotal + deliveryPickupCombined
 
   return (
     <main className="min-h-screen pt-20">
@@ -51,7 +47,7 @@ export default function Cart() {
               Cart
             </h1>
             <p className="text-slate-400">
-              Review equipment, then check out, book with job details, or keep browsing.
+              Review equipment, then check out or request a quote with job details.
             </p>
           </div>
           {resolved.length > 0 && (
@@ -72,7 +68,7 @@ export default function Cart() {
             <Package size={40} className="text-slate-600 mx-auto mb-4" />
             <h2 className="text-lg font-semibold text-white mb-2">Your cart is empty</h2>
             <p className="text-slate-400 mb-6 text-sm max-w-md mx-auto">
-              Add rentals from any product page. Your cart is saved on this device.
+              Add products from any product page. Your cart is saved on this device.
             </p>
             <Link to="/browse" className="btn-primary inline-flex">
               Browse equipment
@@ -81,93 +77,80 @@ export default function Cart() {
         ) : (
           <div className="space-y-6">
             <div className="space-y-3">
-              {resolved.map(({ line, product }) => (
-                <div key={line.productId} className="card p-4 flex flex-col sm:flex-row gap-4">
-                  <Link
-                    to={`/product/${product.slug}`}
-                    className="flex gap-4 flex-1 min-w-0 group"
-                  >
-                    <img
-                      src={product.imageUrl}
-                      alt=""
-                      className="w-24 h-20 object-cover rounded-lg bg-slate-800 flex-shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <h2 className="font-medium text-white text-sm leading-snug group-hover:text-brand-300 transition-colors">
-                        {product.name}
-                      </h2>
-                      <p className="text-xs text-slate-500 mt-1">
-                        ${product.dailyRate.toFixed(2)}/{product.unit}/day · {productSkuLabel(product)}
-                      </p>
-                    </div>
-                  </Link>
+              {resolved.map(({ line, product }) => {
+                const moq = getMinimumOrderQuantity(product)
+                const unit = getRetailUnitPriceForQty(product, line.quantity)
+                const lineTotal = getPurchaseLineSubtotal(product, line.quantity)
+                return (
+                  <div key={line.productId} className="card p-4 flex flex-col sm:flex-row gap-4">
+                    <Link
+                      to={`/product/${product.slug}`}
+                      className="flex gap-4 flex-1 min-w-0 group"
+                    >
+                      <img
+                        src={product.imageUrl}
+                        alt=""
+                        className="w-24 h-20 object-cover rounded-lg bg-slate-800 flex-shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <h2 className="font-medium text-white text-sm leading-snug group-hover:text-brand-300 transition-colors">
+                          {product.name}
+                        </h2>
+                        <p className="text-xs text-slate-500 mt-1">
+                          ${unit.toFixed(2)}/{product.unit} (tier) · {productSkuLabel(product)}
+                        </p>
+                      </div>
+                    </Link>
 
-                  <div className="flex flex-wrap items-end gap-4 sm:flex-col sm:items-end sm:justify-between sm:min-w-[200px]">
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <div>
-                        <span className="label text-xs block mb-1">Qty</span>
-                        <div className="flex items-center gap-1">
-                          <button
-                            type="button"
-                            onClick={() => setLineQuantity(line.productId, line.quantity - 1)}
-                            className="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded-lg text-white text-sm flex items-center justify-center"
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span className="w-9 text-center text-sm font-medium text-white">
-                            {line.quantity}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setLineQuantity(line.productId, line.quantity + 1)}
-                            className="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded-lg text-white text-sm flex items-center justify-center"
-                          >
-                            <Plus size={14} />
-                          </button>
+                    <div className="flex flex-wrap items-end gap-4 sm:flex-col sm:items-end sm:justify-between sm:min-w-[200px]">
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <div>
+                          <span className="label text-xs block mb-1">Qty (min {moq})</span>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => setLineQuantity(line.productId, line.quantity - 1, product)}
+                              className="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded-lg text-white text-sm flex items-center justify-center"
+                            >
+                              <Minus size={14} />
+                            </button>
+                            <span className="w-9 text-center text-sm font-medium text-white">
+                              {line.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setLineQuantity(line.productId, line.quantity + 1, product)}
+                              className="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded-lg text-white text-sm flex items-center justify-center"
+                            >
+                              <Plus size={14} />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                      <div>
-                        <span className="label text-xs block mb-1">Rental days</span>
-                        <input
-                          type="number"
-                          min={product.minimumRentalDays}
-                          value={line.rentalDays}
-                          onChange={(e) =>
-                            setLineRentalDays(
-                              line.productId,
-                              Number(e.target.value),
-                              product.minimumRentalDays,
-                            )
-                          }
-                          className="input py-2 w-20 text-sm text-center"
-                        />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between w-full sm:w-auto gap-4">
-                      <div className="text-right">
-                        <div className="text-sm font-bold text-white">
-                          ${(product.dailyRate * line.quantity * line.rentalDays).toFixed(2)}
+                      <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+                        <div className="text-right">
+                          <div className="text-sm font-bold text-white">${lineTotal.toFixed(2)}</div>
+                          <div className="text-[10px] text-slate-500">line total</div>
                         </div>
-                        <div className="text-[10px] text-slate-500">est. total</div>
+                        <button
+                          type="button"
+                          onClick={() => removeLine(line.productId)}
+                          className="p-2 text-slate-600 hover:text-red-400 rounded-lg hover:bg-slate-800 transition-colors"
+                          aria-label={`Remove ${product.name} from cart`}
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeLine(line.productId)}
-                        className="p-2 text-slate-600 hover:text-red-400 rounded-lg hover:bg-slate-800 transition-colors"
-                        aria-label={`Remove ${product.name} from cart`}
-                      >
-                        <Trash2 size={16} />
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             <div className="card p-5 space-y-4">
               <div className="flex justify-between text-sm text-slate-400">
-                <span>Daily rate (all items)</span>
-                <span>${totalDaily.toFixed(2)}/day</span>
+                <span>Merchandise</span>
+                <span>${merchandiseSubtotal.toFixed(2)}</span>
               </div>
               <DeliveryPickupBreakdown isMember={isMember} className="pt-2 border-t border-slate-800" />
               <div className="flex justify-between text-lg font-semibold text-white pt-2 border-t border-slate-800">
@@ -175,9 +158,8 @@ export default function Cart() {
                 <span>${grandTotal.toFixed(2)}</span>
               </div>
               <p className="text-xs text-slate-500">
-                Final total confirmed when you lock in your order. Shipping will be calculated separately.
+                Volume tier pricing is applied per line. Standard shipping is free at checkout.
               </p>
-              {/* Show in Map — active if a workzone polygon was drawn in the Job Assistant */}
               <button
                 type="button"
                 onClick={() => setShowVisualizer(true)}
@@ -205,7 +187,7 @@ export default function Cart() {
                   Checkout
                 </Link>
                 <Link to="/quote" className="btn-secondary flex-1 justify-center py-3">
-                  Book with job details
+                  Request quote
                   <ArrowRight size={18} />
                 </Link>
                 <Link to="/browse" className="btn-secondary flex-1 justify-center py-3">
@@ -217,7 +199,6 @@ export default function Cart() {
         )}
       </div>
 
-      {/* Workzone Visualizer Modal */}
       {showVisualizer && (
         <WorkzoneVisualizerModal
           mapArea={savedMapArea}

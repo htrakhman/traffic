@@ -156,11 +156,36 @@ export function getLowestRetailUnitPrice(product: Pick<Product, 'volumePriceTier
  * Forces AI / demo recommendations to use catalog purchase tier pricing.
  * Optionally caps cones/drums on modest drawn footprints when the model over-shoots vs. perimeter.
  */
+type LegacyRecItem = RecommendationItem & { dailyRate?: number }
+
+function coerceRecommendationItem(it: LegacyRecItem): RecommendationItem {
+  const unitPrice =
+    typeof it.unitPrice === 'number'
+      ? it.unitPrice
+      : typeof it.dailyRate === 'number'
+        ? it.dailyRate
+        : 0
+  return {
+    productId: it.productId,
+    productName: it.productName,
+    category: it.category,
+    quantity: it.quantity,
+    rationale: it.rationale,
+    priority: it.priority,
+    unitPrice,
+  }
+}
+
+/** Accept legacy model JSON that used `dailyRate` / `totalDailyRate`. */
 export function normalizeRecommendationPricing(
-  rec: AIRecommendation,
+  rec: AIRecommendation & { totalDailyRate?: number; items?: LegacyRecItem[] },
   mapFootprint?: RecommendationFootprintGuard,
 ): AIRecommendation {
-  const priced = applyModestFootprintChannelizingGuard(rec, mapFootprint)
+  const coercedItems = (rec.items ?? []).map(coerceRecommendationItem)
+  const priced = applyModestFootprintChannelizingGuard(
+    { ...rec, items: coercedItems } as AIRecommendation,
+    mapFootprint,
+  )
   const items: RecommendationItem[] = priced.items.map((item) => {
     const p = getProductById(item.productId)
     if (!p) return item

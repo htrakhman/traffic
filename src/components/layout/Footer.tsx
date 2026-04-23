@@ -62,7 +62,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: 'AI Job Planner', href: '/assistant' },
-                { label: 'Book your rental', href: '/quote' },
+                { label: 'Request quote', href: '/quote' },
                 { label: 'Browse All Inventory', href: '/browse' },
                 { label: 'Work Zone Guides', href: '/blog' },
               ].map((item) => (

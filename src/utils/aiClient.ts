@@ -1,6 +1,12 @@
 import type { JobDetails, MapArea, RecommendationItem, AIRecommendation } from '../types'
 import { curatedProducts, getProductById } from '../data/products'
-import { normalizeRecommendationPricing, type RecommendationFootprintGuard } from './pricing'
+import {
+  getLowestRetailUnitPrice,
+  getMinimumOrderQuantity,
+  getRetailUnitPriceForQty,
+  normalizeRecommendationPricing,
+  type RecommendationFootprintGuard,
+} from './pricing'
 import { extractChatCartRecommendation } from './chatCartParse'
 import { SITE_NAME } from '../config/site'
 
@@ -63,15 +69,20 @@ function formatChatHttpError(status: number, rawBody: string): string {
 }
 
 const CATALOG_PROMPT_LINES = curatedProducts
-  .map(
-    (p) =>
-      `- ${p.id}: ${p.name} — $${p.dailyRate.toFixed(2)}/day retail (you MUST use this exact dailyRate in JSON)`,
-  )
+  .map((p) => {
+    const moq = getMinimumOrderQuantity(p)
+    const low = getLowestRetailUnitPrice(p)
+    return `- ${p.id}: ${p.name} — min order ${moq} ${p.unit}, lowest-tier retail $${low.toFixed(2)}/${p.unit} (unitPrice in JSON must equal catalog retail for that line's quantity)`
+  })
   .join('\n')
 
 /** One line for streaming cart instructions */
 const STREAM_CART_PRODUCT_RATES = curatedProducts
-  .map((p) => `${p.id}: ${p.name} ($${p.dailyRate.toFixed(2)}/day)`)
+  .map((p) => {
+    const moq = getMinimumOrderQuantity(p)
+    const low = getLowestRetailUnitPrice(p)
+    return `${p.id}: ${p.name} (moq ${moq} @ $${low.toFixed(2)}/${p.unit})`
+  })
   .join(' | ')
 
 /** Human-readable lines for a drawn work zone (form job prompt + chat API suffix). */
@@ -150,11 +161,11 @@ const TTC_EXPERT_DOCTRINE = `Expert doctrine (follow in every reply):
 - Answer discipline: Answer the user's actual question first in the fewest words that stay safe and useful. Ask clarifying questions only when blocking for safety or sizing—when collecting context, batch questions instead of ping-ponging.
 - Catalog honesty: Recommend catalog SKUs only where there is a clear operational need; omit unrelated categories instead of padding the list.`
 
-const SYSTEM_PROMPT = `You are the AI Work Zone Planner for ${SITE_NAME} — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to rent for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) frameworks, ATSSA guidance, and common work zone setups.
+const SYSTEM_PROMPT = `You are the AI Work Zone Planner for ${SITE_NAME} — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to purchase for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) frameworks, ATSSA guidance, and common work zone setups.
 
 ${TTC_EXPERT_DOCTRINE}
 
-Your available rental equipment catalog (retail daily rental rates — already include our standard 50% markup on supplier-reference economics; copy dailyRate values exactly):
+Your available equipment catalog (retail purchase unit price by volume tier — already includes our standard 50% markup on supplier-reference economics; copy unitPrice exactly for each line's quantity):
 ${CATALOG_PROMPT_LINES}
 
 When a user describes their job, provide a structured equipment recommendation. Be specific about quantities. Consider:
@@ -181,16 +192,16 @@ Respond in valid JSON format:
       "quantity": N,
       "rationale": "Brief reason why this quantity",
       "priority": "required|recommended|optional",
-      "dailyRate": X.XX
+      "unitPrice": X.XX
     }
   ],
-  "totalDailyRate": XX.XX,
+  "estimatedMerchandiseSubtotal": XX.XX,
   "estimatedDurationDays": N,
   "setupNotes": ["Note 1", "Note 2"],
   "disclaimer": "Standard disclaimer about planning guidance vs compliance requirements"
 }
 
-For the productId field, use the prod-* IDs listed above when they match the need. Each item's dailyRate must match the catalog rate for that ID (do not invent rates).
+For the productId field, use the prod-* IDs listed above when they match the need. Each item's unitPrice must match the catalog retail unit price for that ID at the quantity on that line (do not invent rates).
 
 Always remind users that recommendations are planning guidance only and that final requirements depend on project conditions and applicable state/local standards. Keep the tone contractor-friendly and practical.`
 
@@ -329,7 +340,7 @@ ${JSON.stringify(rec)}
       /** Cart JSON + rationales for many SKUs needs headroom; prefer recovery over user-visible truncation. */
       max_tokens: 8192,
       stream: true,
-      system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to rent. Be brief and direct.
+      system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to purchase. Be brief and direct.
 
 ${TTC_EXPERT_DOCTRINE}
 
@@ -368,10 +379,10 @@ Rules:
 WHEN READY TO RECOMMEND — output exactly this (a brief sentence, then the cart block):
 Here's your recommended equipment setup.
 [CART_START]
-{"summary":"...","items":[{"productId":"prod-X","productName":"...","category":"...","quantity":N,"rationale":"...","priority":"required|recommended|optional","dailyRate":X.XX}],"totalDailyRate":XX.XX,"estimatedDurationDays":N,"setupNotes":["..."],"disclaimer":"These recommendations are planning guidance only. Verify with your project engineer or state DOT."}
+{"summary":"...","items":[{"productId":"prod-X","productName":"...","category":"...","quantity":N,"rationale":"...","priority":"required|recommended|optional","unitPrice":X.XX}],"estimatedMerchandiseSubtotal":XX.XX,"estimatedDurationDays":N,"setupNotes":["..."],"disclaimer":"These recommendations are planning guidance only. Verify with your project engineer or state DOT."}
 [CART_END]
 
-Product IDs and retail daily rates (use these exact dailyRate values in the cart JSON):
+Product IDs and catalog unit pricing (use these exact unitPrice values for each quantity in the cart JSON):
 ${STREAM_CART_PRODUCT_RATES}`,
       messages: messagesForApi,
     }),
@@ -421,10 +432,10 @@ const CART_RECOVERY_USER = `Your previous reply in this thread started a [CART_S
 
 Output a single repair message for the chat UI only:
 1) The exact line: Here's your recommended equipment setup.
-2) Then one [CART_START] line, one JSON object (no markdown fences) with: summary, items (productId, productName, category, quantity, rationale, priority, dailyRate), totalDailyRate, estimatedDurationDays, setupNotes, disclaimer — same schema as the main planner.
+2) Then one [CART_START] line, one JSON object (no markdown fences) with: summary, items (productId, productName, category, quantity, rationale, priority, unitPrice), estimatedMerchandiseSubtotal, estimatedDurationDays, setupNotes, disclaimer — same schema as the main planner.
 3) Then [CART_END] on its own line.
 
-Do not repeat [Q]/[A] blocks or a plain-text equipment list. Keep the item list focused; use priority "optional" for extras. dailyRate must match the catalog list in the system message.`
+Do not repeat [Q]/[A] blocks or a plain-text equipment list. Keep the item list focused; use priority "optional" for extras. unitPrice must match the catalog list in the system message for each line's quantity.`
 
 const CART_RECOVERY_SYSTEM = `You complete truncated work-zone equipment carts for ${SITE_NAME}.
 
@@ -432,7 +443,7 @@ ${TTC_EXPERT_DOCTRINE}
 
 Reply discipline: output only the lead sentence, [CART_START], one JSON object, [CART_END] — nothing else.
 
-Catalog product IDs and retail daily rates (copy dailyRate exactly):
+Catalog product IDs and retail unit prices (copy unitPrice exactly for each quantity):
 ${STREAM_CART_PRODUCT_RATES}`
 
 /**
@@ -499,7 +510,11 @@ function getDemoRecommendation(
   jobDetails: Partial<JobDetails>,
   userMessage?: string,
 ): AIRecommendation {
-  const catalogDaily = (productId: string) => getProductById(productId)!.dailyRate
+  const catalogUnit = (productId: string, qty: number) => {
+    const p = getProductById(productId)
+    if (!p) return 0
+    return getRetailUnitPriceForQty(p, qty)
+  }
 
   const isHighSpeed = Number(jobDetails.speedLimit) >= 45
   const isNight = jobDetails.workTime === 'night' || jobDetails.workTime === 'both'
@@ -518,7 +533,7 @@ function getDemoRecommendation(
         ? '36" cones required for roads 45+ mph per most state standards'
         : 'Standard 28" cones for lane and shoulder delineation',
       priority: 'required',
-      dailyRate: catalogDaily(coneId),
+      unitPrice: catalogUnit(coneId, isLaneClosure ? 40 : 20),
     },
     {
       productId: 'prod-4',
@@ -527,7 +542,7 @@ function getDemoRecommendation(
       quantity: 2,
       rationale: 'Required advance warning signs at both approach directions',
       priority: 'required',
-      dailyRate: catalogDaily('prod-4'),
+      unitPrice: catalogUnit('prod-4', 2),
     },
     {
       productId: 'prod-6',
@@ -536,7 +551,7 @@ function getDemoRecommendation(
       quantity: 2,
       rationale: 'One stand per advance warning sign',
       priority: 'required',
-      dailyRate: catalogDaily('prod-6'),
+      unitPrice: catalogUnit('prod-6', 2),
     },
   ]
 
@@ -548,7 +563,7 @@ function getDemoRecommendation(
       quantity: 2,
       rationale: 'Required when lane is closed to alert approaching traffic',
       priority: 'required',
-      dailyRate: catalogDaily('prod-7'),
+      unitPrice: catalogUnit('prod-7', 2),
     })
     items.push({
       productId: 'prod-11',
@@ -557,7 +572,7 @@ function getDemoRecommendation(
       quantity: 1,
       rationale: 'DOT-required arrow board at the beginning of the lane taper',
       priority: 'required',
-      dailyRate: catalogDaily('prod-11'),
+      unitPrice: catalogUnit('prod-11', 1),
     })
   }
 
@@ -569,7 +584,7 @@ function getDemoRecommendation(
       quantity: 15,
       rationale: 'Drums with retroreflective sheeting provide superior visibility at night',
       priority: 'recommended',
-      dailyRate: catalogDaily('prod-3'),
+      unitPrice: catalogUnit('prod-3', 15),
     })
     items.push({
       productId: 'prod-14',
@@ -578,7 +593,7 @@ function getDemoRecommendation(
       quantity: 15,
       rationale: 'Flashing amber lights on drums and barricades required for night work',
       priority: 'required',
-      dailyRate: catalogDaily('prod-14'),
+      unitPrice: catalogUnit('prod-14', 15),
     })
   }
 
@@ -590,7 +605,7 @@ function getDemoRecommendation(
       quantity: 4,
       rationale: 'Pedestrian channelization and protection in high-foot-traffic areas',
       priority: 'recommended',
-      dailyRate: catalogDaily('prod-8'),
+      unitPrice: catalogUnit('prod-8', 4),
     })
   }
 
@@ -599,7 +614,7 @@ function getDemoRecommendation(
   return normalizeRecommendationPricing({
     summary: `Here's a recommended traffic control setup ${jobDesc}. This configuration covers advance warning, channelization${isLaneClosure ? ', and lane closure guidance' : ''}${isNight ? ', plus night-work lighting' : ''}. Quantities are estimated — your traffic control supervisor should verify against local standards.`,
     items,
-    totalDailyRate: 0,
+    estimatedMerchandiseSubtotal: 0,
     estimatedDurationDays: days,
     setupNotes: [
       `Advance warning signs should be placed ${isHighSpeed ? '1,000–1,500 ft' : '350–500 ft'} upstream of the work zone`,
@@ -608,6 +623,6 @@ function getDemoRecommendation(
       'Assign a qualified flagger if traffic alternates through a single open lane',
     ],
     disclaimer:
-      'These recommendations are planning guidance to help you estimate rental needs. Final traffic control plan requirements depend on actual project conditions, applicable state/local standards, and may require a certified Traffic Control Supervisor or TCP. Verify requirements with your project engineer or state DOT.',
+      'These recommendations are planning guidance to help you estimate purchase quantities. Final traffic control plan requirements depend on actual project conditions, applicable state/local standards, and may require a certified Traffic Control Supervisor or TCP. Verify requirements with your project engineer or state DOT.',
   })
 }

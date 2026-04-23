@@ -6,6 +6,7 @@ import { useCart } from '../../context/CartContext'
 import { getDeliveryPickupFees } from '../../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../pricing/DeliveryPickupBreakdown'
 import { getProductById } from '../../data/products'
+import { getPurchaseLineSubtotal } from '../../utils/pricing'
 
 interface Props {
   recommendation: AIRecommendation
@@ -21,17 +22,16 @@ export default function RecommendationPanel({ recommendation }: Props) {
   const navigate = useNavigate()
   const { addItem } = useCart()
   const { isMember } = useMembership()
-  const rentalPeriodTotal = recommendation.totalDailyRate * recommendation.estimatedDurationDays
+  const merchandiseSubtotal = recommendation.estimatedMerchandiseSubtotal
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
-  const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
+  const estimatedGrandTotal = merchandiseSubtotal + deliveryPickupCombined
 
   const handleCheckoutFromRecommendation = () => {
-    const days = Math.max(1, Math.floor(recommendation.estimatedDurationDays))
     let added = 0
     for (const item of recommendation.items) {
       const p = getProductById(item.productId)
       if (p) {
-        addItem(p, item.quantity, days)
+        addItem(p, item.quantity)
         added++
       }
     }
@@ -52,7 +52,7 @@ export default function RecommendationPanel({ recommendation }: Props) {
       {/* Cost estimate */}
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: 'Daily Rate', value: `$${recommendation.totalDailyRate.toFixed(0)}/day` },
+          { label: 'Merchandise', value: `$${merchandiseSubtotal.toFixed(0)}` },
           { label: 'Est. Duration', value: `${recommendation.estimatedDurationDays} days` },
           { label: 'Est. Total', value: `~$${estimatedGrandTotal.toFixed(0)}` },
         ].map((stat) => (
@@ -70,6 +70,8 @@ export default function RecommendationPanel({ recommendation }: Props) {
         <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Recommended Equipment</h4>
         {recommendation.items.map((item, i) => {
           const pc = priorityConfig[item.priority]
+          const p = getProductById(item.productId)
+          const line = p ? getPurchaseLineSubtotal(p, item.quantity) : item.unitPrice * item.quantity
           return (
             <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border ${pc.bg}`}>
               <div className="flex-1 min-w-0">
@@ -81,7 +83,7 @@ export default function RecommendationPanel({ recommendation }: Props) {
               </div>
               <div className="text-right flex-shrink-0">
                 <div className="text-sm font-bold text-white">×{item.quantity}</div>
-                <div className="text-xs text-slate-500">${(item.dailyRate * item.quantity).toFixed(2)}/day</div>
+                <div className="text-xs text-slate-500">${line.toFixed(2)} line</div>
               </div>
             </div>
           )

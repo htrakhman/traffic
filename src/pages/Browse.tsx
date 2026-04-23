@@ -2,13 +2,14 @@ import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
 import { getProducts, filterProductsBySearchQuery } from '../data/products'
+import { getLowestRetailUnitPrice } from '../utils/pricing'
 import { useCatalogSync } from '../context/CatalogSyncContext'
 import ProductCard from '../components/marketplace/ProductCard'
 import FilterSidebar from '../components/marketplace/FilterSidebar'
 
 interface Filters {
   category: string
-  maxDailyRate: number
+  maxRetailUnit: number
   inStockOnly: boolean
   popular: boolean
 }
@@ -19,7 +20,7 @@ export default function Browse() {
   const [query, setQuery] = useState(() => searchParams.get('q') ?? '')
   const [filters, setFilters] = useState<Filters>(() => ({
     category: searchParams.get('category') ?? '',
-    maxDailyRate: 200,
+    maxRetailUnit: 200,
     inStockOnly: false,
     popular: false,
   }))
@@ -48,7 +49,9 @@ export default function Browse() {
     // (Global search ∩ category is often empty, e.g. q="cone" + Pedestrian — users expect in-category search.)
     let list = [...getProducts()]
     if (filters.category) list = list.filter((p) => p.categorySlug === filters.category)
-    if (filters.maxDailyRate < 200) list = list.filter((p) => p.dailyRate <= filters.maxDailyRate)
+    if (filters.maxRetailUnit < 200) {
+      list = list.filter((p) => getLowestRetailUnitPrice(p) <= filters.maxRetailUnit)
+    }
     if (filters.inStockOnly) list = list.filter((p) => p.inStock)
     if (filters.popular) list = list.filter((p) => p.popular)
     list = filterProductsBySearchQuery(list, query)
@@ -72,7 +75,7 @@ export default function Browse() {
       <div className="bg-slate-900/50 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <h1 className="text-3xl font-bold text-white mb-2">Browse Equipment</h1>
-          <p className="text-slate-400">Rental equipment for professional work zones.</p>
+          <p className="text-slate-400">Traffic safety equipment for professional work zones.</p>
 
           {/* Search */}
           <form onSubmit={handleSearch} className="mt-6 relative max-w-xl">
@@ -140,7 +143,7 @@ export default function Browse() {
                   type="button"
                   onClick={() => {
                     setQuery('')
-                    setFilters({ category: '', maxDailyRate: 200, inStockOnly: false, popular: false })
+                    setFilters({ category: '', maxRetailUnit: 200, inStockOnly: false, popular: false })
                     setSearchParams({})
                   }}
                   className="btn-secondary text-sm"

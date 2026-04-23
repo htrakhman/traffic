@@ -27,6 +27,7 @@ import { useMembership } from '../../context/MembershipContext'
 import { getDeliveryPickupFees } from '../../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../pricing/DeliveryPickupBreakdown'
 import WorkzoneVisualizerModal from '../workzone/WorkzoneVisualizerModal'
+import { getMinimumOrderQuantity, getPurchaseLineSubtotal, getRetailUnitPriceForQty } from '../../utils/pricing'
 
 interface Props {
   recommendation: AIRecommendation
@@ -64,15 +65,24 @@ function itemKey(item: RecommendationItem) {
   return item.productId + item.productName
 }
 
+function syncRecommendationItem(it: RecommendationItem): RecommendationItem {
+  const p = getProductById(it.productId)
+  if (!p) return it
+  const moq = getMinimumOrderQuantity(p)
+  const q = Math.max(moq, Math.floor(it.quantity))
+  return { ...it, quantity: q, unitPrice: getRetailUnitPriceForQty(p, q) }
+}
+
 function productToLine(p: Product): RecommendationItem {
+  const moq = getMinimumOrderQuantity(p)
   return {
     productId: p.id,
     productName: p.name,
     category: p.categorySlug.replace(/-/g, ' '),
-    quantity: 1,
+    quantity: moq,
     rationale: 'Added from catalog search',
     priority: 'optional',
-    dailyRate: p.dailyRate,
+    unitPrice: getRetailUnitPriceForQty(p, moq),
   }
 }
 
@@ -104,7 +114,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
   )
 
   useEffect(() => {
-    setItems(recommendation.items)
+    setItems(recommendation.items.map(syncRecommendationItem))
     setRemoved(new Set())
   }, [recommendationItemsKey, recommendation.items])
 
@@ -135,27 +145,28 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
     }
     writeQuoteAiDraft({
       ...recommendation,
-      items: active,
-      totalDailyRate: active.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0),
+      items: active.map(syncRecommendationItem),
+      estimatedMerchandiseSubtotal: active.reduce((sum, item) => {
+        const p = getProductById(item.productId)
+        return sum + (p ? getPurchaseLineSubtotal(p, item.quantity) : item.unitPrice * item.quantity)
+      }, 0),
     })
   }, [quoteDraftPersistKey, recommendation, items, removed])
 
-  const totalDailyRate = activeItems.reduce((sum, item) => sum + item.dailyRate * item.quantity, 0)
+  const merchandiseSubtotal = activeItems.reduce((sum, item) => {
+    const p = getProductById(item.productId)
+    return sum + (p ? getPurchaseLineSubtotal(p, item.quantity) : item.unitPrice * item.quantity)
+  }, 0)
 
   const mapReady =
     Boolean(mapArea) && Array.isArray(mapArea?.path) && (mapArea?.path.length ?? 0) >= 3
 
-  const visualizerCartLines: CartLine[] = useMemo(() => {
-    const days = Math.max(1, Math.floor(recommendation.estimatedDurationDays))
-    return activeItems.map((item) => ({
-      productId: item.productId,
-      quantity: item.quantity,
-      rentalDays: days,
-    }))
-  }, [activeItems, recommendation.estimatedDurationDays])
-  const rentalPeriodTotal = totalDailyRate * recommendation.estimatedDurationDays
+  const visualizerCartLines: CartLine[] = useMemo(
+    () => activeItems.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+    [activeItems],
+  )
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
-  const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
+  const estimatedGrandTotal = merchandiseSubtotal + deliveryPickupCombined
 
   const filteredProducts = useMemo(() => {
     const catalog = getProducts()
@@ -197,8 +208,12 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
     setItems((prev) =>
       prev.map((item) => {
         if (itemKey(item) !== key) return item
-        const newQty = Math.max(1, item.quantity + delta)
-        return { ...item, quantity: newQty }
+        const p = getProductById(item.productId)
+        const moq = p ? getMinimumOrderQuantity(p) : 1
+        const newQty = Math.max(moq, item.quantity + delta)
+        return p
+          ? { ...item, quantity: newQty, unitPrice: getRetailUnitPriceForQty(p, newQty) }
+          : { ...item, quantity: newQty }
       }),
     )
     setRemoved((prev) => {
@@ -210,9 +225,14 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
 
   const setQtyExact = (key: string, raw: number) => {
     const n = Math.floor(raw)
-    const q = Number.isFinite(n) && n >= 1 ? n : 1
     setItems((prev) =>
-      prev.map((item) => (itemKey(item) !== key ? item : { ...item, quantity: q })),
+      prev.map((item) => {
+        if (itemKey(item) !== key) return item
+        const p = getProductById(item.productId)
+        const moq = p ? getMinimumOrderQuantity(p) : 1
+        const q = Number.isFinite(n) ? Math.max(moq, n) : moq
+        return p ? { ...item, quantity: q, unitPrice: getRetailUnitPriceForQty(p, q) } : { ...item, quantity: q }
+      }),
     )
     setRemoved((prev) => {
       const next = new Set(prev)
@@ -222,10 +242,9 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
   }
 
   const handleAddToCart = () => {
-    const days = Math.max(1, Math.floor(recommendation.estimatedDurationDays))
     for (const item of activeItems) {
       const p = getProductById(item.productId)
-      if (p) addItem(p, item.quantity, days)
+      if (p) addItem(p, item.quantity)
     }
   }
 
@@ -259,7 +278,9 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
       const existing = prev.find((it) => it.productId === p.id)
       if (existing) {
         return prev.map((it) =>
-          it.productId === p.id ? { ...it, quantity: it.quantity + 1 } : it,
+          it.productId === p.id
+            ? syncRecommendationItem({ ...it, quantity: it.quantity + 1 })
+            : it,
         )
       }
       return [...prev, productToLine(p)]
@@ -292,12 +313,12 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <div className="text-right">
             <div className="text-xs sm:text-sm font-bold text-white tabular-nums">
-              ${totalDailyRate.toFixed(0)}
-              <span className="text-[10px] sm:text-xs font-normal text-slate-400">/day</span>
+              ${merchandiseSubtotal.toFixed(0)}
+              <span className="text-[10px] sm:text-xs font-normal text-slate-400"> merch</span>
             </div>
-            <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedGrandTotal.toFixed(0)} total</div>
-            <div className="text-[8px] sm:text-[9px] text-slate-600 tabular-nums max-w-[9rem] sm:max-w-none leading-tight text-right">
-              Shipping: TBD
+            <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedGrandTotal.toFixed(0)} w/ ship line</div>
+            <div className="text-[8px] sm:text-[9px] text-emerald-400/80 tabular-nums max-w-[9rem] sm:max-w-none leading-tight text-right">
+              Free shipping
             </div>
           </div>
           {inOverlay ? (
@@ -407,7 +428,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
                   </span>
                 </div>
                 <p className="text-[10px] text-slate-500 mt-0.5 leading-snug line-clamp-1">{item.rationale}</p>
-                <div className="text-[10px] text-slate-400 mt-0.5">${item.dailyRate.toFixed(2)}/ea/day</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">${item.unitPrice.toFixed(2)}/ea (tier)</div>
               </div>
 
               <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -421,7 +442,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
                   </button>
                   <input
                     type="number"
-                    min={1}
+                    min={p ? getMinimumOrderQuantity(p) : 1}
                     step={1}
                     value={item.quantity}
                     onChange={(e) => setQtyExact(key, parseInt(e.target.value, 10))}
@@ -438,8 +459,11 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
                 </div>
 
                 <div className="w-14 text-right">
-                  <div className="text-xs font-semibold text-white">${(item.dailyRate * item.quantity).toFixed(0)}</div>
-                  <div className="text-[9px] text-slate-500">/day</div>
+                  <div className="text-xs font-semibold text-white">
+                    $
+                    {(p ? getPurchaseLineSubtotal(p, item.quantity) : item.unitPrice * item.quantity).toFixed(0)}
+                  </div>
+                  <div className="text-[9px] text-slate-500">line</div>
                 </div>
 
                 <button
@@ -473,8 +497,8 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
         <div className="flex items-center justify-between mb-2 gap-2 flex-wrap">
           <div className="flex items-center gap-4">
             <div>
-              <div className="text-[10px] text-slate-500 uppercase tracking-wide">Daily rate</div>
-              <div className="text-sm font-bold text-white">${totalDailyRate.toFixed(2)}</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wide">Merchandise</div>
+              <div className="text-sm font-bold text-white">${merchandiseSubtotal.toFixed(2)}</div>
             </div>
             <div className="w-px h-8 bg-slate-700" />
             <div>
@@ -622,7 +646,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
           onClick={(e) => e.stopPropagation()}
         >
           <span id="cart-quote-title" className="sr-only">
-            Equipment list and rental estimate
+            Equipment list and purchase estimate
           </span>
           {renderCartBody({ inOverlay: true })}
         </div>

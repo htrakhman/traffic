@@ -3,7 +3,7 @@ import { categories } from '../../data/categories'
 
 interface Filters {
   category: string
-  maxDailyRate: number
+  maxRetailUnit: number
   inStockOnly: boolean
   popular: boolean
 }
@@ -63,12 +63,12 @@ export default function FilterSidebar({ filters, onChange, onClose }: Props) {
         </div>
       </div>
 
-      {/* Max daily rate */}
+      {/* Max starting unit price (lowest tier) */}
       <div>
         <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-          Max Daily Rate
-          {filters.maxDailyRate < 200 && (
-            <span className="ml-2 text-brand-400 normal-case font-normal">≤ ${filters.maxDailyRate}/day</span>
+          Max unit price (lowest tier)
+          {filters.maxRetailUnit < 200 && (
+            <span className="ml-2 text-brand-400 normal-case font-normal">≤ ${filters.maxRetailUnit}/ea</span>
           )}
         </h4>
         <input
@@ -76,13 +76,13 @@ export default function FilterSidebar({ filters, onChange, onClose }: Props) {
           min={5}
           max={200}
           step={5}
-          value={filters.maxDailyRate}
-          onChange={(e) => set('maxDailyRate', Number(e.target.value))}
+          value={filters.maxRetailUnit}
+          onChange={(e) => set('maxRetailUnit', Number(e.target.value))}
           className="w-full accent-brand-500 cursor-pointer"
         />
         <div className="flex justify-between text-xs text-slate-600 mt-1">
-          <span>$5/day</span>
-          <span>$200+/day</span>
+          <span>$5/ea</span>
+          <span>$200+/ea</span>
         </div>
       </div>
 
@@ -91,9 +91,9 @@ export default function FilterSidebar({ filters, onChange, onClose }: Props) {
         <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Price Filter</h4>
         <div className="flex flex-wrap gap-2">
           <button
-            onClick={() => set('maxDailyRate', 200)}
+            onClick={() => set('maxRetailUnit', 200)}
             className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${
-              filters.maxDailyRate >= 200
+              filters.maxRetailUnit >= 200
                 ? 'bg-brand-500/20 border-brand-500/30 text-brand-300'
                 : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200'
             }`}
@@ -103,14 +103,14 @@ export default function FilterSidebar({ filters, onChange, onClose }: Props) {
           {priceRanges.map((price) => (
             <button
               key={price}
-              onClick={() => set('maxDailyRate', price)}
+              onClick={() => set('maxRetailUnit', price)}
               className={`px-2.5 py-1 rounded-lg text-xs border transition-colors ${
-                filters.maxDailyRate === price
+                filters.maxRetailUnit === price
                   ? 'bg-brand-500/20 border-brand-500/30 text-brand-300'
                   : 'border-slate-700 text-slate-400 hover:border-slate-600 hover:text-slate-200'
               }`}
             >
-              ≤${price}/day
+              ≤${price}/ea
             </button>
           ))}
         </div>
@@ -147,7 +147,7 @@ export default function FilterSidebar({ filters, onChange, onClose }: Props) {
 
       {/* Reset */}
       <button
-        onClick={() => onChange({ category: '', maxDailyRate: 200, inStockOnly: false, popular: false })}
+        onClick={() => onChange({ category: '', maxRetailUnit: 200, inStockOnly: false, popular: false })}
         className="w-full text-center text-xs text-slate-500 hover:text-slate-300 py-2 transition-colors"
       >
         Reset all filters
