@@ -246,12 +246,6 @@ function upstreamFrame(path: LL[], origin: LL): { uUp: { x: number; y: number };
   return { uUp: { x: 0, y: -1 }, upstreamVertex: path[idx] }
 }
 
-function normalizeXY(v: { x: number; y: number }): { x: number; y: number } {
-  const h = Math.hypot(v.x, v.y)
-  if (h < 1e-9) return { x: 1, y: 0 }
-  return { x: v.x / h, y: v.y / h }
-}
-
 function clampAllPlacementsInsidePolygon(path: LL[], placements: WorkzonePlacement[]): void {
   if (path.length < 3) return
   for (const pl of placements) {
@@ -581,8 +575,7 @@ export function buildDemoPlan(mapArea: MapArea, items: CartItemInput[]): Workzon
 
   const origin = polygonCentroid(path)
   const perim = perimeterLengthFt(path, origin)
-  const { uUp, upstreamVertex } = upstreamFrame(path, origin)
-  const upUnit = normalizeXY(uUp)
+  const { upstreamVertex } = upstreamFrame(path, origin)
 
   type Slot = { item: CartItemInput; unitIndex: number; cat: string }
   const slots: Slot[] = []
