@@ -1631,43 +1631,43 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
             )}
             {status === 'ready' && (
               <div
-                className="absolute top-14 right-2 z-30 flex flex-col items-center gap-0.5 rounded-xl border border-slate-600/70 bg-slate-900/95 p-1 shadow-xl backdrop-blur-sm pointer-events-auto"
+                className="absolute top-14 right-2 z-30 flex flex-col items-center gap-px rounded-lg border border-slate-500/35 bg-slate-900/40 p-0.5 shadow-md backdrop-blur-md pointer-events-auto"
                 role="group"
                 aria-label="Pan map with arrow buttons"
               >
                 <button
                   type="button"
                   onClick={() => panMapByPixels(0, -MAP_PAN_STEP_PX)}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                  className="flex h-6 w-6 items-center justify-center rounded border border-slate-500/40 bg-slate-800/45 text-slate-100 hover:bg-slate-800/70 hover:text-white"
                   aria-label="Pan map north"
                 >
-                  <ChevronUp size={16} strokeWidth={2.25} />
+                  <ChevronUp size={12} strokeWidth={2.25} />
                 </button>
-                <div className="flex gap-0.5">
+                <div className="flex gap-px">
                   <button
                     type="button"
                     onClick={() => panMapByPixels(-MAP_PAN_STEP_PX, 0)}
-                    className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                    className="flex h-6 w-6 items-center justify-center rounded border border-slate-500/40 bg-slate-800/45 text-slate-100 hover:bg-slate-800/70 hover:text-white"
                     aria-label="Pan map west"
                   >
-                    <ChevronLeft size={16} strokeWidth={2.25} />
+                    <ChevronLeft size={12} strokeWidth={2.25} />
                   </button>
                   <button
                     type="button"
                     onClick={() => panMapByPixels(MAP_PAN_STEP_PX, 0)}
-                    className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                    className="flex h-6 w-6 items-center justify-center rounded border border-slate-500/40 bg-slate-800/45 text-slate-100 hover:bg-slate-800/70 hover:text-white"
                     aria-label="Pan map east"
                   >
-                    <ChevronRight size={16} strokeWidth={2.25} />
+                    <ChevronRight size={12} strokeWidth={2.25} />
                   </button>
                 </div>
                 <button
                   type="button"
                   onClick={() => panMapByPixels(0, MAP_PAN_STEP_PX)}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800/90 text-slate-200 hover:bg-slate-700 hover:text-white"
+                  className="flex h-6 w-6 items-center justify-center rounded border border-slate-500/40 bg-slate-800/45 text-slate-100 hover:bg-slate-800/70 hover:text-white"
                   aria-label="Pan map south"
                 >
-                  <ChevronDown size={16} strokeWidth={2.25} />
+                  <ChevronDown size={12} strokeWidth={2.25} />
                 </button>
               </div>
             )}
@@ -1835,7 +1835,28 @@ function ZoneRecommendationCard({ rec, onAddToCart }: { rec: AIRecommendation; o
 }
 
 const WELCOME =
-  "Hello! I'm your AI Traffic Control Advisor. Describe your work zone scenario — lane closure type, road speed, crew size — and I'll recommend a compliant MUTCD Part 6 layout. If you've drawn a zone on the map, I can also place your equipment directly."
+  'Describe your closure, speed, and crew — I’ll suggest a MUTCD Part 6–style layout. Draw a zone to auto-place cart items.'
+
+const ADVISOR_EXAMPLES: { title: string; blurb: string; prompt: string }[] = [
+  {
+    title: 'Urban lane closure',
+    blurb: 'One lane, 35 mph, short daytime shift, small crew',
+    prompt:
+      'Single-lane closure on a 35 mph two-lane road, utility work, 3 workers, about 4 hours daytime. What advance signs, taper length, and channelizing devices do I need?',
+  },
+  {
+    title: 'Shoulder / high-speed',
+    blurb: '55 mph state route, shoulder work only',
+    prompt:
+      'Shoulder-only maintenance on a 55 mph state highway, 5 workers, single daytime shift. What’s the minimum advance warning and buffer setup?',
+  },
+  {
+    title: 'Overnight paving',
+    blurb: '45 mph arterial, one lane closed, flaggers',
+    prompt:
+      'Overnight paving: 45 mph arterial, one lane closed overnight for two nights, alternating traffic with flaggers, 8-person crew. Key compliance reminders?',
+  },
+]
 
 /** Same [Q:]/[A:] format as homepage JobAssistant / aiClient so choice chips + batch submit match. */
 const SCENARIO_DETAIL_PROMPT = `I've measured your work zone — let me get a few quick details to generate the right NJDOT layout.
@@ -2428,20 +2449,19 @@ INSTRUCTIONS
   }
 
   // ── send message ──────────────────────────────────────────────────────────
-  const send = async () => {
-    const text = input.trim()
+  const dispatchUserMessage = async (rawText: string) => {
+    const text = rawText.trim()
     if (!text || loading) return
-    setInput('')
     const userMsg = { role: 'user' as const, content: text }
     setMessages((prev) => [...prev, userMsg])
+    const next = [...messages, userMsg]
 
-    // If we were waiting for scenario details and a polygon exists, re-run full analysis
     if (awaitingScenario && getDrawnPolygons().length > 0) {
       void analyzeDrawnZone(text, { addDrawingAckBubble: false })
       return
     }
 
-    const next = [...messages, userMsg]
+    const welcomeRef = messages[0]
     setLoading(true)
     try {
       const res = await fetch('/api/chat', {
@@ -2449,7 +2469,7 @@ INSTRUCTIONS
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           system: buildSystemPrompt(),
-          messages: next.filter((m) => m.role !== 'assistant' || m !== messages[0]).map((m) => ({
+          messages: next.filter((m) => m.role !== 'assistant' || m !== welcomeRef).map((m) => ({
             role: m.role,
             content: m.content,
           })),
@@ -2465,6 +2485,13 @@ INSTRUCTIONS
     } finally {
       setLoading(false)
     }
+  }
+
+  const send = async () => {
+    const text = input.trim()
+    if (!text || loading) return
+    setInput('')
+    await dispatchUserMessage(text)
   }
 
   // ── generate layout ───────────────────────────────────────────────────────
@@ -2603,7 +2630,7 @@ INSTRUCTIONS
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-72 min-h-[80px]">
+      <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-80 min-h-[80px]">
         {messages.map((m, i) => {
           if (m.role === 'user') {
             return (
@@ -2635,12 +2662,21 @@ INSTRUCTIONS
               </div>
               <div className="min-w-0 flex-1 space-y-2">
                 {nonCartSegs.length > 0 && (
-                  <div className="rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed bg-slate-800/80 border border-slate-700 text-slate-200 rounded-tl-sm">
+                  <div
+                    className={`rounded-2xl bg-slate-800/80 border border-slate-700 text-slate-200 rounded-tl-sm ${
+                      i === 0
+                        ? 'px-2.5 py-2 text-[11px] leading-snug'
+                        : 'px-3.5 py-2.5 text-sm leading-relaxed'
+                    }`}
+                  >
                     <div className="space-y-3">
                       {nonCartSegs.map((seg, si) =>
                         seg.type === 'text' ? (
                           seg.content.trim() ? (
-                            <p key={si} className="whitespace-pre-wrap leading-relaxed">
+                            <p
+                              key={si}
+                              className={i === 0 ? 'whitespace-pre-wrap leading-snug' : 'whitespace-pre-wrap leading-relaxed'}
+                            >
                               {seg.content.trim()}
                             </p>
                           ) : null
@@ -2692,6 +2728,28 @@ INSTRUCTIONS
                           </button>
                         </div>
                       )}
+                    </div>
+                  </div>
+                )}
+                {i === 0 && (
+                  <div className="space-y-1">
+                    <p className="text-[9px] font-medium uppercase tracking-wide text-slate-500">Examples — tap to ask</p>
+                    <div className="flex flex-col gap-1.5">
+                      {ADVISOR_EXAMPLES.map((ex) => {
+                        const busy = loading || analyzing || generating
+                        return (
+                          <button
+                            key={ex.title}
+                            type="button"
+                            disabled={busy}
+                            onClick={() => void dispatchUserMessage(ex.prompt)}
+                            className="rounded-lg border border-slate-700/90 bg-slate-800/40 px-2 py-1.5 text-left transition-colors hover:border-brand-500/45 hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:opacity-45"
+                          >
+                            <p className="text-[11px] font-semibold text-slate-100 leading-tight">{ex.title}</p>
+                            <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">{ex.blurb}</p>
+                          </button>
+                        )
+                      })}
                     </div>
                   </div>
                 )}
