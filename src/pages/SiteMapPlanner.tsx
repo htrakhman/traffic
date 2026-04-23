@@ -1153,6 +1153,7 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
   const [analyzing, setAnalyzing] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [genError, setGenError] = useState<string | null>(null)
+  const [awaitingScenario, setAwaitingScenario] = useState(false)
   // Drag state — offset from default anchored position
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const dragStateRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null)
@@ -1199,11 +1200,12 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
     void analyzeDrawnZone()
   }, [drawnCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const analyzeDrawnZone = async () => {
+  const analyzeDrawnZone = async (userContext?: string) => {
     const polygons = getDrawnPolygons()
     if (polygons.length === 0) return
     setOpen(true)
     setAnalyzing(true)
+    setAwaitingScenario(false)
     const path = polygons[polygons.length - 1]!
     const mapArea = buildMapAreaFromPath(path, { address: locationHint || undefined })
 
@@ -1258,6 +1260,7 @@ WORK ZONE DATA:
 - ${speedNote}
 ${locationHint ? `- Location: ${locationHint}` : ''}
 ${footprintNote ? `- ${footprintNote}` : ''}
+${userContext ? `- Contractor-provided scenario details: ${userContext}` : ''}
 
 CATALOG (use ONLY these product IDs — do not invent IDs):
 ${catalogStr}
@@ -1380,12 +1383,13 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
         },
       ])
     } catch {
+      setAwaitingScenario(true)
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant' as const,
           content:
-            "I couldn't auto-analyze this zone. Describe your scenario below (lane closure type, posted speed, number of lanes) and I'll provide NJDOT recommendations.",
+            "I've measured your work zone — let me get a few quick details to generate the right NJDOT layout:\n\n**1. What type of work?** (e.g. utility/pipe work, paving, signal repair, sidewalk work)\n**2. Posted speed limit?** (e.g. 25, 35, 45 mph)\n**3. How many lanes are being closed or affected?**\n\nReply below and I'll place the equipment on your map.",
         },
       ])
     } finally {
@@ -1490,8 +1494,15 @@ INSTRUCTIONS
     if (!text || loading) return
     setInput('')
     const userMsg = { role: 'user' as const, content: text }
+    setMessages((prev) => [...prev, userMsg])
+
+    // If we were waiting for scenario details and a polygon exists, re-run full analysis
+    if (awaitingScenario && getDrawnPolygons().length > 0) {
+      void analyzeDrawnZone(text)
+      return
+    }
+
     const next = [...messages, userMsg]
-    setMessages(next)
     setLoading(true)
     try {
       const res = await fetch('/api/chat', {
