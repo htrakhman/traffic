@@ -1,6 +1,6 @@
 import type { Product, VolumePriceTier } from '../types'
 import { SITE_NAME } from '../config/site'
-import { RETAIL_MARKUP_MULTIPLIER, roundMoney } from '../utils/pricingConstants'
+import { RETAIL_REFERENCE_DIVISOR, roundMoney } from '../utils/pricingConstants'
 
 const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
 
@@ -11,15 +11,15 @@ function singleTierFromRefDaily(refDaily: number): VolumePriceTier[] {
 
 /** One open-ended band from an already-retail shelf unit price (undoes ×1.5 to store reference). */
 function singleTierFromRetailUnit(retailUnit: number): VolumePriceTier[] {
-  const ref = roundMoney(retailUnit / RETAIL_MARKUP_MULTIPLIER)
+  const ref = roundMoney(retailUnit / RETAIL_REFERENCE_DIVISOR)
   return [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: ref }]
 }
 
 /** TSS-style volume bands (shelf prices $24.85 / $23.25 / $21.85 on comparable 28" cone listing). */
 const cone28TssVolumeTiers: VolumePriceTier[] = [
-  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(24.85 / RETAIL_MARKUP_MULTIPLIER) },
-  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(23.25 / RETAIL_MARKUP_MULTIPLIER) },
-  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(21.85 / RETAIL_MARKUP_MULTIPLIER) },
+  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(24.85 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(23.25 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(21.85 / RETAIL_REFERENCE_DIVISOR) },
 ]
 
 /**
@@ -2847,7 +2847,7 @@ function migrateLegacyCatalogRow(row: unknown): Product | null {
   const p = row as Record<string, unknown> & { volumePriceTiers?: VolumePriceTier[]; dailyRate?: number }
   if (Array.isArray(p.volumePriceTiers) && p.volumePriceTiers.length) return p as unknown as Product
   if (typeof p.dailyRate === 'number') {
-    const ref = roundMoney(p.dailyRate / RETAIL_MARKUP_MULTIPLIER)
+    const ref = roundMoney(p.dailyRate / RETAIL_REFERENCE_DIVISOR)
     const { dailyRate: _d, weeklyRate: _w, monthlyRate: _m, minimumRentalDays: _min, ...rest } = p as Record<
       string,
       unknown
