@@ -1238,16 +1238,42 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
       ...prev,
       {
         role: 'assistant' as const,
-        content: `I see you've drawn a work zone — ${mapArea.areaLabel}, ${mapArea.perimeterLabel} perimeter${locationHint ? ` near ${locationHint}` : ''}. Before I size the equipment list, I need a few details so the layout matches NJDOT/MUTCD Part 6 rules. Please answer in one reply:
+        content: `I see you've drawn a work zone — ${mapArea.areaLabel}, ${mapArea.perimeterLabel} perimeter${locationHint ? ` near ${locationHint}` : ''}. Answer these so I can size an NJDOT/MUTCD Part 6 compliant layout:
 
-1. **Work type** — lane closure, shoulder work, full road closure, intersection, utility/patch, flagging operation?
-2. **Road & posted speed** — e.g. "35 mph local road", "45 mph arterial", "55 mph state highway"${mapArea.postedSpeedMph ? ` (map suggests ~${mapArea.postedSpeedMph} mph — confirm or correct)` : ''}
-3. **Duration & time of day** — hours, single shift, multi-day? Daytime or overnight?
-4. **Lanes affected** — one lane, two lanes, shoulder only, alternating one-lane (flaggers)?
-5. **Crew size** — number of workers on site.
-6. **Anything else** — flaggers on hand, equipment you already own, special permits, etc.
+[Q: What type of work?]
+[A: Lane closure]
+[A: Shoulder work]
+[A: Full road closure]
+[A: Intersection work]
+[A: Utility / patch]
+[A: Flagging operation]
 
-Once I have these I'll produce the minimum required NJDOT layout and place it on your map.`,
+[Q: Road & posted speed?${mapArea.postedSpeedMph ? ` (map ~${mapArea.postedSpeedMph} mph)` : ''}]
+[A: Local / residential — under 35 mph]
+[A: 35 mph local road]
+[A: 45 mph arterial]
+[A: 55 mph state highway]
+[A: 65+ mph interstate]
+
+[Q: Duration & time of day?]
+[A: Short daytime shift (under 4 hrs)]
+[A: Single daytime shift]
+[A: Multi-day daytime]
+[A: Overnight single shift]
+[A: Multi-day / 24-hour]
+
+[Q: Lanes affected?]
+[A: Shoulder only]
+[A: One lane closed]
+[A: Two lanes closed]
+[A: Alternating one-lane with flaggers]
+[A: Full closure]
+
+[Q: Crew size?]
+[A: 1–2 workers]
+[A: 3–5 workers]
+[A: 6–10 workers]
+[A: More than 10]`,
       },
     ])
   }, [drawnCount]) // eslint-disable-line react-hooks/exhaustive-deps
