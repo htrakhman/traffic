@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
-import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical, Sparkles } from 'lucide-react'
+import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical, Sparkles, Pencil } from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -53,6 +53,32 @@ function readLatLng(
   const lng = typeof (pos as google.maps.LatLng).lng === 'function' ? (pos as google.maps.LatLng).lng() : (pos as { lng: number }).lng
   if (typeof lat !== 'number' || typeof lng !== 'number' || Number.isNaN(lat) || Number.isNaN(lng)) return null
   return { lat, lng }
+}
+
+type PlainLatLng = { lat: number; lng: number }
+
+/** Turn a freehand polyline into a closed corridor polygon for zone-based AI (half-width ≈ feet each side). */
+function bufferPolylineToPolygon(path: PlainLatLng[], halfWidthFt = 48): PlainLatLng[] | null {
+  if (path.length < 2) return null
+  const left: PlainLatLng[] = []
+  const right: PlainLatLng[] = []
+  for (let i = 0; i < path.length; i++) {
+    const i0 = Math.max(0, i - 1)
+    const i1 = Math.min(path.length - 1, i + 1)
+    const dLng = path[i1]!.lng - path[i0]!.lng
+    const dLat = path[i1]!.lat - path[i0]!.lat
+    const len = Math.hypot(dLng, dLat) || 1e-12
+    const tLng = dLng / len
+    const tLat = dLat / len
+    const nLng = -tLat
+    const nLat = tLng
+    const lat = path[i]!.lat
+    const latScale = halfWidthFt / 364000
+    const lngScale = halfWidthFt / (364000 * Math.cos((lat * Math.PI) / 180))
+    left.push({ lat: lat + nLat * latScale, lng: path[i]!.lng + nLng * lngScale })
+    right.push({ lat: lat - nLat * latScale, lng: path[i]!.lng - nLng * lngScale })
+  }
+  return [...left, ...[...right].reverse()]
 }
 
 function buildMarkerShell(product: Product, selected: boolean, sizeMultiplier = 1): HTMLDivElement {
@@ -169,7 +195,7 @@ export default function SiteMapPlanner() {
   /** Tap-to-place: pick a product, then click the map (mobile-friendly). */
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)
 
-  type DrawMode = 'select' | 'polygon' | 'rectangle' | 'circle'
+  type DrawMode = 'select' | 'freehand' | 'polygon' | 'rectangle' | 'circle'
   const [drawMode, setDrawMode] = useState<DrawMode>('select')
   const [drawColor, setDrawColor] = useState('#f97316')
   const [drawnCount, setDrawnCount] = useState(0)
@@ -177,6 +203,11 @@ export default function SiteMapPlanner() {
   const drawingMgrRef = useRef<google.maps.drawing.DrawingManager | null>(null)
   const drawnOverlaysRef = useRef<Map<string, google.maps.MVCObject>>(new Map())
   const drawColorRef = useRef(drawColor)
+  const drawModeRef = useRef(drawMode)
+  const pendingProductIdRef = useRef(pendingProductId)
+  /** In-progress freehand stroke (pointer captured on map div). */
+  const freehandStrokeRef = useRef<{ path: PlainLatLng[]; lastPx: { x: number; y: number } } | null>(null)
+  const suppressNextMapClickRef = useRef(false)
 
   const { paletteItems, paletteNote } = useMemo(() => {
     const q = paletteQuery.trim().toLowerCase()
@@ -332,6 +363,8 @@ export default function SiteMapPlanner() {
   placedRef.current = placed
   searchDraftRef.current = searchDraft
   drawColorRef.current = drawColor
+  drawModeRef.current = drawMode
+  pendingProductIdRef.current = pendingProductId
 
   const schedulePersistSession = useCallback(() => {
     const map = mapRef.current
@@ -511,7 +544,7 @@ export default function SiteMapPlanner() {
         m.marker.map = null
       })
       markersRef.current.clear()
-      drawnOverlaysRef.current.forEach((o) => (o as google.maps.Polygon).setMap(null))
+      drawnOverlaysRef.current.forEach((o) => (o as google.maps.Polyline).setMap(null))
       drawnOverlaysRef.current.clear()
       drawingMgrRef.current = null
       advancedMarkerCtorRef.current = null
@@ -629,6 +662,10 @@ export default function SiteMapPlanner() {
 
   const onMapClick = useCallback(
     (e: google.maps.MapMouseEvent) => {
+      if (suppressNextMapClickRef.current) {
+        suppressNextMapClickRef.current = false
+        return
+      }
       if (!pendingProductId || !e.latLng) return
       addPlacementAt(pendingProductId, e.latLng.lat(), e.latLng.lng())
       setPendingProductId(null)
@@ -647,6 +684,10 @@ export default function SiteMapPlanner() {
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') {
         setPendingProductId(null)
+        if (freehandStrokeRef.current) {
+          freehandStrokeRef.current = null
+          mapRef.current?.setOptions({ draggable: true })
+        }
         return
       }
       if ((ev.key === 'Delete' || ev.key === 'Backspace') && selectedId) {
@@ -690,18 +731,119 @@ export default function SiteMapPlanner() {
   useEffect(() => {
     const mgr = drawingMgrRef.current
     if (!mgr) return
-    if (drawMode === 'select') {
+    if (drawMode === 'select' || drawMode === 'freehand') {
       mgr.setDrawingMode(null)
     } else {
       mgr.setDrawingMode(drawMode as google.maps.drawing.OverlayType)
     }
   }, [drawMode])
 
+  /** Cancel in-progress freehand if user switches tools or leaves freehand mode. */
+  useEffect(() => {
+    if (drawMode === 'freehand') return
+    if (!freehandStrokeRef.current) return
+    freehandStrokeRef.current = null
+    mapRef.current?.setOptions({ draggable: true })
+  }, [drawMode])
+
+  /** Freehand draw: pointer-drag on the map builds a {@link google.maps.Polyline}. */
+  useEffect(() => {
+    if (status !== 'ready' || drawMode !== 'freehand') return
+    const el = mapDivRef.current
+    const overlay = overlayRef.current
+    if (!el || !overlay) return
+
+    const pxToLl = (clientX: number, clientY: number): PlainLatLng | null => {
+      const projection = overlay.getProjection()
+      if (!projection) return null
+      const rect = el.getBoundingClientRect()
+      const x = clientX - rect.left
+      const y = clientY - rect.top
+      const ll = projection.fromContainerPixelToLatLng(new google.maps.Point(x, y))
+      return ll ? { lat: ll.lat(), lng: ll.lng() } : null
+    }
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.button !== 0) return
+      if (drawModeRef.current !== 'freehand' || pendingProductIdRef.current) return
+      const ll = pxToLl(e.clientX, e.clientY)
+      if (!ll) return
+      e.preventDefault()
+      mapRef.current?.setOptions({ draggable: false })
+      freehandStrokeRef.current = { path: [ll], lastPx: { x: e.clientX, y: e.clientY } }
+      try {
+        el.setPointerCapture(e.pointerId)
+      } catch {
+        /* already captured or unsupported */
+      }
+    }
+
+    const onPointerMove = (e: PointerEvent) => {
+      const stroke = freehandStrokeRef.current
+      if (!stroke) return
+      const dx = e.clientX - stroke.lastPx.x
+      const dy = e.clientY - stroke.lastPx.y
+      if (dx * dx + dy * dy < 16) return
+      const ll = pxToLl(e.clientX, e.clientY)
+      if (!ll) return
+      stroke.path.push(ll)
+      stroke.lastPx = { x: e.clientX, y: e.clientY }
+    }
+
+    const finishStroke = (e: PointerEvent) => {
+      if (!freehandStrokeRef.current) return
+      try {
+        el.releasePointerCapture(e.pointerId)
+      } catch {
+        /* not captured */
+      }
+      const stroke = freehandStrokeRef.current
+      freehandStrokeRef.current = null
+      const map = mapRef.current
+      if (map) map.setOptions({ draggable: true })
+      if (!stroke || stroke.path.length < 2) return
+      if (!map) return
+      const id = crypto.randomUUID()
+      const poly = new google.maps.Polyline({
+        path: stroke.path,
+        map,
+        strokeColor: drawColorRef.current,
+        strokeWeight: 3,
+        strokeOpacity: 1,
+        clickable: true,
+        zIndex: 5,
+      })
+      drawnOverlaysRef.current.set(id, poly)
+      google.maps.event.addListener(poly, 'click', () => {
+        setSelectedShapeId(id)
+      })
+      suppressNextMapClickRef.current = true
+      setDrawMode('select')
+      setDrawnCount((n) => n + 1)
+      setSelectedShapeId(id)
+    }
+
+    el.addEventListener('pointerdown', onPointerDown)
+    el.addEventListener('pointermove', onPointerMove)
+    el.addEventListener('pointerup', finishStroke)
+    el.addEventListener('pointercancel', finishStroke)
+    return () => {
+      el.removeEventListener('pointerdown', onPointerDown)
+      el.removeEventListener('pointermove', onPointerMove)
+      el.removeEventListener('pointerup', finishStroke)
+      el.removeEventListener('pointercancel', finishStroke)
+      if (freehandStrokeRef.current) {
+        freehandStrokeRef.current = null
+        mapRef.current?.setOptions({ draggable: true })
+      }
+    }
+  }, [status, drawMode])
+
   const deleteSelectedShape = useCallback(() => {
     if (!selectedShapeId) return
     const overlay = drawnOverlaysRef.current.get(selectedShapeId)
     if (overlay) {
-      (overlay as google.maps.Polygon).setMap(null)
+      (overlay as google.maps.Polyline).setMap(null)
       drawnOverlaysRef.current.delete(selectedShapeId)
       setDrawnCount((n) => n - 1)
     }
@@ -709,7 +851,7 @@ export default function SiteMapPlanner() {
   }, [selectedShapeId])
 
   const clearAllDrawings = useCallback(() => {
-    drawnOverlaysRef.current.forEach((o) => (o as google.maps.Polygon).setMap(null))
+    drawnOverlaysRef.current.forEach((o) => (o as google.maps.Polyline).setMap(null))
     drawnOverlaysRef.current.clear()
     setDrawnCount(0)
     setSelectedShapeId(null)
@@ -858,6 +1000,7 @@ export default function SiteMapPlanner() {
                 {(
                   [
                     { mode: 'select', label: 'Select', Icon: MousePointer2 },
+                    { mode: 'freehand', label: 'Draw', Icon: Pencil },
                     { mode: 'polygon', label: 'Zone', Icon: Hexagon },
                     { mode: 'rectangle', label: 'Box', Icon: Square },
                     { mode: 'circle', label: 'Circle', Icon: Circle },
@@ -867,7 +1010,7 @@ export default function SiteMapPlanner() {
                     key={mode}
                     type="button"
                     onClick={() => setDrawMode(mode)}
-                    title={label}
+                    title={mode === 'freehand' ? 'Freehand — click and drag on the map' : label}
                     className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-medium transition-colors ${
                       drawMode === mode
                         ? 'border-brand-500 bg-brand-500/20 text-brand-200'
@@ -927,7 +1070,7 @@ export default function SiteMapPlanner() {
             )}
             <div
               ref={mapDivRef}
-              className={`absolute inset-0 w-full h-full ${pendingProductId ? 'cursor-crosshair' : ''}`}
+              className={`absolute inset-0 w-full h-full ${pendingProductId || drawMode === 'freehand' ? 'cursor-crosshair' : ''}`}
               onDragOver={onMapDragOver}
               onDrop={onMapDrop}
               role="application"
@@ -1622,11 +1765,20 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
     const polys: { lat: number; lng: number }[][] = []
     drawnOverlaysRef.current.forEach((o) => {
       try {
+        // Polyline (freehand) → corridor polygon for zone-based planning
+        if (o instanceof google.maps.Polyline) {
+          const path = o.getPath().getArray().map((ll) => ({ lat: ll.lat(), lng: ll.lng() }))
+          if (path.length >= 2) {
+            const buff = bufferPolylineToPolygon(path)
+            if (buff && buff.length >= 3) polys.push(buff)
+          }
+          return
+        }
         // Polygon (Zone tool)
-        const poly = o as google.maps.Polygon
-        if (typeof poly.getPath === 'function') {
-          const path = poly.getPath().getArray().map((ll) => ({ lat: ll.lat(), lng: ll.lng() }))
-          if (path.length >= 3) { polys.push(path); return }
+        if (o instanceof google.maps.Polygon) {
+          const path = o.getPath().getArray().map((ll) => ({ lat: ll.lat(), lng: ll.lng() }))
+          if (path.length >= 3) polys.push(path)
+          return
         }
         // Rectangle (Box tool)
         const rect = o as google.maps.Rectangle
