@@ -435,7 +435,7 @@ export default function SiteMapPlanner() {
           },
           polygonOptions: {
             fillColor: drawColorRef.current,
-            fillOpacity: 0.35,
+            fillOpacity: 0.45,
             strokeColor: drawColorRef.current,
             strokeWeight: 2,
             clickable: true,
@@ -444,7 +444,7 @@ export default function SiteMapPlanner() {
           },
           rectangleOptions: {
             fillColor: drawColorRef.current,
-            fillOpacity: 0.35,
+            fillOpacity: 0.45,
             strokeColor: drawColorRef.current,
             strokeWeight: 2,
             clickable: true,
@@ -453,7 +453,7 @@ export default function SiteMapPlanner() {
           },
           circleOptions: {
             fillColor: drawColorRef.current,
-            fillOpacity: 0.35,
+            fillOpacity: 0.45,
             strokeColor: drawColorRef.current,
             strokeWeight: 2,
             clickable: true,
@@ -526,6 +526,27 @@ export default function SiteMapPlanner() {
       mapRef.current = null
     }
   }, [schedulePersistSession])
+
+  // Keep drawing manager shape options in sync with the selected color
+  useEffect(() => {
+    const mgr = drawingMgrRef.current
+    if (!mgr) return
+    const shapeOpts = {
+      fillColor: drawColor,
+      fillOpacity: 0.45,
+      strokeColor: drawColor,
+      strokeWeight: 2,
+      clickable: true,
+      editable: false,
+      zIndex: 5,
+    }
+    mgr.setOptions({
+      polygonOptions: shapeOpts,
+      rectangleOptions: shapeOpts,
+      circleOptions: shapeOpts,
+      polylineOptions: { strokeColor: drawColor, strokeWeight: 3, clickable: true, editable: false, zIndex: 5 },
+    })
+  }, [drawColor])
 
   const runSearch = useCallback(async () => {
     const q = searchDraft.trim()
