@@ -13,7 +13,8 @@ import {
   seedPlacementsFromCart,
   type SiteMapPlacedRow,
 } from '../utils/siteMapPlannerSessionStorage'
-import { clampLatLngToPolygonInterior } from '../utils/workzonePlannerClient'
+import { clampLatLngToPolygonInterior, buildMapAreaFromPath, planWorkzoneLayout, buildDemoPlan } from '../utils/workzonePlannerClient'
+import type { MutableRefObject } from 'react'
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
 const MAP_ID =
@@ -1039,6 +1040,20 @@ export default function SiteMapPlanner() {
           </div>
         </section>
       </div>
+
+      {/* AI chat panel — only shown once map is ready */}
+      {status === 'ready' && (
+        <AIChatPanel
+          placed={placed}
+          cartLines={cartLines}
+          locationHint={searchDraft}
+          drawnOverlaysRef={drawnOverlaysRef}
+          addPlacements={(rows) => {
+            setPlaced((prev) => [...prev, ...rows])
+            setSelectedId(rows[0]?.id ?? null)
+          }}
+        />
+      )}
     </main>
   )
 }
@@ -1071,6 +1086,337 @@ function MapDockItem({ product, onArmPlace }: { product: Product; onArmPlace: ()
       <span className="w-full text-center text-[8px] leading-tight text-slate-400 truncate px-0.5" title={product.name}>
         {product.sku}
       </span>
+    </div>
+  )
+}
+
+interface AIChatPanelProps {
+  placed: SiteMapPlacedRow[]
+  cartLines: { productId: string; quantity: number }[]
+  locationHint: string
+  drawnOverlaysRef: MutableRefObject<Map<string, google.maps.MVCObject>>
+  addPlacements: (rows: SiteMapPlacedRow[]) => void
+}
+
+const WELCOME =
+  "Hello! I'm your AI Traffic Control Advisor. Describe your work zone scenario — lane closure type, road speed, crew size — and I'll recommend a compliant MUTCD Part 6 layout. If you've drawn a zone on the map, I can also place your equipment directly."
+
+function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPlacements }: AIChatPanelProps) {
+  const [open, setOpen] = useState(false)
+  const [messages, setMessages] = useState<{ role: 'assistant' | 'user'; content: string }[]>([
+    { role: 'assistant', content: WELCOME },
+  ])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [genError, setGenError] = useState<string | null>(null)
+  // Drag state — offset from default anchored position
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const dragStateRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    if (open) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+      setTimeout(() => inputRef.current?.focus(), 80)
+    }
+  }, [open, messages.length])
+
+  // ── drag ──────────────────────────────────────────────────────────────────
+  const onDragStart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    dragStateRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      originX: dragOffset.x,
+      originY: dragOffset.y,
+    }
+    const onMove = (ev: MouseEvent) => {
+      if (!dragStateRef.current) return
+      setDragOffset({
+        x: dragStateRef.current.originX + ev.clientX - dragStateRef.current.startX,
+        y: dragStateRef.current.originY + ev.clientY - dragStateRef.current.startY,
+      })
+    }
+    const onUp = () => {
+      dragStateRef.current = null
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+  }
+
+  // ── context helpers ───────────────────────────────────────────────────────
+  const getDrawnPolygons = () => {
+    const polys: { lat: number; lng: number }[][] = []
+    drawnOverlaysRef.current.forEach((o) => {
+      try {
+        const poly = o as google.maps.Polygon
+        if (typeof poly.getPath === 'function') {
+          const path = poly.getPath().getArray().map((ll) => ({ lat: ll.lat(), lng: ll.lng() }))
+          if (path.length >= 3) polys.push(path)
+        }
+      } catch { /* not a polygon */ }
+    })
+    return polys
+  }
+
+  const buildSystemPrompt = () => {
+    const placedSummary =
+      placed.length === 0
+        ? 'No equipment placed yet.'
+        : placed
+            .reduce<{ name: string; count: number }[]>((acc, r) => {
+              const p = getProductById(r.productId)
+              const name = p?.name ?? r.productId
+              const ex = acc.find((a) => a.name === name)
+              if (ex) ex.count++
+              else acc.push({ name, count: 1 })
+              return acc
+            }, [])
+            .map((a) => `${a.count}× ${a.name}`)
+            .join(', ')
+
+    const cartSummary =
+      cartLines.length === 0
+        ? 'Cart is empty.'
+        : cartLines
+            .map((l) => {
+              const p = getProductById(l.productId)
+              return `${l.quantity}× ${p?.name ?? l.productId}`
+            })
+            .join(', ')
+
+    const polygonCount = getDrawnPolygons().length
+
+    return `You are an expert Traffic Control Supervisor (TCS) and AI assistant for Traffic Control Rental — a professional traffic equipment rental service. Help contractors plan safe, MUTCD Part 6-compliant temporary traffic control setups.
+
+CURRENT MAP STATE
+- Location: ${locationHint || 'not specified'}
+- Equipment placed on map: ${placedSummary}
+- Cart items available: ${cartSummary}
+- Drawn work zones on map: ${polygonCount === 0 ? 'none' : `${polygonCount} polygon(s)`}
+
+INSTRUCTIONS
+- Be concise, professional, and actionable — this is a working contractor tool.
+- Reference specific cart items when giving placement advice.
+- Base spacing and zone layout on MUTCD Part 6 (these are planning guidelines; field conditions govern).
+- If the user wants to auto-place equipment on the map, tell them to click the "Generate Layout" button (it requires a drawn polygon zone on the map).
+- Do NOT invent equipment not in the cart. If the cart is empty, recommend what to add.
+- Keep responses under 120 words unless more detail is clearly needed.`
+  }
+
+  // ── send message ──────────────────────────────────────────────────────────
+  const send = async () => {
+    const text = input.trim()
+    if (!text || loading) return
+    setInput('')
+    const userMsg = { role: 'user' as const, content: text }
+    const next = [...messages, userMsg]
+    setMessages(next)
+    setLoading(true)
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          system: buildSystemPrompt(),
+          messages: next.filter((m) => m.role !== 'assistant' || m !== messages[0]).map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+          max_tokens: 400,
+        }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json() as { content?: { text: string }[] }
+      const reply = data.content?.[0]?.text ?? 'Sorry, I could not generate a response.'
+      setMessages([...next, { role: 'assistant', content: reply }])
+    } catch {
+      setMessages([...next, { role: 'assistant', content: 'Unable to reach the AI — check your connection and try again.' }])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // ── generate layout ───────────────────────────────────────────────────────
+  const generateLayout = async () => {
+    setGenError(null)
+    const polygons = getDrawnPolygons()
+    if (polygons.length === 0) {
+      setGenError('Draw a zone on the map first, then click Generate.')
+      return
+    }
+    if (cartLines.length === 0) {
+      setGenError('Add equipment to your cart before generating a layout.')
+      return
+    }
+    setGenerating(true)
+    const path = polygons[0]!
+    const mapArea = buildMapAreaFromPath(path, { address: locationHint || undefined })
+    const items = cartLines.map((l) => {
+      const p = getProductById(l.productId)
+      return {
+        productId: l.productId,
+        productName: p?.name ?? l.productId,
+        quantity: l.quantity,
+        category: p?.categorySlug ?? 'equipment',
+        dimensions: p?.specs?.dimensions,
+      }
+    })
+    try {
+      let plan
+      try {
+        plan = await planWorkzoneLayout(mapArea, items)
+      } catch {
+        plan = buildDemoPlan(mapArea, items)
+      }
+      const newRows: SiteMapPlacedRow[] = plan.placements.map((pl) => ({
+        id: crypto.randomUUID(),
+        productId: pl.productId,
+        lat: pl.lat,
+        lng: pl.lng,
+      }))
+      addPlacements(newRows)
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content: `✓ Layout applied — ${newRows.length} items placed on your map based on the drawn zone. Drag any pin to fine-tune positions. Remember: these are planning guidelines; always verify against your project TCP and applicable state standards.`,
+        },
+      ])
+    } catch {
+      setGenError('Layout generation failed. Try again or simplify your cart.')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
+  const hasPolygon = getDrawnPolygons().length > 0
+
+  // ── collapsed trigger button ───────────────────────────────────────────────
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        style={{ transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)` }}
+        className="fixed bottom-[5.5rem] right-3 z-40 flex items-center gap-2 rounded-full border border-brand-500/60 bg-slate-900/95 px-3 py-2 text-xs font-semibold text-brand-200 shadow-2xl backdrop-blur-sm hover:bg-slate-800 transition-colors"
+      >
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-400" />
+        </span>
+        AI Layout Advisor
+      </button>
+    )
+  }
+
+  // ── expanded panel ─────────────────────────────────────────────────────────
+  return (
+    <div
+      style={{ transform: `translate(${dragOffset.x}px, ${dragOffset.y}px)` }}
+      className="fixed bottom-[5.5rem] right-3 z-40 w-80 flex flex-col rounded-2xl border border-slate-600/80 bg-slate-900/95 shadow-2xl backdrop-blur-md overflow-hidden"
+    >
+      {/* Header / drag handle */}
+      <div
+        onMouseDown={onDragStart}
+        className="flex items-center justify-between gap-2 px-3 py-2.5 border-b border-slate-700 cursor-grab active:cursor-grabbing select-none bg-slate-800/60"
+      >
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-400" />
+          </span>
+          <span className="text-xs font-semibold text-slate-100 truncate">AI Traffic Control Advisor</span>
+        </div>
+        <button
+          type="button"
+          aria-label="Close advisor"
+          onClick={() => setOpen(false)}
+          className="shrink-0 p-1 rounded text-slate-400 hover:text-white hover:bg-slate-700"
+        >
+          <X size={13} />
+        </button>
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 max-h-64 min-h-[80px]">
+        {messages.map((m, i) => (
+          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div
+              className={`max-w-[90%] rounded-xl px-3 py-2 text-[11px] leading-relaxed ${
+                m.role === 'user'
+                  ? 'bg-brand-600/80 text-white rounded-br-sm'
+                  : 'bg-slate-800 text-slate-200 rounded-bl-sm'
+              }`}
+            >
+              {m.content}
+            </div>
+          </div>
+        ))}
+        {loading && (
+          <div className="flex justify-start">
+            <div className="bg-slate-800 rounded-xl rounded-bl-sm px-3 py-2 text-[11px] text-slate-400 italic">
+              Thinking…
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Generate layout CTA */}
+      <div className="px-3 pt-1 pb-2 border-t border-slate-800">
+        <button
+          type="button"
+          onClick={() => void generateLayout()}
+          disabled={generating || !hasPolygon || cartLines.length === 0}
+          title={
+            !hasPolygon
+              ? 'Draw a zone on the map to enable this'
+              : cartLines.length === 0
+              ? 'Add equipment to your cart first'
+              : 'Place your cart equipment inside the drawn zone'
+          }
+          className="w-full rounded-lg border border-brand-500/50 bg-brand-500/15 py-1.5 text-[11px] font-semibold text-brand-200 hover:bg-brand-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >
+          {generating ? 'Generating layout…' : '✦ Generate AI Equipment Layout'}
+        </button>
+        {genError && <p className="mt-1 text-[10px] text-amber-400/90">{genError}</p>}
+        {!hasPolygon && (
+          <p className="mt-0.5 text-[10px] text-slate-500 text-center">
+            Draw a zone on the map to auto-place equipment
+          </p>
+        )}
+      </div>
+
+      {/* Input */}
+      <div className="px-3 pb-3 flex gap-2 items-end">
+        <textarea
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault()
+              void send()
+            }
+          }}
+          placeholder="Describe your scenario or ask for advice…"
+          rows={2}
+          className="flex-1 resize-none rounded-lg border border-slate-700 bg-slate-800/90 px-2.5 py-2 text-[11px] text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500/60 leading-snug"
+        />
+        <button
+          type="button"
+          onClick={() => void send()}
+          disabled={loading || !input.trim()}
+          className="shrink-0 rounded-lg bg-brand-500 px-3 py-2 text-[11px] font-semibold text-white hover:bg-brand-600 disabled:opacity-40"
+        >
+          Send
+        </button>
+      </div>
     </div>
   )
 }

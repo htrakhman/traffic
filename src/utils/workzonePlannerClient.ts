@@ -481,6 +481,90 @@ export async function planWorkzoneLayout(
   return finalizeWorkzonePlan(mapArea, plan)
 }
 
+/**
+ * Build a MapArea from a raw polygon path (lat/lng array).
+ * Used by the Site Map AI chat panel to pass a drawn zone to planWorkzoneLayout.
+ */
+export function buildMapAreaFromPath(
+  path: LL[],
+  opts?: { address?: string; postedSpeedMph?: number },
+): MapArea {
+  if (path.length < 3) {
+    const c = path[0] ?? { lat: 39.8, lng: -98.6 }
+    return {
+      path,
+      areaFt2: 0,
+      perimeterFt: 0,
+      areaLabel: '0 sq ft',
+      perimeterLabel: '0 ft',
+      center: c,
+      address: opts?.address,
+      postedSpeedMph: opts?.postedSpeedMph,
+    }
+  }
+
+  // centroid
+  let la = 0; let ln = 0
+  for (const p of path) { la += p.lat; ln += p.lng }
+  const n = path.length
+  const origin: LL = { lat: la / n, lng: ln / n }
+
+  // convert to feet using existing R_FT constant
+  const cosLat = Math.cos((origin.lat * Math.PI) / 180)
+  const toFt = (p: LL) => ({
+    x: R_FT * cosLat * ((p.lng - origin.lng) * Math.PI / 180),
+    y: R_FT * ((p.lat - origin.lat) * Math.PI / 180),
+  })
+
+  const verts = path.map(toFt)
+
+  // shoelace area
+  let area = 0
+  for (let i = 0; i < verts.length; i++) {
+    const a = verts[i]!
+    const b = verts[(i + 1) % verts.length]!
+    area += a.x * b.y - b.x * a.y
+  }
+  const areaFt2 = Math.abs(area) / 2
+
+  // perimeter
+  let perimeterFt = 0
+  for (let i = 0; i < verts.length; i++) {
+    const a = verts[i]!
+    const b = verts[(i + 1) % verts.length]!
+    perimeterFt += Math.hypot(b.x - a.x, b.y - a.y)
+  }
+
+  // bounding box spans
+  let minX = Infinity; let maxX = -Infinity; let minY = Infinity; let maxY = -Infinity
+  for (const v of verts) {
+    minX = Math.min(minX, v.x); maxX = Math.max(maxX, v.x)
+    minY = Math.min(minY, v.y); maxY = Math.max(maxY, v.y)
+  }
+  const spanX = maxX - minX
+  const spanY = maxY - minY
+  const footprintMinSpanFt = Math.min(spanX, spanY)
+  const footprintMaxSpanFt = Math.max(spanX, spanY)
+
+  const fmtFt = (ft: number) =>
+    ft >= 5280
+      ? `${(ft / 5280).toFixed(2)} mi`
+      : `${Math.round(ft).toLocaleString()} ft`
+
+  return {
+    path,
+    areaFt2,
+    perimeterFt,
+    areaLabel: `${Math.round(areaFt2).toLocaleString()} sq ft`,
+    perimeterLabel: fmtFt(perimeterFt),
+    center: origin,
+    address: opts?.address,
+    postedSpeedMph: opts?.postedSpeedMph,
+    footprintMinSpanFt,
+    footprintMaxSpanFt,
+  }
+}
+
 /** Demo/fallback plan when AI is unavailable — devices hug the drawn polygon perimeter */
 export function buildDemoPlan(mapArea: MapArea, items: CartItemInput[]): WorkzonePlan {
   const path = mapArea.path
