@@ -154,26 +154,22 @@ function findInteriorAnchor(path: LL[]): LL {
 export function clampLatLngToPolygonInterior(p: LL, path: LL[]): LL {
   if (path.length < 3) return p
   if (pointInPolygon(p.lat, p.lng, path)) return p
-  const anchor = findInteriorAnchor(path)
-  if (!pointInPolygon(anchor.lat, anchor.lng, path)) {
-    const origin = polygonCentroid(path)
-    return nearestOnPolygonBoundaryFt(p, path, origin).point
+  // Snap outside points to their NEAREST boundary point (preserves spatial
+  // distribution — collapsing toward a single interior anchor caused stacking).
+  const origin = polygonCentroid(path)
+  const { point } = nearestOnPolygonBoundaryFt(p, path, origin)
+  // Inset ~4 ft toward centroid so the icon sits visibly inside the shaded zone.
+  const xyPt = llDeltaToFt(point, origin)
+  const h = Math.hypot(xyPt.x, xyPt.y)
+  if (h < 1e-6) return point
+  const inset = { x: xyPt.x - (xyPt.x / h) * 4, y: xyPt.y - (xyPt.y / h) * 4 }
+  const ll = ftDeltaToLl(inset, origin)
+  if (!pointInPolygon(ll.lat, ll.lng, path)) {
+    // Concave polygon edge case — fall back to centroid-ish interior anchor.
+    const anchor = findInteriorAnchor(path)
+    return pointInPolygon(anchor.lat, anchor.lng, path) ? anchor : point
   }
-  let lo = 0
-  let hi = 1
-  for (let k = 0; k < 24; k++) {
-    const mid = (lo + hi) / 2
-    const t = {
-      lat: anchor.lat + mid * (p.lat - anchor.lat),
-      lng: anchor.lng + mid * (p.lng - anchor.lng),
-    }
-    if (pointInPolygon(t.lat, t.lng, path)) lo = mid
-    else hi = mid
-  }
-  return {
-    lat: anchor.lat + lo * (p.lat - anchor.lat),
-    lng: anchor.lng + lo * (p.lng - anchor.lng),
-  }
+  return ll
 }
 
 function nearestOnPolygonBoundaryFt(p: LL, path: LL[], origin: LL): { point: LL; distFt: number } {
@@ -281,11 +277,9 @@ function spreadCollidingPlacements(mapArea: MapArea, placements: WorkzonePlaceme
         if (d >= minFt || d < 1e-8) continue
         dx /= d
         dy /= d
-        const push = (minFt - d) / 2 + 4
-        const perp = pass % 2 === 0 ? { x: -dy, y: dx } : { x: dy, y: -dx }
-        const k = 1 + (i % 3)
-        xyI.x += dx * push + perp.x * k * 5
-        xyI.y += dy * push + perp.y * k * 5
+        const push = (minFt - d) / 2 + 1
+        xyI.x += dx * push
+        xyI.y += dy * push
         const out = ftDeltaToLl(xyI, origin)
         placements[i].lat = out.lat
         placements[i].lng = out.lng
@@ -615,10 +609,37 @@ export function buildDemoPlan(mapArea: MapArea, items: CartItemInput[]): Workzon
 
   const placements: WorkzonePlacement[] = []
 
+  // Find the arc-length position of the upstream vertex so signs/arrows
+  // can be distributed along the upstream portion of the polygon perimeter
+  // (keeps every device INSIDE the drawn zone).
+  const upstreamArc = (() => {
+    let s = 0
+    for (let i = 0; i < path.length; i++) {
+      if (path[i].lat === upstreamVertex.lat && path[i].lng === upstreamVertex.lng) return s
+      const a = path[i]
+      const b = path[(i + 1) % path.length]
+      s += Math.hypot(
+        llDeltaToFt(b, origin).x - llDeltaToFt(a, origin).x,
+        llDeltaToFt(b, origin).y - llDeltaToFt(a, origin).y,
+      )
+    }
+    return 0
+  })()
+
+  const insetToCentroid = (ll: LL, inset: number): LL => {
+    const xy = llDeltaToFt(ll, origin)
+    const h = Math.hypot(xy.x, xy.y)
+    if (h < 1e-6) return ll
+    return ftDeltaToLl({ x: xy.x - (xy.x / h) * inset, y: xy.y - (xy.y / h) * inset }, origin)
+  }
+
+  const nSigns = signs.length
+  const signSpanFt = Math.min(perim * 0.25, Math.max(40, nSigns * 35))
   signs.forEach((s, k) => {
-    const xyV = llDeltaToFt(upstreamVertex, origin)
-    const off = awDist + k * 130
-    const ll = ftDeltaToLl({ x: xyV.x + upUnit.x * off, y: xyV.y + upUnit.y * off }, origin)
+    const offset = nSigns > 1 ? -signSpanFt / 2 + (signSpanFt * k) / (nSigns - 1) : 0
+    const arc = upstreamArc + offset
+    const onPerim = pointOnPolygonPerimeter(path, origin, arc)
+    const ll = insetToCentroid(onPerim, 6)
     placements.push({
       productId: s.item.productId,
       productName: s.item.productName,
@@ -627,14 +648,16 @@ export function buildDemoPlan(mapArea: MapArea, items: CartItemInput[]): Workzon
       rotation: 0,
       zone: 'advance_warning',
       label: `${s.item.productName} ${k + 1}`,
-      notes: `Advance warning ~${Math.round(off)} ft upstream along approach`,
+      notes: 'Advance warning — inside upstream edge of drawn zone',
     })
   })
 
+  const nArrows = arrows.length
   arrows.forEach((s, k) => {
-    const xyV = llDeltaToFt(upstreamVertex, origin)
-    const back = 55 + k * 28
-    const ll = ftDeltaToLl({ x: xyV.x + upUnit.x * back, y: xyV.y + upUnit.y * back }, origin)
+    const offset = nArrows > 1 ? -20 + (40 * k) / (nArrows - 1) : 0
+    const arc = upstreamArc + offset
+    const onPerim = pointOnPolygonPerimeter(path, origin, arc)
+    const ll = insetToCentroid(onPerim, 12)
     placements.push({
       productId: s.item.productId,
       productName: s.item.productName,
@@ -643,7 +666,7 @@ export function buildDemoPlan(mapArea: MapArea, items: CartItemInput[]): Workzon
       rotation: 0,
       zone: 'transition',
       label: `${s.item.productName} ${k + 1}`,
-      notes: 'Arrow board near upstream taper (demo)',
+      notes: 'Arrow board at upstream end of drawn zone',
     })
   })
 

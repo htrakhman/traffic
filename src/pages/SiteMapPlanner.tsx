@@ -1223,12 +1223,33 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
     window.addEventListener('mouseup', onUp)
   }
 
-  // ── auto-analyze when zone is drawn ──────────────────────────────────────
+  // ── ask clarifying questions when a new zone is drawn ───────────────────
   // Capture drawnCount at mount so we only react to NEW draws, not session-restored ones
   const initialDrawCountRef = useRef(drawnCount)
   useEffect(() => {
     if (drawnCount <= initialDrawCountRef.current) return
-    void analyzeDrawnZone()
+    const polygons = getDrawnPolygons()
+    if (polygons.length === 0) return
+    const path = polygons[polygons.length - 1]!
+    const mapArea = buildMapAreaFromPath(path, { address: locationHint || undefined })
+    setOpen(true)
+    setAwaitingScenario(true)
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'assistant' as const,
+        content: `I see you've drawn a work zone — ${mapArea.areaLabel}, ${mapArea.perimeterLabel} perimeter${locationHint ? ` near ${locationHint}` : ''}. Before I size the equipment list, I need a few details so the layout matches NJDOT/MUTCD Part 6 rules. Please answer in one reply:
+
+1. **Work type** — lane closure, shoulder work, full road closure, intersection, utility/patch, flagging operation?
+2. **Road & posted speed** — e.g. "35 mph local road", "45 mph arterial", "55 mph state highway"${mapArea.postedSpeedMph ? ` (map suggests ~${mapArea.postedSpeedMph} mph — confirm or correct)` : ''}
+3. **Duration & time of day** — hours, single shift, multi-day? Daytime or overnight?
+4. **Lanes affected** — one lane, two lanes, shoulder only, alternating one-lane (flaggers)?
+5. **Crew size** — number of workers on site.
+6. **Anything else** — flaggers on hand, equipment you already own, special permits, etc.
+
+Once I have these I'll produce the minimum required NJDOT layout and place it on your map.`,
+      },
+    ])
   }, [drawnCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const analyzeDrawnZone = async (
