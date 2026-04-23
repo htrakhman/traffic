@@ -737,52 +737,64 @@ export default function SiteMapPlanner() {
   }
 
   return (
-    <main className="min-h-screen pt-20 bg-slate-950 flex flex-col">
-      <div className="border-b border-slate-800/60 bg-slate-900/40 shrink-0">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-6 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="flex items-center gap-2 text-brand-400 text-xs font-semibold uppercase tracking-wider">
-              <Layers size={14} aria-hidden />
-              Interactive layout
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white mt-1">Site map planner</h1>
-            <p className="text-slate-400 text-sm mt-1 max-w-2xl leading-relaxed">
-              Drag catalog items onto the map to place cones, barricades, signs, and other gear. Drag pins to fine-tune. Export JSON to
-              share coordinates with your crew or attach to a rental booking. While this tab stays open, your placements, pan/zoom, and search are
-              remembered as you move around the site; a work zone from the AI Job Planner shows as an outline, and a brand-new layout picks
-              up your cart automatically once.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={exportJson}
-              disabled={placed.length === 0}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-100 hover:bg-slate-700 disabled:opacity-40"
-            >
-              <Download size={14} />
-              Export JSON
-            </button>
-            <button
-              type="button"
-              onClick={clearAll}
-              disabled={placed.length === 0}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-red-800/50 bg-red-950/40 px-3 py-2 text-xs font-medium text-red-200 hover:bg-red-950/70 disabled:opacity-40"
-            >
-              <Trash2 size={14} />
-              Clear all
-            </button>
-          </div>
+    <main className="h-screen pt-16 bg-slate-950 flex flex-col overflow-hidden">
+      {/* Compact single-row toolbar */}
+      <div className="flex items-center gap-2 px-3 py-1.5 border-b border-slate-800/60 bg-slate-900/60 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
+          <Layers size={13} className="text-brand-400" />
+          <span className="text-sm font-semibold text-white hidden sm:block">Site Map Planner</span>
         </div>
+        <div className="w-px h-4 bg-slate-700 mx-1 hidden sm:block" />
+        <form
+          className="flex flex-1 gap-1.5 min-w-0 max-w-sm"
+          onSubmit={(e) => { e.preventDefault(); void runSearch() }}
+        >
+          <div className="relative flex-1 min-w-0">
+            <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+            <input
+              value={searchDraft}
+              onChange={(e) => setSearchDraft(e.target.value)}
+              placeholder="Search address or lat, lng"
+              className="w-full rounded-md border border-slate-700 bg-slate-800/90 py-1 pl-6 pr-2 text-xs text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500/50"
+            />
+          </div>
+          <button type="submit" className="shrink-0 rounded-md border border-slate-600 bg-slate-800 px-2.5 py-1 text-xs font-medium text-slate-200 hover:bg-slate-700">Go</button>
+        </form>
+        {searchError && <p className="text-[10px] text-amber-400/95 shrink-0 hidden sm:block">{searchError}</p>}
+        <div className="flex-1" />
+        <span className="text-[10px] text-slate-500 shrink-0">{placed.length} placed</span>
+        {selectedId && (
+          <button type="button" onClick={() => removePlacement(selectedId)} className="rounded border border-slate-600 px-2 py-0.5 text-[10px] font-medium text-slate-300 hover:bg-slate-800 hover:text-white shrink-0">
+            Remove selected
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={exportJson}
+          disabled={placed.length === 0}
+          className="inline-flex items-center gap-1 rounded-md border border-slate-600 bg-slate-800 px-2 py-1 text-xs font-medium text-slate-100 hover:bg-slate-700 disabled:opacity-40 shrink-0"
+        >
+          <Download size={12} />
+          Export
+        </button>
+        <button
+          type="button"
+          onClick={clearAll}
+          disabled={placed.length === 0}
+          className="inline-flex items-center gap-1 rounded-md border border-red-800/50 bg-red-950/40 px-2 py-1 text-xs font-medium text-red-200 hover:bg-red-950/70 disabled:opacity-40 shrink-0"
+        >
+          <Trash2 size={12} />
+          Clear
+        </button>
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row min-h-0 min-h-[calc(100dvh-12rem)]">
+      <div className="flex-1 flex flex-col lg:flex-row min-h-0">
         {/* Palette — full catalog; quick-drag strip also sits on the map below */}
         <aside
           id="planner-equipment-catalog"
-          className="w-full lg:w-[300px] shrink-0 border-b lg:border-b-0 lg:border-r border-slate-800 bg-slate-900/50 flex flex-col max-h-[40vh] lg:max-h-none"
+          className="w-full lg:w-[260px] shrink-0 border-b lg:border-b-0 lg:border-r border-slate-800 bg-slate-900/50 flex flex-col max-h-[35vh] lg:max-h-none"
         >
-          <div className="p-3 border-b border-slate-800 space-y-2">
+          <div className="p-2 border-b border-slate-800 space-y-1.5">
             <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
               <Package size={12} className="text-brand-400 shrink-0" aria-hidden />
               Drag any item directly onto the map
@@ -820,53 +832,14 @@ export default function SiteMapPlanner() {
               <PaletteItem key={p.id} product={p} onPick={() => setPendingProductId(p.id)} />
             ))}
           </div>
-          <div className="p-3 border-t border-slate-800 text-[10px] text-slate-500 leading-relaxed">
-            On mobile: tap an item, then tap where it goes on the map.
+          <div className="px-3 py-1.5 border-t border-slate-800 text-[10px] text-slate-600">
+            Mobile: tap item → tap map
           </div>
         </aside>
 
-        {/* Map + search */}
-        <section className="flex-1 flex flex-col min-w-0 min-h-[320px] lg:min-h-0">
-          <div className="p-2 sm:p-3 border-b border-slate-800 flex flex-col sm:flex-row gap-2 shrink-0">
-            <form
-              className="flex flex-1 gap-2 min-w-0"
-              onSubmit={(e) => {
-                e.preventDefault()
-                void runSearch()
-              }}
-            >
-              <div className="relative flex-1 min-w-0">
-                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
-                <input
-                  value={searchDraft}
-                  onChange={(e) => setSearchDraft(e.target.value)}
-                  placeholder="Search address or lat, lng"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-800/90 py-2 pl-8 pr-2 text-xs text-slate-100 placeholder-slate-500 outline-none focus:border-brand-500/50"
-                />
-              </div>
-              <button
-                type="submit"
-                className="shrink-0 rounded-lg border border-slate-600 bg-slate-800 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-slate-700"
-              >
-                Go
-              </button>
-            </form>
-            <div className="flex items-center gap-2 text-[10px] text-slate-500 sm:self-center shrink-0">
-              <span>{placed.length} placed</span>
-              {selectedId && (
-                <button
-                  type="button"
-                  onClick={() => removePlacement(selectedId)}
-                  className="rounded border border-slate-600 px-2 py-0.5 text-[10px] font-medium text-slate-300 hover:bg-slate-800 hover:text-white"
-                >
-                  Remove selected
-                </button>
-              )}
-            </div>
-          </div>
-          {searchError && <p className="px-3 text-[10px] text-amber-400/95 shrink-0">{searchError}</p>}
-
-          <div className="relative flex-1 min-h-[280px]">
+        {/* Map canvas */}
+        <section className="flex-1 flex flex-col min-w-0 min-h-0">
+          <div className="relative flex-1 min-h-0">
             {/* Drawing toolbar — floating overlay on the map */}
             {status === 'ready' && (
               <div className="absolute top-2 left-2 z-20 flex flex-wrap items-center gap-1 rounded-xl border border-slate-600/70 bg-slate-900/90 px-2 py-1.5 shadow-xl backdrop-blur-sm pointer-events-auto">
