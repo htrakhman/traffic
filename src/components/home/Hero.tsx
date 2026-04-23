@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { Sparkles, Search, ExternalLink, X } from 'lucide-react'
-import JobAssistant from '../ai/JobAssistant'
+import { Link, useNavigate } from 'react-router-dom'
+import { Search, ExternalLink, X, Layers } from 'lucide-react'
+import SiteMapPlanner from '../../pages/SiteMapPlanner'
 import { useCatalogSync } from '../../context/CatalogSyncContext'
 import { getBrowseQuickChips } from '../../utils/browseQuickChips'
 
@@ -17,11 +17,8 @@ export default function Hero({
   onBrowseSearchClear,
 }: HeroProps) {
   const { tick } = useCatalogSync()
-  const [activeTab, setActiveTab] = useState<'ai' | 'browse'>('ai')
-  const [plannerMapBoost, setPlannerMapBoost] = useState(false)
+  const [activeTab, setActiveTab] = useState<'map' | 'browse'>('map')
   const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const plannerQuery = searchParams.get('q')?.trim() || undefined
 
   const browseChips = useMemo(
     () => getBrowseQuickChips(browseSearchQuery),
@@ -43,22 +40,22 @@ export default function Hero({
         </h1>
 
         <p className="text-slate-400 max-w-lg mx-auto mb-6 text-sm sm:text-base leading-relaxed">
-          Traffic control and safety equipment rental for contractors — with AI that recommends the right setup for your job.
+          Traffic control and safety equipment rental for contractors — draw your work zone on the map, place gear, and book what you need.
         </p>
 
         {/* Tabs */}
         <div className="inline-flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 mb-4">
           <button
             onClick={() => {
-              setActiveTab('ai')
+              setActiveTab('map')
               onBrowseSearchClear()
             }}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeTab === 'ai' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/25' : 'text-slate-400 hover:text-white'
+              activeTab === 'map' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/25' : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Sparkles size={12} />
-            AI Job Planner
+            <Layers size={12} />
+            Site Map
           </button>
           <button
             onClick={() => setActiveTab('browse')}
@@ -71,43 +68,22 @@ export default function Hero({
           </button>
         </div>
 
-        {/* AI panel — full chat + map on the homepage */}
-        {activeTab === 'ai' && (
+        {/* Site map — same card footprint as the former AI + map panel */}
+        {activeTab === 'map' && (
           <div className="w-full max-w-4xl mx-auto animate-fade-in text-left">
             <div
-              className={`card flex flex-col overflow-hidden shadow-2xl shadow-black/40 transition-[height,min-height] duration-200 ease-out ${
-                plannerMapBoost
-                  ? 'min-h-[460px] h-[min(90dvh,calc(100dvh-4.5rem))]'
-                  : 'min-h-[420px] h-[min(680px,calc(100dvh-12rem))]'
-              }`}
+              className="card flex flex-col overflow-hidden shadow-2xl shadow-black/40 min-h-[460px] h-[min(720px,calc(100dvh-11rem))]"
             >
-              <JobAssistant
-                key={plannerQuery ?? 'home'}
-                initialPrompt={plannerQuery}
-                embedded
-                onMapExpandedLayoutChange={setPlannerMapBoost}
-              />
+              <SiteMapPlanner embedded />
             </div>
             <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
               <Link
-                to={plannerQuery ? `/assistant?q=${encodeURIComponent(plannerQuery)}` : '/assistant'}
+                to="/planner"
                 className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors"
               >
-                Open full planner layout
+                Open full site map
                 <ExternalLink size={12} className="opacity-80" />
               </Link>
-              {plannerQuery && (
-                <>
-                  <span className="hidden sm:inline text-slate-600">·</span>
-                  <button
-                    type="button"
-                    onClick={() => setSearchParams({})}
-                    className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
-                  >
-                    Clear topic from URL
-                  </button>
-                </>
-              )}
             </div>
           </div>
         )}

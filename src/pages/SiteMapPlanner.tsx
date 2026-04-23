@@ -343,7 +343,12 @@ function wireMarkerShellControls(
   sizeRow?.addEventListener('mousedown', stopPtr, true)
 }
 
-export default function SiteMapPlanner() {
+type SiteMapPlannerProps = {
+  /** When true, fills a parent with fixed height (e.g. homepage hero card) instead of full viewport under the header. */
+  embedded?: boolean
+}
+
+export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps) {
   const { tick } = useCatalogSync()
   const { lines: cartLines } = useCart()
   const catalog = useMemo(() => getProducts(), [tick])
@@ -1079,32 +1084,71 @@ export default function SiteMapPlanner() {
   }, [clearAllDrawings])
 
   if (noKey) {
+    const noKeyBody = (
+      <>
+        <MapPin className="mx-auto mb-3 text-slate-500" size={28} />
+        <p className="text-sm leading-relaxed">
+          Add <code className="text-brand-300">VITE_GOOGLE_MAPS_API_KEY</code> to your{' '}
+          <code className="text-brand-300">.env</code> file to use the layout planner (same key as the rest of the site).
+        </p>
+      </>
+    )
+    if (embedded) {
+      return (
+        <div
+          role="region"
+          aria-label="Site map planner"
+          className="h-full min-h-[220px] flex items-center justify-center p-6 text-center text-slate-300 bg-slate-950/40"
+        >
+          <div className="max-w-md rounded-xl border border-slate-700 bg-slate-900/60 p-6">{noKeyBody}</div>
+        </div>
+      )
+    }
     return (
       <main className="min-h-screen pt-24 px-4 pb-16 bg-slate-950">
         <div className="max-w-lg mx-auto rounded-xl border border-slate-700 bg-slate-900/60 p-8 text-center text-slate-300">
-          <MapPin className="mx-auto mb-3 text-slate-500" size={28} />
-          <p className="text-sm leading-relaxed">
-            Add <code className="text-brand-300">VITE_GOOGLE_MAPS_API_KEY</code> to your{' '}
-            <code className="text-brand-300">.env</code> file to use the layout planner (same key as the rest of the site).
-          </p>
+          {noKeyBody}
         </div>
       </main>
     )
   }
 
   if (status === 'error') {
+    const errBody = (
+      <p className="text-sm text-red-200/90 leading-relaxed">
+        Google Maps did not load. Confirm your API key, billing, and that the{' '}
+        <strong className="text-red-100">Maps JavaScript API</strong> is enabled for this origin.
+      </p>
+    )
+    if (embedded) {
+      return (
+        <div
+          role="region"
+          aria-label="Site map planner"
+          className="h-full min-h-[220px] flex items-center justify-center p-6 bg-slate-950/40"
+        >
+          <div className="max-w-md rounded-xl border border-red-800/40 bg-red-950/30 p-6">{errBody}</div>
+        </div>
+      )
+    }
     return (
       <main className="min-h-screen pt-24 px-4 pb-16 bg-slate-950">
-        <div className="max-w-lg mx-auto rounded-xl border border-red-800/40 bg-red-950/30 p-6 text-sm text-red-200/90">
-          Google Maps did not load. Confirm your API key, billing, and that the{' '}
-          <strong className="text-red-100">Maps JavaScript API</strong> is enabled for this origin.
-        </div>
+        <div className="max-w-lg mx-auto rounded-xl border border-red-800/40 bg-red-950/30 p-6">{errBody}</div>
       </main>
     )
   }
 
+  const rootClass = embedded
+    ? 'h-full min-h-0 flex flex-col overflow-hidden bg-slate-950'
+    : 'h-screen pt-16 bg-slate-950 flex flex-col overflow-hidden'
+
+  const PlannerShell = embedded ? 'div' : 'main'
+  const plannerShellProps = embedded
+    ? ({ role: 'region' as const, 'aria-label': 'Site map planner' as const } as const)
+    : ({} as const)
+
   return (
-    <main className="h-screen pt-16 bg-slate-950 flex flex-col overflow-hidden">
+    <PlannerShell className={rootClass} {...plannerShellProps}>
       {/* Compact single-row toolbar */}
       <div className="flex items-center gap-2 px-3 py-1.5 border-b border-slate-800/60 bg-slate-900/60 shrink-0">
         <div className="flex items-center gap-1.5 shrink-0">
@@ -1344,7 +1388,7 @@ export default function SiteMapPlanner() {
           }}
         />
       )}
-    </main>
+    </PlannerShell>
   )
 }
 
