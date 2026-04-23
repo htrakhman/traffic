@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
-import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Pen, Square, Circle, Hexagon, ZoomIn, ZoomOut } from 'lucide-react'
+import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Pen, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical } from 'lucide-react'
 import type { Product } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -785,7 +785,7 @@ export default function SiteMapPlanner() {
           <div className="p-3 border-b border-slate-800 space-y-2">
             <label className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
               <Package size={12} className="text-brand-400 shrink-0" aria-hidden />
-              Full catalog — drag thumbnail → map
+              Drag any item directly onto the map
             </label>
             <input
               value={paletteQuery}
@@ -821,7 +821,7 @@ export default function SiteMapPlanner() {
             ))}
           </div>
           <div className="p-3 border-t border-slate-800 text-[10px] text-slate-500 leading-relaxed">
-            Tip: on desktop, drag the thumbnail onto the map. On mobile, tap an item, then tap where it goes.
+            On mobile: tap an item, then tap where it goes on the map.
           </div>
         </aside>
 
@@ -866,74 +866,76 @@ export default function SiteMapPlanner() {
           </div>
           {searchError && <p className="px-3 text-[10px] text-amber-400/95 shrink-0">{searchError}</p>}
 
-          {/* Drawing toolbar */}
-          {status === 'ready' && (
-            <div className="px-2 sm:px-3 pb-2 border-b border-slate-800 flex flex-wrap items-center gap-1.5 shrink-0">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mr-1">Draw</span>
-              {(
-                [
-                  { mode: 'select', label: 'Select', Icon: MousePointer2 },
-                  { mode: 'polyline', label: 'Line', Icon: Pen },
-                  { mode: 'polygon', label: 'Zone', Icon: Hexagon },
-                  { mode: 'rectangle', label: 'Box', Icon: Square },
-                  { mode: 'circle', label: 'Circle', Icon: Circle },
-                ] as const
-              ).map(({ mode, label, Icon }) => (
-                <button
-                  key={mode}
-                  type="button"
-                  onClick={() => setDrawMode(mode)}
-                  title={label}
-                  className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-medium transition-colors ${
-                    drawMode === mode
-                      ? 'border-brand-500 bg-brand-500/20 text-brand-200'
-                      : 'border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700'
-                  }`}
-                >
-                  <Icon size={11} />
-                  {label}
-                </button>
-              ))}
-              <div className="flex items-center gap-1 ml-2">
-                <span className="text-[10px] text-slate-500">Color:</span>
-                {['#f97316', '#ef4444', '#facc15', '#ffffff', '#3b82f6', '#22c55e'].map((c) => (
+          <div className="relative flex-1 min-h-[280px]">
+            {/* Drawing toolbar — floating overlay on the map */}
+            {status === 'ready' && (
+              <div className="absolute top-2 left-2 z-20 flex flex-wrap items-center gap-1 rounded-xl border border-slate-600/70 bg-slate-900/90 px-2 py-1.5 shadow-xl backdrop-blur-sm pointer-events-auto">
+                {(
+                  [
+                    { mode: 'select', label: 'Select', Icon: MousePointer2 },
+                    { mode: 'polyline', label: 'Line', Icon: Pen },
+                    { mode: 'polygon', label: 'Zone', Icon: Hexagon },
+                    { mode: 'rectangle', label: 'Box', Icon: Square },
+                    { mode: 'circle', label: 'Circle', Icon: Circle },
+                  ] as const
+                ).map(({ mode, label, Icon }) => (
                   <button
-                    key={c}
+                    key={mode}
                     type="button"
-                    onClick={() => setDrawColor(c)}
-                    title={c}
-                    className={`w-4 h-4 rounded-full border-2 transition-transform ${
-                      drawColor === c ? 'border-white scale-125' : 'border-slate-600'
+                    onClick={() => setDrawMode(mode)}
+                    title={label}
+                    className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-medium transition-colors ${
+                      drawMode === mode
+                        ? 'border-brand-500 bg-brand-500/20 text-brand-200'
+                        : 'border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-700'
                     }`}
-                    style={{ background: c }}
-                  />
+                  >
+                    <Icon size={11} />
+                    {label}
+                  </button>
                 ))}
-              </div>
-              {(drawnCount > 0 || selectedShapeId) && (
-                <div className="flex items-center gap-1.5 ml-auto">
-                  {selectedShapeId && (
+                <div className="w-px h-4 bg-slate-600 mx-0.5" />
+                <div className="flex items-center gap-1">
+                  {['#f97316', '#ef4444', '#facc15', '#ffffff', '#3b82f6', '#22c55e'].map((c) => (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setDrawColor(c)}
+                      title={c}
+                      className={`w-3.5 h-3.5 rounded-full border-2 transition-transform ${
+                        drawColor === c ? 'border-white scale-125' : 'border-slate-600'
+                      }`}
+                      style={{ background: c }}
+                    />
+                  ))}
+                </div>
+                {selectedShapeId && (
+                  <>
+                    <div className="w-px h-4 bg-slate-600 mx-0.5" />
                     <button
                       type="button"
                       onClick={deleteSelectedShape}
                       className="inline-flex items-center gap-1 rounded-md border border-red-800/50 bg-red-950/40 px-2 py-1 text-[10px] font-medium text-red-200 hover:bg-red-950/70"
                     >
                       <Trash2 size={10} />
-                      Delete shape
+                      Delete
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={clearAllDrawings}
-                    className="text-[10px] text-slate-500 hover:text-red-400 underline-offset-2 hover:underline"
-                  >
-                    Clear drawings
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="relative flex-1 min-h-[280px]">
+                  </>
+                )}
+                {drawnCount > 0 && !selectedShapeId && (
+                  <>
+                    <div className="w-px h-4 bg-slate-600 mx-0.5" />
+                    <button
+                      type="button"
+                      onClick={clearAllDrawings}
+                      className="text-[10px] text-slate-400 hover:text-red-400"
+                    >
+                      Clear
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
             {status === 'loading' && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900 text-slate-400 text-sm">
                 Loading map…
@@ -1429,26 +1431,21 @@ function PaletteItem({ product, onPick }: { product: Product; onPick: () => void
   }
 
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-800/40 p-1.5 hover:border-slate-600 transition-colors group">
-      <div
-        draggable
-        onDragStart={onDragStart}
-        className="relative h-11 w-11 shrink-0 rounded-md overflow-hidden border border-slate-600 cursor-grab active:cursor-grabbing"
-        title={`Drag to map: ${product.name}`}
-      >
+    <div
+      draggable
+      onDragStart={onDragStart}
+      onClick={onPick}
+      title={`Drag onto the map — or tap to place: ${product.name}`}
+      className="flex items-center gap-2 rounded-lg border border-slate-700/80 bg-slate-800/40 p-1.5 cursor-grab active:cursor-grabbing hover:border-brand-500/50 hover:bg-slate-800/70 transition-colors group select-none"
+    >
+      <div className="relative h-11 w-11 shrink-0 rounded-md overflow-hidden border border-slate-600 group-hover:border-brand-500/60 transition-colors">
         <img src={product.imageUrl} alt="" className="h-full w-full object-cover pointer-events-none" draggable={false} />
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-[11px] font-medium text-slate-100 leading-tight line-clamp-2">{product.name}</p>
         <p className="text-[9px] text-slate-500 mt-0.5">{product.sku}</p>
       </div>
-      <button
-        type="button"
-        onClick={onPick}
-        className="shrink-0 rounded-md border border-slate-600 px-2 py-1 text-[10px] font-medium text-slate-300 hover:bg-slate-700 hover:text-white opacity-80 group-hover:opacity-100"
-      >
-        Place
-      </button>
+      <GripVertical size={14} className="shrink-0 text-slate-600 group-hover:text-slate-400 transition-colors" />
     </div>
   )
 }
