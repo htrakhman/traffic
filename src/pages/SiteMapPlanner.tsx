@@ -1420,7 +1420,22 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
           recommendation: rec,
         },
       ])
-    } catch {
+    } catch (err) {
+      console.error('[advisor] analyzeDrawnZone failed', err)
+      // If the user already answered the clarifying questions, don't re-ask —
+      // surface the failure so they can retry or describe in free text.
+      if (userContext || awaitingScenario) {
+        setAwaitingScenario(false)
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant' as const,
+            content:
+              "I couldn't process that response from the AI service. Your baseline layout is still on the map. Try rephrasing your scenario in the box below (e.g. '35 mph single lane closure, 200 ft long, daytime'), or click Generate AI Equipment Layout to place your cart.",
+          },
+        ])
+        return
+      }
       setAwaitingScenario(true)
       // Baseline NJDOT placement so the zone is populated immediately while
       // we wait for the contractor's clarifying answers. Defaults assume a
