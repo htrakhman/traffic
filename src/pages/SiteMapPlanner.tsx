@@ -415,6 +415,9 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
   const overlayRef = useRef<google.maps.OverlayView | null>(null)
   const markersRef = useRef<Map<string, MarkerMeta>>(new Map())
   const advancedMarkerCtorRef = useRef<typeof google.maps.marker.AdvancedMarkerElement | null>(null)
+  const pinElementCtorRef = useRef<typeof google.maps.marker.PinElement | null>(null)
+  /** Geocoded / coordinate search result — distinct from equipment markers and the blue “your location” dot. */
+  const addressReferenceMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null)
   const userLocationMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null)
   const workZonePolyRef = useRef<google.maps.Polygon | null>(null)
   const workZonePathRef = useRef(plannerBoot.workZonePath)
@@ -696,7 +699,9 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     Promise.all([importLibrary('maps'), importLibrary('marker'), importLibrary('drawing'), importLibrary('places')])
       .then(([_, markerLib]) => {
         if (cancelled || !mapDivRef.current) return
-        advancedMarkerCtorRef.current = markerLib.AdvancedMarkerElement
+        const ml = markerLib as google.maps.MarkerLibrary
+        advancedMarkerCtorRef.current = ml.AdvancedMarkerElement
+        pinElementCtorRef.current = ml.PinElement
         const boot = initialMapViewRef.current
         const map = new google.maps.Map(mapDivRef.current, {
           center: boot ? { lat: boot.lat, lng: boot.lng } : DEFAULT_CENTER,
@@ -830,6 +835,9 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       idleListener?.remove()
       workZonePolyRef.current?.setMap(null)
       workZonePolyRef.current = null
+      const addrRefMarker = addressReferenceMarkerRef.current
+      if (addrRefMarker) addrRefMarker.map = null
+      addressReferenceMarkerRef.current = null
       const userLocMarker = userLocationMarkerRef.current
       if (userLocMarker) userLocMarker.map = null
       userLocationMarkerRef.current = null
@@ -841,6 +849,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       drawnOverlaysRef.current.clear()
       drawingMgrRef.current = null
       advancedMarkerCtorRef.current = null
+      pinElementCtorRef.current = null
       overlayRef.current = null
       autocompleteServiceRef.current = null
       sessionTokenRef.current = null
@@ -869,6 +878,34 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     })
   }, [drawColor])
 
+  const placeAddressReferenceMarker = useCallback((lat: number, lng: number, title?: string) => {
+    const map = mapRef.current
+    const AdvancedMarkerElement = advancedMarkerCtorRef.current
+    const PinElement = pinElementCtorRef.current
+    if (!map || !AdvancedMarkerElement || !PinElement) return
+
+    const prev = addressReferenceMarkerRef.current
+    if (prev) {
+      prev.map = null
+      addressReferenceMarkerRef.current = null
+    }
+
+    const pin = new PinElement({
+      background: '#f43f5e',
+      borderColor: '#9f1239',
+      glyphColor: '#ffffff',
+      scale: 1.12,
+    })
+    addressReferenceMarkerRef.current = new AdvancedMarkerElement({
+      map,
+      position: { lat, lng },
+      content: pin,
+      title: title?.trim() || 'Searched address',
+      zIndex: 85,
+      gmpClickable: false,
+    })
+  }, [])
+
   const runSearch = useCallback(async () => {
     const q = searchDraft.trim()
     setSearchError(null)
@@ -885,6 +922,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     if (plain) {
       map.setCenter(plain)
       map.setZoom(17)
+      placeAddressReferenceMarker(plain.lat, plain.lng, q)
       setSuggestionsOpen(false)
       setPlacePredictions([])
       setHighlightIdx(-1)
@@ -904,6 +942,9 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       }
       map.setCenter(first.geometry.location)
       map.setZoom(15)
+      const lat = first.geometry.location.lat()
+      const lng = first.geometry.location.lng()
+      placeAddressReferenceMarker(lat, lng, first.formatted_address ?? q)
       setSuggestionsOpen(false)
       setPlacePredictions([])
       setHighlightIdx(-1)
@@ -911,7 +952,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
     } catch {
       setSearchError('Search failed.')
     }
-  }, [searchDraft, schedulePersistSession])
+  }, [searchDraft, schedulePersistSession, placeAddressReferenceMarker])
 
   const selectPlacePrediction = useCallback(
     (prediction: google.maps.places.AutocompletePrediction) => {
@@ -926,6 +967,11 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
         const loc = results[0].geometry.location
         m.setCenter(loc)
         m.setZoom(15)
+        placeAddressReferenceMarker(
+          loc.lat(),
+          loc.lng(),
+          results[0].formatted_address ?? prediction.description,
+        )
         setSearchDraft(results[0].formatted_address ?? prediction.description)
         setSearchError(null)
         setSuggestionsOpen(false)
@@ -935,7 +981,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
         window.setTimeout(() => schedulePersistSession(), 100)
       })
     },
-    [schedulePersistSession],
+    [schedulePersistSession, placeAddressReferenceMarker],
   )
 
   const pickSuggestionByFlatIndex = useCallback(
@@ -949,6 +995,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
           if (!m) return
           m.setCenter(coord)
           m.setZoom(17)
+          placeAddressReferenceMarker(coord.lat, coord.lng, q)
           setSearchError(null)
           setSuggestionsOpen(false)
           setPlacePredictions([])
@@ -964,7 +1011,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
         selectPlacePrediction(placePredictions[pi])
       }
     },
-    [searchDraft, placePredictions, selectPlacePrediction, schedulePersistSession],
+    [searchDraft, placePredictions, selectPlacePrediction, schedulePersistSession, placeAddressReferenceMarker],
   )
 
   useEffect(() => {
