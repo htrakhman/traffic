@@ -8,6 +8,7 @@ export type SiteMapPlacedRow = {
   productId: string
   lat: number
   lng: number
+  size?: number  // 1.0 = default 44px marker
 }
 
 export interface SiteMapPlannerPersistedV1 {
@@ -76,6 +77,7 @@ export function readSiteMapPlannerSession(): SiteMapPlannerPersistedV1 | null {
         productId: row.productId,
         lat: row.lat,
         lng: row.lng,
+        size: typeof row.size === 'number' && row.size > 0 ? row.size : undefined,
       }))
     const mapView =
       p.mapView &&

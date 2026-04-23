@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
-import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package } from 'lucide-react'
+import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Pen, Square, Circle, Hexagon, ZoomIn, ZoomOut } from 'lucide-react'
 import type { Product } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -29,6 +29,7 @@ type MapsAuthWindow = Window & { gm_authFailure?: () => void }
 type MarkerMeta = {
   marker: google.maps.marker.AdvancedMarkerElement
   shell: HTMLDivElement
+  size: number
 }
 
 /** Minimal overlay so we can convert container pixels → LatLng on drop. */
@@ -52,7 +53,11 @@ function readLatLng(
   return { lat, lng }
 }
 
-function buildMarkerShell(product: Product, selected: boolean): HTMLDivElement {
+function buildMarkerShell(product: Product, selected: boolean, sizeMultiplier = 1): HTMLDivElement {
+  const px = Math.round(44 * sizeMultiplier)
+  const capMaxWidth = Math.round(72 * sizeMultiplier)
+  const capFontSize = Math.max(7, Math.round(9 * Math.min(sizeMultiplier, 1.5)))
+
   const shell = document.createElement('div')
   shell.style.cssText = [
     'display:flex',
@@ -67,8 +72,8 @@ function buildMarkerShell(product: Product, selected: boolean): HTMLDivElement {
 
   const card = document.createElement('div')
   card.style.cssText = [
-    'width:44px',
-    'height:44px',
+    `width:${px}px`,
+    `height:${px}px`,
     'border-radius:8px',
     'overflow:hidden',
     'background:#0f172a',
@@ -98,8 +103,8 @@ function buildMarkerShell(product: Product, selected: boolean): HTMLDivElement {
   const cap = document.createElement('div')
   cap.textContent = product.sku || product.slug.slice(0, 8)
   cap.style.cssText = [
-    'max-width:72px',
-    'font:600 9px/1.1 system-ui,sans-serif',
+    `max-width:${capMaxWidth}px`,
+    `font:600 ${capFontSize}px/1.1 system-ui,sans-serif`,
     'color:#fff',
     'text-align:center',
     'text-shadow:0 1px 2px rgba(0,0,0,0.85)',
@@ -161,6 +166,15 @@ export default function SiteMapPlanner() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   /** Tap-to-place: pick a product, then click the map (mobile-friendly). */
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)
+
+  type DrawMode = 'select' | 'polyline' | 'polygon' | 'rectangle' | 'circle'
+  const [drawMode, setDrawMode] = useState<DrawMode>('select')
+  const [drawColor, setDrawColor] = useState('#f97316')
+  const [drawnCount, setDrawnCount] = useState(0)
+  const [selectedShapeId, setSelectedShapeId] = useState<string | null>(null)
+  const drawingMgrRef = useRef<google.maps.drawing.DrawingManager | null>(null)
+  const drawnOverlaysRef = useRef<Map<string, google.maps.MVCObject>>(new Map())
+  const drawColorRef = useRef(drawColor)
 
   const { paletteItems, paletteNote } = useMemo(() => {
     const q = paletteQuery.trim().toLowerCase()
@@ -249,8 +263,15 @@ export default function SiteMapPlanner() {
       if (!AdvancedMarkerElement || !map) return
 
       let meta = markersRef.current.get(row.id)
+      const rowSize = row.size ?? 1
+      // Rebuild shell if size changed
+      if (meta && Math.abs(meta.size - rowSize) > 0.01) {
+        meta.marker.map = null
+        markersRef.current.delete(row.id)
+        meta = undefined
+      }
       if (!meta) {
-        const shell = buildMarkerShell(product, false)
+        const shell = buildMarkerShell(product, false, rowSize)
         const marker = new AdvancedMarkerElement({
           map,
           position: { lat: row.lat, lng: row.lng },
@@ -279,7 +300,7 @@ export default function SiteMapPlanner() {
           setPlaced((prev) => prev.map((r) => (r.id === row.id ? { ...r, lat, lng } : r)))
         })
 
-        meta = { marker, shell }
+        meta = { marker, shell, size: rowSize }
         markersRef.current.set(row.id, meta)
       } else {
         meta.marker.position = { lat: row.lat, lng: row.lng }
@@ -308,6 +329,7 @@ export default function SiteMapPlanner() {
 
   placedRef.current = placed
   searchDraftRef.current = searchDraft
+  drawColorRef.current = drawColor
 
   const schedulePersistSession = useCallback(() => {
     const map = mapRef.current
@@ -369,7 +391,7 @@ export default function SiteMapPlanner() {
     setOptions({
       key: MAPS_KEY,
       v: 'weekly',
-      libraries: ['marker'],
+      libraries: ['marker', 'drawing'],
       mapIds: [MAP_ID],
     })
 
@@ -377,7 +399,7 @@ export default function SiteMapPlanner() {
     let idleListener: google.maps.MapsEventListener | null = null
     let idlePersistTimer: number | null = null
 
-    Promise.all([importLibrary('maps'), importLibrary('marker')])
+    Promise.all([importLibrary('maps'), importLibrary('marker'), importLibrary('drawing')])
       .then(([_, markerLib]) => {
         if (cancelled || !mapDivRef.current) return
         advancedMarkerCtorRef.current = markerLib.AdvancedMarkerElement
@@ -398,6 +420,62 @@ export default function SiteMapPlanner() {
         mapRef.current = map
         overlayRef.current = attachPixelToLatLngOverlay(map)
         geocoderRef.current = new google.maps.Geocoder()
+
+        // Set up drawing manager
+        const drawingMgr = new google.maps.drawing.DrawingManager({
+          drawingMode: null,
+          drawingControl: false,
+          polylineOptions: {
+            strokeColor: drawColorRef.current,
+            strokeWeight: 3,
+            clickable: true,
+            editable: false,
+            zIndex: 5,
+          },
+          polygonOptions: {
+            fillColor: drawColorRef.current,
+            fillOpacity: 0.18,
+            strokeColor: drawColorRef.current,
+            strokeWeight: 2,
+            clickable: true,
+            editable: false,
+            zIndex: 5,
+          },
+          rectangleOptions: {
+            fillColor: drawColorRef.current,
+            fillOpacity: 0.18,
+            strokeColor: drawColorRef.current,
+            strokeWeight: 2,
+            clickable: true,
+            editable: false,
+            zIndex: 5,
+          },
+          circleOptions: {
+            fillColor: drawColorRef.current,
+            fillOpacity: 0.18,
+            strokeColor: drawColorRef.current,
+            strokeWeight: 2,
+            clickable: true,
+            editable: false,
+            zIndex: 5,
+          },
+        })
+        drawingMgr.setMap(map)
+        drawingMgrRef.current = drawingMgr
+
+        google.maps.event.addListener(drawingMgr, 'overlaycomplete', (e: google.maps.drawing.OverlayCompleteEvent) => {
+          const id = crypto.randomUUID()
+          const overlay = e.overlay as google.maps.MVCObject
+          drawnOverlaysRef.current.set(id, overlay)
+          // Switch back to select mode after drawing
+          drawingMgr.setDrawingMode(null)
+          setDrawMode('select')
+          setDrawnCount((n) => n + 1)
+          // Click to select shape
+          google.maps.event.addListener(overlay, 'click', () => {
+            setSelectedShapeId(id)
+          })
+        })
 
         if (navigator.geolocation && !boot) {
           navigator.geolocation.getCurrentPosition(
@@ -438,6 +516,9 @@ export default function SiteMapPlanner() {
         m.marker.map = null
       })
       markersRef.current.clear()
+      drawnOverlaysRef.current.forEach((o) => (o as google.maps.Polygon).setMap(null))
+      drawnOverlaysRef.current.clear()
+      drawingMgrRef.current = null
       advancedMarkerCtorRef.current = null
       overlayRef.current = null
       geocoderRef.current = null
@@ -591,6 +672,34 @@ export default function SiteMapPlanner() {
     URL.revokeObjectURL(url)
   }, [placed])
 
+  useEffect(() => {
+    const mgr = drawingMgrRef.current
+    if (!mgr) return
+    if (drawMode === 'select') {
+      mgr.setDrawingMode(null)
+    } else {
+      mgr.setDrawingMode(drawMode as google.maps.drawing.OverlayType)
+    }
+  }, [drawMode])
+
+  const deleteSelectedShape = useCallback(() => {
+    if (!selectedShapeId) return
+    const overlay = drawnOverlaysRef.current.get(selectedShapeId)
+    if (overlay) {
+      (overlay as google.maps.Polygon).setMap(null)
+      drawnOverlaysRef.current.delete(selectedShapeId)
+      setDrawnCount((n) => n - 1)
+    }
+    setSelectedShapeId(null)
+  }, [selectedShapeId])
+
+  const clearAllDrawings = useCallback(() => {
+    drawnOverlaysRef.current.forEach((o) => (o as google.maps.Polygon).setMap(null))
+    drawnOverlaysRef.current.clear()
+    setDrawnCount(0)
+    setSelectedShapeId(null)
+  }, [])
+
   const clearAll = useCallback(() => {
     markersRef.current.forEach((m) => {
       m.marker.map = null
@@ -598,7 +707,8 @@ export default function SiteMapPlanner() {
     markersRef.current.clear()
     setPlaced([])
     setSelectedId(null)
-  }, [])
+    clearAllDrawings()
+  }, [clearAllDrawings])
 
   if (noKey) {
     return (
@@ -755,6 +865,73 @@ export default function SiteMapPlanner() {
           </div>
           {searchError && <p className="px-3 text-[10px] text-amber-400/95 shrink-0">{searchError}</p>}
 
+          {/* Drawing toolbar */}
+          {status === 'ready' && (
+            <div className="px-2 sm:px-3 pb-2 border-b border-slate-800 flex flex-wrap items-center gap-1.5 shrink-0">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mr-1">Draw</span>
+              {(
+                [
+                  { mode: 'select', label: 'Select', Icon: MousePointer2 },
+                  { mode: 'polyline', label: 'Line', Icon: Pen },
+                  { mode: 'polygon', label: 'Zone', Icon: Hexagon },
+                  { mode: 'rectangle', label: 'Box', Icon: Square },
+                  { mode: 'circle', label: 'Circle', Icon: Circle },
+                ] as const
+              ).map(({ mode, label, Icon }) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setDrawMode(mode)}
+                  title={label}
+                  className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-medium transition-colors ${
+                    drawMode === mode
+                      ? 'border-brand-500 bg-brand-500/20 text-brand-200'
+                      : 'border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  }`}
+                >
+                  <Icon size={11} />
+                  {label}
+                </button>
+              ))}
+              <div className="flex items-center gap-1 ml-2">
+                <span className="text-[10px] text-slate-500">Color:</span>
+                {['#f97316', '#ef4444', '#facc15', '#ffffff', '#3b82f6', '#22c55e'].map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setDrawColor(c)}
+                    title={c}
+                    className={`w-4 h-4 rounded-full border-2 transition-transform ${
+                      drawColor === c ? 'border-white scale-125' : 'border-slate-600'
+                    }`}
+                    style={{ background: c }}
+                  />
+                ))}
+              </div>
+              {(drawnCount > 0 || selectedShapeId) && (
+                <div className="flex items-center gap-1.5 ml-auto">
+                  {selectedShapeId && (
+                    <button
+                      type="button"
+                      onClick={deleteSelectedShape}
+                      className="inline-flex items-center gap-1 rounded-md border border-red-800/50 bg-red-950/40 px-2 py-1 text-[10px] font-medium text-red-200 hover:bg-red-950/70"
+                    >
+                      <Trash2 size={10} />
+                      Delete shape
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={clearAllDrawings}
+                    className="text-[10px] text-slate-500 hover:text-red-400 underline-offset-2 hover:underline"
+                  >
+                    Clear drawings
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="relative flex-1 min-h-[280px]">
             {status === 'loading' && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900 text-slate-400 text-sm">
@@ -769,6 +946,69 @@ export default function SiteMapPlanner() {
               role="application"
               aria-label="Job site map — drop equipment here"
             />
+
+            {/* Size control for selected marker */}
+            {selectedId && (() => {
+              const row = placed.find((r) => r.id === selectedId)
+              const product = row ? getProductById(row.productId) : null
+              if (!row || !product) return null
+              const size = row.size ?? 1
+              return (
+                <div className="pointer-events-auto absolute top-2 right-2 z-30 rounded-xl border border-slate-600/80 bg-slate-900/95 shadow-2xl backdrop-blur-md p-3 w-52">
+                  <div className="flex items-start justify-between gap-1 mb-2">
+                    <p className="text-[11px] font-semibold text-slate-100 leading-tight line-clamp-2">{product.name}</p>
+                    <button
+                      type="button"
+                      aria-label="Deselect"
+                      onClick={() => setSelectedId(null)}
+                      className="shrink-0 p-0.5 rounded text-slate-400 hover:text-white"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                  <label className="text-[10px] text-slate-400 flex items-center justify-between mb-1">
+                    <span>Size</span>
+                    <span className="text-slate-300 font-mono">{size.toFixed(1)}×</span>
+                  </label>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setPlaced((prev) => prev.map((r) => r.id === selectedId ? { ...r, size: Math.max(0.5, (r.size ?? 1) - 0.25) } : r))}
+                      className="shrink-0 rounded border border-slate-600 p-1 text-slate-300 hover:bg-slate-700"
+                    >
+                      <ZoomOut size={10} />
+                    </button>
+                    <input
+                      type="range"
+                      min={0.5}
+                      max={3}
+                      step={0.25}
+                      value={size}
+                      onChange={(e) => {
+                        const v = parseFloat(e.target.value)
+                        setPlaced((prev) => prev.map((r) => r.id === selectedId ? { ...r, size: v } : r))
+                      }}
+                      className="flex-1 h-1 accent-brand-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setPlaced((prev) => prev.map((r) => r.id === selectedId ? { ...r, size: Math.min(3, (r.size ?? 1) + 0.25) } : r))}
+                      className="shrink-0 rounded border border-slate-600 p-1 text-slate-300 hover:bg-slate-700"
+                    >
+                      <ZoomIn size={10} />
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => removePlacement(selectedId)}
+                    className="mt-2 w-full inline-flex items-center justify-center gap-1 rounded-md border border-red-800/50 bg-red-950/30 py-1 text-[10px] font-medium text-red-200 hover:bg-red-950/60"
+                  >
+                    <Trash2 size={10} />
+                    Remove from map
+                  </button>
+                </div>
+              )
+            })()}
 
             {/* On-map equipment dock: draggable icons live here so they sit visually on the layout */}
             {status === 'ready' && dockProducts.length > 0 && (
