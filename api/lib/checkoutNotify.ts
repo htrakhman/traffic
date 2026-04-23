@@ -11,13 +11,12 @@
 export type CheckoutLinePayload = {
   productId: string
   productName: string
-  /** Rental catalog SKU (site); included on new checkouts for fulfillment. */
+  /** Store catalog SKU; included on checkouts for fulfillment. */
   sku?: string
   /** OEM / supplier reorder SKU when present. */
   supplierSku?: string
   quantity: number
-  rentalDays: number
-  dailyRate: number
+  unitPrice: number
   lineTotal: number
 }
 
@@ -31,8 +30,7 @@ export type CheckoutNotifyPayload = {
   deliveryNeeded: boolean
   lines: CheckoutLinePayload[]
   totals: {
-    totalDaily: number
-    rentalGrandTotal: number
+    merchandiseSubtotal: number
     deliveryPickupCombined: number
     grandTotal: number
   }
@@ -44,6 +42,65 @@ function isNonEmptyString(v: unknown): v is string {
   return typeof v === 'string' && v.trim().length > 0
 }
 
+/** Accept legacy rental payloads (rentalDays + dailyRate) and map to purchase shape. */
+function normalizeLineRow(r: Record<string, unknown>): CheckoutLinePayload | null {
+  if (
+    !isNonEmptyString(r.productId) ||
+    !isNonEmptyString(r.productName) ||
+    typeof r.quantity !== 'number' ||
+    typeof r.lineTotal !== 'number'
+  ) {
+    return null
+  }
+  const sku = isNonEmptyString(r.sku) ? r.sku.trim() : undefined
+  const supplierSku = isNonEmptyString(r.supplierSku) ? r.supplierSku.trim() : undefined
+  const qty = Math.max(1, Math.floor(r.quantity))
+  let unitPrice: number
+  if (typeof r.unitPrice === 'number') {
+    unitPrice = r.unitPrice
+  } else if (typeof r.dailyRate === 'number' && typeof r.rentalDays === 'number') {
+    unitPrice = r.dailyRate * Math.max(1, Math.floor(r.rentalDays))
+  } else {
+    return null
+  }
+  return {
+    productId: r.productId.trim(),
+    productName: r.productName.trim(),
+    sku,
+    supplierSku,
+    quantity: qty,
+    unitPrice,
+    lineTotal: r.lineTotal,
+  }
+}
+
+function normalizeTotals(tr: Record<string, unknown>): CheckoutNotifyPayload['totals'] | null {
+  if (
+    typeof tr.merchandiseSubtotal === 'number' &&
+    typeof tr.deliveryPickupCombined === 'number' &&
+    typeof tr.grandTotal === 'number'
+  ) {
+    return {
+      merchandiseSubtotal: tr.merchandiseSubtotal,
+      deliveryPickupCombined: tr.deliveryPickupCombined,
+      grandTotal: tr.grandTotal,
+    }
+  }
+  if (
+    typeof tr.totalDaily === 'number' &&
+    typeof tr.rentalGrandTotal === 'number' &&
+    typeof tr.deliveryPickupCombined === 'number' &&
+    typeof tr.grandTotal === 'number'
+  ) {
+    return {
+      merchandiseSubtotal: tr.rentalGrandTotal,
+      deliveryPickupCombined: tr.deliveryPickupCombined,
+      grandTotal: tr.grandTotal,
+    }
+  }
+  return null
+}
+
 function validatePayload(data: unknown): CheckoutNotifyPayload | null {
   if (!data || typeof data !== 'object') return null
   const o = data as Record<string, unknown>
@@ -53,41 +110,15 @@ function validatePayload(data: unknown): CheckoutNotifyPayload | null {
   const lines: CheckoutLinePayload[] = []
   for (const row of o.lines) {
     if (!row || typeof row !== 'object') return null
-    const r = row as Record<string, unknown>
-    if (
-      !isNonEmptyString(r.productId) ||
-      !isNonEmptyString(r.productName) ||
-      typeof r.quantity !== 'number' ||
-      typeof r.rentalDays !== 'number' ||
-      typeof r.dailyRate !== 'number' ||
-      typeof r.lineTotal !== 'number'
-    ) {
-      return null
-    }
-    const sku = isNonEmptyString(r.sku) ? r.sku.trim() : undefined
-    const supplierSku = isNonEmptyString(r.supplierSku) ? r.supplierSku.trim() : undefined
-    lines.push({
-      productId: r.productId.trim(),
-      productName: r.productName.trim(),
-      sku,
-      supplierSku,
-      quantity: Math.max(1, Math.floor(r.quantity)),
-      rentalDays: Math.max(1, Math.floor(r.rentalDays)),
-      dailyRate: r.dailyRate,
-      lineTotal: r.lineTotal,
-    })
+    const normalized = normalizeLineRow(row as Record<string, unknown>)
+    if (!normalized) return null
+    lines.push(normalized)
   }
   const t = o.totals
   if (!t || typeof t !== 'object') return null
-  const tr = t as Record<string, unknown>
-  if (
-    typeof tr.totalDaily !== 'number' ||
-    typeof tr.rentalGrandTotal !== 'number' ||
-    typeof tr.deliveryPickupCombined !== 'number' ||
-    typeof tr.grandTotal !== 'number'
-  ) {
-    return null
-  }
+  const totals = normalizeTotals(t as Record<string, unknown>)
+  if (!totals) return null
+
   const membershipSubscribedAtCheckout =
     o.membershipSubscribedAtCheckout === true ? true : undefined
 
@@ -100,12 +131,7 @@ function validatePayload(data: unknown): CheckoutNotifyPayload | null {
     notes: isNonEmptyString(o.notes) ? o.notes.trim() : undefined,
     deliveryNeeded: o.deliveryNeeded,
     lines,
-    totals: {
-      totalDaily: tr.totalDaily,
-      rentalGrandTotal: tr.rentalGrandTotal,
-      deliveryPickupCombined: tr.deliveryPickupCombined,
-      grandTotal: tr.grandTotal,
-    },
+    totals,
     membershipSubscribedAtCheckout,
   }
 }
@@ -129,11 +155,11 @@ function formatPlainText(p: CheckoutNotifyPayload): string {
   const lines = p.lines
     .map(
       (l) =>
-        `- ${l.productName} (id ${l.productId})${skuPlainSuffix(l)} · qty ${l.quantity} · ${l.rentalDays}d · $${l.lineTotal.toFixed(2)} rental`,
+        `- ${l.productName} (id ${l.productId})${skuPlainSuffix(l)} · qty ${l.quantity} · $${l.unitPrice.toFixed(2)}/unit (tier) · line $${l.lineTotal.toFixed(2)}`,
     )
     .join('\n')
   return [
-    'New rental checkout submission',
+    'New purchase checkout submission',
     '',
     `Name: ${p.name}`,
     `Email: ${p.email}`,
@@ -149,9 +175,8 @@ function formatPlainText(p: CheckoutNotifyPayload): string {
     'Line items:',
     lines,
     '',
-    `Daily rate (all items): $${p.totals.totalDaily.toFixed(2)}/day`,
-    `Rental subtotal: $${p.totals.rentalGrandTotal.toFixed(2)}`,
-    `Delivery + pickup (est.): $${p.totals.deliveryPickupCombined.toFixed(2)}`,
+    `Merchandise subtotal: $${p.totals.merchandiseSubtotal.toFixed(2)}`,
+    `Shipping (shown at checkout): $${p.totals.deliveryPickupCombined.toFixed(2)}`,
     `Estimated grand total: $${p.totals.grandTotal.toFixed(2)}`,
   ].join('\n')
 }
@@ -167,11 +192,11 @@ function formatHtml(p: CheckoutNotifyPayload): string {
       } else if (l.supplierSku) {
         skuCell = `<span style="font-size:12px;color:#555">Supplier: ${escapeHtml(l.supplierSku)}</span>`
       }
-      return `<tr><td>${escapeHtml(l.productName)}</td><td>${skuCell}</td><td>${l.quantity}</td><td>${l.rentalDays}</td><td>$${l.lineTotal.toFixed(2)}</td></tr>`
+      return `<tr><td>${escapeHtml(l.productName)}</td><td>${skuCell}</td><td>${l.quantity}</td><td>$${l.unitPrice.toFixed(2)}</td><td>$${l.lineTotal.toFixed(2)}</td></tr>`
     })
     .join('')
   return `<!DOCTYPE html><html><body style="font-family:sans-serif;line-height:1.5">
-<h2>New rental checkout</h2>
+<h2>New purchase checkout</h2>
 <p><strong>Name:</strong> ${escapeHtml(p.name)}<br/>
 <strong>Email:</strong> ${escapeHtml(p.email)}<br/>
 <strong>Phone:</strong> ${p.phone ? escapeHtml(p.phone) : '—'}<br/>
@@ -184,11 +209,10 @@ ${
       : ''
   }
 ${p.notes ? `<p><strong>Notes</strong><br/>${escapeHtml(p.notes).replace(/\n/g, '<br/>')}</p>` : ''}
-<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><thead><tr><th>Item</th><th>SKU</th><th>Qty</th><th>Days</th><th>Rental</th></tr></thead><tbody>${rows}</tbody></table>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><thead><tr><th>Item</th><th>SKU</th><th>Qty</th><th>Unit</th><th>Line</th></tr></thead><tbody>${rows}</tbody></table>
 <p><strong>Totals</strong><br/>
-Daily (all items): $${p.totals.totalDaily.toFixed(2)}/day<br/>
-Rental: $${p.totals.rentalGrandTotal.toFixed(2)}<br/>
-Delivery + pickup: $${p.totals.deliveryPickupCombined.toFixed(2)}<br/>
+Merchandise: $${p.totals.merchandiseSubtotal.toFixed(2)}<br/>
+Shipping line: $${p.totals.deliveryPickupCombined.toFixed(2)}<br/>
 <strong>Estimated total: $${p.totals.grandTotal.toFixed(2)}</strong></p>
 </body></html>`
 }
@@ -221,7 +245,7 @@ export async function sendCheckoutNotification(data: unknown): Promise<NotifyRes
     .map((s) => s.trim())
     .filter(Boolean)
 
-  const subject = `Rental checkout: ${payload.name}`
+  const subject = `Purchase checkout: ${payload.name}`
   const text = formatPlainText(payload)
   const html = formatHtml(payload)
 
