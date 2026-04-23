@@ -1424,7 +1424,7 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
       console.error('[advisor] analyzeDrawnZone failed', err)
       // If the user already answered the clarifying questions, don't re-ask —
       // surface the failure so they can retry or describe in free text.
-      if (userContext || awaitingScenario) {
+      {
         setAwaitingScenario(false)
         // Build a rules-based recommendation locally so the user still gets a
         // cart-ready layout when the AI service misbehaves.
