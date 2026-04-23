@@ -1077,7 +1077,7 @@ const WELCOME =
   "Hello! I'm your AI Traffic Control Advisor. Describe your work zone scenario — lane closure type, road speed, crew size — and I'll recommend a compliant MUTCD Part 6 layout. If you've drawn a zone on the map, I can also place your equipment directly."
 
 function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPlacements }: AIChatPanelProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
   const [messages, setMessages] = useState<{ role: 'assistant' | 'user'; content: string }[]>([
     { role: 'assistant', content: WELCOME },
   ])
