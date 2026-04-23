@@ -33,6 +33,7 @@ import {
 } from '../../utils/jobAssistantSessionStorage'
 import CartWidget from './CartWidget'
 import MapAreaSelector, { type MapAreaSelectorHandle } from './MapAreaSelector'
+import { parseQASegments as parseQASegmentsFromUtil } from '../../utils/chatQAParse'
 
 type Segment =
   | { type: 'text'; content: string }
@@ -40,31 +41,7 @@ type Segment =
   | { type: 'cart'; recommendation: AIRecommendation }
 
 function parseQASegments(content: string): Segment[] {
-  const lines = content.split('\n')
-  const segments: Segment[] = []
-  let textLines: string[] = []
-  let i = 0
-  while (i < lines.length) {
-    const qMatch = lines[i].match(/^\[Q:\s*(.*?)\]\s*$/)
-    if (qMatch) {
-      const text = textLines.join('\n').trim()
-      if (text) segments.push({ type: 'text', content: text })
-      textLines = []
-      const options: string[] = []
-      i++
-      while (i < lines.length) {
-        const aMatch = lines[i].match(/^\[A:\s*(.*?)\]\s*$/)
-        if (aMatch) { options.push(aMatch[1]); i++ } else break
-      }
-      if (options.length) segments.push({ type: 'choices', question: qMatch[1], options })
-    } else {
-      textLines.push(lines[i])
-      i++
-    }
-  }
-  const rem = textLines.join('\n').trim()
-  if (rem) segments.push({ type: 'text', content: rem })
-  return segments
+  return parseQASegmentsFromUtil(content) as Segment[]
 }
 
 function parseSegments(content: string, mapFootprint?: RecommendationFootprintGuard): Segment[] {

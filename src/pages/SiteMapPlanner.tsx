@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
-import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Pen, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical } from 'lucide-react'
+import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical, Sparkles } from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -14,6 +14,7 @@ import {
   type SiteMapPlacedRow,
 } from '../utils/siteMapPlannerSessionStorage'
 import { clampLatLngToPolygonInterior, buildMapAreaFromPath, planWorkzoneLayout, buildDemoPlan } from '../utils/workzonePlannerClient'
+import { parseQASegments } from '../utils/chatQAParse'
 import type { MutableRefObject } from 'react'
 
 const MAPS_KEY = (import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined)?.trim() || undefined
@@ -168,7 +169,7 @@ export default function SiteMapPlanner() {
   /** Tap-to-place: pick a product, then click the map (mobile-friendly). */
   const [pendingProductId, setPendingProductId] = useState<string | null>(null)
 
-  type DrawMode = 'select' | 'polyline' | 'polygon' | 'rectangle' | 'circle'
+  type DrawMode = 'select' | 'polygon' | 'rectangle' | 'circle'
   const [drawMode, setDrawMode] = useState<DrawMode>('select')
   const [drawColor, setDrawColor] = useState('#f97316')
   const [drawnCount, setDrawnCount] = useState(0)
@@ -426,13 +427,6 @@ export default function SiteMapPlanner() {
         const drawingMgr = new google.maps.drawing.DrawingManager({
           drawingMode: null,
           drawingControl: false,
-          polylineOptions: {
-            strokeColor: drawColorRef.current,
-            strokeWeight: 3,
-            clickable: true,
-            editable: false,
-            zIndex: 5,
-          },
           polygonOptions: {
             fillColor: drawColorRef.current,
             fillOpacity: 0.45,
@@ -544,7 +538,6 @@ export default function SiteMapPlanner() {
       polygonOptions: shapeOpts,
       rectangleOptions: shapeOpts,
       circleOptions: shapeOpts,
-      polylineOptions: { strokeColor: drawColor, strokeWeight: 3, clickable: true, editable: false, zIndex: 5 },
     })
   }, [drawColor])
 
@@ -865,7 +858,6 @@ export default function SiteMapPlanner() {
                 {(
                   [
                     { mode: 'select', label: 'Select', Icon: MousePointer2 },
-                    { mode: 'polyline', label: 'Line', Icon: Pen },
                     { mode: 'polygon', label: 'Zone', Icon: Hexagon },
                     { mode: 'rectangle', label: 'Box', Icon: Square },
                     { mode: 'circle', label: 'Circle', Icon: Circle },
@@ -1047,6 +1039,18 @@ export default function SiteMapPlanner() {
             setPlaced((prev) => [...prev, ...rows])
             setSelectedId(rows[0]?.id ?? null)
           }}
+          replacePlacementsByIds={(removeIds, rows) => {
+            const remove = new Set(removeIds)
+            remove.forEach((id) => {
+              const meta = markersRef.current.get(id)
+              if (meta) {
+                meta.marker.map = null
+                markersRef.current.delete(id)
+              }
+            })
+            setPlaced((prev) => [...prev.filter((r) => !remove.has(r.id)), ...rows])
+            setSelectedId(rows[0]?.id ?? null)
+          }}
         />
       )}
     </main>
@@ -1091,6 +1095,7 @@ interface AIChatPanelProps {
   locationHint: string
   drawnOverlaysRef: MutableRefObject<Map<string, google.maps.MVCObject>>
   addPlacements: (rows: SiteMapPlacedRow[]) => void
+  replacePlacementsByIds: (removeIds: string[], rows: SiteMapPlacedRow[]) => void
   drawnCount: number
 }
 
@@ -1140,7 +1145,33 @@ function ZoneRecommendationCard({ rec, onAddToCart }: { rec: AIRecommendation; o
 const WELCOME =
   "Hello! I'm your AI Traffic Control Advisor. Describe your work zone scenario — lane closure type, road speed, crew size — and I'll recommend a compliant MUTCD Part 6 layout. If you've drawn a zone on the map, I can also place your equipment directly."
 
-function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPlacements, drawnCount }: AIChatPanelProps) {
+/** Same [Q:]/[A:] format as homepage JobAssistant / aiClient so choice chips + batch submit match. */
+const SCENARIO_DETAIL_PROMPT = `I've measured your work zone — let me get a few quick details to generate the right NJDOT layout.
+
+[Q: What type of work?]
+[A: Utility / pipe work]
+[A: Paving]
+[A: Signal repair]
+[A: Sidewalk / curb]
+[A: Other / mixed]
+
+[Q: Posted speed limit?]
+[A: 25 mph]
+[A: 30 mph]
+[A: 35 mph]
+[A: 45 mph]
+[A: 50+ mph]
+[A: Not sure]
+
+[Q: How many lanes are closed or affected?]
+[A: Shoulder only]
+[A: One lane]
+[A: Two lanes]
+[A: Full closure]
+[A: Other]`
+
+function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPlacements, replacePlacementsByIds, drawnCount }: AIChatPanelProps) {
+  const aiPlacedIdsRef = useRef<string[]>([])
   const { addItem } = useCart()
   const [open, setOpen] = useState(true)
   const [messages, setMessages] = useState<ChatMsg[]>([
@@ -1152,6 +1183,8 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
   const [generating, setGenerating] = useState(false)
   const [genError, setGenError] = useState<string | null>(null)
   const [awaitingScenario, setAwaitingScenario] = useState(false)
+  const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(() => new Map())
+  const [lockedQuestionMessages, setLockedQuestionMessages] = useState<Set<number>>(() => new Set())
   // Drag state — offset from default anchored position
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const dragStateRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null)
@@ -1198,7 +1231,10 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
     void analyzeDrawnZone()
   }, [drawnCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const analyzeDrawnZone = async (userContext?: string) => {
+  const analyzeDrawnZone = async (
+    userContext?: string,
+    options?: { addDrawingAckBubble?: boolean },
+  ) => {
     const polygons = getDrawnPolygons()
     if (polygons.length === 0) return
     setOpen(true)
@@ -1207,13 +1243,16 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
     const path = polygons[polygons.length - 1]!
     const mapArea = buildMapAreaFromPath(path, { address: locationHint || undefined })
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: 'assistant' as const,
-        content: `I see you've drawn a work zone — ${mapArea.areaLabel}, ${mapArea.perimeterLabel} perimeter${locationHint ? ` near ${locationHint}` : ''}. Analyzing for NJDOT/MUTCD Part 6 compliance…`,
-      },
-    ])
+    const addDrawingAckBubble = options?.addDrawingAckBubble !== false
+    if (addDrawingAckBubble) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant' as const,
+          content: `I see you've drawn a work zone — ${mapArea.areaLabel}, ${mapArea.perimeterLabel} perimeter${locationHint ? ` near ${locationHint}` : ''}. Analyzing for NJDOT/MUTCD Part 6 compliance…`,
+        },
+      ])
+    }
 
     try {
       const catalog = getProducts()
@@ -1361,7 +1400,8 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
           lat: pl.lat,
           lng: pl.lng,
         }))
-        addPlacements(newRows)
+        replacePlacementsByIds(aiPlacedIdsRef.current, newRows)
+        aiPlacedIdsRef.current = newRows.map((r) => r.id)
         placedCount = newRows.length
       } catch {
         /* placement failed — still show recommendation */
@@ -1382,12 +1422,46 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
       ])
     } catch {
       setAwaitingScenario(true)
+      // Baseline NJDOT placement so the zone is populated immediately while
+      // we wait for the contractor's clarifying answers. Defaults assume a
+      // 35 mph single-lane closure — swapped out once real details arrive.
+      let baselineCount = 0
+      try {
+        const speed = mapArea.postedSpeedMph ?? 35
+        const baselineItems = [
+          { productId: 'CON-28-STD', productName: '28" Traffic Cone', quantity: Math.max(12, Math.ceil(mapArea.perimeterFt / (speed >= 45 ? 30 : 20))), category: 'cones' },
+          { productId: 'SGN-RU-RWA-36', productName: 'Road Work Ahead Sign', quantity: 2, category: 'signs' },
+          { productId: 'BAR-T3-8FT', productName: 'Type III Barricade', quantity: 2, category: 'barricades' },
+          { productId: 'ARR-TRL-15L', productName: 'Arrow Board Trailer', quantity: speed >= 45 ? 1 : 0, category: 'boards' },
+        ].filter((i) => i.quantity > 0 && getProductById(i.productId))
+        if (baselineItems.length > 0) {
+          let plan
+          try {
+            plan = await planWorkzoneLayout(mapArea, baselineItems)
+          } catch {
+            plan = buildDemoPlan(mapArea, baselineItems)
+          }
+          const newRows: SiteMapPlacedRow[] = plan.placements.map((pl) => ({
+            id: crypto.randomUUID(),
+            productId: pl.productId,
+            lat: pl.lat,
+            lng: pl.lng,
+          }))
+          replacePlacementsByIds(aiPlacedIdsRef.current, newRows)
+          aiPlacedIdsRef.current = newRows.map((r) => r.id)
+          baselineCount = newRows.length
+        }
+      } catch {
+        /* baseline placement best-effort */
+      }
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant' as const,
           content:
-            "I've measured your work zone — let me get a few quick details to generate the right NJDOT layout:\n\n**1. What type of work?** (e.g. utility/pipe work, paving, signal repair, sidewalk work)\n**2. Posted speed limit?** (e.g. 25, 35, 45 mph)\n**3. How many lanes are being closed or affected?**\n\nReply below and I'll place the equipment on your map.",
+            (baselineCount > 0
+              ? `I've placed a baseline NJDOT layout (${baselineCount} items) — it will live-update as you answer below.\n\n`
+              : '') + SCENARIO_DETAIL_PROMPT,
         },
       ])
     } finally {
@@ -1496,7 +1570,7 @@ INSTRUCTIONS
 
     // If we were waiting for scenario details and a polygon exists, re-run full analysis
     if (awaitingScenario && getDrawnPolygons().length > 0) {
-      void analyzeDrawnZone(text)
+      void analyzeDrawnZone(text, { addDrawingAckBubble: false })
       return
     }
 
@@ -1581,6 +1655,40 @@ INSTRUCTIONS
 
   const hasPolygon = getDrawnPolygons().length > 0
 
+  const selectChoiceOption = (msgIndex: number, segIndex: number, option: string) => {
+    if (loading || analyzing || lockedQuestionMessages.has(msgIndex)) return
+    setChoiceSelections((prev) => new Map(prev).set(`${msgIndex}-${segIndex}`, option))
+  }
+
+  const submitScenarioChoiceBatch = (msgIndex: number) => {
+    if (loading || analyzing || lockedQuestionMessages.has(msgIndex)) return
+    const msg = messages[msgIndex]
+    if (!msg || msg.role !== 'assistant') return
+    const nonCartSegs = parseQASegments(msg.content)
+    const choiceBlocks = nonCartSegs
+      .map((seg, si) => ({ seg, si }))
+      .filter(
+        (x): x is { seg: { type: 'choices'; question: string; options: string[] }; si: number } =>
+          x.seg.type === 'choices',
+      )
+    if (choiceBlocks.length === 0) return
+    const allChosen = choiceBlocks.every(({ si }) => choiceSelections.has(`${msgIndex}-${si}`))
+    if (!allChosen) return
+
+    const body =
+      'Here are my answers:\n' +
+      choiceBlocks
+        .map(({ seg, si }) => {
+          const ans = choiceSelections.get(`${msgIndex}-${si}`)!
+          return `• ${seg.question} ${ans}`
+        })
+        .join('\n')
+
+    setLockedQuestionMessages((prev) => new Set(prev).add(msgIndex))
+    setMessages((prev) => [...prev, { role: 'user', content: body }])
+    void analyzeDrawnZone(body, { addDrawingAckBubble: false })
+  }
+
   // ── collapsed trigger button ───────────────────────────────────────────────
   if (!open) {
     return (
@@ -1628,35 +1736,120 @@ INSTRUCTIONS
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 max-h-72 min-h-[80px]">
-        {messages.map((m, i) => (
-          <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div
-              className={`max-w-[95%] rounded-xl px-3 py-2 text-[11px] leading-relaxed ${
-                m.role === 'user'
-                  ? 'bg-brand-600/80 text-white rounded-br-sm'
-                  : 'bg-slate-800 text-slate-200 rounded-bl-sm'
-              }`}
-            >
-              {m.content}
-              {m.recommendation && (
-                <ZoneRecommendationCard
-                  rec={m.recommendation}
-                  onAddToCart={() => {
-                    const days = Math.max(1, Math.floor(m.recommendation!.estimatedDurationDays))
-                    for (const item of m.recommendation!.items) {
-                      const p = getProductById(item.productId)
-                      if (p) addItem(p, item.quantity, days)
-                    }
-                  }}
-                />
-              )}
+      <div className="flex-1 overflow-y-auto p-3 space-y-3 max-h-72 min-h-[80px]">
+        {messages.map((m, i) => {
+          if (m.role === 'user') {
+            return (
+              <div key={i} className="flex justify-end animate-slide-up">
+                <div className="max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed bg-brand-500/20 border border-brand-500/30 text-white rounded-tr-sm whitespace-pre-wrap">
+                  {m.content}
+                </div>
+              </div>
+            )
+          }
+
+          const segments = parseQASegments(m.content)
+          const nonCartSegs = segments
+          const choiceSegIndices = nonCartSegs
+            .map((seg, si) => ({ seg, si }))
+            .filter(
+              (x): x is { seg: { type: 'choices'; question: string; options: string[] }; si: number } =>
+                x.seg.type === 'choices',
+            )
+          const allChoicesPicked =
+            choiceSegIndices.length > 0 &&
+            choiceSegIndices.every(({ si }) => choiceSelections.has(`${i}-${si}`))
+          const showBatchSubmit = choiceSegIndices.length > 0 && !lockedQuestionMessages.has(i) && !analyzing && !loading
+
+          return (
+            <div key={i} className="flex gap-2 min-w-0 animate-slide-up">
+              <div className="w-6 h-6 bg-brand-500/10 border border-brand-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Sparkles size={11} className="text-brand-400" aria-hidden />
+              </div>
+              <div className="min-w-0 flex-1 space-y-2">
+                {nonCartSegs.length > 0 && (
+                  <div className="rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed bg-slate-800/80 border border-slate-700 text-slate-200 rounded-tl-sm">
+                    <div className="space-y-3">
+                      {nonCartSegs.map((seg, si) =>
+                        seg.type === 'text' ? (
+                          seg.content.trim() ? (
+                            <p key={si} className="whitespace-pre-wrap leading-relaxed">
+                              {seg.content.trim()}
+                            </p>
+                          ) : null
+                        ) : (
+                          <div key={si} className="pt-0.5">
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
+                              {seg.question}
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {seg.options.map((opt) => {
+                                const mapKey = `${i}-${si}`
+                                const picked = choiceSelections.get(mapKey)
+                                const isSelected = picked === opt
+                                const locked = lockedQuestionMessages.has(i)
+                                const isDisabled = locked || analyzing || loading
+                                return (
+                                  <button
+                                    key={opt}
+                                    type="button"
+                                    onClick={() => !isDisabled && selectChoiceOption(i, si, opt)}
+                                    className={`px-2.5 py-1.5 text-xs rounded-lg border transition-all duration-150 ${
+                                      isSelected
+                                        ? 'bg-brand-500/30 border-brand-500/60 text-brand-200 font-medium'
+                                        : isDisabled
+                                          ? 'bg-slate-800/30 border-slate-700/30 text-slate-600 cursor-default'
+                                          : 'bg-slate-700/60 hover:bg-brand-500/20 border-slate-600 hover:border-brand-500/50 text-slate-300 hover:text-white cursor-pointer'
+                                    }`}
+                                  >
+                                    {opt}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        ),
+                      )}
+                      {showBatchSubmit && (
+                        <div className="pt-2 border-t border-slate-700/60 space-y-2">
+                          <p className="text-[11px] text-slate-500">
+                            Pick one option for each question, then send them together.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => submitScenarioChoiceBatch(i)}
+                            disabled={!allChoicesPicked}
+                            className="w-full rounded-lg bg-brand-500 px-3 py-2 text-xs font-semibold text-white hover:bg-brand-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                          >
+                            Send answers to AI
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {m.recommendation && (
+                  <ZoneRecommendationCard
+                    rec={m.recommendation}
+                    onAddToCart={() => {
+                      const days = Math.max(1, Math.floor(m.recommendation!.estimatedDurationDays))
+                      for (const item of m.recommendation!.items) {
+                        const p = getProductById(item.productId)
+                        if (p) addItem(p, item.quantity, days)
+                      }
+                    }}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         {(loading || analyzing) && (
-          <div className="flex justify-start">
-            <div className="bg-slate-800 rounded-xl rounded-bl-sm px-3 py-2 text-[11px] text-slate-400 italic">
+          <div className="flex gap-2 min-w-0">
+            <div className="w-6 h-6 bg-brand-500/10 border border-brand-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Sparkles size={11} className="text-brand-400" aria-hidden />
+            </div>
+            <div className="rounded-2xl rounded-tl-sm px-3.5 py-2.5 text-sm text-slate-400 italic bg-slate-800/80 border border-slate-700">
               {analyzing ? 'Analyzing zone & preparing NJDOT recommendation…' : 'Thinking…'}
             </div>
           </div>
