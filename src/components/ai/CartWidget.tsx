@@ -155,7 +155,6 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
   }, [activeItems, recommendation.estimatedDurationDays])
   const rentalPeriodTotal = totalDailyRate * recommendation.estimatedDurationDays
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
-  const guestDeliveryPickupCombined = getDeliveryPickupFees(false).combined
   const estimatedGrandTotal = rentalPeriodTotal + deliveryPickupCombined
 
   const filteredProducts = useMemo(() => {

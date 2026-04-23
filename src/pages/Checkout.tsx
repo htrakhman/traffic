@@ -29,7 +29,7 @@ export default function Checkout() {
   const [done, setDone] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [addMembership, setAddMembership] = useState(false)
+  const [addMembership] = useState(false)
   const [stripeResume, setStripeResume] = useState<'idle' | 'working' | 'error'>('idle')
   const [infoBanner, setInfoBanner] = useState<string | null>(null)
 

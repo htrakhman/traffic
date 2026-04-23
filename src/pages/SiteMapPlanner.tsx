@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
-import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical, Sparkles, Pencil } from 'lucide-react'
+import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Square, Circle, Hexagon, GripVertical, Sparkles, Pencil } from 'lucide-react'
 import type { Product, AIRecommendation } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -32,6 +32,7 @@ type MarkerMeta = {
   marker: google.maps.marker.AdvancedMarkerElement
   shell: HTMLDivElement
   size: number
+  productId: string
 }
 
 /** Minimal overlay so we can convert container pixels → LatLng on drop. */
@@ -81,6 +82,36 @@ function bufferPolylineToPolygon(path: PlainLatLng[], halfWidthFt = 48): PlainLa
   return [...left, ...[...right].reverse()]
 }
 
+function applyMarkerShellLayout(shell: HTMLDivElement, sizeMultiplier: number) {
+  const px = Math.round(44 * sizeMultiplier)
+  const capMaxWidth = Math.round(72 * sizeMultiplier)
+  const capFontSize = Math.max(7, Math.round(9 * Math.min(sizeMultiplier, 1.5)))
+
+  const card = shell.querySelector('[data-marker-card]') as HTMLDivElement | null
+  if (card) {
+    card.style.width = `${px}px`
+    card.style.height = `${px}px`
+  }
+  const cap = shell.querySelector('[data-marker-cap]') as HTMLDivElement | null
+  if (cap) {
+    cap.style.maxWidth = `${capMaxWidth}px`
+    cap.style.font = `600 ${capFontSize}px/1.1 system-ui,sans-serif`
+  }
+  const sizeRow = shell.querySelector('[data-marker-size-row]') as HTMLDivElement | null
+  if (sizeRow) {
+    sizeRow.style.maxWidth = `${Math.max(capMaxWidth, px)}px`
+  }
+  const slider = shell.querySelector('[data-size-slider]') as HTMLInputElement | null
+  if (slider) {
+    const cur = parseFloat(slider.value)
+    if (!Number.isFinite(cur) || Math.abs(cur - sizeMultiplier) > 0.001) {
+      slider.value = String(sizeMultiplier)
+    }
+  }
+  const readout = shell.querySelector('[data-size-readout]') as HTMLSpanElement | null
+  if (readout) readout.textContent = `${sizeMultiplier.toFixed(1)}×`
+}
+
 function buildMarkerShell(product: Product, selected: boolean, sizeMultiplier = 1): HTMLDivElement {
   const px = Math.round(44 * sizeMultiplier)
   const capMaxWidth = Math.round(72 * sizeMultiplier)
@@ -99,16 +130,49 @@ function buildMarkerShell(product: Product, selected: boolean, sizeMultiplier = 
   ].join(';')
 
   const card = document.createElement('div')
+  card.setAttribute('data-marker-card', '')
   card.style.cssText = [
+    'position:relative',
     `width:${px}px`,
     `height:${px}px`,
     'border-radius:8px',
-    'overflow:hidden',
+    'overflow:visible',
     'background:#0f172a',
     'box-shadow:0 4px 14px rgba(0,0,0,0.45)',
     'border:2px solid',
     selected ? 'border-color:#fb923c' : 'border-color:rgba(255,255,255,0.35)',
   ].join(';')
+
+  const del = document.createElement('button')
+  del.type = 'button'
+  del.setAttribute('data-delete-placement', '')
+  del.setAttribute('aria-label', 'Remove from map')
+  del.textContent = '×'
+  del.style.cssText = [
+    'position:absolute',
+    'top:3px',
+    'right:3px',
+    'z-index:6',
+    'width:18px',
+    'height:18px',
+    'padding:0',
+    'margin:0',
+    'border:none',
+    'border-radius:999px',
+    'cursor:pointer',
+    'font:700 12px/1 system-ui,sans-serif',
+    'color:#fff',
+    'background:rgba(185,28,28,0.95)',
+    'box-shadow:0 2px 8px rgba(0,0,0,0.5)',
+    'display:flex',
+    'align-items:center',
+    'justify-content:center',
+    'line-height:1',
+    'pointer-events:auto',
+  ].join(';')
+
+  const imgHost = document.createElement('div')
+  imgHost.style.cssText = 'position:absolute;inset:0;border-radius:6px;overflow:hidden;pointer-events:none'
 
   const img = document.createElement('img')
   img.src = product.imageUrl
@@ -118,17 +182,84 @@ function buildMarkerShell(product: Product, selected: boolean, sizeMultiplier = 
   img.referrerPolicy = 'no-referrer-when-downgrade'
   img.onerror = () => {
     img.style.display = 'none'
-    card.textContent = '•'
-    card.style.display = 'flex'
-    card.style.alignItems = 'center'
-    card.style.justifyContent = 'center'
-    card.style.fontSize = '20px'
-    card.style.color = '#fb923c'
+    imgHost.textContent = '•'
+    imgHost.style.display = 'flex'
+    imgHost.style.alignItems = 'center'
+    imgHost.style.justifyContent = 'center'
+    imgHost.style.fontSize = '20px'
+    imgHost.style.color = '#fb923c'
   }
 
-  card.appendChild(img)
+  imgHost.appendChild(img)
+  card.appendChild(imgHost)
+  card.appendChild(del)
+
+  const sizeRow = document.createElement('div')
+  sizeRow.setAttribute('data-marker-size-row', '')
+  sizeRow.style.cssText = [
+    'display:flex',
+    'flex-direction:row',
+    'align-items:center',
+    'gap:3px',
+    `max-width:${Math.max(capMaxWidth, px)}px`,
+    'width:100%',
+    'padding:1px 0',
+    'pointer-events:auto',
+    'cursor:default',
+  ].join(';')
+
+  const readout = document.createElement('span')
+  readout.setAttribute('data-size-readout', '')
+  readout.textContent = `${sizeMultiplier.toFixed(1)}×`
+  readout.style.cssText =
+    'font:600 8px/1.1 ui-monospace,monospace;color:#cbd5e1;min-width:22px;text-align:center;user-select:none'
+
+  const minus = document.createElement('button')
+  minus.type = 'button'
+  minus.setAttribute('data-size-minus', '')
+  minus.textContent = '−'
+  minus.style.cssText = [
+    'flex-shrink:0',
+    'width:18px',
+    'height:18px',
+    'padding:0',
+    'border-radius:4px',
+    'border:1px solid #475569',
+    'background:#1e293b',
+    'color:#e2e8f0',
+    'font:700 12px/1 system-ui',
+    'cursor:pointer',
+    'line-height:1',
+  ].join(';')
+
+  const slider = document.createElement('input')
+  slider.type = 'range'
+  slider.setAttribute('data-size-slider', '')
+  slider.min = '0.5'
+  slider.max = '3'
+  slider.step = '0.25'
+  slider.value = String(sizeMultiplier)
+  slider.style.cssText = [
+    'flex:1',
+    'min-width:0',
+    'height:4px',
+    'accent-color:#f97316',
+    'cursor:pointer',
+  ].join(';')
+
+  const plus = document.createElement('button')
+  plus.type = 'button'
+  plus.setAttribute('data-size-plus', '')
+  plus.textContent = '+'
+  plus.style.cssText = minus.style.cssText
+
+  sizeRow.appendChild(readout)
+  sizeRow.appendChild(minus)
+  sizeRow.appendChild(slider)
+  sizeRow.appendChild(plus)
 
   const cap = document.createElement('div')
+  cap.setAttribute('data-marker-cap', '')
   cap.textContent = product.sku || product.slug.slice(0, 8)
   cap.style.cssText = [
     `max-width:${capMaxWidth}px`,
@@ -142,8 +273,74 @@ function buildMarkerShell(product: Product, selected: boolean, sizeMultiplier = 
   ].join(';')
 
   shell.appendChild(card)
+  shell.appendChild(sizeRow)
   shell.appendChild(cap)
   return shell
+}
+
+function wireMarkerShellControls(
+  shell: HTMLDivElement,
+  rowId: string,
+  ctl: MutableRefObject<{
+    removePlacement: (id: string) => void
+    setPlacementSize: (id: string, size: number) => void
+  }>,
+) {
+  if (shell.dataset.markerControlsWired === '1') return
+  shell.dataset.markerControlsWired = '1'
+
+  const stopPe = (e: Event) => {
+    e.stopPropagation()
+    e.preventDefault()
+  }
+
+  const stopPtr = (e: Event) => {
+    e.stopPropagation()
+  }
+
+  const del = shell.querySelector('[data-delete-placement]')
+  del?.addEventListener(
+    'click',
+    (e) => {
+      stopPe(e)
+      ctl.current.removePlacement(rowId)
+    },
+    true,
+  )
+
+  const slider = shell.querySelector('[data-size-slider]') as HTMLInputElement | null
+  const bump = (delta: number) => {
+    if (!slider) return
+    const cur = parseFloat(slider.value) || 1
+    const next = Math.min(3, Math.max(0.5, Math.round((cur + delta) * 4) / 4))
+    slider.value = String(next)
+    ctl.current.setPlacementSize(rowId, next)
+  }
+
+  shell.querySelector('[data-size-minus]')?.addEventListener('click', (e) => {
+    stopPe(e)
+    bump(-0.25)
+  })
+  shell.querySelector('[data-size-plus]')?.addEventListener('click', (e) => {
+    stopPe(e)
+    bump(0.25)
+  })
+
+  slider?.addEventListener('input', (e) => {
+    e.stopPropagation()
+    const v = parseFloat(slider.value)
+    if (!Number.isFinite(v)) return
+    ctl.current.setPlacementSize(rowId, v)
+  })
+
+  for (const el of [del, slider, shell.querySelector('[data-size-minus]'), shell.querySelector('[data-size-plus]')]) {
+    el?.addEventListener('pointerdown', stopPtr, true)
+    el?.addEventListener('mousedown', stopPtr, true)
+  }
+
+  const sizeRow = shell.querySelector('[data-marker-size-row]')
+  sizeRow?.addEventListener('pointerdown', stopPtr, true)
+  sizeRow?.addEventListener('mousedown', stopPtr, true)
 }
 
 export default function SiteMapPlanner() {
@@ -254,7 +451,7 @@ export default function SiteMapPlanner() {
 
   const applySelectionStyles = useCallback((nextSelected: string | null) => {
     markersRef.current.forEach((meta, id) => {
-      const card = meta.shell.firstElementChild as HTMLDivElement | null
+      const card = meta.shell.querySelector('[data-marker-card]') as HTMLDivElement | null
       if (!card) return
       const on = id === nextSelected
       card.style.borderColor = on ? '#fb923c' : 'rgba(255,255,255,0.35)'
@@ -289,22 +486,34 @@ export default function SiteMapPlanner() {
     setSelectedId((s) => (s === id ? null : s))
   }, [])
 
+  const markerShellControlRef = useRef({
+    removePlacement: (_id: string) => {},
+    setPlacementSize: (_id: string, _size: number) => {},
+  })
+  markerShellControlRef.current.removePlacement = removePlacement
+  markerShellControlRef.current.setPlacementSize = (id, size) => {
+    const clamped = Math.min(3, Math.max(0.5, size))
+    setPlaced((prev) => prev.map((r) => (r.id === id ? { ...r, size: clamped } : r)))
+  }
+
   const upsertMarker = useCallback(
     (row: SiteMapPlacedRow, product: Product) => {
       const AdvancedMarkerElement = advancedMarkerCtorRef.current
       const map = mapRef.current
       if (!AdvancedMarkerElement || !map) return
 
-      let meta = markersRef.current.get(row.id)
       const rowSize = row.size ?? 1
-      // Rebuild shell if size changed
-      if (meta && Math.abs(meta.size - rowSize) > 0.01) {
+      let meta = markersRef.current.get(row.id)
+
+      if (meta && meta.productId !== row.productId) {
         meta.marker.map = null
         markersRef.current.delete(row.id)
         meta = undefined
       }
+
       if (!meta) {
         const shell = buildMarkerShell(product, false, rowSize)
+        wireMarkerShellControls(shell, row.id, markerShellControlRef)
         const marker = new AdvancedMarkerElement({
           map,
           position: { lat: row.lat, lng: row.lng },
@@ -333,10 +542,12 @@ export default function SiteMapPlanner() {
           setPlaced((prev) => prev.map((r) => (r.id === row.id ? { ...r, lat, lng } : r)))
         })
 
-        meta = { marker, shell, size: rowSize }
+        meta = { marker, shell, size: rowSize, productId: row.productId }
         markersRef.current.set(row.id, meta)
       } else {
         meta.marker.position = { lat: row.lat, lng: row.lng }
+        applyMarkerShellLayout(meta.shell, rowSize)
+        meta.size = rowSize
       }
     },
     [],
@@ -1076,69 +1287,6 @@ export default function SiteMapPlanner() {
               role="application"
               aria-label="Job site map — drop equipment here"
             />
-
-            {/* Size control for selected marker */}
-            {selectedId && (() => {
-              const row = placed.find((r) => r.id === selectedId)
-              const product = row ? getProductById(row.productId) : null
-              if (!row || !product) return null
-              const size = row.size ?? 1
-              return (
-                <div className="pointer-events-auto absolute top-2 right-2 z-30 rounded-xl border border-slate-600/80 bg-slate-900/95 shadow-2xl backdrop-blur-md p-3 w-52">
-                  <div className="flex items-start justify-between gap-1 mb-2">
-                    <p className="text-[11px] font-semibold text-slate-100 leading-tight line-clamp-2">{product.name}</p>
-                    <button
-                      type="button"
-                      aria-label="Deselect"
-                      onClick={() => setSelectedId(null)}
-                      className="shrink-0 p-0.5 rounded text-slate-400 hover:text-white"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                  <label className="text-[10px] text-slate-400 flex items-center justify-between mb-1">
-                    <span>Size</span>
-                    <span className="text-slate-300 font-mono">{size.toFixed(1)}×</span>
-                  </label>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => setPlaced((prev) => prev.map((r) => r.id === selectedId ? { ...r, size: Math.max(0.5, (r.size ?? 1) - 0.25) } : r))}
-                      className="shrink-0 rounded border border-slate-600 p-1 text-slate-300 hover:bg-slate-700"
-                    >
-                      <ZoomOut size={10} />
-                    </button>
-                    <input
-                      type="range"
-                      min={0.5}
-                      max={3}
-                      step={0.25}
-                      value={size}
-                      onChange={(e) => {
-                        const v = parseFloat(e.target.value)
-                        setPlaced((prev) => prev.map((r) => r.id === selectedId ? { ...r, size: v } : r))
-                      }}
-                      className="flex-1 h-1 accent-brand-500"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setPlaced((prev) => prev.map((r) => r.id === selectedId ? { ...r, size: Math.min(3, (r.size ?? 1) + 0.25) } : r))}
-                      className="shrink-0 rounded border border-slate-600 p-1 text-slate-300 hover:bg-slate-700"
-                    >
-                      <ZoomIn size={10} />
-                    </button>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removePlacement(selectedId)}
-                    className="mt-2 w-full inline-flex items-center justify-center gap-1 rounded-md border border-red-800/50 bg-red-950/30 py-1 text-[10px] font-medium text-red-200 hover:bg-red-950/60"
-                  >
-                    <Trash2 size={10} />
-                    Remove from map
-                  </button>
-                </div>
-              )
-            })()}
 
             {/* On-map equipment dock: draggable icons live here so they sit visually on the layout */}
             {status === 'ready' && dockProducts.length > 0 && (
