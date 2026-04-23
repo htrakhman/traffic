@@ -1536,7 +1536,7 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
           { productId: 'ARR-TRL-15L', productName: 'Arrow Board Trailer', quantity: speed >= 45 ? 1 : 0, category: 'boards' },
         ].filter((i) => i.quantity > 0 && getProductById(i.productId))
         if (baselineItems.length > 0) {
-          let plan
+          let plan: Awaited<ReturnType<typeof planWorkzoneLayout>>
           try {
             plan = await planWorkzoneLayout(mapArea, baselineItems)
           } catch {
