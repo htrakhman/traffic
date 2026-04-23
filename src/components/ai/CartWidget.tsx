@@ -298,14 +298,7 @@ export default function CartWidget({ recommendation, layout = 'modal', mapArea }
             </div>
             <div className="text-[9px] sm:text-[10px] text-slate-500 tabular-nums">~${estimatedGrandTotal.toFixed(0)} total</div>
             <div className="text-[8px] sm:text-[9px] text-slate-600 tabular-nums max-w-[9rem] sm:max-w-none leading-tight text-right">
-              {isMember ? (
-                <span>
-                  <span className="line-through decoration-slate-500 text-slate-500">${guestDeliveryPickupCombined}</span>
-                  <span className="text-emerald-400/90"> del. & pickup waived · member</span>
-                </span>
-              ) : (
-                'Incl. $150 delivery + $150 pickup'
-              )}
+              Shipping: TBD
             </div>
           </div>
           {inOverlay ? (

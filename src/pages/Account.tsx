@@ -88,7 +88,7 @@ export default function Account() {
             <UserIcon size={28} className="text-brand-400" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-3">My Account</h1>
-          <p className="text-slate-400 mb-8">Sign in to manage your membership and access member pricing.</p>
+          <p className="text-slate-400 mb-8">Sign in to manage your profile.</p>
           <div className="flex gap-3 justify-center flex-wrap">
             <button
               className="btn-primary px-6"
@@ -152,7 +152,7 @@ export default function Account() {
               <UserIcon className="text-brand-400" size={28} />
               My Account
             </h1>
-            <p className="text-slate-400">Manage your profile and membership.</p>
+            <p className="text-slate-400">Manage your profile.</p>
           </div>
           <button
             type="button"
@@ -184,7 +184,8 @@ export default function Account() {
           </div>
         </div>
 
-        {/* Membership card */}
+        {/* Membership card hidden — platform is focused on drop-ship rentals for now. */}
+        {(false as boolean) && (
         <div className="card p-6">
           <h2 className="font-semibold text-white mb-1 flex items-center gap-2">
             <Crown size={16} className="text-amber-400" />
@@ -306,7 +307,9 @@ export default function Account() {
             </div>
           )}
         </div>
+        )}
       </div>
     </main>
   )
 }
+

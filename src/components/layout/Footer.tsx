@@ -30,7 +30,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-2 text-sm text-slate-400">
                 <MapPin size={14} className="text-brand-400 mt-0.5 flex-shrink-0" />
-                <span>Serving the greater metro area.<br />Delivery and pickup available.</span>
+                <span>Equipment shipped to your job site.</span>
               </div>
             </div>
           </div>
@@ -65,7 +65,6 @@ export default function Footer() {
                 { label: 'Book your rental', href: '/quote' },
                 { label: 'Browse All Inventory', href: '/browse' },
                 { label: 'Work Zone Guides', href: '/blog' },
-                { label: 'Delivery & Pickup', href: '/delivery' },
               ].map((item) => (
                 <li key={item.href}>
                   <Link to={item.href} className="text-sm text-slate-400 hover:text-white transition-colors">

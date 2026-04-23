@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Search, Phone, ChevronDown, ShoppingCart, User, LogOut, Crown } from 'lucide-react'
+import { Menu, X, Search, Phone, ChevronDown, ShoppingCart, User, LogOut } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { categories } from '../../data/categories'
@@ -17,7 +17,7 @@ export default function Header() {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
   const location = useLocation()
   const { itemCount } = useCart()
-  const { user, logout, isMemberActive } = useAuth()
+  const { user, logout } = useAuth()
   const userDropRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -194,7 +194,6 @@ export default function Header() {
                     onClick={() => setIsUserOpen(v => !v)}
                     className="flex items-center gap-2 h-9 px-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors text-sm shrink-0 xl:h-10 xl:px-3"
                   >
-                    {isMemberActive && <Crown size={13} className="text-amber-400" />}
                     <User size={15} className="text-slate-300" />
                     <span className="text-slate-200 max-w-[100px] truncate">{user.name.split(' ')[0]}</span>
                     <ChevronDown size={13} className={`text-slate-400 transition-transform ${isUserOpen ? 'rotate-180' : ''}`} />
@@ -204,12 +203,6 @@ export default function Header() {
                       <div className="px-3 py-2.5 border-b border-slate-800">
                         <div className="text-xs text-slate-500">Signed in as</div>
                         <div className="text-sm font-medium text-white truncate">{user.email}</div>
-                        {isMemberActive && (
-                          <div className="flex items-center gap-1 text-xs text-amber-400 mt-0.5">
-                            <Crown size={11} />
-                            Member
-                          </div>
-                        )}
                       </div>
                       <div className="p-1.5">
                         <Link
@@ -219,15 +212,7 @@ export default function Header() {
                           <User size={14} />
                           My account
                         </Link>
-                        {!isMemberActive && (
-                          <Link
-                            to="/account"
-                            className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-slate-800 text-sm text-amber-400 hover:text-amber-300 transition-colors"
-                          >
-                            <Crown size={14} />
-                            Join membership
-                          </Link>
-                        )}
+                        {/* Membership link hidden while platform focuses on drop-shipping. */}
                         <button
                           type="button"
                           onClick={logout}
@@ -324,12 +309,6 @@ export default function Header() {
                     <div className="px-3 py-2">
                       <div className="text-xs text-slate-500">Signed in as</div>
                       <div className="text-sm text-white font-medium">{user.name}</div>
-                      {isMemberActive && (
-                        <div className="flex items-center gap-1 text-xs text-amber-400 mt-0.5">
-                          <Crown size={11} />
-                          Active member
-                        </div>
-                      )}
                     </div>
                     <Link to="/account" className="flex items-center gap-2 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-sm text-slate-300 transition-colors">
                       <User size={15} />

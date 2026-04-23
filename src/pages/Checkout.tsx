@@ -1,14 +1,10 @@
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { CheckCircle, CreditCard, Package, ArrowLeft, Crown } from 'lucide-react'
+import { CheckCircle, CreditCard, Package, ArrowLeft } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useMembership } from '../context/MembershipContext'
 import { useAuth } from '../context/AuthContext'
-import {
-  getDeliveryPickupFees,
-  NON_MEMBER_DELIVERY_FEE_USD,
-  NON_MEMBER_PICKUP_FEE_USD,
-} from '../constants/deliveryPickup'
+import { getDeliveryPickupFees } from '../constants/deliveryPickup'
 import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { getProductById } from '../data/products'
 import {
@@ -79,9 +75,6 @@ export default function Checkout() {
     if (!done && stripeResume !== 'working') return
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }, [done, stripeResume])
-
-  const previewMemberFees = getDeliveryPickupFees(true)
-  const previewGrandTotalIfMember = rentalGrandTotal + previewMemberFees.combined
 
   useEffect(() => {
     if (!membershipCancelled) return
@@ -432,26 +425,13 @@ export default function Checkout() {
                   <span>Daily rate (all items)</span>
                   <span className="tabular-nums">${totalDaily.toFixed(2)}/day</span>
                 </div>
-                <DeliveryPickupBreakdown
-                  isMember={isMember}
-                  checkoutMembershipPreview={addMembership && !isMember}
-                  className="pt-2 border-t border-slate-800"
-                />
+                <DeliveryPickupBreakdown className="pt-2 border-t border-slate-800" />
                 <div className="flex justify-between font-semibold text-white text-base pt-2 border-t border-slate-800">
                   <span>Estimated total</span>
-                  <span className="tabular-nums">
-                    $
-                    {(addMembership && !isMember ? previewGrandTotalIfMember : grandTotal).toFixed(2)}
-                  </span>
+                  <span className="tabular-nums">${grandTotal.toFixed(2)}</span>
                 </div>
-                {addMembership && !isMember ? (
-                  <p className="text-xs text-brand-300/90">
-                    {`Estimate assumes membership is active (waives $${NON_MEMBER_DELIVERY_FEE_USD} delivery + $${NON_MEMBER_PICKUP_FEE_USD} pickup). Membership is billed separately on Stripe at $150/month.`}
-                  </p>
-                ) : null}
                 <p className="text-xs text-slate-500">
-                  Final invoice may differ. Rental charges are arranged after we confirm availability.
-                  {isMember ? ' Member delivery and pickup pricing applied.' : ''}
+                  Shipping is confirmed separately after we review your order. Rental charges are arranged after we confirm availability.
                 </p>
               </div>
             </div>
@@ -528,46 +508,9 @@ export default function Checkout() {
                   />
                 </div>
 
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={form.deliveryNeeded}
-                    onChange={(e) => set('deliveryNeeded', e.target.checked)}
-                    className="w-4 h-4 accent-brand-500 rounded"
-                  />
-                  <span className="text-sm text-slate-300">I need delivery to the job site</span>
-                </label>
+                {/* Delivery toggle hidden — drop-ship only for now. */}
 
-                {!isMember ? (
-                  <div className="rounded-xl border border-slate-700 bg-slate-800/40 p-4 space-y-3">
-                    <div className="flex items-start gap-3">
-                      <Crown size={20} className="text-amber-400 shrink-0 mt-0.5" />
-                      <div className="min-w-0">
-                        <label className="flex items-start gap-3 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={addMembership}
-                            onChange={(e) => setAddMembership(e.target.checked)}
-                            className="w-4 h-4 mt-0.5 accent-brand-500 rounded shrink-0"
-                          />
-                          <span className="text-sm text-slate-200 leading-snug">
-                            I want membership and the discounted rates — free delivery and free pickup (${NON_MEMBER_DELIVERY_FEE_USD} + $
-                            {NON_MEMBER_PICKUP_FEE_USD} waived) on rentals while subscribed. Billed{' '}
-                            <strong className="font-semibold text-white">$150/month</strong> on Stripe.
-                          </span>
-                        </label>
-                        {addMembership && !user ? (
-                          <p className="text-xs text-amber-200/90 mt-2 pl-7">
-                            <Link to="/account" className="text-brand-400 hover:underline font-medium">
-                              Sign in or create an account
-                            </Link>{' '}
-                            first; membership billing uses your account email in Stripe.
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
+                {/* Membership upsell hidden — platform is focused on drop-ship rentals for now. */}
 
                 {submitError ? (
                   <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
@@ -581,21 +524,11 @@ export default function Checkout() {
                   className="w-full btn-primary py-3 justify-center text-base gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <CreditCard size={18} />
-                  {submitting
-                    ? addMembership && !isMember && user
-                      ? 'Opening Stripe…'
-                      : 'Submitting…'
-                    : addMembership && !isMember && user
-                      ? 'Continue to Stripe — $150/mo membership'
-                      : 'Submit checkout'}
+                  {submitting ? 'Submitting…' : 'Submit checkout'}
                 </button>
 
                 <p className="text-xs text-slate-500 text-center">
-                  {addMembership && !isMember && user
-                    ? 'Stripe Checkout collects only the $150/month subscription. After you subscribe, you’ll return here so we can email your rental details — no rental card charge on that step.'
-                    : addMembership && !isMember
-                      ? 'Sign in to open Stripe for the membership. Or uncheck the box to submit a rental-only request (no payment on this step).'
-                      : 'By submitting you agree we may contact you about this order. No Stripe charge for rentals on this step — membership uses Stripe only if you check the box above.'}
+                  By submitting you agree we may contact you about this order. Shipping will be confirmed after we review availability — no card charge on this step.
                 </p>
               </div>
             </div>

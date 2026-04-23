@@ -8,9 +8,8 @@ const items = [
   },
   {
     icon: Truck,
-    title: 'Scheduled delivery',
-    description:
-      'Pickup and job-site delivery booked around your timeline—we confirm the window before dispatch.',
+    title: 'Shipped to your site',
+    description: 'Equipment ships directly to your job address. Shipping is confirmed after we review your order.',
   },
   {
     icon: Headphones,
@@ -19,8 +18,8 @@ const items = [
   },
   {
     icon: MapPin,
-    title: 'Local & Flexible',
-    description: 'Pickup, delivery, and job-site drop and swap available.',
+    title: 'Nationwide availability',
+    description: 'Order online — we coordinate fulfillment and keep you updated on timing.',
   },
 ]
 

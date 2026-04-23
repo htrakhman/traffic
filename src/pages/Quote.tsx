@@ -227,8 +227,7 @@ export default function Quote() {
                     <span>${grandTotal.toFixed(2)}</span>
                   </div>
                   <p className="text-xs text-slate-500">
-                    We confirm the final total in writing when your rental is scheduled. Totals include delivery and pickup
-                    as shown{isMember ? ' (member benefit).' : '.'}
+                    We confirm the final total in writing when your rental is scheduled. Shipping is confirmed separately.
                   </p>
                 </div>
               </div>
@@ -276,15 +275,7 @@ export default function Quote() {
                 <textarea value={form.notes} onChange={(e) => set('notes', e.target.value)} placeholder="Any special delivery instructions, access info, or additional context..." className="input text-sm resize-none h-20" />
               </div>
 
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={form.deliveryNeeded}
-                  onChange={(e) => set('deliveryNeeded', e.target.checked)}
-                  className="w-4 h-4 accent-brand-500 rounded"
-                />
-                <span className="text-sm text-slate-300">I need delivery to job site</span>
-              </label>
+              {/* Delivery toggle hidden — drop-ship only for now. */}
 
               <button
                 type="submit"

@@ -175,8 +175,7 @@ export default function Cart() {
                 <span>${grandTotal.toFixed(2)}</span>
               </div>
               <p className="text-xs text-slate-500">
-                Final total confirmed when you lock in your order. Estimated total includes delivery and pickup as shown
-                {isMember ? ' (member benefit).' : '.'}
+                Final total confirmed when you lock in your order. Shipping will be calculated separately.
               </p>
               {/* Show in Map — active if a workzone polygon was drawn in the Job Assistant */}
               <button

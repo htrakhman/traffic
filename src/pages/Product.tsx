@@ -322,7 +322,7 @@ export default function Product() {
             <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-slate-500">
               <div className="card p-2">
                 <Truck size={14} className="mx-auto mb-1 text-brand-400" />
-                {isMember ? 'Delivery & pickup included (member)' : 'Delivery & pickup + fees'}
+                Shipping: TBD
               </div>
               <div className="card p-2">
                 <Clock size={14} className="mx-auto mb-1 text-brand-400" />
