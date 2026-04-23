@@ -2781,7 +2781,7 @@ INSTRUCTIONS
                 {i === 0 && (
                   <div className="space-y-1">
                     <p className="text-[9px] font-medium uppercase tracking-wide text-slate-500">Examples — tap to ask</p>
-                    <div className="flex flex-col gap-1.5">
+                    <div className="flex flex-wrap gap-1.5">
                       {ADVISOR_EXAMPLES.map((ex) => {
                         const busy = loading || analyzing || generating
                         return (
@@ -2789,11 +2789,11 @@ INSTRUCTIONS
                             key={ex.title}
                             type="button"
                             disabled={busy}
+                            title={ex.blurb}
                             onClick={() => void dispatchUserMessage(ex.prompt)}
-                            className="rounded-lg border border-slate-700/90 bg-slate-800/40 px-2 py-1.5 text-left transition-colors hover:border-brand-500/45 hover:bg-slate-800/70 disabled:cursor-not-allowed disabled:opacity-45"
+                            className="rounded-full border border-slate-600/80 bg-slate-900/60 px-2.5 py-1 text-[10px] font-medium text-slate-200 transition-colors hover:border-brand-500/60 hover:bg-slate-800/80 hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
                           >
-                            <p className="text-[11px] font-semibold text-slate-100 leading-tight">{ex.title}</p>
-                            <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">{ex.blurb}</p>
+                            {ex.title}
                           </button>
                         )
                       })}
