@@ -19,11 +19,12 @@ Every post:
 ### Week 1 (ship by 2026-04-25)
 
 **Post 1 — "How Many Traffic Cones Do You Actually Need for a Lane Closure? (NJ MUTCD Guide)"**
-- Status: outlined (see below)
+- Status: drafted (2026-04-23) — full draft in `../content/001-how-many-cones-for-lane-closure.md`
 - Primary keyword: *how many cones for lane closure*
 - Secondary: *MUTCD cone spacing*, *NJ lane closure requirements*
 - Audience: small contractors doing a job, Googling "do I have enough cones"
-- Outline: in `../content/cones-for-lane-closure-outline.md` (first run)
+- Outline: in `../content/001-how-many-cones-for-lane-closure-outline.md`
+- Next step: Harold to create article entry in `src/data/articles/` and add to articles.ts
 
 **Post 2 — "Type I vs Type II vs Type III Barricades: Which One Do You Need?"**
 - Status: queued
@@ -75,3 +76,4 @@ testimonials when available, local phone number / address.
 ## Changelog
 
 - **2026-04-18** — Calendar seeded. Week 1 outline starts below.
+- **2026-04-23** — Post 1 ("How Many Traffic Cones…") moved from `outlined` → `drafted`. Full draft in `../content/001-how-many-cones-for-lane-closure.md`. Needs article entry in `src/data/articles/` to go live.

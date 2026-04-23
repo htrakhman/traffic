@@ -1,21 +1,30 @@
-import type { Product } from '../types'
+import type { Product, VolumePriceTier } from '../types'
 import { SITE_NAME } from '../config/site'
-import { applyRetailMarkup, roundMoney } from '../utils/pricing'
+import { RETAIL_MARKUP_MULTIPLIER, roundMoney } from '../utils/pricing'
 
 const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
 
-function retailRates(refDaily: number): Pick<Product, 'dailyRate' | 'weeklyRate' | 'monthlyRate'> {
-  const dailyRate = applyRetailMarkup(refDaily)
-  return {
-    dailyRate,
-    weeklyRate: roundMoney(dailyRate * 4),
-    monthlyRate: roundMoney(dailyRate * 12),
-  }
+/** One open-ended band from supplier-reference unit economics (same numeric input as legacy `retailRates`). */
+function singleTierFromRefDaily(refDaily: number): VolumePriceTier[] {
+  return [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: roundMoney(refDaily) }]
 }
 
+/** One open-ended band from an already-retail shelf unit price (undoes ×1.5 to store reference). */
+function singleTierFromRetailUnit(retailUnit: number): VolumePriceTier[] {
+  const ref = roundMoney(retailUnit / RETAIL_MARKUP_MULTIPLIER)
+  return [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: ref }]
+}
+
+/** TSS-style volume bands (shelf prices $24.85 / $23.25 / $21.85 on comparable 28" cone listing). */
+const cone28TssVolumeTiers: VolumePriceTier[] = [
+  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(24.85 / RETAIL_MARKUP_MULTIPLIER) },
+  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(23.25 / RETAIL_MARKUP_MULTIPLIER) },
+  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(21.85 / RETAIL_MARKUP_MULTIPLIER) },
+]
+
 /**
- * Rental rates in this file are **retail** prices (50% markup on supplier-reference economics).
- * When adjusting reference costs, use `applyRetailMarkup` from `../utils/pricing` so daily / weekly / monthly tiers stay aligned.
+ * Purchase tiers use supplier-reference unit price per band; retail uses `applyRetailMarkup` (×1.5).
+ * When adjusting reference costs, keep tiers in `singleTierFromRefDaily` / explicit `VolumePriceTier[]` aligned.
  */
 /** Traffic Safety Store CDN — product-matched photos (same transforms as `scripts/generate-tss-catalog.mjs`). */
 const cdn = (path: string) =>
@@ -72,9 +81,7 @@ export const curatedProducts: Product[] = [
     description: 'Lakeside Plastics 28" 7 lb flow-molded orange PVC cone, NCHRP 350 / MASH accepted',
     longDescription:
       'Exact product: Lakeside Plastics C28S, 28" orange flow-molded PVC traffic cone. One-piece construction with cleated base, UV inhibitors, 15"×15" base. Meets MUTCD, NCHRP-350, and MASH crashworthiness standards. Ideal for lane closures, shoulder work, and general delineation at speeds up to 65 mph. Add reflective collar option at checkout if needed.',
-    dailyRate: 2.25,
-    weeklyRate: 9,
-    monthlyRate: 27,
+    volumePriceTiers: cone28TssVolumeTiers,
     unit: 'each',
     imageUrl: cone28img,
     images: [cone28img, cone36img, drumImg],
@@ -122,8 +129,8 @@ export const curatedProducts: Product[] = [
         answer: 'Standard rental cones ship without reflective collars. If your work zone operates at night or in low-visibility conditions, we recommend upgrading to our 36" reflective cone rentals or adding reflective collar sleeves — mention this in your quote request.',
       },
       {
-        question: 'How are the cones delivered and picked up?',
-        answer: 'Cones are delivered stacked on pallets or in crates to your job site. We schedule pickup at the end of your rental period. Delivery and pickup fees vary by location — request a quote for exact delivery costs.',
+        question: 'How do cones get to and from my job site?',
+        answer: 'Cones ship stacked on pallets or in crates to your job site. We coordinate return at the end of your rental period. Transport fees vary by location — request a quote for exact costs.',
       },
     ],
     tags: ['cone', 'channelization', 'lane closure', 'reflective'],
@@ -134,11 +141,10 @@ export const curatedProducts: Product[] = [
     supplierSku: 'C28S',
     supplierUrl: '',
     supplier: 'Lakeside Plastics',
-    minimumRentalDays: 1,
     weight: '7 lbs',
     dimensions: '28" H × 15" × 15" base',
     metaTitle: titleBrand('Rent 28" Traffic Cones | MUTCD / MASH Compliant'),
-    metaDescription: 'Rent NCHRP-350 & MASH-accepted 28" orange traffic cones starting at $2.25/day. 500+ in stock. Perfect for lane closures and shoulder work up to 45 mph. Fast delivery.',
+    metaDescription: 'Rent NCHRP-350 & MASH-accepted 28" orange traffic cones starting at $2.25/day. 500+ in stock. Perfect for lane closures and shoulder work up to 45 mph. Fast dispatch.',
   },
   {
     id: 'prod-2',
@@ -149,9 +155,7 @@ export const curatedProducts: Product[] = [
     description: 'JBC 36" 10 lb orange injection-molded cone with 6" & 4" high-intensity reflective collars',
     longDescription:
       'Exact product: JBC CR36SRC64, 36" 10 lb orange traffic cone with black recycled rubber base and two molded-in high-intensity reflective collars (6" + 4"). Injection-molded for durability. Over 50% post-consumer recycled materials. Meets MUTCD, FDOT, FHWA, NFPA, and NCHRP-350 crash test standards. Required by many state DOTs for 55+ mph work zones.',
-    dailyRate: 3.38,
-    weeklyRate: 13.5,
-    monthlyRate: 40.5,
+    volumePriceTiers: singleTierFromRetailUnit(3.38),
     unit: 'each',
     imageUrl: cone36img,
     images: [cone36img, cone28img, drumImg],
@@ -211,7 +215,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'CR36SRC64',
     supplierUrl: '',
     supplier: 'JBC Safety Plastic',
-    minimumRentalDays: 1,
     weight: '10 lbs',
     dimensions: '36" H × 14" × 14" base',
     metaTitle: titleBrand('Rent 36" Reflective Traffic Cones | Highway-Grade MUTCD'),
@@ -226,9 +229,7 @@ export const curatedProducts: Product[] = [
     description: 'MUTCD / NCHRP-350 channelizing drum with 6" high-intensity reflective sheeting and recycled tire ring base',
     longDescription:
       'Exact product: DRUM6HITIRE-class channelizing drum. 37" tall polyethylene channelizing drum with 6" high-intensity orange and white reflective stripes. 23" diameter recycled tire ring base prevents rolling into traffic. ~10 lb drum body + ~22 lb tire base. Exceeds MUTCD standards and meets NCHRP-350 crash test rating. High visibility day and night.',
-    dailyRate: 6.75,
-    weeklyRate: 27,
-    monthlyRate: 81,
+    volumePriceTiers: singleTierFromRetailUnit(6.75),
     unit: 'each',
     imageUrl: drumImg,
     images: [drumImg, cone28img, cone36img],
@@ -289,7 +290,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'DRUM6HITIRE',
     supplierUrl: '',
     supplier: 'OEM channelizing drum',
-    minimumRentalDays: 1,
     weight: '~32 lbs (drum + base)',
     dimensions: '37" H × 23" base diameter',
     metaTitle: titleBrand('Rent Channelizing Drums | 37" HI Reflective Tire Base'),
@@ -306,9 +306,7 @@ export const curatedProducts: Product[] = [
     description: 'Heavy-duty 36"×36" reflective vinyl roll-up sign, MUTCD W20-1, fiberglass ribs',
     longDescription:
       'Exact product: RU-36-REF-RWAHD — 36"×36" heavy-duty high-visibility reflective vinyl roll-up sign with fiberglass cross-ribs and plastic corner pockets. MUTCD code W20-1. Compatible with all standard roll-up sign stands. Made in USA. Ships same day.',
-    dailyRate: 7.5,
-    weeklyRate: 30,
-    monthlyRate: 90,
+    volumePriceTiers: singleTierFromRetailUnit(7.5),
     unit: 'each',
     imageUrl: signRWAimg,
     images: [signRWAimg, signFLGimg, signOLRimg],
@@ -369,11 +367,10 @@ export const curatedProducts: Product[] = [
     supplierSku: 'RU-36-REF-RWAHD',
     supplierUrl: '',
     supplier: 'MUTCD roll-up sign (OEM)',
-    minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
     metaTitle: titleBrand('Rent Road Work Ahead Sign (W20-1) | 36" Reflective Roll-Up'),
-    metaDescription: 'Rent MUTCD W20-1 "Road Work Ahead" 36" reflective roll-up signs from $7.50/day. Required for all work zones. Fiberglass ribs, reflective vinyl. Same-day delivery available.',
+    metaDescription: 'Rent MUTCD W20-1 "Road Work Ahead" 36" reflective roll-up signs from $7.50/day. Required for all work zones. Fiberglass ribs, reflective vinyl. Same-day dispatch available.',
   },
   {
     id: 'prod-5',
@@ -384,9 +381,7 @@ export const curatedProducts: Product[] = [
     description: 'Heavy-duty 36"×36" reflective vinyl roll-up sign, MUTCD W20-7a, fiberglass ribs',
     longDescription:
       'Exact product: RU-36-REF-FLGAHD — 36"×36" heavy-duty high-visibility reflective vinyl "Flagger Ahead" roll-up sign. MUTCD code W20-7a. Required whenever a flagger is controlling traffic in a work zone. Fiberglass cross-ribs, plastic corner pockets. Made in USA.',
-    dailyRate: 7.5,
-    weeklyRate: 30,
-    monthlyRate: 90,
+    volumePriceTiers: singleTierFromRetailUnit(7.5),
     unit: 'each',
     imageUrl: signFLGimg,
     images: [signFLGimg, signRWAimg, signOLRimg],
@@ -446,11 +441,10 @@ export const curatedProducts: Product[] = [
     supplierSku: 'RU-36-REF-FLGAHD',
     supplierUrl: '',
     supplier: 'MUTCD roll-up sign (OEM)',
-    minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
     metaTitle: titleBrand('Rent Flagger Ahead Sign (W20-7a) | 36" Reflective Roll-Up'),
-    metaDescription: 'Rent MUTCD W20-7a "Flagger Ahead" 36" reflective roll-up signs from $7.50/day. Required by law when flaggers control traffic. Fast delivery to job sites.',
+    metaDescription: 'Rent MUTCD W20-7a "Flagger Ahead" 36" reflective roll-up signs from $7.50/day. Required by law when flaggers control traffic. Rapid dispatch to job sites.',
   },
   {
     id: 'prod-6',
@@ -461,9 +455,7 @@ export const curatedProducts: Product[] = [
     description: 'Cortina tri-pod steel sign stand, MPN 07-822, for 36" or 48" roll-up or rigid signs',
     longDescription:
       'Exact product: Cortina TRI-POD-STD (MPN 07-822). Economical, versatile powder-coated steel tripod stand designed for 36" or 48" rigid or roll-up traffic signs. Compact, lightweight, and folds flat for storage. Three-leg configuration for stable deployment on varied terrain.',
-    dailyRate: 6,
-    weeklyRate: 24,
-    monthlyRate: 72,
+    volumePriceTiers: singleTierFromRetailUnit(6),
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, signRWAimg, signFLGimg],
@@ -523,7 +515,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'TRI-POD-STD',
     supplierUrl: '',
     supplier: 'Cortina Safety Products',
-    minimumRentalDays: 1,
     weight: '~10 lbs',
     dimensions: 'Folds flat for storage',
     metaTitle: titleBrand('Rent Cortina Tri-Pod Sign Stand | 36" & 48" Signs'),
@@ -538,9 +529,7 @@ export const curatedProducts: Product[] = [
     description: 'Heavy-duty 36"×36" non-reflective orange vinyl roll-up sign, MUTCD W20-4',
     longDescription:
       'Exact product: RU-36-NON-OLRA — 36"×36" heavy-duty non-reflective bright orange vinyl "One Lane Road Ahead" roll-up sign. MUTCD code W20-4. Fiberglass cross-ribs and plastic corner pockets. Compatible with all standard roll-up sign stands.',
-    dailyRate: 7.5,
-    weeklyRate: 30,
-    monthlyRate: 90,
+    volumePriceTiers: singleTierFromRetailUnit(7.5),
     unit: 'each',
     imageUrl: signOLRimg,
     images: [signOLRimg, signRWAimg, signFLGimg],
@@ -595,7 +584,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'RU-36-NON-OLRA',
     supplierUrl: '',
     supplier: 'MUTCD roll-up sign (OEM)',
-    minimumRentalDays: 1,
     weight: '3 lbs',
     dimensions: '36" × 36"',
     metaTitle: titleBrand('Rent One Lane Road Ahead Sign (W20-4) | 36" Roll-Up'),
@@ -612,9 +600,7 @@ export const curatedProducts: Product[] = [
     description: '60" tall MUTCD Type III break-away barricade with three 8 ft EG reflective plastic rails',
     longDescription:
       'Exact product: T3-BA-EG-8 (MPN 313-ASBL). 60" tall MUTCD Type III barricade with break-away fold-flat design. Three 8-foot plastic rails with engineer grade (EG) orange and white reflective sheeting. NCHRP-350 accepted. Accommodates two barricade flashers. Complete assembly with plastic uprights, feet, and hardware.',
-    dailyRate: 12,
-    weeklyRate: 48,
-    monthlyRate: 144,
+    volumePriceTiers: singleTierFromRetailUnit(12),
     unit: 'each',
     imageUrl: barT3img,
     images: [barT3img, barT2img, barWFimg],
@@ -675,7 +661,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'T3-BA-EG-8',
     supplierUrl: '',
     supplier: 'OEM Type III barricade',
-    minimumRentalDays: 1,
     weight: '~25 lbs',
     dimensions: '96" W × 60" H',
     metaTitle: titleBrand('Rent Type III Road Closure Barricades | 8 ft Break-Away'),
@@ -690,9 +675,7 @@ export const curatedProducts: Product[] = [
     description: '45"×24" folding plastic MUTCD Type II barricade with high-intensity reflective sheeting',
     longDescription:
       'Exact product: TYPE 2HI (MPN 37408-FHIP). 45" tall × 24" wide folding plastic Type II barricade with high-intensity (HI) reflective sheeting. Impact-resistant polyethylene, stackable with molded lugs. ~12 lbs. Commonly used for lane closures, channelization, and temporary closures where traffic may still pass.',
-    dailyRate: 8.25,
-    weeklyRate: 33,
-    monthlyRate: 99,
+    volumePriceTiers: singleTierFromRetailUnit(8.25),
     unit: 'each',
     imageUrl: barT2img,
     images: [barT2img, barT3img, barWFimg],
@@ -749,7 +732,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'TYPE 2HI',
     supplierUrl: '',
     supplier: 'OEM Type II barricade',
-    minimumRentalDays: 1,
     weight: '~12 lbs',
     dimensions: '24" W × 45" H',
     metaTitle: titleBrand('Rent Type II Traffic Barricades | HI Reflective Sheeting'),
@@ -764,9 +746,7 @@ export const curatedProducts: Product[] = [
     description: 'Yodock 2001MB HDPE water-filled construction barrier, 72"L × 32"H × 18"W, NCHRP-350',
     longDescription:
       'Exact product: Yodock 2001MBORG (MPN 148002B). Orange HDPE water-filled construction barrier. 72"L × 32"H × 18"W. Ships at 85 lbs empty; weighs ~900 lbs when filled with water. Links together for any run length. Meets NCHRP Report 350 standards. Compatible with optional fence panel toppers.',
-    dailyRate: 27,
-    weeklyRate: 108,
-    monthlyRate: 324,
+    volumePriceTiers: singleTierFromRetailUnit(27),
     unit: 'each',
     imageUrl: barWFimg,
     images: [barWFimg, barT3img, barT2img],
@@ -806,7 +786,7 @@ export const curatedProducts: Product[] = [
     faqs: [
       {
         question: 'Do water-filled barriers require a water source on site?',
-        answer: 'Yes. Barriers ship empty and must be filled with water on site using a garden hose, water truck, or on-site water supply. Filling takes approximately 5–10 minutes per barrier. Barriers must be emptied before pickup (or we can drain them for an additional fee).',
+        answer: 'Yes. Barriers ship empty and must be filled with water on site using a garden hose, water truck, or on-site water supply. Filling takes approximately 5–10 minutes per barrier. Barriers must be emptied before return (or we can drain them for an additional fee).',
       },
       {
         question: 'How many Yodock barriers do I need per 100 feet of run?',
@@ -829,7 +809,6 @@ export const curatedProducts: Product[] = [
     supplierSku: '2001MBORG',
     supplierUrl: '',
     supplier: 'Yodock / OEM',
-    minimumRentalDays: 3,
     weight: '85 lbs empty / ~900 lbs filled',
     dimensions: '72" L × 18" W × 32" H',
     metaTitle: titleBrand('Rent Water-Filled Barriers | Yodock 2001MB NCHRP-350'),
@@ -845,10 +824,8 @@ export const curatedProducts: Product[] = [
     slug: 'trailer-mounted-arrow-board-15',
     description: 'Hi-Way Safety M90 solar-assisted towable arrow board trailer, 15 amber LED PAR46 lamps',
     longDescription:
-      'Exact product: Hi-Way Safety / Trans-Supply WAAW-PL25C (15-lamp configuration). M90 Next Generation Solar-Assisted Arrow Board Trailer. 15 amber PAR 46 sealed-beam LED lamps. 48"H × 96"W sign panel. Solar panel + two 12V 22AH sealed batteries with 30-day backup. 5-year lamp warranty. Optional GPS/remote modem. Easily towed by any pickup truck.',
-    dailyRate: 142.5,
-    weeklyRate: 570,
-    monthlyRate: 1710,
+      'Exact product: Hi-Way Safety / Trans-Supply WAAW-PL25C (15-lamp configuration). M90 Next Generation Solar-Assisted Arrow Board Trailer. 15 amber PAR 46 sealed-beam LED lamps. 48"H × 96"W sign panel. Solar panel + two 12V 22AH sealed batteries with 30-day backup. 5-year lamp warranty. Optional GPS/remote modem. Easily towed by most full-size trucks.',
+    volumePriceTiers: singleTierFromRetailUnit(142.5),
     unit: 'each',
     imageUrl: arrowTrailerImg,
     images: [arrowTrailerImg, arrowTruckImg],
@@ -868,7 +845,7 @@ export const curatedProducts: Product[] = [
       '30-day battery backup',
       'Optional GPS/remote modem',
       '5-year lamp warranty',
-      'Easily towed by any pickup',
+      'Easily towed by most full-size trucks',
     ],
     compliance: ['MUTCD', 'FHWA', 'NCHRP-350'],
     useCases: [
@@ -892,7 +869,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'Do I need a special hitch to tow the arrow board trailer?',
-        answer: 'The trailer uses a standard 2" ball hitch. Any pickup truck, SUV, or heavy equipment with a standard 2" receiver can tow the M90 trailer. Tongue weight is 95–100 lbs — well within the capacity of any tow-rated vehicle.',
+        answer: 'The trailer uses a standard 2" ball hitch. Most full-size trucks, SUVs, or heavy equipment with a standard 2" receiver can tow the M90 trailer. Tongue weight is 95–100 lbs — well within the capacity of any tow-rated vehicle.',
       },
       {
         question: 'How long will the battery run without solar charging?',
@@ -911,7 +888,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'WAAW-PL25C',
     supplierUrl: 'https://www.trans-supply.com/pg/187/solar-arrow-board-trailers?ProductID=7382',
     supplier: TRANS,
-    minimumRentalDays: 1,
     weight: '~1,000 lbs',
     dimensions: '48" H × 96" W panel; 95" L trailer',
     metaTitle: titleBrand('Rent Arrow Board Trailer | Hi-Way Safety M90 Solar 15-Lamp'),
@@ -926,9 +902,7 @@ export const curatedProducts: Product[] = [
     description: 'Gregory Industries AVP15 vehicle-mounted 15-light LED arrow board panel with wireless controller',
     longDescription:
       'Exact product: Traffic Safety Products AVP15. Gregory Industries 15-light LED arrow board panel with wireless remote controller, battery powered. 100 lbs. Mounts to truck bed or hitch mount bracket (sold separately). Wireless controller for remote operation. Same directional modes as trailer units. Compact and easily transferred between vehicles.',
-    dailyRate: 97.5,
-    weeklyRate: 390,
-    monthlyRate: 1170,
+    volumePriceTiers: singleTierFromRetailUnit(97.5),
     unit: 'each',
     imageUrl: arrowTruckImg,
     images: [arrowTruckImg, arrowTrailerImg],
@@ -974,7 +948,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'How long does the battery last?',
-        answer: 'Battery runtime varies by lamp brightness setting and mode. Typical operation yields 8–12 hours per charge. We deliver units with fully charged batteries. For multi-day operations, a solar charging kit can be requested.',
+        answer: 'Battery runtime varies by lamp brightness setting and mode. Typical operation yields 8–12 hours per charge. Units ship with fully charged batteries. For multi-day operations, a solar charging kit can be requested.',
       },
     ],
     tags: ['arrow board', 'truck mounted', 'vehicle mounted', 'LED', 'wireless'],
@@ -985,7 +959,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'AVP15',
     supplierUrl: 'https://trafficsafetyproducts.net/workzone-products/workzone-lighting/arrow-board-15-light-led-panel-wireless-controller-battery-poweredavp15.html',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '100 lbs',
     dimensions: 'Contact supplier for panel dimensions',
     metaTitle: titleBrand('Rent Truck-Mounted Arrow Board | Gregory AVP15 15-LED Wireless'),
@@ -1002,9 +975,7 @@ export const curatedProducts: Product[] = [
     description: 'Ver-Mac PCMS-1210 Pro solar trailer-mounted 3-line LED portable changeable message sign, NTCIP compliant',
     longDescription:
       'Exact product: Ver-Mac PCMS-1210 Pro (available via Coral Sales). Full-size trailer-mounted 3-line portable changeable message sign. 71"×133" display, 18" character height per line, 8 characters per line. V-Touch touchscreen controller, V-Sync WiFi + 4G LTE, tilt-and-rotate solar panels, sealed maintenance-free batteries (Stealth Technology). NTCIP compliant. JamLogic fleet management ready.',
-    dailyRate: 262.5,
-    weeklyRate: 1050,
-    monthlyRate: 3150,
+    volumePriceTiers: singleTierFromRetailUnit(262.5),
     unit: 'each',
     imageUrl: msgBoardImg,
     images: [msgBoardImg, arrowTrailerImg],
@@ -1068,7 +1039,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'PCMS-1210-PRO',
     supplierUrl: 'https://coralsales.com/products/pcms-1210-pro-message-board',
     supplier: CORAL,
-    minimumRentalDays: 1,
     weight: 'Contact supplier',
     dimensions: '71" × 133" display',
     metaTitle: titleBrand('Rent Portable Message Board | Ver-Mac PCMS-1210 Pro 3-Line Solar'),
@@ -1085,9 +1055,7 @@ export const curatedProducts: Product[] = [
     description: '3-volt D-cell LED amber barricade flasher, photo-cell controlled, MUTCD Type B',
     longDescription:
       'Exact product: OEM 3VOLT LED (MPN 99-02006). Amber 3-volt D-cell LED barricade flasher. Photo-cell activated — automatically turns off during daylight to conserve battery. Two modes: Steady-On or Flash. Mounts to barricades, drums, cones, and sign stands. Made in USA. Ships same day.',
-    dailyRate: 2.25,
-    weeklyRate: 9,
-    monthlyRate: 27,
+    volumePriceTiers: singleTierFromRetailUnit(2.25),
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, flareImg],
@@ -1129,7 +1097,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'How long do the batteries last?',
-        answer: 'In flash mode with the photo-cell active (nighttime only), two D-cell batteries last approximately 300–500 hours of active operation — enough for 30–60 nights. We deliver flashers with fresh batteries.',
+        answer: 'In flash mode with the photo-cell active (nighttime only), two D-cell batteries last approximately 300–500 hours of active operation — enough for 30–60 nights. Flashers ship with fresh batteries.',
       },
       {
         question: 'Do I need one flasher per barricade?',
@@ -1148,7 +1116,6 @@ export const curatedProducts: Product[] = [
     supplierSku: '3VOLT LED',
     supplierUrl: '',
     supplier: 'OEM Type B flasher',
-    minimumRentalDays: 1,
     weight: '~1 lb',
     dimensions: '~5" diameter',
     metaTitle: titleBrand('Rent Type B Barricade Flashers | Amber LED MUTCD Compliant'),
@@ -1163,9 +1130,7 @@ export const curatedProducts: Product[] = [
     description: 'Six Orion 30-minute waxed road flares in nylon carrying case with orange safety vest',
     longDescription:
       'Exact product: Orion ORION6030 (MPN 6030). Six-pack of Orion 30-minute waxed road flares. Includes high-visibility red nylon carrying case and orange safety vest. Waxed construction is weather-resistant — works in fog, rain, and snow. DOT approved. Visible day or night. Standard for work zone and emergency delineation where open-flame flares are permitted.',
-    dailyRate: 18,
-    weeklyRate: 72,
-    monthlyRate: 216,
+    volumePriceTiers: singleTierFromRetailUnit(18),
     unit: 'set',
     imageUrl: flareImg,
     images: [flareImg, flasherImg],
@@ -1226,7 +1191,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'ORION6030',
     supplierUrl: '',
     supplier: 'Orion Safety Products',
-    minimumRentalDays: 1,
     weight: '~3 lbs (set)',
     dimensions: '6 flares in nylon case',
     metaTitle: titleBrand('Rent Road Flares | Orion 30-Min 6-Pack DOT Approved'),
@@ -1243,7 +1207,7 @@ export const curatedProducts: Product[] = [
     description: 'Solar-charged amber LED barricade light with dusk-to-dawn operation for drums, barricades, and sign stands',
     longDescription:
       'Exact product line: solar-assist LED barricade warning light (amber lens). High-output LEDs for MUTCD nighttime conspicuity on channelizing devices. Integrated photocell, sealed housing, and rechargeable battery pack reduce D-cell swaps vs. traditional flashers. Mounts to Type I–III barricades, drums, and compatible sign hardware.',
-    ...retailRates(3),
+    volumePriceTiers: singleTierFromRefDaily(3),
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, drumImg, barT2img],
@@ -1302,7 +1266,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'SOLAR-LED-BARR',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~2 lbs',
     dimensions: 'Compact drum / barricade mount',
     metaTitle: titleBrand('Rent Solar LED Barricade Lights | Amber High-Output'),
@@ -1319,7 +1282,7 @@ export const curatedProducts: Product[] = [
     description: 'Low-profile water-filled pedestrian barricade for crowd lines, festivals, and sidewalk closures',
     longDescription:
       'Exact product family: Urbanite-style water-filled pedestrian barricade (white shell, interlocking feet). Ballast with water on site for stability without heavy steel barriers. Common for sidewalk detours, outdoor retail queues, stadium ingress, and short-term pedestrian channelization adjacent to low-speed traffic.',
-    ...retailRates(5),
+    volumePriceTiers: singleTierFromRefDaily(5),
     unit: 'each',
     imageUrl: urbanitePedImg,
     images: [urbanitePedImg, barWFimg, barT2img],
@@ -1355,7 +1318,7 @@ export const curatedProducts: Product[] = [
     faqs: [
       {
         question: 'Do I fill the units on site?',
-        answer: 'Yes. Units ship empty for transport efficiency; fill with water after placement. Drain before pickup unless your contract specifies otherwise.',
+        answer: 'Yes. Units ship empty for transport efficiency; fill with water after placement. Drain before return unless your contract specifies otherwise.',
       },
       {
         question: 'Are these MUTCD highway barriers?',
@@ -1363,7 +1326,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'How many do I need for a run?',
-        answer: 'Interlocking length and corner geometry drive counts. Send a sketch or call with footage — we can estimate a layout and delivery windows.',
+        answer: 'Interlocking length and corner geometry drive counts. Send a sketch or call with footage — we can estimate a layout and scheduling windows.',
       },
       {
         question: 'What is the minimum rental period?',
@@ -1378,7 +1341,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'URBANITE-WHT',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: 'Empty — fills on site',
     dimensions: 'Low-profile ped barricade module',
     metaTitle: titleBrand('Rent Urbanite Pedestrian Barricades | Water-Filled'),
@@ -1393,7 +1355,7 @@ export const curatedProducts: Product[] = [
     description: 'Folding-style economy pedestrian barricade with engineer-grade reflective sheeting',
     longDescription:
       'Exact product line: economy pedestrian barricade (orange frame) with red/white engineer-grade reflective panels. Lightweight A-frame style for quick setup at sidewalk closures, parking garage entrances, and short-term ped routes. Pairs with ballast or sandbags in wind-exposed locations.',
-    ...retailRates(2.5),
+    volumePriceTiers: singleTierFromRefDaily(2.5),
     unit: 'each',
     imageUrl: barT2img,
     images: [barT2img, urbanitePedImg, signStandImg],
@@ -1451,7 +1413,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'PED-BARR-EG',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~12–18 lbs (typical)',
     dimensions: 'Folding barricade panel',
     metaTitle: titleBrand('Rent Economy Pedestrian Barricades | EG Reflective'),
@@ -1468,7 +1429,7 @@ export const curatedProducts: Product[] = [
     description: 'Woven polypropylene empty sandbag for ballasting signs, stands, and lightweight barricades',
     longDescription:
       'Exact product: standard 14" × 26" woven polypropylene traffic sandbag (empty). UV-treated fabric resists tearing when filled. Tie or clip closure. Used for sign stand ballast, pedestrian barricade legs, and temporary message board anchoring in moderate wind.',
-    ...retailRates(1.5),
+    volumePriceTiers: singleTierFromRefDaily(1.5),
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, barT2img, cone28img],
@@ -1520,7 +1481,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'SB-14X26-PP',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~0.2 lb empty',
     dimensions: '14" × 26" flat',
     metaTitle: titleBrand('Rent Traffic Sandbags | 14×26 Polypropylene'),
@@ -1535,7 +1495,7 @@ export const curatedProducts: Product[] = [
     description: 'Recycled-rubber donut weight for telescoping sign stands and roll-up hardware',
     longDescription:
       'Exact product line: recycled rubber sign stand base weight with dual handles. Slides over common telescoping mast tubes to lower center of gravity for roll-up signs in wind. Faster reposition than sandbags alone for crews that strike and reset layouts daily.',
-    ...retailRates(1.5),
+    volumePriceTiers: singleTierFromRefDaily(1.5),
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, cone28img, drumImg],
@@ -1587,7 +1547,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'STAND-RUB-WT',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~28–40 lb (SKU dependent)',
     dimensions: 'Fits common mast tubes',
     metaTitle: titleBrand('Rent Sign Stand Rubber Weights | Dual-Handle'),
@@ -1604,7 +1563,7 @@ export const curatedProducts: Product[] = [
     description: 'Six-foot recycled rubber wheel stop with galvanized spikes for asphalt installs',
     longDescription:
       'Exact product line: commercial recycled rubber parking block, 6 ft length, blue with pre-drilled galvanized spike holes. Low-profile design for cars and light trucks in lots and garages. Spikes anchor into asphalt; alternate hardware available for concrete (request in quote).',
-    ...retailRates(2.25),
+    volumePriceTiers: singleTierFromRefDaily(2.25),
     unit: 'each',
     imageUrl: parkingBlueImg,
     images: [parkingBlueImg, cone28img, barT2img],
@@ -1641,8 +1600,8 @@ export const curatedProducts: Product[] = [
         answer: '1 day minimum; weekly and monthly tiers available.',
       },
       {
-        question: 'Do you deliver and place?',
-        answer: 'Delivery is available; placement labor can be quoted separately.',
+        question: 'Can you place these on site?',
+        answer: 'On-site placement can be quoted separately; ask when you request a quote.',
       },
       {
         question: 'Are blue blocks required anywhere?',
@@ -1657,7 +1616,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'PK-BLK-6-BLU',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~34 lb (typical)',
     dimensions: '6 ft × ~7–8 in height (typical)',
     metaTitle: titleBrand('Rent 6 ft Rubber Parking Blocks | Blue Wheel Stops'),
@@ -1672,7 +1630,7 @@ export const curatedProducts: Product[] = [
     description: 'Four-foot recycled rubber wheel stop with molded yellow chevron or stripe visibility',
     longDescription:
       'Exact product line: 4 ft recycled rubber wheel stop with high-visibility yellow stripe or chevron molding. Shorter length fits compact stalls and angled parking. Pre-drilled for mechanical anchoring; specify asphalt vs. concrete in your quote.',
-    ...retailRates(2.25),
+    volumePriceTiers: singleTierFromRefDaily(2.25),
     unit: 'each',
     imageUrl: parkingBlueImg,
     images: [parkingBlueImg, parkingBlueImg, cone28img],
@@ -1709,7 +1667,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'Do I return damaged units?',
-        answer: 'Normal wear is expected; cracked or cut units should be noted at pickup for fair billing.',
+        answer: 'Normal wear is expected; cracked or cut units should be noted at return for fair billing.',
       },
       {
         question: 'Spacing from the wall?',
@@ -1724,7 +1682,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'PK-BLK-4-YL',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~22–28 lb (typical)',
     dimensions: '4 ft length',
     metaTitle: titleBrand('Rent 4 ft Rubber Wheel Stops | Yellow Stripes'),
@@ -1741,7 +1698,7 @@ export const curatedProducts: Product[] = [
     description: 'Modular rubber speed hump middle section with asphalt spikes for traffic calming',
     longDescription:
       'Exact product line: economy modular rubber speed hump middle section with integrated cable channels (model dependent) and galvanized spikes for asphalt. Combine with end caps to create full-width humps on private drives, logistics yards, and temporary lot controls.',
-    ...retailRates(4),
+    volumePriceTiers: singleTierFromRefDaily(4),
     unit: 'each',
     imageUrl: speedHumpImg,
     images: [speedHumpImg, parkingBlueImg, cone28img],
@@ -1793,7 +1750,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'HUMP-ECO-MID',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~45–60 lb (section dependent)',
     dimensions: 'Modular middle section',
     metaTitle: titleBrand('Rent Rubber Speed Hump Sections | Modular'),
@@ -1808,7 +1764,7 @@ export const curatedProducts: Product[] = [
     description: 'Six-foot portable rubber speed bump for temporary lot and lane speed reduction',
     longDescription:
       'Exact product line: 6 ft portable rubber speed bump kit with carry handles and cat’s-eye reflectors (model dependent). Designed for repeated deploy/strike on lots where permanent asphalt milling is not allowed. Anchor with spikes or lag bolts per substrate.',
-    ...retailRates(4),
+    volumePriceTiers: singleTierFromRefDaily(4),
     unit: 'each',
     imageUrl: speedHumpImg,
     images: [speedHumpImg, barT2img, cone28img],
@@ -1830,7 +1786,7 @@ export const curatedProducts: Product[] = [
         description: 'Temporary traffic calming on private base camps.',
       },
       {
-        title: 'School Pickup Lanes',
+        title: 'School student loading zones',
         description: 'Short-term calming during construction detours.',
       },
     ],
@@ -1860,7 +1816,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'BUMP-6-PORT',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~50–70 lb (typical)',
     dimensions: '6 ft length',
     metaTitle: titleBrand('Rent Portable Rubber Speed Bumps | 6 ft'),
@@ -1877,7 +1832,7 @@ export const curatedProducts: Product[] = [
     description: 'ANSI/ISEA 107 Class 2 mesh vest with contrasting trim for roadway work',
     longDescription:
       'Exact product line: ANSI/ISEA 107 Class 2 mesh safety vest, fluorescent orange with contrasting silver reflective trim. Breathable mesh for warm climates. Sized for roadway workers in 25 mph+ applications where Class 2 minimum applies—confirm your state hi-vis rules.',
-    ...retailRates(2),
+    volumePriceTiers: singleTierFromRefDaily(2),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, cone36img, signFLGimg],
@@ -1929,7 +1884,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'VEST-C2-MESH-ORG',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~0.4 lb',
     dimensions: 'Sized garment',
     metaTitle: titleBrand('Rent ANSI Class 2 Safety Vests | Orange Mesh'),
@@ -1944,7 +1898,7 @@ export const curatedProducts: Product[] = [
     description: 'Class 3 hi-vis surveyors vest with expanded reflective for high-speed or complex backgrounds',
     longDescription:
       'Exact product line: ANSI/ISEA 107 Class 3 surveyors vest, fluorescent lime with silver reflective stripes on torso and shoulders. Additional background material for complex visual environments. Common for highway work, night operations, and layouts requiring maximum conspicuity.',
-    ...retailRates(2),
+    volumePriceTiers: singleTierFromRefDaily(2),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, vestMeshImg, signRWAimg],
@@ -1996,7 +1950,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'VEST-C3-SURV-LIM',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~0.7 lb',
     dimensions: 'Sized garment',
     metaTitle: titleBrand('Rent ANSI Class 3 Surveyors Vests | Lime Hi-Vis'),
@@ -2013,7 +1966,7 @@ export const curatedProducts: Product[] = [
     description: 'ANSI Z89.1 Type I safety helmet with wheel ratchet suspension and vented shell',
     longDescription:
       'Exact product line: Kask Zenith X2 safety helmet, vented ABS shell, wheel ratchet harness, chin strap included. ANSI Z89.1 Type I for top-of-head protection. Popular upgrade from hard hats for crews wanting improved retention, accessory mounts, and comfort padding.',
-    ...retailRates(3.5),
+    volumePriceTiers: singleTierFromRefDaily(3.5),
     unit: 'each',
     imageUrl: kaskZenithImg,
     images: [kaskZenithImg, vestMeshImg, cone28img],
@@ -2065,7 +2018,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'KASK-ZENITH-X2-WHT',
     supplierUrl: '',
     supplier: 'Kask',
-    minimumRentalDays: 1,
     weight: '~1.3 lb',
     dimensions: 'Universal shell sizes',
     metaTitle: titleBrand('Rent Kask Zenith X2 Safety Helmets | ANSI Z89.1'),
@@ -2080,7 +2032,7 @@ export const curatedProducts: Product[] = [
     description: '13-gauge HPPE shell with sandy nitrile palm for grip and ANSI A4 cut resistance',
     longDescription:
       'Exact product line: 13-gauge HPPE knit shell with sandy nitrile palm coating, ANSI/ISEA 105 cut level A4 (label verified per SKU). Touchscreen-compatible fingertips on select models. For material handling, sign hardware, and general construction where cut and abrasion risks exist.',
-    ...retailRates(1.4),
+    volumePriceTiers: singleTierFromRefDaily(1.4),
     unit: 'pair',
     imageUrl: kaskZenithImg,
     images: [kaskZenithImg, vestMeshImg, signStandImg],
@@ -2132,7 +2084,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'GLV-HPPE-A4-NIT',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~0.15 lb / pair',
     dimensions: 'SM–2XL mixes',
     metaTitle: titleBrand('Rent Cut-Resistant Work Gloves | ANSI A4 Nitrile'),
@@ -2147,7 +2098,7 @@ export const curatedProducts: Product[] = [
     description: 'Polycarbonate wraparound safety glasses with anti-fog and UV400 protection',
     longDescription:
       'Exact product line: polycarbonate wraparound safety glasses, clear lens, anti-fog coating (model dependent), UV400 protection, scratch-resistant hardcoat. For dust, wind, and incidental impact hazards during daytime flagging and utility work.',
-    ...retailRates(1.25),
+    volumePriceTiers: singleTierFromRefDaily(1.25),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, kaskZenithImg, signStandImg],
@@ -2199,7 +2150,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'GLS-Z87-AF-CLR',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~1 oz',
     dimensions: 'One size fits most',
     metaTitle: titleBrand('Rent ANSI Z87 Safety Glasses | Clear Anti-Fog'),
@@ -2216,7 +2166,7 @@ export const curatedProducts: Product[] = [
     description: 'Case of 12 aerosol marking paint cans for layout, utility locate, and temp marks',
     longDescription:
       'Exact product line: Aervoe-style water-based construction marking paint, case of 12 aerosol cans. Bright colors for survey layout, utility locates, and short-duration pavement marks that wear with traffic. VOC and color availability vary by SKU—specify color in quote.',
-    ...retailRates(2.5),
+    volumePriceTiers: singleTierFromRefDaily(2.5),
     unit: 'case',
     imageUrl: aervoePaintImg,
     images: [aervoePaintImg, cone28img, speedHumpImg],
@@ -2227,7 +2177,7 @@ export const curatedProducts: Product[] = [
       Application: 'Upside-down spray tips on many SKUs',
     },
     features: ['Case pricing for crew efficiency', 'Bright temporary marks', 'Upside-down capable tips (model dependent)', 'Common for locate and layout', 'Store cool and dry'],
-    compliance: ['MSDS / SDS provided at delivery'],
+    compliance: ['MSDS / SDS provided with your order'],
     useCases: [
       {
         title: 'Utility Locate Marking',
@@ -2268,7 +2218,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'AERVOE-MARK-12',
     supplierUrl: '',
     supplier: 'Aervoe',
-    minimumRentalDays: 1,
     weight: '~18 lb / case (approx.)',
     dimensions: '12 cans',
     metaTitle: titleBrand('Rent Construction Marking Paint | Case of 12'),
@@ -2283,7 +2232,7 @@ export const curatedProducts: Product[] = [
     description: 'Roll of temporary white pavement marking tape for short-duration lane lines and symbols',
     longDescription:
       'Exact product line: temporary pavement marking tape roll, white, high-adhesion rubberized backing for asphalt and concrete (primer may be required). Used for short work zones, pilot lines, and experimental lane shifts before permanent thermoplastic.',
-    ...retailRates(2),
+    volumePriceTiers: singleTierFromRefDaily(2),
     unit: 'roll',
     imageUrl: aervoePaintImg,
     images: [aervoePaintImg, speedHumpImg, parkingBlueImg],
@@ -2335,7 +2284,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'TAPE-TEMP-WHT-4',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~15–25 lb / roll (SKU dependent)',
     dimensions: '4 in × roll length',
     metaTitle: titleBrand('Rent Temporary Pavement Marking Tape | White'),
@@ -2352,7 +2300,7 @@ export const curatedProducts: Product[] = [
     description: 'Interlocking steel crowd control fence panel with bridge feet for events and sites',
     longDescription:
       'Exact product line: galvanized steel crowd control fence panel, ~6 ft × 10 ft mesh panel with tubular frame and interlocking hooks. Bridge feet distribute load on turf, asphalt, and concrete. Common for concerts, parades, construction laydown yards, and secured pedestrian corridors.',
-    ...retailRates(4.5),
+    volumePriceTiers: singleTierFromRefDaily(4.5),
     unit: 'each',
     imageUrl: fenceBridgeImg,
     images: [fenceBridgeImg, urbanitePedImg, barWFimg],
@@ -2404,7 +2352,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'FENCE-CC-6X10',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~55–75 lb / panel (typical)',
     dimensions: '6 ft × 10 ft panel',
     metaTitle: titleBrand('Rent Crowd Control Fence Panels | Galvanized 6×10'),
@@ -2419,7 +2366,7 @@ export const curatedProducts: Product[] = [
     description: 'Two-channel drop-over cable guard for hoses and cords up to ~2 in OD in work zones',
     longDescription:
       'Exact product line: economy two-channel drop-over cable protector, black lid with yellow lid hinges / sides (brand varies). Protects extension cords, ethernet, and small hoses from cart and vehicle crush in lots and indoor venues. Modular end caps available for tapered entries.',
-    ...retailRates(2.8),
+    volumePriceTiers: singleTierFromRefDaily(2.8),
     unit: 'each',
     imageUrl: fenceBridgeImg,
     images: [fenceBridgeImg, parkingBlueImg, speedHumpImg],
@@ -2471,7 +2418,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'CABLE-GUARD-2',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~18–28 lb / section (typical)',
     dimensions: 'Modular length per SKU',
     metaTitle: titleBrand('Rent 2-Channel Cable Protectors | Drop-Over'),
@@ -2488,7 +2434,7 @@ export const curatedProducts: Product[] = [
     description: 'ANSI Z359.11-style full-body harness with hi-vis webbing and pass-through buckles',
     longDescription:
       'Exact product line: Radians-style hi-vis full-body harness with dorsal D-ring, pass-through leg and chest buckles, and breakaway / friction chest styles (SKU dependent). For fall arrest systems when paired with an approved anchor, lanyard, and competent person inspection per OSHA 1926 Subpart M.',
-    ...retailRates(5.5),
+    volumePriceTiers: singleTierFromRefDaily(5.5),
     unit: 'each',
     imageUrl: harnessImg,
     images: [harnessImg, vestMeshImg, kaskZenithImg],
@@ -2540,7 +2486,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'HAR-RAD-HV-D',
     supplierUrl: '',
     supplier: 'Radians',
-    minimumRentalDays: 1,
     weight: '~3 lb',
     dimensions: 'Universal adjustable',
     metaTitle: titleBrand('Rent Hi-Vis Full-Body Harnesses | ANSI Z359'),
@@ -2555,7 +2500,7 @@ export const curatedProducts: Product[] = [
     description: '6 ft single-leg shock-absorbing lanyard with steel snap hooks for fall arrest systems',
     longDescription:
       'Exact product line: 6 ft single-leg shock-absorbing lanyard with rebar hooks or steel snap hooks (SKU dependent). Integrates with full-body harness and approved anchor points. Inspect before each use; retire after deployment or per manufacturer limits.',
-    ...retailRates(3),
+    volumePriceTiers: singleTierFromRefDaily(3),
     unit: 'each',
     imageUrl: harnessImg,
     images: [harnessImg, harnessImg, kaskZenithImg],
@@ -2607,7 +2552,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'LAN-6-SA-SNAP',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~2.5 lb',
     dimensions: '6 ft single leg',
     metaTitle: titleBrand('Rent Shock-Absorbing Lanyards | 6 ft Single Leg'),
@@ -2624,7 +2568,7 @@ export const curatedProducts: Product[] = [
     description: 'Sleeve-style HDPE bollard cover for steel pipe bollards in lots and storefronts',
     longDescription:
       'Exact product line: tall polyethylene bollard cover, ~5 in inner diameter × 52 in height, blue HDPE shell. Slips over installed steel pipe bollards to improve visibility and reduce maintenance painting. UV-stabilized resin for outdoor lots.',
-    ...retailRates(3),
+    volumePriceTiers: singleTierFromRefDaily(3),
     unit: 'each',
     imageUrl: bollardCoverImg,
     images: [bollardCoverImg, parkingBlueImg, cone28img],
@@ -2676,7 +2620,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'BOLL-CVR-5-BLU',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~3 lb',
     dimensions: '5" ID × 52" H',
     metaTitle: titleBrand('Rent Bollard Covers | 5" Blue HDPE Sleeves'),
@@ -2691,7 +2634,7 @@ export const curatedProducts: Product[] = [
     description: 'Heavy urethane wheel chock with grip base for service trucks and trailers on grade',
     longDescription:
       'Exact product line: heavy urethane wheel chock, truck/trailer class, aggressive grip base for asphalt and concrete. For DOT-style chocking of unattended trailers on shallow grades when paired with proper procedures and secondary brakes.',
-    ...retailRates(1.5),
+    volumePriceTiers: singleTierFromRefDaily(1.5),
     unit: 'each',
     imageUrl: bollardCoverImg,
     images: [bollardCoverImg, parkingBlueImg, drumImg],
@@ -2705,7 +2648,7 @@ export const curatedProducts: Product[] = [
     compliance: ['FMCSA / DOT chocking rules apply to CMVs'],
     useCases: [
       {
-        title: 'Delivery Box Trucks',
+        title: 'Box trucks at loading docks',
         description: 'Chock both sides on grade during hand unload.',
       },
       {
@@ -2743,7 +2686,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'CHOCK-URE-TK',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~8–12 lb (typical)',
     dimensions: 'Truck class chock',
     metaTitle: titleBrand('Rent Truck Wheel Chocks | Urethane'),
@@ -2760,7 +2702,7 @@ export const curatedProducts: Product[] = [
     description: 'Spring-return delineator post with high-intensity sheeting for bike lanes and gore markings',
     longDescription:
       'Exact product line: flexible surface-mounted delineator post, ~42 in height, white post with high-intensity reflective bands. Spring-return base reduces damage from occasional tire strikes while keeping lane edge cues visible for bikes and low-speed traffic.',
-    ...retailRates(2.2),
+    volumePriceTiers: singleTierFromRefDaily(2.2),
     unit: 'each',
     imageUrl: drumImg,
     images: [drumImg, cone36img, flareImg],
@@ -2812,7 +2754,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'DEL-POST-42-HI',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~4–6 lb',
     dimensions: '42 in post typical',
     metaTitle: titleBrand('Rent Flexible Delineator Posts | 42" White HI'),
@@ -2827,7 +2768,7 @@ export const curatedProducts: Product[] = [
     description: '21-inch amber LED traffic wand with steady, flash, and flashlight modes for flagging',
     longDescription:
       'Exact product line: 21 in amber LED traffic wand with wrist lanyard, steady / flash modes, and flashlight tip (SKU dependent). For night flagging, tapers, and parking direction where illuminated paddles improve motorist recognition beyond handheld flashlights alone.',
-    ...retailRates(1.8),
+    volumePriceTiers: singleTierFromRefDaily(1.8),
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, flareImg, vestMeshImg],
@@ -2879,7 +2820,6 @@ export const curatedProducts: Product[] = [
     supplierSku: 'WAND-LED-21-AM',
     supplierUrl: '',
     supplier: TSP,
-    minimumRentalDays: 1,
     weight: '~0.4 lb',
     dimensions: '21 in length',
     metaTitle: titleBrand('Rent LED Traffic Wands | 21" Amber'),
@@ -2902,11 +2842,27 @@ function rebuildExtendedIndexes() {
   productById = m
 }
 
+function migrateLegacyCatalogRow(row: unknown): Product | null {
+  if (!row || typeof row !== 'object') return null
+  const p = row as Record<string, unknown> & { volumePriceTiers?: VolumePriceTier[]; dailyRate?: number }
+  if (Array.isArray(p.volumePriceTiers) && p.volumePriceTiers.length) return p as unknown as Product
+  if (typeof p.dailyRate === 'number') {
+    const ref = roundMoney(p.dailyRate / RETAIL_MARKUP_MULTIPLIER)
+    const { dailyRate: _d, weeklyRate: _w, monthlyRate: _m, minimumRentalDays: _min, ...rest } = p as Record<
+      string,
+      unknown
+    >
+    return { ...rest, volumePriceTiers: [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: ref }] } as Product
+  }
+  return null
+}
+
 /** Merge extended catalog from `public/tss-catalog.json` (generated; see `scripts/generate-tss-catalog.mjs`). */
-export function registerExtendedCatalog(raw: Product[]) {
-  extendedProducts = raw.filter(
-    (p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug),
-  )
+export function registerExtendedCatalog(raw: unknown[]) {
+  extendedProducts = raw
+    .map(migrateLegacyCatalogRow)
+    .filter((p): p is Product => p != null)
+    .filter((p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug))
   mergedProducts = null
   productById = null
   if (extendedProducts.length) rebuildExtendedIndexes()

@@ -2,7 +2,7 @@
 /**
  * Downloads Traffic Safety Store sitemap, extracts /shop/{slug}/{sku} product URLs,
  * infers colorways / reflective “schemes” from URL slugs, groups sibling SKUs, and writes
- * public/tss-catalog.json with rental rates at 50% retail markup (×1.5).
+ * public/tss-catalog.json with purchase volume tiers (supplier ref ×1.5 at checkout).
  */
 import { createHash } from 'node:crypto'
 import { writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs'
@@ -13,15 +13,11 @@ const SITEMAP = 'https://www.trafficsafetystore.com/sitemap.xml'
 const OUT = fileURLToPath(new URL('../public/tss-catalog.json', import.meta.url))
 const SUPPLIER = 'Traffic Safety Store'
 
-function retailDaily(refDaily) {
-  return Math.round(refDaily * 1.5 * 100) / 100
-}
-
-function tiersFromDaily(d) {
+/** One open-ended purchase tier from heuristic supplier-reference unit economics (×1.5 retail via app). */
+function purchaseTiersFromRefDaily(refDaily) {
+  const ref = Math.round(refDaily * 100) / 100
   return {
-    dailyRate: d,
-    weeklyRate: Math.round(d * 4 * 100) / 100,
-    monthlyRate: Math.round(d * 12 * 100) / 100,
+    volumePriceTiers: [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: ref }],
   }
 }
 
@@ -359,7 +355,7 @@ function attachVariantGroups(products) {
             slug: v.slug,
             supplierSku: v.supplierSku,
             supplierUrl: v.supplierUrl,
-            dailyRate: v.dailyRate,
+            volumePriceTiers: v.volumePriceTiers,
             swatch: swatchHex(v.colorLabel ?? extractColorLabel(seg)),
           }
         })
@@ -409,8 +405,7 @@ async function main() {
     const skuRaw = decodeURIComponent(parts.slice(2).join('/'))
 
     const { categoryId, categorySlug, refDaily } = classify(slugSeg)
-    const d = retailDaily(refDaily)
-    const pricing = tiersFromDaily(d)
+    const pricing = purchaseTiersFromRefDaily(refDaily)
 
     let baseSlug = slugSeg.replace(/[^a-z0-9-]+/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase()
     if (!baseSlug) baseSlug = 'item'
@@ -433,9 +428,8 @@ async function main() {
     if (finishLabel) metaBits.push(finishLabel)
     const name = metaBits.length ? `${nameParts[0]} — ${metaBits.join(' · ')}` : nameParts[0]
 
-    const minDays = /yodock|water-filled|jersey.*barrier/i.test(slugSeg) ? 3 : 1
     const shortDesc = `${nameParts[0]} (TSS SKU ${skuRaw}).`
-    const longDesc = `Catalog match: Traffic Safety Store SKU ${skuRaw}. Rental rate = reference economics × 1.5 (50% retail markup).${colorLabel ? ` Colorway: ${colorLabel}.` : ''}${finishLabel ? ` Sheeting / scheme: ${finishLabel}.` : ''}`
+    const longDesc = `Catalog match: Traffic Safety Store SKU ${skuRaw}. Purchase unit pricing = reference economics × 1.5 (50% retail markup).${colorLabel ? ` Colorway: ${colorLabel}.` : ''}${finishLabel ? ` Sheeting / scheme: ${finishLabel}.` : ''}`
 
     const specs = { SKU: skuRaw }
     if (colorLabel) specs.Color = colorLabel
@@ -457,14 +451,13 @@ async function main() {
       features: ['TSS catalog match', colorLabel && `Color: ${colorLabel}`, finishLabel && `Finish: ${finishLabel}`].filter(
         Boolean,
       ),
-      tags: [categorySlug.split('-')[0] ?? 'rental', ...(colorLabel ? [colorLabel.toLowerCase()] : [])].filter(Boolean),
+      tags: [categorySlug.split('-')[0] ?? 'equipment', ...(colorLabel ? [colorLabel.toLowerCase()] : [])].filter(Boolean),
       inStock: true,
       popular: false,
       sku: `TSS-${skuRaw.replace(/\s+/g, '-').slice(0, 40)}`,
       supplierSku: skuRaw,
       supplierUrl: url,
       supplier: SUPPLIER,
-      minimumRentalDays: minDays,
       colorLabel,
       finishLabel,
     })

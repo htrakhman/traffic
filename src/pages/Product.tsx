@@ -15,14 +15,26 @@ import {
   ShoppingCart,
 } from 'lucide-react'
 import { useCart } from '../context/CartContext'
-import { useMembership } from '../context/MembershipContext'
-import { getDeliveryPickupFees } from '../constants/deliveryPickup'
-import DeliveryPickupBreakdown from '../components/pricing/DeliveryPickupBreakdown'
 import { useCatalogSync } from '../context/CatalogSyncContext'
 import { getProductBySlug, getProductsByCategory } from '../data/products'
 import { categories } from '../data/categories'
 import ProductCard from '../components/marketplace/ProductCard'
 import { SITE_CONTACT_PHONE_E164, SITE_NAME } from '../config/site'
+import type { VolumePriceTier } from '../types'
+import {
+  applyRetailMarkup,
+  getMinimumOrderQuantity,
+  getPurchaseLineSubtotal,
+  getRetailUnitPriceForQty,
+  sortVolumePriceTiers,
+} from '../utils/pricing'
+
+function tierQtyLabel(t: VolumePriceTier): string {
+  const max = t.maxQty
+  if (max == null) return `${t.minQty}+`
+  if (t.minQty === max) return `${t.minQty}`
+  return `${t.minQty}–${max}`
+}
 
 export default function Product() {
   const { tick } = useCatalogSync()
@@ -30,9 +42,7 @@ export default function Product() {
   const product = slug ? getProductBySlug(slug) : undefined
   const navigate = useNavigate()
   const { addItem } = useCart()
-  const { isMember } = useMembership()
   const [quantity, setQuantity] = useState(1)
-  const [rentalDays, setRentalDays] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
@@ -41,6 +51,12 @@ export default function Product() {
     [product],
   )
 
+  useEffect(() => {
+    if (!product) return
+    const moq = getMinimumOrderQuantity(product)
+    setQuantity((q) => Math.max(moq, q))
+  }, [product?.id])
+
   const related = useMemo(() => {
     if (!product) return []
     return getProductsByCategory(product.categorySlug)
@@ -48,16 +64,22 @@ export default function Product() {
       .slice(0, 4)
   }, [product, tick])
 
+  const sortedTiers = useMemo(
+    () => (product ? sortVolumePriceTiers(product.volumePriceTiers) : []),
+    [product],
+  )
+
   // SEO / AEO: meta tags, Open Graph, Twitter, canonical, JSON-LD @graph
   useEffect(() => {
     if (!product) return
     const origin = window.location.origin
     const pagePath = `/product/${product.slug}`
     const pageUrl = `${origin}${pagePath}`
-    const title = product.metaTitle ?? `Rent ${product.name} | ${SITE_NAME}`
+    const fromPrice = getRetailUnitPriceForQty(product, getMinimumOrderQuantity(product))
+    const title = product.metaTitle ?? `Buy ${product.name} | ${SITE_NAME}`
     const desc =
       product.metaDescription ??
-      `Rent ${product.name} for $${product.dailyRate.toFixed(2)}/day. ${product.description}. MUTCD-aware traffic control equipment rental with delivery.`
+      `Buy ${product.name} from $${fromPrice.toFixed(2)}/${product.unit} (volume pricing). ${product.description}. MUTCD-aware traffic safety equipment.`
     const absolutize = (u: string) => (u.startsWith('/') ? `${origin}${u}` : u)
     const ogImage = absolutize(product.images[0] ?? product.imageUrl)
     const productImagesAbs = product.images.map(absolutize)
@@ -118,24 +140,27 @@ export default function Product() {
         brand: { '@type': 'Brand', name: product.supplier },
         category: category?.name,
         offers: {
-          '@type': 'Offer',
+          '@type': 'AggregateOffer',
           url: pageUrl,
           availability: product.inStock
             ? 'https://schema.org/InStock'
             : 'https://schema.org/OutOfStock',
           priceCurrency: 'USD',
-          price: product.dailyRate,
-          priceValidUntil: new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
+          lowPrice: Math.min(
+            ...sortVolumePriceTiers(product.volumePriceTiers).map((t) =>
+              applyRetailMarkup(t.supplierReferenceUnitPrice),
+            ),
+          ),
+          highPrice: Math.max(
+            ...sortVolumePriceTiers(product.volumePriceTiers).map((t) =>
+              applyRetailMarkup(t.supplierReferenceUnitPrice),
+            ),
+          ),
+          offerCount: product.volumePriceTiers.length,
           seller: {
             '@type': 'Organization',
             name: SITE_NAME,
             url: origin,
-          },
-          priceSpecification: {
-            '@type': 'UnitPriceSpecification',
-            price: product.dailyRate,
-            priceCurrency: 'USD',
-            unitText: 'DAY',
           },
         },
       },
@@ -169,27 +194,27 @@ export default function Product() {
       },
       {
         '@type': 'HowTo',
-        '@id': `${pageUrl}#howto-rent`,
-        name: `How to rent ${product.name} from ${SITE_NAME}`,
-        description: `Book your rental, confirm dates, and schedule delivery or pickup for ${product.name}.`,
+        '@id': `${pageUrl}#howto-buy`,
+        name: `How to buy ${product.name} from ${SITE_NAME}`,
+        description: `Add to cart, check out, and receive ${product.name} with free shipping.`,
         step: [
           {
             '@type': 'HowToStep',
             position: 1,
-            name: 'Book your rental',
-            text: 'Add the item to your cart or go to book with your quantity, rental duration, and job site details.',
+            name: 'Choose quantity',
+            text: 'Review volume price tiers, set quantity (minimum order per tier), and add the item to your cart.',
           },
           {
             '@type': 'HowToStep',
             position: 2,
-            name: 'Confirm availability',
-            text: `${SITE_NAME} confirms inventory and final pricing, including any delivery fees.`,
+            name: 'Checkout',
+            text: `${SITE_NAME} confirms your order; shipping is free on standard checkout.`,
           },
           {
             '@type': 'HowToStep',
             position: 3,
-            name: 'Deploy and return',
-            text: 'Equipment is delivered to your job site for the rental window, then picked up when the job is complete.',
+            name: 'Receive equipment',
+            text: 'Equipment ships to your job site or address. Track delivery from your confirmation email.',
           },
         ],
       },
@@ -238,9 +263,11 @@ export default function Product() {
     )
   }
 
-  const rentalLineTotal = product.dailyRate * quantity * rentalDays
-  const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
-  const totalCost = rentalLineTotal + deliveryPickupCombined
+  const moq = getMinimumOrderQuantity(product)
+  const unitPrice = getRetailUnitPriceForQty(product, quantity)
+  const lineSubtotal = getPurchaseLineSubtotal(product, quantity)
+  const firstTierRetail =
+    sortedTiers.length > 0 ? applyRetailMarkup(sortedTiers[0].supplierReferenceUnitPrice) : 0
 
   return (
     <main className="min-h-screen pt-20">
@@ -273,7 +300,7 @@ export default function Product() {
               )}
               <img
                 src={product.images[selectedImage] ?? product.imageUrl}
-                alt={`${product.name} — traffic control equipment for rent`}
+                alt={`${product.name} — traffic control equipment`}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -322,7 +349,7 @@ export default function Product() {
             <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs text-slate-500">
               <div className="card p-2">
                 <Truck size={14} className="mx-auto mb-1 text-brand-400" />
-                Shipping: TBD
+                Free shipping
               </div>
               <div className="card p-2">
                 <Clock size={14} className="mx-auto mb-1 text-brand-400" />
@@ -402,13 +429,15 @@ export default function Product() {
                           />
                         )}
                         <span>{v.label}</span>
-                        <span className="text-xs text-slate-500 tabular-nums">${v.dailyRate.toFixed(2)}/day</span>
+                        <span className="text-xs text-slate-500 tabular-nums">
+                          from ${getRetailUnitPriceForQty({ volumePriceTiers: v.volumePriceTiers }, v.volumePriceTiers[0]?.minQty ?? 1).toFixed(2)}/{product.unit}
+                        </span>
                       </Link>
                     )
                   })}
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  Same product line as Traffic Safety Store; each SKU is a separate rental listing with its own rate.
+                  Same product line as Traffic Safety Store; each SKU is a separate listing with its own volume pricing.
                 </p>
               </div>
             )}
@@ -423,77 +452,79 @@ export default function Product() {
             {/* Pricing */}
             <div className="card p-5 mb-6">
               <h2 className="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">
-                Rental Rates
+                Volume pricing
               </h2>
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                {[
-                  { period: 'Daily', rate: product.dailyRate },
-                  { period: 'Weekly', rate: product.weeklyRate },
-                  { period: 'Monthly', rate: product.monthlyRate },
-                ].map(({ period, rate }) => (
-                  <div key={period} className="text-center p-3 bg-slate-800/60 rounded-lg">
-                    <div className="text-lg font-bold text-white">${rate.toFixed(2)}</div>
-                    <div className="text-xs text-slate-500">{period}</div>
-                  </div>
-                ))}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {sortedTiers.map((t) => {
+                  const retail = applyRetailMarkup(t.supplierReferenceUnitPrice)
+                  const savePct =
+                    firstTierRetail > 0 && retail < firstTierRetail
+                      ? Math.round((1 - retail / firstTierRetail) * 100)
+                      : 0
+                  return (
+                    <div
+                      key={`${t.minQty}-${t.maxQty ?? 'x'}`}
+                      className="flex-1 min-w-[100px] text-center p-3 bg-slate-800/60 rounded-lg border border-slate-700/80"
+                    >
+                      <div className="text-lg font-bold text-white tabular-nums">${retail.toFixed(2)}</div>
+                      <div className="text-[10px] text-slate-500 uppercase tracking-wide mt-0.5">per {product.unit}</div>
+                      <div className="text-xs text-slate-400 mt-1">Qty {tierQtyLabel(t)}</div>
+                      {savePct > 0 ? (
+                        <div className="text-[10px] font-semibold text-amber-400 mt-1">Save {savePct}%</div>
+                      ) : null}
+                    </div>
+                  )
+                })}
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div>
-                  <label className="label text-xs">Quantity ({product.unit})</label>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-9 h-9 bg-slate-700 hover:bg-slate-600 rounded-lg text-white font-bold transition-colors"
-                    >
-                      −
-                    </button>
-                    <input
-                      type="number"
-                      value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
-                      className="w-full text-center input py-2"
-                    />
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-9 h-9 bg-slate-700 hover:bg-slate-600 rounded-lg text-white font-bold transition-colors"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label className="label text-xs">
-                    Rental days (min {product.minimumRentalDays})
-                  </label>
+              <div className="mb-4">
+                <label className="label text-xs">Quantity ({product.unit}, min {moq})</label>
+                <div className="flex items-center gap-2 mt-1">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(Math.max(moq, quantity - 1))}
+                    className="w-9 h-9 bg-slate-700 hover:bg-slate-600 rounded-lg text-white font-bold transition-colors"
+                  >
+                    −
+                  </button>
                   <input
                     type="number"
-                    value={rentalDays}
-                    onChange={(e) =>
-                      setRentalDays(Math.max(product.minimumRentalDays, Number(e.target.value)))
-                    }
-                    min={product.minimumRentalDays}
-                    className="input py-2.5"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Math.max(moq, Number(e.target.value) || moq))}
+                    min={moq}
+                    className="w-full text-center input py-2"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-9 h-9 bg-slate-700 hover:bg-slate-600 rounded-lg text-white font-bold transition-colors"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
 
               <div className="space-y-2 py-3 border-t border-slate-800 mb-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-400">Rental ({rentalDays}d × {quantity}×)</span>
-                  <span className="font-semibold text-slate-200 tabular-nums">${rentalLineTotal.toFixed(2)}</span>
+                  <span className="text-slate-400">
+                    Subtotal ({quantity}× @ ${unitPrice.toFixed(2)}/{product.unit})
+                  </span>
+                  <span className="font-semibold text-slate-200 tabular-nums">${lineSubtotal.toFixed(2)}</span>
                 </div>
-                <DeliveryPickupBreakdown isMember={isMember} />
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-400">Shipping</span>
+                  <span className="text-emerald-400 font-medium">Free</span>
+                </div>
               </div>
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-800">
                 <span className="text-sm text-slate-300">Estimated total</span>
-                <span className="text-xl font-bold text-white tabular-nums">${totalCost.toFixed(2)}</span>
+                <span className="text-xl font-bold text-white tabular-nums">${lineSubtotal.toFixed(2)}</span>
               </div>
 
               <button
                 type="button"
                 onClick={() => {
-                  addItem(product, quantity, rentalDays)
+                  addItem(product, quantity)
                   navigate('/cart')
                 }}
                 disabled={!product.inStock}
@@ -503,19 +534,20 @@ export default function Product() {
                 Add to cart
               </button>
               <button
-                onClick={() => navigate('/quote', { state: { product, quantity, rentalDays } })}
+                type="button"
+                onClick={() => navigate('/quote', { state: { product, quantity } })}
                 disabled={!product.inStock}
                 className="w-full btn-primary py-3 justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
               >
                 <Package size={18} />
-                Book with dates & job site
+                Request quote with job details
               </button>
               <a
                 href={`tel:${SITE_CONTACT_PHONE_E164}`}
                 className="w-full btn-secondary py-3 mt-2 justify-center text-sm"
               >
                 <Phone size={14} />
-                Call to Reserve
+                Call to order
               </a>
             </div>
 
@@ -562,12 +594,12 @@ export default function Product() {
           <div className="card p-6 border-slate-700/80">
             <p className="text-slate-400 text-sm leading-relaxed mb-4">
               {product.supplierUrl
-                ? 'We rent industry-standard models. The OEM catalog SKU and manufacturer link below help when your traffic control plan or submittal needs primary-source documentation.'
-                : 'We rent industry-standard models. The OEM catalog SKU below identifies the equipment family for your submittal — contact us if you need manufacturer cut sheets or compliance letters.'}
+                ? 'We sell industry-standard models. The OEM catalog SKU and manufacturer link below help when your traffic control plan or submittal needs primary-source documentation.'
+                : 'We sell industry-standard models. The OEM catalog SKU below identifies the equipment family for your submittal — contact us if you need manufacturer cut sheets or compliance letters.'}
             </p>
             <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm border-t border-slate-800 pt-4">
               <div>
-                <dt className="text-slate-500 font-medium mb-1">Rental SKU ({SITE_NAME})</dt>
+                <dt className="text-slate-500 font-medium mb-1">Store SKU ({SITE_NAME})</dt>
                 <dd className="text-slate-200 font-mono">{product.sku}</dd>
               </div>
               <div>
@@ -695,28 +727,28 @@ export default function Product() {
           </section>
         )}
 
-        {/* ── Rental process callout ── */}
+        {/* ── Purchase process callout ── */}
         <section aria-labelledby="how-it-works" className="mt-12">
           <div className="card p-6 bg-gradient-to-r from-brand-500/10 to-slate-800/50 border border-brand-500/20">
             <h2 id="how-it-works" className="text-lg font-bold text-white mb-4">
-              How the Rental Process Works
+              How buying works
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {[
                 {
                   step: '1',
-                  title: 'Book your rental',
-                  desc: 'You see live rates on the product. Select quantity and dates, add job site info, and send your booking. We respond within 2 hours on business days.',
+                  title: 'Choose quantity & tier',
+                  desc: 'Volume pricing updates automatically. Add to cart when the line total matches your crew’s needs.',
                 },
                 {
                   step: '2',
-                  title: 'Confirm & Schedule',
-                  desc: 'We confirm availability, finalize your order, and schedule delivery or pickup at your convenience.',
+                  title: 'Checkout',
+                  desc: 'We confirm inventory and send your order summary. Standard shipping is free at checkout.',
                 },
                 {
                   step: '3',
-                  title: 'Deploy & Return',
-                  desc: 'Equipment arrives clean and ready to use. At the end of your rental, we pick it up — no hassle.',
+                  title: 'Receive on site',
+                  desc: 'Equipment ships to your address or job site. Need a formal quote first? Use Request quote with job details.',
                 },
               ].map((s) => (
                 <div key={s.step} className="flex gap-3">

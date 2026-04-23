@@ -14,13 +14,11 @@ export type PendingCheckoutNotifyPayload = {
     sku?: string
     supplierSku?: string
     quantity: number
-    rentalDays: number
-    dailyRate: number
+    unitPrice: number
     lineTotal: number
   }>
   totals: {
-    totalDaily: number
-    rentalGrandTotal: number
+    merchandiseSubtotal: number
     deliveryPickupCombined: number
     grandTotal: number
   }

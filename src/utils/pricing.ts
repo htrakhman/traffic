@@ -1,4 +1,4 @@
-import type { AIRecommendation, RecommendationItem, MapArea } from '../types'
+import type { AIRecommendation, RecommendationItem, MapArea, Product, VolumePriceTier } from '../types'
 import { getProductById } from '../data/products'
 
 /** When set, modest-footprint channelizing (cones/drums) totals may be capped vs. polygon perimeter. */
@@ -80,8 +80,8 @@ function applyModestFootprintChannelizingGuard(
 }
 
 /**
- * All catalog `dailyRate` / `weeklyRate` / `monthlyRate` values are **retail** rental rates.
- * They are computed as supplier-reference rental economics × this multiplier (50% markup).
+ * Catalog `supplierReferenceUnitPrice` values are pre-markup economics; retail shelf unit price
+ * uses this multiplier (50% markup).
  */
 export const RETAIL_MARKUP_MULTIPLIER = 1.5
 
@@ -89,13 +89,71 @@ export function roundMoney(value: number): number {
   return Math.round(value * 100) / 100
 }
 
-/** Apply 50% markup to a supplier-reference daily rate (use when setting or auditing catalog numbers). */
-export function applyRetailMarkup(supplierReferenceDaily: number): number {
-  return roundMoney(supplierReferenceDaily * RETAIL_MARKUP_MULTIPLIER)
+/** Apply 50% markup to a supplier-reference unit price (use when building catalog tiers). */
+export function applyRetailMarkup(supplierReferenceUnitPrice: number): number {
+  return roundMoney(supplierReferenceUnitPrice * RETAIL_MARKUP_MULTIPLIER)
+}
+
+/** Sort tiers by minQty ascending (mutates copy). */
+export function sortVolumePriceTiers(tiers: VolumePriceTier[]): VolumePriceTier[] {
+  return [...tiers].sort((a, b) => a.minQty - b.minQty)
 }
 
 /**
- * Forces AI / demo recommendations to use catalog retail rates so quotes never show pre-markup pricing.
+ * Pick the volume tier that applies to `quantity` (integer units).
+ * If quantity is below the first tier’s minQty, the first tier is still returned (MOQ enforcement is elsewhere).
+ */
+export function getVolumeTierForQty(tiers: VolumePriceTier[], quantity: number): VolumePriceTier | undefined {
+  if (!tiers.length) return undefined
+  const sorted = sortVolumePriceTiers(tiers)
+  const q = Math.floor(quantity)
+  if (q < sorted[0]!.minQty) return sorted[0]
+
+  let best: VolumePriceTier | undefined
+  for (const t of sorted) {
+    if (q < t.minQty) break
+    if (t.maxQty != null && q > t.maxQty) continue
+    best = t
+  }
+  if (best) return best
+  return sorted[sorted.length - 1]
+}
+
+export function getMinimumOrderQuantity(product: Pick<Product, 'volumePriceTiers'>): number {
+  const sorted = sortVolumePriceTiers(product.volumePriceTiers)
+  const first = sorted[0]
+  return first ? Math.max(1, first.minQty) : 1
+}
+
+export function getRetailUnitPriceForQty(
+  product: Pick<Product, 'volumePriceTiers'>,
+  quantity: number,
+): number {
+  const tier = getVolumeTierForQty(product.volumePriceTiers, quantity)
+  if (!tier) return 0
+  return applyRetailMarkup(tier.supplierReferenceUnitPrice)
+}
+
+export function getPurchaseLineSubtotal(
+  product: Pick<Product, 'volumePriceTiers'>,
+  quantity: number,
+): number {
+  const q = Math.max(0, Math.floor(quantity))
+  if (q === 0) return 0
+  const unit = getRetailUnitPriceForQty(product, q)
+  return roundMoney(unit * q)
+}
+
+/** Lowest retail unit price (first tier after markup). */
+export function getLowestRetailUnitPrice(product: Pick<Product, 'volumePriceTiers'>): number {
+  const sorted = sortVolumePriceTiers(product.volumePriceTiers)
+  const first = sorted[0]
+  if (!first) return 0
+  return applyRetailMarkup(first.supplierReferenceUnitPrice)
+}
+
+/**
+ * Forces AI / demo recommendations to use catalog purchase tier pricing.
  * Optionally caps cones/drums on modest drawn footprints when the model over-shoots vs. perimeter.
  */
 export function normalizeRecommendationPricing(
@@ -108,13 +166,16 @@ export function normalizeRecommendationPricing(
     if (!p) return item
     return {
       ...item,
-      dailyRate: p.dailyRate,
+      unitPrice: getRetailUnitPriceForQty(p, item.quantity),
       productName: p.name,
       category: p.categorySlug.replace(/-/g, ' '),
     }
   })
-  const totalDailyRate = roundMoney(
-    items.reduce((sum, it) => sum + it.dailyRate * it.quantity, 0),
+  const estimatedMerchandiseSubtotal = roundMoney(
+    items.reduce((sum, it) => {
+      const p = getProductById(it.productId)
+      return sum + (p ? getPurchaseLineSubtotal(p, it.quantity) : 0)
+    }, 0),
   )
-  return { ...priced, items, totalDailyRate }
+  return { ...priced, items, estimatedMerchandiseSubtotal }
 }

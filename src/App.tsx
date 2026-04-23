@@ -56,11 +56,11 @@ function CatalogLoader() {
           console.warn('[CatalogLoader] /tss-catalog.json HTTP', r.status)
           return null
         }
-        return r.json() as Promise<Product[]>
+        return r.json() as Promise<unknown[]>
       })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          registerExtendedCatalog(data)
+          registerExtendedCatalog(data as unknown[])
           bump()
         }
       })

@@ -7,9 +7,6 @@ type Props = {
   className?: string
 }
 
-// Delivery/pickup is hidden — platform is drop-ship only. We show a simple
-// "Shipping: To be determined" line in place of the previous breakdown so
-// every consumer (Cart, Checkout, Product, Quote) stays consistent.
 export default function DeliveryPickupBreakdown({ variant = 'default', className = '' }: Props) {
   const isCompact = variant === 'compact'
   const isInline = variant === 'inline'
@@ -17,7 +14,7 @@ export default function DeliveryPickupBreakdown({ variant = 'default', className
   if (isInline) {
     return (
       <p className={`text-[10px] text-slate-500 leading-snug ${className}`}>
-        Shipping: <span className="text-slate-300">To be determined</span>
+        Shipping: <span className="text-emerald-400/90">Free</span>
       </p>
     )
   }
@@ -29,7 +26,7 @@ export default function DeliveryPickupBreakdown({ variant = 'default', className
     <div className={`${className}`}>
       <div className={`flex justify-between gap-3 ${row}`}>
         <span className={muted}>Shipping</span>
-        <span className="text-slate-300">To be determined</span>
+        <span className="text-emerald-400/90 font-medium">Free</span>
       </div>
     </div>
   )

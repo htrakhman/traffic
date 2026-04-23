@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Star, Package } from 'lucide-react'
 import type { Product } from '../../types'
+import { getLowestRetailUnitPrice, sortVolumePriceTiers } from '../../utils/pricing'
 
 interface Props {
   product: Product
@@ -11,6 +12,9 @@ interface Props {
 }
 
 function ProductCard({ product, index = 0, suppressEntryAnimation = false }: Props) {
+  const fromPrice = getLowestRetailUnitPrice(product)
+  const tierCount = sortVolumePriceTiers(product.volumePriceTiers).length
+
   return (
     <Link
       to={`/product/${product.slug}`}
@@ -93,11 +97,12 @@ function ProductCard({ product, index = 0, suppressEntryAnimation = false }: Pro
         <div className="flex items-end justify-between mt-auto pt-2 border-t border-slate-800">
           <div>
             <div className="flex items-baseline gap-1">
-              <span className="text-xl font-bold text-white">${product.dailyRate.toFixed(2)}</span>
-              <span className="text-xs text-slate-500">/day</span>
+              <span className="text-xs text-slate-500">from</span>
+              <span className="text-xl font-bold text-white">${fromPrice.toFixed(2)}</span>
+              <span className="text-xs text-slate-500">/{product.unit}</span>
             </div>
             <div className="text-xs text-slate-600">
-              ${product.weeklyRate}/wk · ${product.monthlyRate}/mo
+              {tierCount > 1 ? `${tierCount} volume tiers` : 'Volume pricing'}
             </div>
           </div>
           <div className="flex items-center gap-1 text-xs text-slate-500">

@@ -19,13 +19,21 @@ export interface ProductUseCase {
   description: string
 }
 
+/** Volume purchase band; retail unit price = applyRetailMarkup(supplierReferenceUnitPrice). */
+export interface VolumePriceTier {
+  minQty: number
+  /** Inclusive upper bound; omit or null = no upper limit */
+  maxQty: number | null
+  supplierReferenceUnitPrice: number
+}
+
 /** One selectable color / SKU option within the same OEM product family */
 export interface ProductColorVariant {
   label: string
   slug: string
   supplierSku: string
   supplierUrl: string
-  dailyRate: number
+  volumePriceTiers: VolumePriceTier[]
   /** CSS hex or named color for UI swatch */
   swatch?: string
 }
@@ -38,9 +46,8 @@ export interface Product {
   slug: string
   description: string
   longDescription: string
-  dailyRate: number
-  weeklyRate: number
-  monthlyRate: number
+  /** Purchase volume tiers (supplier-reference unit price per tier; ×1.5 at checkout). */
+  volumePriceTiers: VolumePriceTier[]
   unit: string // 'each' | 'set' | 'pair'
   imageUrl: string
   images: string[]
@@ -54,7 +61,6 @@ export interface Product {
   supplierSku: string       // Exact SKU used to reorder from supplier
   supplierUrl: string       // Optional manufacturer page URL (empty string if none)
   supplier: string          // Manufacturer or generic source label for submittals
-  minimumRentalDays: number
   weight?: string
   dimensions?: string
   faqs?: ProductFAQ[]
@@ -154,14 +160,15 @@ export interface RecommendationItem {
   quantity: number
   rationale: string
   priority: 'required' | 'recommended' | 'optional'
-  dailyRate: number
+  /** Retail unit price for this line’s quantity tier (catalog × markup). */
+  unitPrice: number
 }
 
-/** AI / cart recommendation payload (aligned with catalog retail `dailyRate` values). */
+/** AI / cart recommendation payload (aligned with catalog purchase `unitPrice` per tier). */
 export interface AIRecommendation {
   summary: string
   items: RecommendationItem[]
-  totalDailyRate: number
+  estimatedMerchandiseSubtotal: number
   estimatedDurationDays: number
   setupNotes: string[]
   disclaimer: string
@@ -170,7 +177,7 @@ export interface AIRecommendation {
 export interface Recommendation {
   summary: string
   items: RecommendationItem[]
-  totalDailyRate: number
+  estimatedMerchandiseSubtotal: number
   estimatedDuration: number
   notes: string[]
   disclaimer: string
@@ -179,7 +186,6 @@ export interface Recommendation {
 export interface QuoteItem {
   product: Product
   quantity: number
-  days: number
 }
 
 export interface QuoteRequest {

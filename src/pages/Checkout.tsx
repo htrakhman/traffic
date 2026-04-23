@@ -17,6 +17,7 @@ import {
 } from '../utils/pendingCheckoutAfterMembership'
 import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../config/site'
 import { productSkuLabel } from '../utils/productSkuLabel'
+import { getPurchaseLineSubtotal, getRetailUnitPriceForQty } from '../utils/pricing'
 
 export default function Checkout() {
   const { lines, clearCart } = useCart()
@@ -60,16 +61,12 @@ export default function Checkout() {
     [lines],
   )
 
-  const totalDaily = resolved.reduce(
-    (s, { line, product }) => s + product.dailyRate * line.quantity,
-    0,
-  )
-  const rentalGrandTotal = resolved.reduce(
-    (s, { line, product }) => s + product.dailyRate * line.quantity * line.rentalDays,
+  const merchandiseSubtotal = resolved.reduce(
+    (s, { line, product }) => s + getPurchaseLineSubtotal(product, line.quantity),
     0,
   )
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
-  const grandTotal = rentalGrandTotal + deliveryPickupCombined
+  const grandTotal = merchandiseSubtotal + deliveryPickupCombined
 
   useLayoutEffect(() => {
     if (!done && stripeResume !== 'working') return
@@ -131,7 +128,7 @@ export default function Checkout() {
       if (!pending) {
         setStripeResume('idle')
         setSubmitError(
-          'We could not find your saved checkout. Please submit your rental details again (your membership is active).',
+          'We could not find your saved checkout. Please submit your order again (your membership is active).',
         )
         try {
           sessionStorage.setItem(resumeKey, 'done')
@@ -145,8 +142,7 @@ export default function Checkout() {
       }
 
       const memberFees = getDeliveryPickupFees(true)
-      const nextRentalGrand = pending.lines.reduce((s, l) => s + l.lineTotal, 0)
-      const nextTotalDaily = pending.lines.reduce((s, l) => s + l.dailyRate * l.quantity, 0)
+      const nextMerch = pending.lines.reduce((s, l) => s + l.lineTotal, 0)
       const body = {
         name: pending.name,
         email: pending.email,
@@ -157,10 +153,9 @@ export default function Checkout() {
         deliveryNeeded: pending.deliveryNeeded,
         lines: pending.lines,
         totals: {
-          totalDaily: nextTotalDaily,
-          rentalGrandTotal: nextRentalGrand,
+          merchandiseSubtotal: nextMerch,
           deliveryPickupCombined: memberFees.combined,
-          grandTotal: nextRentalGrand + memberFees.combined,
+          grandTotal: nextMerch + memberFees.combined,
         },
         membershipSubscribedAtCheckout: true,
       }
@@ -176,7 +171,7 @@ export default function Checkout() {
         setStripeResume('idle')
         setSubmitError(
           data.error ||
-            'Membership is active, but we could not email your rental checkout. Please call us or try submitting again.',
+            'Membership is active, but we could not email your checkout. Please call us or try submitting again.',
         )
         releaseClaimIfPending()
         return
@@ -226,13 +221,11 @@ export default function Checkout() {
       sku: product.sku,
       supplierSku: product.supplierSku,
       quantity: line.quantity,
-      rentalDays: line.rentalDays,
-      dailyRate: product.dailyRate,
-      lineTotal: product.dailyRate * line.quantity * line.rentalDays,
+      unitPrice: getRetailUnitPriceForQty(product, line.quantity),
+      lineTotal: getPurchaseLineSubtotal(product, line.quantity),
     })),
     totals: {
-      totalDaily,
-      rentalGrandTotal,
+      merchandiseSubtotal,
       deliveryPickupCombined,
       grandTotal,
     },
@@ -300,16 +293,16 @@ export default function Checkout() {
           </div>
           <h1 className="text-3xl font-bold text-white mb-3">Checkout submitted</h1>
           <p className="text-slate-400 mb-2">
-            Thanks, <strong className="text-white">{displayName}</strong>. We received your rental checkout.
+            Thanks, <strong className="text-white">{displayName}</strong>. We received your purchase checkout.
           </p>
           <p className="text-slate-400 mb-8">
             {successContact?.email ? (
               <>
                 Someone from our team will reach out soon at <strong className="text-white">{displayEmail}</strong> to
-                confirm availability, delivery, and pickup.{' '}
+                confirm your order and delivery details.{' '}
               </>
             ) : (
-              <>Someone from our team will reach out soon to confirm availability, delivery, and pickup. </>
+              <>Someone from our team will reach out soon to confirm your order and delivery. </>
             )}
             Questions? Call{' '}
             <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="text-brand-400">
@@ -359,7 +352,7 @@ export default function Checkout() {
             <CreditCard className="text-brand-400" size={28} />
             Checkout
           </h1>
-          <p className="text-slate-400">Review your cart, enter contact details, and submit your rental checkout.</p>
+          <p className="text-slate-400">Review your cart, enter contact details, and submit your order.</p>
         </div>
       </div>
 
@@ -367,8 +360,7 @@ export default function Checkout() {
         {sessionIdParam && !user ? (
           <div className="card p-8 max-w-lg mx-auto text-center space-y-4">
             <p className="text-slate-300 text-sm">
-              Sign in with the same account you used before paying for membership to finish sending your rental
-              checkout.
+              Sign in with the same account you used before paying for membership to finish sending your checkout.
             </p>
             <Link to="/account" className="btn-primary inline-flex justify-center">
               My Account
@@ -407,14 +399,15 @@ export default function Checkout() {
                       <h3 className="font-medium text-white text-sm leading-snug">{product.name}</h3>
                       <p className="text-xs text-slate-500 mt-0.5 font-mono">{productSkuLabel(product)}</p>
                       <p className="text-xs text-slate-500 mt-0.5">
-                        Qty {line.quantity} · {line.rentalDays} days · ${product.dailyRate.toFixed(2)}/{product.unit}/day
+                        Qty {line.quantity} · ${getRetailUnitPriceForQty(product, line.quantity).toFixed(2)}/
+                        {product.unit} (tier)
                       </p>
                     </div>
                     <div className="text-right flex-shrink-0">
                       <div className="text-sm font-bold text-white tabular-nums">
-                        ${(product.dailyRate * line.quantity * line.rentalDays).toFixed(2)}
+                        ${getPurchaseLineSubtotal(product, line.quantity).toFixed(2)}
                       </div>
-                      <div className="text-xs text-slate-500">rental</div>
+                      <div className="text-xs text-slate-500">line total</div>
                     </div>
                   </div>
                 ))}
@@ -422,8 +415,8 @@ export default function Checkout() {
 
               <div className="card p-4 space-y-2 text-sm">
                 <div className="flex justify-between text-slate-400">
-                  <span>Daily rate (all items)</span>
-                  <span className="tabular-nums">${totalDaily.toFixed(2)}/day</span>
+                  <span>Merchandise</span>
+                  <span className="tabular-nums">${merchandiseSubtotal.toFixed(2)}</span>
                 </div>
                 <DeliveryPickupBreakdown className="pt-2 border-t border-slate-800" />
                 <div className="flex justify-between font-semibold text-white text-base pt-2 border-t border-slate-800">
@@ -431,7 +424,7 @@ export default function Checkout() {
                   <span className="tabular-nums">${grandTotal.toFixed(2)}</span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Shipping is confirmed separately after we review your order. Rental charges are arranged after we confirm availability.
+                  Standard shipping is free. We may follow up to confirm the ship-to address and any access constraints.
                 </p>
               </div>
             </div>
@@ -528,7 +521,7 @@ export default function Checkout() {
                 </button>
 
                 <p className="text-xs text-slate-500 text-center">
-                  By submitting you agree we may contact you about this order. Shipping will be confirmed after we review availability — no card charge on this step.
+                  By submitting you agree we may contact you about this order. No card charge on this step — we confirm details by email or phone.
                 </p>
               </div>
             </div>
