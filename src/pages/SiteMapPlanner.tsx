@@ -1426,12 +1426,91 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
       // surface the failure so they can retry or describe in free text.
       if (userContext || awaitingScenario) {
         setAwaitingScenario(false)
+        // Build a rules-based recommendation locally so the user still gets a
+        // cart-ready layout when the AI service misbehaves.
+        const ctx = (userContext ?? '').toLowerCase()
+        const speedMatch = ctx.match(/(\d{2})\s*mph/)
+        const speed = speedMatch ? Number(speedMatch[1]) : mapArea.postedSpeedMph ?? 35
+        const fullClosure = /full closure|road closed/.test(ctx)
+        const twoLanes = /two lanes|2 lanes/.test(ctx)
+        const tangentSpacing = speed >= 50 ? 80 : speed >= 40 ? 60 : 40
+        const coneQty = Math.max(12, Math.ceil(mapArea.perimeterFt / tangentSpacing) * 2)
+        const fallbackItems: Array<{
+          productId: string
+          productName: string
+          quantity: number
+          rationale: string
+          priority: 'required' | 'recommended' | 'optional'
+          dailyRate: number
+          category: string
+        }> = []
+        const push = (
+          id: string,
+          qty: number,
+          rationale: string,
+          priority: 'required' | 'recommended' | 'optional',
+        ) => {
+          if (qty <= 0) return
+          const p = getProductById(id)
+          if (!p) return
+          fallbackItems.push({
+            productId: id,
+            productName: p.name,
+            quantity: qty,
+            rationale,
+            priority,
+            dailyRate: p.dailyRate,
+            category: p.categorySlug,
+          })
+        }
+        push('CON-28-STD', coneQty, `NJDOT SDTTC channelizing spacing at ${speed} mph (${tangentSpacing} ft tangent).`, 'required')
+        push('SGN-RU-RWA-36', fullClosure ? 3 : 2, 'Advance warning per MUTCD Table 6C-1.', 'required')
+        push('BAR-T3-8FT', fullClosure ? 4 : 2, 'End-of-closure delineation; NJDOT requires Type III barricades at closure termini.', 'required')
+        push('ARR-TRL-15L', speed >= 45 || fullClosure || twoLanes ? 1 : 0, `Arrow board required for lane closures at ${speed} mph per NJDOT.`, 'required')
+        push('MSG-3L-SOL', speed >= 45 ? 1 : 0, 'PCMS advised for ≥45 mph arterials/expressways.', 'recommended')
+        push('PPE-HEL-K', 2, 'ANSI Class 2/3 PPE for workers.', 'required')
+        const rec: AIRecommendation = {
+          summary: `Rules-based NJDOT fallback for ~${Math.round(mapArea.perimeterFt)} ft perimeter at ${speed} mph${fullClosure ? ', full closure' : twoLanes ? ', two-lane closure' : ''}. AI service was unavailable — these quantities follow NJDOT SDTTC and MUTCD Part 6 spacing tables.`,
+          items: fallbackItems,
+          totalDailyRate: fallbackItems.reduce((s, i) => s + i.dailyRate * i.quantity, 0),
+          estimatedDurationDays: 1,
+          setupNotes: [
+            'Verify against your approved TCP and NJDOT permit conditions.',
+            'Field conditions govern — adjust taper length and device spacing as required.',
+          ],
+          disclaimer: 'Rules-based fallback (AI service unavailable). Verify against your approved TCP and NJDOT permit.',
+        }
+        // Auto-place fallback items on the map.
+        try {
+          const cartItems = fallbackItems.map((i) => ({
+            productId: i.productId,
+            productName: i.productName,
+            quantity: i.quantity,
+            category: i.category,
+          }))
+          let plan
+          try {
+            plan = await planWorkzoneLayout(mapArea, cartItems)
+          } catch {
+            plan = buildDemoPlan(mapArea, cartItems)
+          }
+          const newRows: SiteMapPlacedRow[] = plan.placements.map((pl) => ({
+            id: crypto.randomUUID(),
+            productId: pl.productId,
+            lat: pl.lat,
+            lng: pl.lng,
+          }))
+          replacePlacementsByIds(aiPlacedIdsRef.current, newRows)
+          aiPlacedIdsRef.current = newRows.map((r) => r.id)
+        } catch {
+          /* best-effort placement */
+        }
         setMessages((prev) => [
           ...prev,
           {
             role: 'assistant' as const,
-            content:
-              "I couldn't process that response from the AI service. Your baseline layout is still on the map. Try rephrasing your scenario in the box below (e.g. '35 mph single lane closure, 200 ft long, daytime'), or click Generate AI Equipment Layout to place your cart.",
+            content: `**NJDOT rules-based layout** — ${rec.summary} Click Add to Cart to check out.`,
+            recommendation: rec,
           },
         ])
         return
