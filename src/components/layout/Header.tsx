@@ -10,7 +10,6 @@ import AuthModal from '../auth/AuthModal'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isCatOpen, setIsCatOpen] = useState(false)
   const [isUserOpen, setIsUserOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showAuth, setShowAuth] = useState(false)
@@ -28,7 +27,6 @@ export default function Header() {
 
   useEffect(() => {
     setIsMenuOpen(false)
-    setIsCatOpen(false)
     setIsUserOpen(false)
   }, [location.pathname])
 
@@ -68,50 +66,11 @@ export default function Header() {
             {/* Desktop nav — no horizontal clip (that hid "Equipment" / "Guides"); compact lg–xl instead */}
             <nav className="hidden lg:flex justify-center items-center min-w-0 w-full px-0.5 xl:px-1">
               <div className="flex flex-nowrap items-center justify-center gap-0 lg:gap-px xl:gap-0.5">
-              {/* Categories dropdown */}
-              <div className="relative shrink-0" onMouseLeave={() => setIsCatOpen(false)}>
-                <button
-                  type="button"
-                  onMouseEnter={() => setIsCatOpen(true)}
-                  className="inline-flex items-center justify-center gap-1 h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap xl:h-10 xl:px-3 xl:text-sm"
-                >
-                  Equipment
-                  <ChevronDown size={14} className={`shrink-0 transition-transform ${isCatOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {isCatOpen && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl shadow-black/50 overflow-hidden animate-slide-up">
-                    <div className="p-2">
-                      {categories.map((cat) => (
-                        <Link
-                          key={cat.id}
-                          to={`/category/${cat.slug}`}
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition-colors group"
-                        >
-                          <span className="text-lg">{cat.icon}</span>
-                          <div>
-                            <div className="text-sm font-medium text-slate-200 group-hover:text-white">{cat.name}</div>
-                            <div className="text-xs text-slate-500">{cat.productCount} items</div>
-                          </div>
-                        </Link>
-                      ))}
-                      <div className="border-t border-slate-800 mt-2 pt-2">
-                        <Link
-                          to="/browse"
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-800 text-sm text-brand-400 hover:text-brand-300 font-medium transition-colors"
-                        >
-                          View all equipment →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
               <Link
                 to="/browse"
                 className="inline-flex items-center justify-center h-9 px-2 text-[13px] font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800 transition-all duration-150 whitespace-nowrap shrink-0 xl:h-10 xl:px-3 xl:text-sm"
               >
-                Browse
+                Equipment
               </Link>
               <Link
                 to="/assistant"
