@@ -792,8 +792,7 @@ export default function SiteMapPlanner() {
         <button
           type="button"
           onClick={exportJson}
-          disabled={placed.length === 0}
-          className="inline-flex items-center gap-1 rounded-md border border-slate-600 bg-slate-800 px-2 py-1 text-xs font-medium text-slate-100 hover:bg-slate-700 disabled:opacity-40 shrink-0"
+          className="inline-flex items-center gap-1 rounded-md border border-slate-600 bg-slate-800 px-2 py-1 text-xs font-medium text-slate-100 hover:bg-slate-700 shrink-0"
         >
           <Download size={12} />
           Export
@@ -801,8 +800,7 @@ export default function SiteMapPlanner() {
         <button
           type="button"
           onClick={clearAll}
-          disabled={placed.length === 0}
-          className="inline-flex items-center gap-1 rounded-md border border-red-800/50 bg-red-950/40 px-2 py-1 text-xs font-medium text-red-200 hover:bg-red-950/70 disabled:opacity-40 shrink-0"
+          className="inline-flex items-center gap-1 rounded-md border border-red-800/50 bg-red-950/40 px-2 py-1 text-xs font-medium text-red-200 hover:bg-red-950/70 shrink-0"
         >
           <Trash2 size={12} />
           Clear
