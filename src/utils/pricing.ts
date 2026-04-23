@@ -1,5 +1,9 @@
 import type { AIRecommendation, RecommendationItem, MapArea, Product, VolumePriceTier } from '../types'
 import { getProductById } from '../data/products'
+import { RETAIL_MARKUP_MULTIPLIER as _RETAIL_MARKUP_MULTIPLIER, roundMoney as _roundMoney } from './pricingConstants'
+
+export const RETAIL_MARKUP_MULTIPLIER = _RETAIL_MARKUP_MULTIPLIER
+export const roundMoney = _roundMoney
 
 /** When set, modest-footprint channelizing (cones/drums) totals may be capped vs. polygon perimeter. */
 export type RecommendationFootprintGuard = Pick<MapArea, 'perimeterFt' | 'areaFt2'>
@@ -77,16 +81,6 @@ function applyModestFootprintChannelizingGuard(
   const setupNotes = priorNotes.some((n) => n.includes('auto-capped')) ? priorNotes : [...priorNotes, note]
 
   return { ...rec, items, setupNotes }
-}
-
-/**
- * Catalog `supplierReferenceUnitPrice` values are pre-markup economics; retail shelf unit price
- * uses this multiplier (50% markup).
- */
-export const RETAIL_MARKUP_MULTIPLIER = 1.5
-
-export function roundMoney(value: number): number {
-  return Math.round(value * 100) / 100
 }
 
 /** Apply 50% markup to a supplier-reference unit price (use when building catalog tiers). */

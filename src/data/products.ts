@@ -1,6 +1,6 @@
 import type { Product, VolumePriceTier } from '../types'
 import { SITE_NAME } from '../config/site'
-import { RETAIL_MARKUP_MULTIPLIER, roundMoney } from '../utils/pricing'
+import { RETAIL_MARKUP_MULTIPLIER, roundMoney } from '../utils/pricingConstants'
 
 const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
 
