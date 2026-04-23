@@ -435,7 +435,7 @@ export default function SiteMapPlanner() {
           },
           polygonOptions: {
             fillColor: drawColorRef.current,
-            fillOpacity: 0.18,
+            fillOpacity: 0.35,
             strokeColor: drawColorRef.current,
             strokeWeight: 2,
             clickable: true,
@@ -444,7 +444,7 @@ export default function SiteMapPlanner() {
           },
           rectangleOptions: {
             fillColor: drawColorRef.current,
-            fillOpacity: 0.18,
+            fillOpacity: 0.35,
             strokeColor: drawColorRef.current,
             strokeWeight: 2,
             clickable: true,
@@ -453,7 +453,7 @@ export default function SiteMapPlanner() {
           },
           circleOptions: {
             fillColor: drawColorRef.current,
-            fillOpacity: 0.18,
+            fillOpacity: 0.35,
             strokeColor: drawColorRef.current,
             strokeWeight: 2,
             clickable: true,
@@ -1171,11 +1171,10 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
   }
 
   // ── auto-analyze when zone is drawn ──────────────────────────────────────
-  const isFirstDrawRef = useRef(true)
+  // Capture drawnCount at mount so we only react to NEW draws, not session-restored ones
+  const initialDrawCountRef = useRef(drawnCount)
   useEffect(() => {
-    if (drawnCount === 0) return
-    // skip the initial mount value (0→N on rehydration doesn't mean new draw)
-    if (isFirstDrawRef.current) { isFirstDrawRef.current = false; return }
+    if (drawnCount <= initialDrawCountRef.current) return
     void analyzeDrawnZone()
   }, [drawnCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1217,37 +1216,57 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
           ? `Footprint: ~${Math.round(mapArea.footprintMinSpanFt)} ft × ~${Math.round(mapArea.footprintMaxSpanFt)} ft`
           : ''
 
-      const prompt = `You are an expert Traffic Control Supervisor specializing in NJDOT (New Jersey DOT) standards and MUTCD Part 6. A contractor has drawn a work zone. Recommend the MINIMUM compliant equipment — avoid over-specifying.
+      const prompt = `You are a certified Traffic Control Supervisor (TCS) with deep expertise in NJDOT (New Jersey Department of Transportation) standards, the NJDOT Standard Details for Temporary Traffic Control (SDTTC), and MUTCD Part 6. You have extensive field experience in New Jersey and know exactly what is required vs. what is overkill.
 
-WORK ZONE:
+A contractor has drawn a work zone on their site map. Analyze it and provide the MINIMUM legally required and practically necessary equipment under NJDOT rules. Do not pad the list — every item must justify its inclusion with a specific NJDOT or MUTCD reference.
+
+KEY NJDOT RULES TO APPLY:
+- Channelizing device spacing: 35 mph and below = 20 ft in taper, 40 ft in tangent; 40-45 mph = 30 ft taper, 60 ft tangent; 50+ mph = 40 ft taper, 80 ft tangent (NJDOT SDTTC)
+- Advance warning sign spacing (Table 6C-1 MUTCD, enforced by NJDOT): <25 mph = 100 ft; 25-30 mph = 350 ft; 35 mph = 500 ft; 40-45 mph = 1000 ft; 50+ mph = 1500 ft
+- Taper length: L = WS (W=lane width in ft, S=speed in mph) for speeds ≥ 45 mph; L = WS²/60 for <45 mph
+- Arrow boards required when a lane is closed on roads ≥ 45 mph, or when directed by engineer
+- Portable message boards (PCMs) required for work on NJ expressways and freeways and for overnight closures on arterials ≥ 45 mph
+- Flaggers required when signal control is not in place and traffic must alternate; use Type III barricades at ends of one-lane alternating sections
+- NJDOT requires retroreflective vests (ANSI Class 2 min daytime, Class 3 night) for ALL workers
+- Sandbags: required to ballast signs and barricades on NJ roads (min 2 per sign stand, 4 per Type III barricade)
+- Drums preferred over cones on NJ state highways ≥ 50 mph
+
+WORK ZONE DATA:
 - Area: ${mapArea.areaLabel} (${Math.round(mapArea.areaFt2).toLocaleString()} sq ft)
 - Perimeter: ${mapArea.perimeterLabel}
 - ${speedNote}
 ${locationHint ? `- Location: ${locationHint}` : ''}
 ${footprintNote ? `- ${footprintNote}` : ''}
 
-CATALOG (use ONLY these product IDs):
+CATALOG (use ONLY these product IDs — do not invent IDs):
 ${catalogStr}
 
-Infer the scenario from zone size and shape (shoulder work, lane closure, intersection, etc). Apply NJDOT standards precisely — recommend only what is required or clearly warranted. Every item must earn its place.
+INSTRUCTIONS:
+1. Infer the scenario from zone dimensions (small zone ≈ utility/patch work; long narrow zone ≈ lane closure; wide zone ≈ intersection or ramp work)
+2. Calculate actual device counts using NJDOT spacing rules above based on zone perimeter and estimated taper length
+3. Select products from catalog that best match each required device type
+4. Mark items "required" if mandated by NJDOT/MUTCD, "recommended" if strongly advised, "optional" if situational
+5. Include rationale with specific rule citation (e.g. "MUTCD 6C-1, 35 mph spacing")
 
-Return VALID JSON ONLY (no markdown fences):
+Return VALID JSON ONLY — no markdown fences, no prose before or after:
 {
-  "scenarioType": "short label e.g. 'Shoulder closure on 35 mph road'",
-  "summary": "2-3 sentence analysis: zone type, key NJDOT requirements, traffic impact",
+  "scenarioType": "concise label e.g. 'Single-lane closure on 35 mph arterial'",
+  "summary": "3-4 sentences: scenario identification, key NJDOT requirements that apply, traffic impact, and any critical compliance notes",
   "items": [
     {
-      "productId": "exact id from catalog",
-      "productName": "exact name from catalog",
+      "productId": "exact id from catalog list above",
+      "productName": "exact name from catalog list above",
       "quantity": number,
-      "rationale": "why needed + MUTCD/NJDOT reference",
+      "rationale": "specific reason + NJDOT/MUTCD rule reference",
       "priority": "required|recommended|optional",
-      "dailyRate": number
+      "dailyRate": number (from catalog)
     }
   ],
-  "setupNotes": ["NJDOT-specific compliance note", "..."],
+  "setupNotes": [
+    "NJDOT-specific setup or compliance note (e.g. permit requirements, inspector notification, etc.)"
+  ],
   "estimatedDurationDays": number,
-  "disclaimer": "short disclaimer"
+  "disclaimer": "AI-generated planning estimate only. Verify against your approved TCP and NJDOT permit conditions."
 }`
 
       const res = await fetch('/api/chat', {
@@ -1358,12 +1377,43 @@ Return VALID JSON ONLY (no markdown fences):
     const polys: { lat: number; lng: number }[][] = []
     drawnOverlaysRef.current.forEach((o) => {
       try {
+        // Polygon (Zone tool)
         const poly = o as google.maps.Polygon
         if (typeof poly.getPath === 'function') {
           const path = poly.getPath().getArray().map((ll) => ({ lat: ll.lat(), lng: ll.lng() }))
-          if (path.length >= 3) polys.push(path)
+          if (path.length >= 3) { polys.push(path); return }
         }
-      } catch { /* not a polygon */ }
+        // Rectangle (Box tool)
+        const rect = o as google.maps.Rectangle
+        if (typeof rect.getBounds === 'function') {
+          const b = rect.getBounds()
+          if (b) {
+            const ne = b.getNorthEast(), sw = b.getSouthWest()
+            polys.push([
+              { lat: ne.lat(), lng: sw.lng() },
+              { lat: ne.lat(), lng: ne.lng() },
+              { lat: sw.lat(), lng: ne.lng() },
+              { lat: sw.lat(), lng: sw.lng() },
+            ])
+          }
+          return
+        }
+        // Circle — approximate as 16-point polygon
+        const circle = o as google.maps.Circle
+        if (typeof circle.getCenter === 'function' && typeof circle.getRadius === 'function') {
+          const center = circle.getCenter(), r = circle.getRadius()
+          if (center && r > 0) {
+            const pts = Array.from({ length: 16 }, (_, i) => {
+              const angle = (i * Math.PI * 2) / 16
+              return {
+                lat: center.lat() + (r * Math.cos(angle)) / 111320,
+                lng: center.lng() + (r * Math.sin(angle)) / (111320 * Math.cos((center.lat() * Math.PI) / 180)),
+              }
+            })
+            polys.push(pts)
+          }
+        }
+      } catch { /* unrecognized shape */ }
     })
     return polys
   }
