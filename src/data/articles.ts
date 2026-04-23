@@ -58,8 +58,10 @@ import { articleAutomatedFlaggerAssistanceDeviceAfadGuide } from './articles/aut
 import { articleBarricadeRentalNearMeGuide } from './articles/barricade-rental-near-me-guide'
 import { articlePortableTrafficControlDevicesGuide } from './articles/portable-traffic-control-devices-guide'
 import { articleTrafficControlEquipmentRental } from './articles/traffic-control-equipment-rental'
+import { articleTrafficControlDevicesGuide } from './articles/traffic-control-devices-guide'
 
 export const articles: Article[] = [
+  articleTrafficControlDevicesGuide,
   articleUniformTrafficControlDevicesMutcdGuide,
   articleArrowBoardRentalGuide,
   articleAutomatedFlaggerAssistanceDeviceAfadGuide,

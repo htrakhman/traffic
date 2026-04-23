@@ -55,6 +55,16 @@
       "targetVolume": 500,
       "wordCount": 1620,
       "notes": "Portable signals (ATSSA-certified), rumble strips, cones vs drums, NCHRP 350 / MASH crashworthiness, portable vs permanent decision framework."
+    },
+    {
+      "date": "2026-04-22",
+      "slug": "traffic-control-devices-guide",
+      "url": "/blog/traffic-control-devices-guide",
+      "primaryKeyword": "traffic control devices",
+      "targetVolume": 5000,
+      "wordCount": 1650,
+      "opportunityScore": 74,
+      "notes": "PILLAR ARTICLE. Solution-hub covering all 5 MUTCD device categories, sizing table by speed limit (MUTCD Tables 6C-1 and 6F-1), arrow board mandatory-use rules, MASH/NCHRP 350 crashworthiness, and OSHA 1926.200 compliance. No heroImage (no verified photography available)."
     }
   ]
 }

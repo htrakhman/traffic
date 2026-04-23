@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
 import { Download, MapPin, Search, Trash2, X, MousePointer2, Layers, Package, Pen, Square, Circle, Hexagon, ZoomIn, ZoomOut, GripVertical } from 'lucide-react'
-import type { Product } from '../types'
+import type { Product, AIRecommendation } from '../types'
 import { getProducts, getProductById, getFeaturedProducts } from '../data/products'
 import { useCatalogSync } from '../context/CatalogSyncContext'
 import { useCart } from '../context/CartContext'
@@ -1023,6 +1023,7 @@ export default function SiteMapPlanner() {
           cartLines={cartLines}
           locationHint={searchDraft}
           drawnOverlaysRef={drawnOverlaysRef}
+          drawnCount={drawnCount}
           addPlacements={(rows) => {
             setPlaced((prev) => [...prev, ...rows])
             setSelectedId(rows[0]?.id ?? null)
@@ -1071,18 +1072,64 @@ interface AIChatPanelProps {
   locationHint: string
   drawnOverlaysRef: MutableRefObject<Map<string, google.maps.MVCObject>>
   addPlacements: (rows: SiteMapPlacedRow[]) => void
+  drawnCount: number
+}
+
+type ChatMsg = { role: 'assistant' | 'user'; content: string; recommendation?: AIRecommendation }
+
+function ZoneRecommendationCard({ rec, onAddToCart }: { rec: AIRecommendation; onAddToCart: () => void }) {
+  const [added, setAdded] = useState(false)
+  const handleAdd = () => { onAddToCart(); setAdded(true) }
+  return (
+    <div className="mt-1.5 rounded-xl border border-brand-500/30 bg-slate-900/80 overflow-hidden text-[10px]">
+      <div className="divide-y divide-slate-800/60 max-h-44 overflow-y-auto">
+        {rec.items.map((item, i) => (
+          <div key={i} className="flex items-start gap-2 px-2.5 py-1.5">
+            <span className={`mt-0.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+              item.priority === 'required' ? 'bg-brand-400' :
+              item.priority === 'recommended' ? 'bg-amber-400' : 'bg-slate-500'
+            }`} />
+            <span className="flex-1 text-slate-200 leading-snug">{item.quantity}× {item.productName}</span>
+            <span className="text-slate-500 whitespace-nowrap">${(item.dailyRate * item.quantity).toFixed(0)}/day</span>
+          </div>
+        ))}
+      </div>
+      {rec.setupNotes.length > 0 && (
+        <div className="px-2.5 py-1.5 border-t border-slate-800/60 bg-slate-950/30">
+          {rec.setupNotes.slice(0, 2).map((n, i) => (
+            <p key={i} className="text-[9px] text-amber-300/70 leading-snug">{n}</p>
+          ))}
+        </div>
+      )}
+      <div className="flex items-center justify-between gap-2 px-2.5 py-2 bg-slate-800/60 border-t border-slate-700/60">
+        <div className="text-slate-300 font-semibold">
+          ${rec.totalDailyRate.toFixed(0)}<span className="text-slate-500 font-normal">/day</span>
+        </div>
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={added}
+          className="rounded-lg bg-brand-500 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-brand-600 disabled:opacity-60 transition-colors"
+        >
+          {added ? '✓ Added to cart' : 'Add all to cart'}
+        </button>
+      </div>
+    </div>
+  )
 }
 
 const WELCOME =
   "Hello! I'm your AI Traffic Control Advisor. Describe your work zone scenario — lane closure type, road speed, crew size — and I'll recommend a compliant MUTCD Part 6 layout. If you've drawn a zone on the map, I can also place your equipment directly."
 
-function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPlacements }: AIChatPanelProps) {
+function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPlacements, drawnCount }: AIChatPanelProps) {
+  const { addItem } = useCart()
   const [open, setOpen] = useState(true)
-  const [messages, setMessages] = useState<{ role: 'assistant' | 'user'; content: string }[]>([
+  const [messages, setMessages] = useState<ChatMsg[]>([
     { role: 'assistant', content: WELCOME },
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [analyzing, setAnalyzing] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [genError, setGenError] = useState<string | null>(null)
   // Drag state — offset from default anchored position
@@ -1121,6 +1168,189 @@ function AIChatPanel({ placed, cartLines, locationHint, drawnOverlaysRef, addPla
     }
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseup', onUp)
+  }
+
+  // ── auto-analyze when zone is drawn ──────────────────────────────────────
+  const isFirstDrawRef = useRef(true)
+  useEffect(() => {
+    if (drawnCount === 0) return
+    // skip the initial mount value (0→N on rehydration doesn't mean new draw)
+    if (isFirstDrawRef.current) { isFirstDrawRef.current = false; return }
+    void analyzeDrawnZone()
+  }, [drawnCount]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const analyzeDrawnZone = async () => {
+    const polygons = getDrawnPolygons()
+    if (polygons.length === 0) return
+    setOpen(true)
+    setAnalyzing(true)
+    const path = polygons[polygons.length - 1]!
+    const mapArea = buildMapAreaFromPath(path, { address: locationHint || undefined })
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'assistant' as const,
+        content: `I see you've drawn a work zone — ${mapArea.areaLabel}, ${mapArea.perimeterLabel} perimeter${locationHint ? ` near ${locationHint}` : ''}. Analyzing for NJDOT/MUTCD Part 6 compliance…`,
+      },
+    ])
+
+    try {
+      const catalog = getProducts()
+        .filter((p) =>
+          ['cone', 'drum', 'sign', 'barricade', 'arrow', 'message', 'board', 'flash', 'vest', 'sandbag'].some((kw) =>
+            p.name.toLowerCase().includes(kw) || p.categorySlug.includes(kw),
+          ),
+        )
+        .slice(0, 50)
+
+      const catalogStr = catalog
+        .map((p) => `  id:"${p.id}" name:"${p.name}" cat:"${p.categorySlug}" rate:$${p.dailyRate}/day`)
+        .join('\n')
+
+      const speedNote = mapArea.postedSpeedMph
+        ? `Posted speed: ${mapArea.postedSpeedMph} mph`
+        : 'Posted speed: unknown — assume 35 mph for spacing'
+
+      const footprintNote =
+        mapArea.footprintMinSpanFt && mapArea.footprintMaxSpanFt
+          ? `Footprint: ~${Math.round(mapArea.footprintMinSpanFt)} ft × ~${Math.round(mapArea.footprintMaxSpanFt)} ft`
+          : ''
+
+      const prompt = `You are an expert Traffic Control Supervisor specializing in NJDOT (New Jersey DOT) standards and MUTCD Part 6. A contractor has drawn a work zone. Recommend the MINIMUM compliant equipment — avoid over-specifying.
+
+WORK ZONE:
+- Area: ${mapArea.areaLabel} (${Math.round(mapArea.areaFt2).toLocaleString()} sq ft)
+- Perimeter: ${mapArea.perimeterLabel}
+- ${speedNote}
+${locationHint ? `- Location: ${locationHint}` : ''}
+${footprintNote ? `- ${footprintNote}` : ''}
+
+CATALOG (use ONLY these product IDs):
+${catalogStr}
+
+Infer the scenario from zone size and shape (shoulder work, lane closure, intersection, etc). Apply NJDOT standards precisely — recommend only what is required or clearly warranted. Every item must earn its place.
+
+Return VALID JSON ONLY (no markdown fences):
+{
+  "scenarioType": "short label e.g. 'Shoulder closure on 35 mph road'",
+  "summary": "2-3 sentence analysis: zone type, key NJDOT requirements, traffic impact",
+  "items": [
+    {
+      "productId": "exact id from catalog",
+      "productName": "exact name from catalog",
+      "quantity": number,
+      "rationale": "why needed + MUTCD/NJDOT reference",
+      "priority": "required|recommended|optional",
+      "dailyRate": number
+    }
+  ],
+  "setupNotes": ["NJDOT-specific compliance note", "..."],
+  "estimatedDurationDays": number,
+  "disclaimer": "short disclaimer"
+}`
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          system:
+            'You are an NJDOT/MUTCD Part 6 traffic control expert. Output ONLY valid JSON — no markdown, no prose, no code fences.',
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 2500,
+        }),
+      })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = (await res.json()) as { content?: { text: string }[] }
+      const raw = data.content?.[0]?.text ?? ''
+      const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/i, '').trim()
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
+      if (!jsonMatch) throw new Error('No JSON in response')
+
+      const parsed = JSON.parse(jsonMatch[0]) as {
+        scenarioType: string
+        summary: string
+        items: Array<{
+          productId: string
+          productName: string
+          quantity: number
+          rationale: string
+          priority: 'required' | 'recommended' | 'optional'
+          dailyRate: number
+        }>
+        setupNotes: string[]
+        estimatedDurationDays: number
+        disclaimer: string
+      }
+
+      const rec: AIRecommendation = {
+        summary: parsed.summary,
+        items: parsed.items.map((item) => ({
+          ...item,
+          category: getProductById(item.productId)?.categorySlug ?? 'equipment',
+        })),
+        totalDailyRate: parsed.items.reduce((s, i) => s + i.dailyRate * i.quantity, 0),
+        estimatedDurationDays: parsed.estimatedDurationDays,
+        setupNotes: parsed.setupNotes,
+        disclaimer: parsed.disclaimer,
+      }
+
+      // Auto-place on map
+      const cartItems = parsed.items.map((item) => {
+        const p = getProductById(item.productId)
+        return {
+          productId: item.productId,
+          productName: item.productName,
+          quantity: item.quantity,
+          category: p?.categorySlug ?? 'equipment',
+        }
+      })
+
+      let placedCount = 0
+      try {
+        let plan
+        try {
+          plan = await planWorkzoneLayout(mapArea, cartItems)
+        } catch {
+          plan = buildDemoPlan(mapArea, cartItems)
+        }
+        const newRows: SiteMapPlacedRow[] = plan.placements.map((pl) => ({
+          id: crypto.randomUUID(),
+          productId: pl.productId,
+          lat: pl.lat,
+          lng: pl.lng,
+        }))
+        addPlacements(newRows)
+        placedCount = newRows.length
+      } catch {
+        /* placement failed — still show recommendation */
+      }
+
+      const placedNote =
+        placedCount > 0
+          ? ` I've placed ${placedCount} items on your map — drag any pin to adjust.`
+          : ' Use the Generate Layout button to place these on the map.'
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant' as const,
+          content: `**${parsed.scenarioType}** — ${parsed.summary}${placedNote}`,
+          recommendation: rec,
+        },
+      ])
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant' as const,
+          content:
+            "I couldn't auto-analyze this zone. Describe your scenario below (lane closure type, posted speed, number of lanes) and I'll provide NJDOT recommendations.",
+        },
+      ])
+    } finally {
+      setAnalyzing(false)
+    }
   }
 
   // ── context helpers ───────────────────────────────────────────────────────
@@ -1318,24 +1548,36 @@ INSTRUCTIONS
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 max-h-64 min-h-[80px]">
+      <div className="flex-1 overflow-y-auto p-3 space-y-2.5 max-h-72 min-h-[80px]">
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className={`max-w-[90%] rounded-xl px-3 py-2 text-[11px] leading-relaxed ${
+              className={`max-w-[95%] rounded-xl px-3 py-2 text-[11px] leading-relaxed ${
                 m.role === 'user'
                   ? 'bg-brand-600/80 text-white rounded-br-sm'
                   : 'bg-slate-800 text-slate-200 rounded-bl-sm'
               }`}
             >
               {m.content}
+              {m.recommendation && (
+                <ZoneRecommendationCard
+                  rec={m.recommendation}
+                  onAddToCart={() => {
+                    const days = Math.max(1, Math.floor(m.recommendation!.estimatedDurationDays))
+                    for (const item of m.recommendation!.items) {
+                      const p = getProductById(item.productId)
+                      if (p) addItem(p, item.quantity, days)
+                    }
+                  }}
+                />
+              )}
             </div>
           </div>
         ))}
-        {loading && (
+        {(loading || analyzing) && (
           <div className="flex justify-start">
             <div className="bg-slate-800 rounded-xl rounded-bl-sm px-3 py-2 text-[11px] text-slate-400 italic">
-              Thinking…
+              {analyzing ? 'Analyzing zone & preparing NJDOT recommendation…' : 'Thinking…'}
             </div>
           </div>
         )}
