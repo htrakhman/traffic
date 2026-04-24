@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { useCatalogSync } from '../context/CatalogSyncContext'
@@ -14,6 +14,10 @@ export default function Category() {
     () => (slug ? getProductsByCategory(slug) : []),
     [slug, tick],
   )
+  const PAGE_SIZE = 48
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  useEffect(() => { setVisibleCount(PAGE_SIZE) }, [slug])
+  const visibleProducts = useMemo(() => products.slice(0, visibleCount), [products, visibleCount])
 
   if (!category) {
     return (
@@ -60,10 +64,26 @@ export default function Category() {
               <span className="text-white font-semibold">{products.length}</span> items available
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {products.map((product, i) => (
-                <ProductCard key={product.id} product={product} index={i} />
+              {visibleProducts.map((product, i) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  index={i}
+                  suppressEntryAnimation={i >= 12}
+                />
               ))}
             </div>
+            {visibleCount < products.length && (
+              <div className="flex justify-center mt-8">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
+                  className="btn-secondary"
+                >
+                  Load more ({products.length - visibleCount} remaining)
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

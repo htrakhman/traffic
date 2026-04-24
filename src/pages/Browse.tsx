@@ -58,6 +58,11 @@ export default function Browse() {
     return list
   }, [query, filters, tick])
 
+  const PAGE_SIZE = 48
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  useEffect(() => { setVisibleCount(PAGE_SIZE) }, [query, filters])
+  const visibleProducts = useMemo(() => filteredProducts.slice(0, visibleCount), [filteredProducts, visibleCount])
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     setSearchParams((prev) => {
@@ -152,11 +157,29 @@ export default function Browse() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredProducts.map((product, i) => (
-                  <ProductCard key={product.id} product={product} index={i} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {visibleProducts.map((product, i) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      index={i}
+                      suppressEntryAnimation={i >= 12}
+                    />
+                  ))}
+                </div>
+                {visibleCount < filteredProducts.length && (
+                  <div className="flex justify-center mt-8">
+                    <button
+                      type="button"
+                      onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
+                      className="btn-secondary"
+                    >
+                      Load more ({filteredProducts.length - visibleCount} remaining)
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

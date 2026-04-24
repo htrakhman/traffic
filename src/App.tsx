@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { usePostHog } from '@posthog/react'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
@@ -9,17 +9,18 @@ import { registerExtendedCatalog } from './data/products'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import Home from './pages/Home'
-import Browse from './pages/Browse'
-import Category from './pages/Category'
-import ProductPage from './pages/Product'
-import Assistant from './pages/Assistant'
-import Quote from './pages/Quote'
-import Cart from './pages/Cart'
-import Checkout from './pages/Checkout'
-import SiteMapPlanner from './pages/SiteMapPlanner'
-import Blog from './pages/Blog'
-import Article from './pages/Article'
-import Account from './pages/Account'
+
+const Browse = lazy(() => import('./pages/Browse'))
+const Category = lazy(() => import('./pages/Category'))
+const ProductPage = lazy(() => import('./pages/Product'))
+const Assistant = lazy(() => import('./pages/Assistant'))
+const Quote = lazy(() => import('./pages/Quote'))
+const Cart = lazy(() => import('./pages/Cart'))
+const Checkout = lazy(() => import('./pages/Checkout'))
+const SiteMapPlanner = lazy(() => import('./pages/SiteMapPlanner'))
+const Blog = lazy(() => import('./pages/Blog'))
+const Article = lazy(() => import('./pages/Article'))
+const Account = lazy(() => import('./pages/Account'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -49,7 +50,7 @@ function PostHogPageview() {
 function CatalogLoader() {
   const { bump } = useCatalogSync()
   useEffect(() => {
-    fetch('/tss-catalog.json')
+    const run = () => fetch('/tss-catalog.json')
       .then((r) => {
         if (!r.ok) {
           console.warn('[CatalogLoader] /tss-catalog.json HTTP', r.status)
@@ -66,6 +67,9 @@ function CatalogLoader() {
       .catch((err) => {
         console.warn('[CatalogLoader] Failed to load or parse /tss-catalog.json:', err)
       })
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
+    if (typeof ric === 'function') ric(run, { timeout: 2000 })
+    else setTimeout(run, 200)
   }, [bump])
   return null
 }
@@ -75,6 +79,7 @@ function AppLayout() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <div className="flex-1">
+        <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
@@ -93,6 +98,7 @@ function AppLayout() {
           {/* Fallback */}
           <Route path="*" element={<Home />} />
         </Routes>
+        </Suspense>
       </div>
       <Footer />
     </div>
