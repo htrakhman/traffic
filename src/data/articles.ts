@@ -60,8 +60,10 @@ import { articlePortableTrafficControlDevicesGuide } from './articles/portable-t
 import { articleTrafficControlEquipmentRental } from './articles/traffic-control-equipment-rental'
 import { articleTrafficControlDevicesGuide } from './articles/traffic-control-devices-guide'
 import { articleTrafficConeRentalGuide } from './articles/traffic-cone-rental-guide'
+import { articleHowManyConesForLaneClosure } from './articles/how-many-cones-for-lane-closure-nj'
 
 export const articles: Article[] = [
+  articleHowManyConesForLaneClosure,
   articleTrafficConeRentalGuide,
   articleTrafficControlDevicesGuide,
   articleUniformTrafficControlDevicesMutcdGuide,
