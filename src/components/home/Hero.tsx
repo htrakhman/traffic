@@ -7,12 +7,14 @@ import { getBrowseQuickChips } from '../../utils/browseQuickChips'
 
 type HeroProps = {
   browseSearchQuery: string
+  browseSearchQueryDebounced: string
   onBrowseSearchQueryChange: (q: string) => void
   onBrowseSearchClear: () => void
 }
 
 export default function Hero({
   browseSearchQuery,
+  browseSearchQueryDebounced,
   onBrowseSearchQueryChange,
   onBrowseSearchClear,
 }: HeroProps) {
@@ -21,8 +23,8 @@ export default function Hero({
   const navigate = useNavigate()
 
   const browseChips = useMemo(
-    () => getBrowseQuickChips(browseSearchQuery),
-    [browseSearchQuery, tick],
+    () => getBrowseQuickChips(browseSearchQueryDebounced),
+    [browseSearchQueryDebounced, tick],
   )
   const browseQ = browseSearchQuery.trim()
 

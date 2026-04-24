@@ -23,6 +23,7 @@ export default function Home() {
       />
       <Hero
         browseSearchQuery={browseSearchQuery}
+        browseSearchQueryDebounced={debouncedBrowseSearch}
         onBrowseSearchQueryChange={setBrowseSearchQuery}
         onBrowseSearchClear={onBrowseSearchClear}
       />
