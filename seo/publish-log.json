@@ -65,6 +65,16 @@
       "wordCount": 1650,
       "opportunityScore": 74,
       "notes": "PILLAR ARTICLE. Solution-hub covering all 5 MUTCD device categories, sizing table by speed limit (MUTCD Tables 6C-1 and 6F-1), arrow board mandatory-use rules, MASH/NCHRP 350 crashworthiness, and OSHA 1926.200 compliance. No heroImage (no verified photography available)."
+    },
+    {
+      "date": "2026-04-24",
+      "slug": "traffic-cone-rental-guide",
+      "url": "/blog/traffic-cone-rental-guide",
+      "primaryKeyword": "portable traffic cones",
+      "targetVolume": 500,
+      "opportunityScore": 27.8,
+      "wordCount": 950,
+      "notes": "TACTICAL ARTICLE. 28\" vs. 36\" MUTCD Section 6F.64 height requirements, taper and tangent spacing table (MUTCD Table 6C-2), retroreflectivity rules, rental rates, cones vs. drums decision guide. Internal links to 28-inch-traffic-cone, 36-inch-traffic-cone, channelizing-drum products and cones-drums category."
     }
   ]
 }
