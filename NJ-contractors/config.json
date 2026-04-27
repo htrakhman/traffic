@@ -1,0 +1,35 @@
+{
+  "match_threshold": 80,
+  "partial_match_threshold": 90,
+  "baseline_lookback_days": 30,
+  "daily_lookback_days": 3,
+  "max_concurrent_scrapers": 12,
+  "request_timeout_seconds": 45,
+  "retry_attempts": 3,
+  "retry_backoff_base_seconds": 2,
+  "user_agent": "PermitMonitor/1.0 (+contact via your-email@example.com)",
+  "trade_keywords": [
+    "highway", "paving", "asphalt", "overlay", "resurfacing",
+    "lane closure", "traffic control", "excavation", "grading",
+    "utility", "drainage", "concrete", "curb", "road", "row",
+    "right of way", "right-of-way", "site work", "underground",
+    "water main", "sewer", "trenching", "boring", "encroachment",
+    "milling", "striping", "guardrail", "culvert", "bridge",
+    "sidewalk", "pavement", "subgrade"
+  ],
+  "permit_type_keywords": [
+    "row", "right of way", "right-of-way", "encroachment",
+    "street use", "road work", "highway work", "excavation",
+    "utility", "street opening", "street cut", "construction",
+    "site development", "land use"
+  ],
+  "files": {
+    "contractors": "contractors.csv",
+    "matches": "matches.csv",
+    "prospects": "prospects.csv",
+    "seen_permits": "seen_permits.json",
+    "source_status": "source_status.json",
+    "error_log": "error_log.txt",
+    "digests_dir": "digests"
+  }
+}

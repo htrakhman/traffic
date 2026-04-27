@@ -1,0 +1,554 @@
+{
+  "AK_Anchorage": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Anchorage Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.muni.org/Departments/OCPD/permits"
+  },
+  "AL_Birmingham": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Birmingham Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.birminghamal.gov/permits"
+  },
+  "AR_LittleRock": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Little Rock Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.littlerock.gov/"
+  },
+  "AZ_ADOT_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "ADOT Encroachment Permits",
+    "permits_found_lifetime": 0,
+    "reason": "ADOT permits via Permitting Portal \u2014 auth required",
+    "status": "not_implemented",
+    "url": "https://azdot.gov/business/engineering-and-construction/permits"
+  },
+  "AZ_Phoenix_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Phoenix PDD Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Phoenix PlanIt portal \u2014 JS-rendered",
+    "status": "not_implemented",
+    "url": "https://www.phoenix.gov/pdd/permits"
+  },
+  "CA_Caltrans_Encroachment": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "Caltrans Encroachment Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Caltrans EPMS portal \u2014 JS-rendered + captcha; needs Playwright + likely auth",
+    "status": "not_implemented",
+    "url": "https://encroachmentpermits.dot.ca.gov/"
+  },
+  "CA_LA_Building": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "Los Angeles Building & Safety Permits",
+    "permits_found_lifetime": 0,
+    "reason": "socrata returned 403",
+    "status": "auth_required",
+    "url": "https://data.lacity.org/A-Prosperous-City/Building-and-Safety-Permit-Information/nbyu-2ha9"
+  },
+  "CA_SF_Building": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "San Francisco Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Dataset i98e-djp9 has no contractor/applicant name fields. Use the SF DataSF Permits Application dataset (look for applicant_name) \u2014 search portal for current dataset id.",
+    "status": "not_implemented",
+    "url": "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"
+  },
+  "CA_SF_StreetUse": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "San Francisco Street-Use Permits",
+    "permits_found_lifetime": 0,
+    "reason": "DPW street-use permits aren't on a Socrata dataset",
+    "status": "not_implemented",
+    "url": "https://sfdpw.org/permits"
+  },
+  "CO_CDOT": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "CDOT Access & Utility Permits",
+    "permits_found_lifetime": 0,
+    "reason": "CDOT permits via OnBase portal \u2014 auth required",
+    "status": "not_implemented",
+    "url": "https://www.codot.gov/business/permits"
+  },
+  "CO_Denver_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Denver Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Denver publishes through ArcGIS Hub \u2014 needs FeatureServer URL",
+    "status": "not_implemented",
+    "url": "https://opendata-geospatialdenver.hub.arcgis.com/"
+  },
+  "CT_Hartford": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Hartford Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.hartford.gov/government/departments/development-services"
+  },
+  "DE_Wilmington": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Wilmington Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.wilmingtonde.gov/"
+  },
+  "FL_FDOT_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "FDOT Permits",
+    "permits_found_lifetime": 0,
+    "reason": "FDOT One-Stop Permitting \u2014 auth required",
+    "status": "not_implemented",
+    "url": "https://www.fdot.gov/permits/default.shtm"
+  },
+  "FL_Miami_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Miami-Dade Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Miami-Dade ArcGIS Hub \u2014 FeatureServer URL needs sniffing",
+    "status": "not_implemented",
+    "url": "https://gis-mdc.opendata.arcgis.com/"
+  },
+  "GA_Atlanta_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Atlanta Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Aurora portal \u2014 JS-rendered, needs Playwright",
+    "status": "not_implemented",
+    "url": "https://aurora.atlantaga.gov/"
+  },
+  "GA_GDOT_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "GDOT Permits",
+    "permits_found_lifetime": 0,
+    "reason": "GDOT permits via GUPS \u2014 auth required",
+    "status": "not_implemented",
+    "url": "https://www.dot.ga.gov/PartnerSmart/Business/Pages/Permits.aspx"
+  },
+  "HI_Honolulu": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Honolulu Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.honolulu.gov/dpp"
+  },
+  "IA_DesMoines": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Des Moines Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.dsm.city/"
+  },
+  "ID_Boise": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Boise Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.cityofboise.org/departments/planning-and-development-services/"
+  },
+  "IL_Chicago_Building": {
+    "last_checked": "2026-04-27T19:29:15+00:00",
+    "name": "Chicago Building Permits",
+    "permits_found_lifetime": 841,
+    "permits_found_this_run": 32,
+    "status": "live",
+    "url": "https://data.cityofchicago.org/Buildings/Building-Permits/ydr8-5enu"
+  },
+  "IL_IDOT": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "IDOT Highway Permits",
+    "permits_found_lifetime": 0,
+    "reason": "IDOT permits filed via local district offices; no public listing",
+    "status": "not_implemented",
+    "url": "https://idot.illinois.gov/transportation-system/local-transportation-partners/county-engineers-and-local-public-agencies/permits"
+  },
+  "IN_Indianapolis": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Indianapolis Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.indy.gov/agency/department-of-business-and-neighborhood-services"
+  },
+  "KS_Wichita": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Wichita Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.wichita.gov/"
+  },
+  "KY_Louisville": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Louisville Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://louisvilleky.gov/government/develop-louisville/permits-licensing"
+  },
+  "LA_NewOrleans": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "New Orleans Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.nola.gov/safety-and-permits/"
+  },
+  "MA_Boston_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Boston ISD Approved Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Boston runs CKAN (not Socrata). Use api/3/action/datastore_search after looking up the current resource_id via https://data.boston.gov/api/3/action/package_show?id=approved-building-permits",
+    "status": "not_implemented",
+    "url": "https://data.boston.gov/dataset/approved-building-permits"
+  },
+  "MD_Baltimore": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Baltimore Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.baltimorecity.gov/"
+  },
+  "ME_Portland": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Portland Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.portlandmaine.gov/"
+  },
+  "MI_Detroit": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Detroit Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://detroitmi.gov/departments/buildings-safety-engineering-and-environmental-department"
+  },
+  "MN_Minneapolis": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Minneapolis Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www2.minneapolismn.gov/business/cspws/"
+  },
+  "MO_KansasCity": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Kansas City Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.kcmo.gov/city-hall/departments/city-planning-development"
+  },
+  "MS_Jackson": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Jackson Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.jacksonms.gov/"
+  },
+  "MT_Billings": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Billings Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.billingsmt.gov/"
+  },
+  "NC_Charlotte_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Charlotte Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Charlotte ArcGIS Hub \u2014 FeatureServer URL needs sniffing",
+    "status": "not_implemented",
+    "url": "https://data.charlottenc.gov/"
+  },
+  "NC_NCDOT_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "NCDOT Encroachment Permits",
+    "permits_found_lifetime": 0,
+    "reason": "NCDOT encroachment permits filed via PEPS \u2014 auth required",
+    "status": "not_implemented",
+    "url": "https://connect.ncdot.gov/business/Pages/Permits.aspx"
+  },
+  "NC_Raleigh_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Raleigh Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Raleigh ArcGIS Hub \u2014 FeatureServer URL needs sniffing",
+    "status": "not_implemented",
+    "url": "https://data.raleighnc.gov/"
+  },
+  "ND_Fargo": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Fargo Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.fargond.gov/city-government/departments/inspections"
+  },
+  "NE_Omaha": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Omaha Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://permitsandinspections.cityofomaha.org/"
+  },
+  "NH_Manchester": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Manchester Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.manchesternh.gov/"
+  },
+  "NJ_Newark": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Newark Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.newarknj.gov/"
+  },
+  "NM_Albuquerque": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Albuquerque Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.cabq.gov/planning"
+  },
+  "NV_LasVegas": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Las Vegas Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.lasvegasnevada.gov/Business/Permits-Licenses"
+  },
+  "NY_NYC_DOB": {
+    "last_checked": "2026-04-27T19:29:15+00:00",
+    "name": "NYC DOB Permit Issuance",
+    "permits_found_lifetime": 0,
+    "permits_found_this_run": 0,
+    "status": "live",
+    "url": "https://data.cityofnewyork.us/Housing-Development/DOB-Permit-Issuance/ipu4-2q9a"
+  },
+  "NY_NYC_DOT_StreetWork": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "NYC DOT Street Construction Permits",
+    "permits_found_lifetime": 0,
+    "reason": "DOT Permit Search requires session token / form POST",
+    "status": "not_implemented",
+    "url": "https://www1.nyc.gov/html/dot/html/infrastructure/streetwork-permits.shtml"
+  },
+  "NY_State_DOT": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "NYSDOT Highway Work Permits",
+    "permits_found_lifetime": 0,
+    "reason": "NYSDOT permits aren't published as a public dataset",
+    "status": "not_implemented",
+    "url": "https://www.dot.ny.gov/main/business-center/engineering/specifications-engineering/work-permits"
+  },
+  "OH_Columbus": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Columbus Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.columbus.gov/bzs/"
+  },
+  "OK_OklahomaCity": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Oklahoma City Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.okc.gov/departments/development-services"
+  },
+  "OR_ODOT_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "ODOT Permits",
+    "permits_found_lifetime": 0,
+    "reason": "ODOT ROW permits aren't published as a public dataset",
+    "status": "not_implemented",
+    "url": "https://www.oregon.gov/odot/Permits/"
+  },
+  "OR_Portland_ROW": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Portland ROW Permits",
+    "permits_found_lifetime": 0,
+    "reason": "PBOT permits via Cityworks portal \u2014 auth required for full data",
+    "status": "not_implemented",
+    "url": "https://www.portland.gov/transportation/permitting"
+  },
+  "PA_PennDOT": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "PennDOT Highway Occupancy Permits",
+    "permits_found_lifetime": 0,
+    "reason": "PennDOT HOPs filed via ePermitting \u2014 auth required",
+    "status": "not_implemented",
+    "url": "https://www.dot.state.pa.us/Public/PdfForms/Forms/M-945A.pdf"
+  },
+  "PA_Philly_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Philadelphia L&I Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Philadelphia L&I uses Carto, not Socrata \u2014 needs separate fetch impl",
+    "status": "not_implemented",
+    "url": "https://www.opendataphilly.org/dataset/licenses-and-inspections-building-permits"
+  },
+  "PA_Pittsburgh_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Pittsburgh PLI Permits",
+    "permits_found_lifetime": 0,
+    "reason": "WPRDC CKAN \u2014 needs separate fetch impl",
+    "status": "not_implemented",
+    "url": "https://data.wprdc.org/dataset/pittsburgh-pli-permits-issued"
+  },
+  "RI_Providence": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Providence Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.providenceri.gov/"
+  },
+  "SC_Columbia": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Columbia Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.columbiasc.gov/"
+  },
+  "SD_SiouxFalls": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Sioux Falls Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.siouxfalls.org/"
+  },
+  "TN_Nashville": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Nashville Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.nashville.gov/departments/codes"
+  },
+  "TX_Austin_Construction": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Austin Issued Construction Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Dataset 3syk-w9eu omits contractor name. Use the contractor-trades dataset (e.g. uri7-hbbe Construction Permit \u2013 Contractor Trades) and join on permit_number, OR use TDLR's contractor license API.",
+    "status": "not_implemented",
+    "url": "https://data.austintexas.gov/Building-and-Development/Issued-Construction-Permits/3syk-w9eu"
+  },
+  "TX_Dallas_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Dallas Building Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Dataset ID needs verification \u2014 see DallasOpenData portal",
+    "status": "not_implemented",
+    "url": "https://www.dallasopendata.com/"
+  },
+  "TX_Houston_Permits": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Houston Public Works Permits",
+    "permits_found_lifetime": 0,
+    "reason": "Houston permits live behind ILMS \u2014 no public dataset",
+    "status": "not_implemented",
+    "url": "https://www.houstonpermittingcenter.org/"
+  },
+  "TX_TxDOT_ROW": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "TxDOT Right-of-Way Permits",
+    "permits_found_lifetime": 0,
+    "reason": "TxDOT ROW permits aren't published as a queryable dataset",
+    "status": "not_implemented",
+    "url": "https://www.txdot.gov/business/resources/right-of-way.html"
+  },
+  "UT_SaltLakeCity": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Salt Lake City Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.slc.gov/buildingservices/"
+  },
+  "VA_VirginiaBeach": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Virginia Beach Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.vbgov.com/"
+  },
+  "VT_Burlington": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Burlington Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.burlingtonvt.gov/"
+  },
+  "WA_Seattle_Building": {
+    "last_checked": "2026-04-27T19:29:15+00:00",
+    "name": "Seattle SDCI Built-Environment Permits",
+    "permits_found_lifetime": 653,
+    "permits_found_this_run": 20,
+    "status": "live",
+    "url": "https://data.seattle.gov/Permitting/Built-Environment-Permits/76t5-zqzr"
+  },
+  "WA_WSDOT_Permits": {
+    "last_attempted": "2026-04-27T19:29:15+00:00",
+    "name": "WSDOT Access & Utility Permits",
+    "permits_found_lifetime": 0,
+    "reason": "WSDOT permits aren't published as a single public dataset",
+    "status": "not_implemented",
+    "url": "https://wsdot.wa.gov/business-wsdot/permits-applications"
+  },
+  "WI_Milwaukee": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Milwaukee Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://city.milwaukee.gov/permits"
+  },
+  "WV_Charleston": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Charleston Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.charlestonwv.gov/"
+  },
+  "WY_Cheyenne": {
+    "last_attempted": "2026-04-27T19:29:14+00:00",
+    "name": "Cheyenne Permits",
+    "permits_found_lifetime": 0,
+    "reason": "needs scraper implementation \u2014 start by inspecting the linked portal",
+    "status": "not_implemented",
+    "url": "https://www.cheyennecity.org/"
+  }
+}

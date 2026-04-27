@@ -4,11 +4,6 @@ import { RETAIL_REFERENCE_DIVISOR, roundMoney } from '../utils/pricingConstants'
 
 const titleBrand = (line: string) => `${line} | ${SITE_NAME}`
 
-/** One open-ended band from supplier-reference unit economics (same numeric input as legacy `retailRates`). */
-function singleTierFromRefDaily(refDaily: number): VolumePriceTier[] {
-  return [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: roundMoney(refDaily) }]
-}
-
 /** One open-ended band from an already-retail shelf unit price (undoes ×1.5 to store reference). */
 function singleTierFromRetailUnit(retailUnit: number): VolumePriceTier[] {
   const ref = roundMoney(retailUnit / RETAIL_REFERENCE_DIVISOR)
@@ -17,9 +12,9 @@ function singleTierFromRetailUnit(retailUnit: number): VolumePriceTier[] {
 
 /** TSS-style volume bands (shelf prices $24.85 / $23.25 / $21.85 on comparable 28" cone listing). */
 const cone28TssVolumeTiers: VolumePriceTier[] = [
-  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(24.85 / RETAIL_REFERENCE_DIVISOR) },
-  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(23.25 / RETAIL_REFERENCE_DIVISOR) },
-  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(21.85 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(20.9 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(19.55 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(18.4 / RETAIL_REFERENCE_DIVISOR) },
 ]
 
 /**
@@ -155,7 +150,7 @@ const rawCuratedProducts: Product[] = [
     description: 'JBC 36" 10 lb orange injection-molded cone with 6" & 4" high-intensity reflective collars',
     longDescription:
       'Exact product: JBC CR36SRC64, 36" 10 lb orange traffic cone with black recycled rubber base and two molded-in high-intensity reflective collars (6" + 4"). Injection-molded for durability. Over 50% post-consumer recycled materials. Meets MUTCD, FDOT, FHWA, NFPA, and NCHRP-350 crash test standards. Required by many state DOTs for 55+ mph work zones.',
-    volumePriceTiers: singleTierFromRetailUnit(3.38),
+    volumePriceTiers: singleTierFromRetailUnit(39.45),
     unit: 'each',
     imageUrl: cone36img,
     images: [cone36img, cone28img, drumImg],
@@ -225,7 +220,7 @@ const rawCuratedProducts: Product[] = [
     description: 'MUTCD / NCHRP-350 channelizing drum with 6" high-intensity reflective sheeting and recycled tire ring base',
     longDescription:
       'Exact product: DRUM6HITIRE-class channelizing drum. 37" tall polyethylene channelizing drum with 6" high-intensity orange and white reflective stripes. 23" diameter recycled tire ring base prevents rolling into traffic. ~10 lb drum body + ~22 lb tire base. Exceeds MUTCD standards and meets NCHRP-350 crash test rating. High visibility day and night.',
-    volumePriceTiers: singleTierFromRetailUnit(6.75),
+    volumePriceTiers: singleTierFromRetailUnit(67.95),
     unit: 'each',
     imageUrl: drumImg,
     images: [drumImg, cone28img, cone36img],
@@ -298,7 +293,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Heavy-duty 36"×36" reflective vinyl roll-up sign, MUTCD W20-1, fiberglass ribs',
     longDescription:
       'Exact product: RU-36-REF-RWAHD — 36"×36" heavy-duty high-visibility reflective vinyl roll-up sign with fiberglass cross-ribs and plastic corner pockets. MUTCD code W20-1. Compatible with all standard roll-up sign stands. Made in USA. Ships same day.',
-    volumePriceTiers: singleTierFromRetailUnit(7.5),
+    volumePriceTiers: singleTierFromRetailUnit(84.25),
     unit: 'each',
     imageUrl: signRWAimg,
     images: [signRWAimg, signFLGimg, signOLRimg],
@@ -373,7 +368,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Heavy-duty 36"×36" reflective vinyl roll-up sign, MUTCD W20-7a, fiberglass ribs',
     longDescription:
       'Exact product: RU-36-REF-FLGAHD — 36"×36" heavy-duty high-visibility reflective vinyl "Flagger Ahead" roll-up sign. MUTCD code W20-7a. Required whenever a flagger is controlling traffic in a work zone. Fiberglass cross-ribs, plastic corner pockets. Made in USA.',
-    volumePriceTiers: singleTierFromRetailUnit(7.5),
+    volumePriceTiers: singleTierFromRetailUnit(84.25),
     unit: 'each',
     imageUrl: signFLGimg,
     images: [signFLGimg, signRWAimg, signOLRimg],
@@ -447,7 +442,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Cortina tri-pod steel sign stand, MPN 07-822, for 36" or 48" roll-up or rigid signs',
     longDescription:
       'Exact product: Cortina TRI-POD-STD (MPN 07-822). Economical, versatile powder-coated steel tripod stand designed for 36" or 48" rigid or roll-up traffic signs. Compact, lightweight, and folds flat for storage. Three-leg configuration for stable deployment on varied terrain.',
-    volumePriceTiers: singleTierFromRetailUnit(6),
+    volumePriceTiers: singleTierFromRetailUnit(66.9),
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, signRWAimg, signFLGimg],
@@ -521,7 +516,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Heavy-duty 36"×36" non-reflective orange vinyl roll-up sign, MUTCD W20-4',
     longDescription:
       'Exact product: RU-36-NON-OLRA — 36"×36" heavy-duty non-reflective bright orange vinyl "One Lane Road Ahead" roll-up sign. MUTCD code W20-4. Fiberglass cross-ribs and plastic corner pockets. Compatible with all standard roll-up sign stands.',
-    volumePriceTiers: singleTierFromRetailUnit(7.5),
+    volumePriceTiers: singleTierFromRetailUnit(42.25),
     unit: 'each',
     imageUrl: signOLRimg,
     images: [signOLRimg, signRWAimg, signFLGimg],
@@ -592,7 +587,7 @@ const rawCuratedProducts: Product[] = [
     description: '60" tall MUTCD Type III break-away barricade with three 8 ft EG reflective plastic rails',
     longDescription:
       'Exact product: T3-BA-EG-8 (MPN 313-ASBL). 60" tall MUTCD Type III barricade with break-away fold-flat design. Three 8-foot plastic rails with engineer grade (EG) orange and white reflective sheeting. NCHRP-350 accepted. Accommodates two barricade flashers. Complete assembly with plastic uprights, feet, and hardware.',
-    volumePriceTiers: singleTierFromRetailUnit(12),
+    volumePriceTiers: singleTierFromRetailUnit(375),
     unit: 'each',
     imageUrl: barT3img,
     images: [barT3img, barT2img, barWFimg],
@@ -667,7 +662,7 @@ const rawCuratedProducts: Product[] = [
     description: '45"×24" folding plastic MUTCD Type II barricade with high-intensity reflective sheeting',
     longDescription:
       'Exact product: TYPE 2HI (MPN 37408-FHIP). 45" tall × 24" wide folding plastic Type II barricade with high-intensity (HI) reflective sheeting. Impact-resistant polyethylene, stackable with molded lugs. ~12 lbs. Commonly used for lane closures, channelization, and temporary closures where traffic may still pass.',
-    volumePriceTiers: singleTierFromRetailUnit(8.25),
+    volumePriceTiers: singleTierFromRetailUnit(90.6),
     unit: 'each',
     imageUrl: barT2img,
     images: [barT2img, barT3img, barWFimg],
@@ -738,7 +733,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Yodock 2001MB HDPE water-filled construction barrier, 72"L × 32"H × 18"W, NCHRP-350',
     longDescription:
       'Exact product: Yodock 2001MBORG (MPN 148002B). Orange HDPE water-filled construction barrier. 72"L × 32"H × 18"W. Ships at 85 lbs empty; weighs ~900 lbs when filled with water. Links together for any run length. Meets NCHRP Report 350 standards. Compatible with optional fence panel toppers.',
-    volumePriceTiers: singleTierFromRetailUnit(27),
+    volumePriceTiers: singleTierFromRetailUnit(509.3),
     unit: 'each',
     imageUrl: barWFimg,
     images: [barWFimg, barT3img, barT2img],
@@ -1039,7 +1034,7 @@ const rawCuratedProducts: Product[] = [
     description: '3-volt D-cell LED amber barricade flasher, photo-cell controlled, MUTCD Type B',
     longDescription:
       'Exact product: OEM 3VOLT LED (MPN 99-02006). Amber 3-volt D-cell LED barricade flasher. Photo-cell activated — automatically turns off during daylight to conserve battery. Two modes: Steady-On or Flash. Mounts to barricades, drums, cones, and sign stands. Made in USA. Ships same day.',
-    volumePriceTiers: singleTierFromRetailUnit(2.25),
+    volumePriceTiers: singleTierFromRetailUnit(39.2),
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, flareImg],
@@ -1114,7 +1109,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Six Orion 30-minute waxed road flares in nylon carrying case with orange safety vest',
     longDescription:
       'Exact product: Orion ORION6030 (MPN 6030). Six-pack of Orion 30-minute waxed road flares. Includes high-visibility red nylon carrying case and orange safety vest. Waxed construction is weather-resistant — works in fog, rain, and snow. DOT approved. Visible day or night. Standard for work zone and emergency delineation where open-flame flares are permitted.',
-    volumePriceTiers: singleTierFromRetailUnit(18),
+    volumePriceTiers: singleTierFromRetailUnit(24.5),
     unit: 'set',
     imageUrl: flareImg,
     images: [flareImg, flasherImg],
@@ -1183,7 +1178,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Solar-charged amber LED barricade light with dusk-to-dawn operation for drums, barricades, and sign stands',
     longDescription:
       'Exact product line: solar-assist LED barricade warning light (amber lens). High-output LEDs for MUTCD nighttime conspicuity on channelizing devices. Integrated photocell, sealed housing, and rechargeable battery pack reduce D-cell swaps vs. traditional flashers. Mounts to Type I–III barricades, drums, and compatible sign hardware.',
-    volumePriceTiers: singleTierFromRefDaily(3),
+    volumePriceTiers: singleTierFromRetailUnit(148),
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, drumImg, barT2img],
@@ -1254,7 +1249,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Low-profile water-filled pedestrian barricade for crowd lines, festivals, and sidewalk closures',
     longDescription:
       'Exact product family: Urbanite-style water-filled pedestrian barricade (white shell, interlocking feet). Ballast with water on site for stability without heavy steel barriers. Common for sidewalk detours, outdoor retail queues, stadium ingress, and short-term pedestrian channelization adjacent to low-speed traffic.',
-    volumePriceTiers: singleTierFromRefDaily(5),
+    volumePriceTiers: singleTierFromRetailUnit(160),
     unit: 'each',
     imageUrl: urbanitePedImg,
     images: [urbanitePedImg, barWFimg, barT2img],
@@ -1323,7 +1318,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Folding-style economy pedestrian barricade with engineer-grade reflective sheeting',
     longDescription:
       'Exact product line: economy pedestrian barricade (orange frame) with red/white engineer-grade reflective panels. Lightweight A-frame style for quick setup at sidewalk closures, parking garage entrances, and short-term ped routes. Pairs with ballast or sandbags in wind-exposed locations.',
-    volumePriceTiers: singleTierFromRefDaily(2.5),
+    volumePriceTiers: singleTierFromRetailUnit(109.8),
     unit: 'each',
     imageUrl: barT2img,
     images: [barT2img, urbanitePedImg, signStandImg],
@@ -1393,7 +1388,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Woven polypropylene empty sandbag for ballasting signs, stands, and lightweight barricades',
     longDescription:
       'Exact product: standard 14" × 26" woven polypropylene traffic sandbag (empty). UV-treated fabric resists tearing when filled. Tie or clip closure. Used for sign stand ballast, pedestrian barricade legs, and temporary message board anchoring in moderate wind.',
-    volumePriceTiers: singleTierFromRefDaily(1.5),
+    volumePriceTiers: singleTierFromRetailUnit(0.5),
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, barT2img, cone28img],
@@ -1451,7 +1446,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Recycled-rubber donut weight for telescoping sign stands and roll-up hardware',
     longDescription:
       'Exact product line: recycled rubber sign stand base weight with dual handles. Slides over common telescoping mast tubes to lower center of gravity for roll-up signs in wind. Faster reposition than sandbags alone for crews that strike and reset layouts daily.',
-    volumePriceTiers: singleTierFromRefDaily(1.5),
+    volumePriceTiers: singleTierFromRetailUnit(133),
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, cone28img, drumImg],
@@ -1515,7 +1510,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Six-foot recycled rubber wheel stop with galvanized spikes for asphalt installs',
     longDescription:
       'Exact product line: commercial recycled rubber parking block, 6 ft length, blue with pre-drilled galvanized spike holes. Low-profile design for cars and light trucks in lots and garages. Spikes anchor into asphalt; alternate hardware available for concrete (request in quote).',
-    volumePriceTiers: singleTierFromRefDaily(2.25),
+    volumePriceTiers: singleTierFromRetailUnit(35.7),
     unit: 'each',
     imageUrl: parkingBlueImg,
     images: [parkingBlueImg, cone28img, barT2img],
@@ -1578,7 +1573,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Four-foot recycled rubber wheel stop with molded yellow chevron or stripe visibility',
     longDescription:
       'Exact product line: 4 ft recycled rubber wheel stop with high-visibility yellow stripe or chevron molding. Shorter length fits compact stalls and angled parking. Pre-drilled for mechanical anchoring; specify asphalt vs. concrete in your quote.',
-    volumePriceTiers: singleTierFromRefDaily(2.25),
+    volumePriceTiers: singleTierFromRetailUnit(43.35),
     unit: 'each',
     imageUrl: parkingBlueImg,
     images: [parkingBlueImg, parkingBlueImg, cone28img],
@@ -1642,7 +1637,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Modular rubber speed hump middle section with asphalt spikes for traffic calming',
     longDescription:
       'Exact product line: economy modular rubber speed hump middle section with integrated cable channels (model dependent) and galvanized spikes for asphalt. Combine with end caps to create full-width humps on private drives, logistics yards, and temporary lot controls.',
-    volumePriceTiers: singleTierFromRefDaily(4),
+    volumePriceTiers: singleTierFromRetailUnit(58.1),
     unit: 'each',
     imageUrl: speedHumpImg,
     images: [speedHumpImg, parkingBlueImg, cone28img],
@@ -1704,7 +1699,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Six-foot portable rubber speed bump for temporary lot and lane speed reduction',
     longDescription:
       'Exact product line: 6 ft portable rubber speed bump kit with carry handles and cat’s-eye reflectors (model dependent). Designed for repeated deploy/strike on lots where permanent asphalt milling is not allowed. Anchor with spikes or lag bolts per substrate.',
-    volumePriceTiers: singleTierFromRefDaily(4),
+    volumePriceTiers: singleTierFromRetailUnit(267.05),
     unit: 'each',
     imageUrl: speedHumpImg,
     images: [speedHumpImg, barT2img, cone28img],
@@ -1768,7 +1763,7 @@ const rawCuratedProducts: Product[] = [
     description: 'ANSI/ISEA 107 Class 2 mesh vest with contrasting trim for roadway work',
     longDescription:
       'Exact product line: ANSI/ISEA 107 Class 2 mesh safety vest, fluorescent orange with contrasting silver reflective trim. Breathable mesh for warm climates. Sized for roadway workers in 25 mph+ applications where Class 2 minimum applies—confirm your state hi-vis rules.',
-    volumePriceTiers: singleTierFromRefDaily(2),
+    volumePriceTiers: singleTierFromRetailUnit(15.5),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, cone36img, signFLGimg],
@@ -1826,7 +1821,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Class 3 hi-vis surveyors vest with expanded reflective for high-speed or complex backgrounds',
     longDescription:
       'Exact product line: ANSI/ISEA 107 Class 3 surveyors vest, fluorescent lime with silver reflective stripes on torso and shoulders. Additional background material for complex visual environments. Common for highway work, night operations, and layouts requiring maximum conspicuity.',
-    volumePriceTiers: singleTierFromRefDaily(2),
+    volumePriceTiers: singleTierFromRetailUnit(23.25),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, vestMeshImg, signRWAimg],
@@ -1890,7 +1885,7 @@ const rawCuratedProducts: Product[] = [
     description: 'ANSI Z89.1 Type I safety helmet with wheel ratchet suspension and vented shell',
     longDescription:
       'Exact product line: Kask Zenith X2 safety helmet, vented ABS shell, wheel ratchet harness, chin strap included. ANSI Z89.1 Type I for top-of-head protection. Popular upgrade from hard hats for crews wanting improved retention, accessory mounts, and comfort padding.',
-    volumePriceTiers: singleTierFromRefDaily(3.5),
+    volumePriceTiers: singleTierFromRetailUnit(164.95),
     unit: 'each',
     imageUrl: kaskZenithImg,
     images: [kaskZenithImg, vestMeshImg, cone28img],
@@ -1952,7 +1947,7 @@ const rawCuratedProducts: Product[] = [
     description: '13-gauge HPPE shell with sandy nitrile palm for grip and ANSI A4 cut resistance',
     longDescription:
       'Exact product line: 13-gauge HPPE knit shell with sandy nitrile palm coating, ANSI/ISEA 105 cut level A4 (label verified per SKU). Touchscreen-compatible fingertips on select models. For material handling, sign hardware, and general construction where cut and abrasion risks exist.',
-    volumePriceTiers: singleTierFromRefDaily(1.4),
+    volumePriceTiers: singleTierFromRetailUnit(7.5),
     unit: 'pair',
     imageUrl: kaskZenithImg,
     images: [kaskZenithImg, vestMeshImg, signStandImg],
@@ -2014,7 +2009,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Polycarbonate wraparound safety glasses with anti-fog and UV400 protection',
     longDescription:
       'Exact product line: polycarbonate wraparound safety glasses, clear lens, anti-fog coating (model dependent), UV400 protection, scratch-resistant hardcoat. For dust, wind, and incidental impact hazards during daytime flagging and utility work.',
-    volumePriceTiers: singleTierFromRefDaily(1.25),
+    volumePriceTiers: singleTierFromRetailUnit(15.75),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, kaskZenithImg, signStandImg],
@@ -2078,7 +2073,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Case of 12 aerosol marking paint cans for layout, utility locate, and temp marks',
     longDescription:
       'Exact product line: Aervoe-style water-based construction marking paint, case of 12 aerosol cans. Bright colors for survey layout, utility locates, and short-duration pavement marks that wear with traffic. VOC and color availability vary by SKU—specify color in quote.',
-    volumePriceTiers: singleTierFromRefDaily(2.5),
+    volumePriceTiers: singleTierFromRetailUnit(65.5),
     unit: 'case',
     imageUrl: aervoePaintImg,
     images: [aervoePaintImg, cone28img, speedHumpImg],
@@ -2140,7 +2135,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Roll of temporary white pavement marking tape for short-duration lane lines and symbols',
     longDescription:
       'Exact product line: temporary pavement marking tape roll, white, high-adhesion rubberized backing for asphalt and concrete (primer may be required). Used for short work zones, pilot lines, and experimental lane shifts before permanent thermoplastic.',
-    volumePriceTiers: singleTierFromRefDaily(2),
+    volumePriceTiers: singleTierFromRetailUnit(95),
     unit: 'roll',
     imageUrl: aervoePaintImg,
     images: [aervoePaintImg, speedHumpImg, parkingBlueImg],
@@ -2204,7 +2199,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Interlocking steel crowd control fence panel with bridge feet for events and sites',
     longDescription:
       'Exact product line: galvanized steel crowd control fence panel, ~6 ft × 10 ft mesh panel with tubular frame and interlocking hooks. Bridge feet distribute load on turf, asphalt, and concrete. Common for concerts, parades, construction laydown yards, and secured pedestrian corridors.',
-    volumePriceTiers: singleTierFromRefDaily(4.5),
+    volumePriceTiers: singleTierFromRetailUnit(112.75),
     unit: 'each',
     imageUrl: fenceBridgeImg,
     images: [fenceBridgeImg, urbanitePedImg, barWFimg],
@@ -2266,7 +2261,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Two-channel drop-over cable guard for hoses and cords up to ~2 in OD in work zones',
     longDescription:
       'Exact product line: economy two-channel drop-over cable protector, black lid with yellow lid hinges / sides (brand varies). Protects extension cords, ethernet, and small hoses from cart and vehicle crush in lots and indoor venues. Modular end caps available for tapered entries.',
-    volumePriceTiers: singleTierFromRefDaily(2.8),
+    volumePriceTiers: singleTierFromRetailUnit(76.45),
     unit: 'each',
     imageUrl: fenceBridgeImg,
     images: [fenceBridgeImg, parkingBlueImg, speedHumpImg],
@@ -2330,7 +2325,7 @@ const rawCuratedProducts: Product[] = [
     description: 'ANSI Z359.11-style full-body harness with hi-vis webbing and pass-through buckles',
     longDescription:
       'Exact product line: Radians-style hi-vis full-body harness with dorsal D-ring, pass-through leg and chest buckles, and breakaway / friction chest styles (SKU dependent). For fall arrest systems when paired with an approved anchor, lanyard, and competent person inspection per OSHA 1926 Subpart M.',
-    volumePriceTiers: singleTierFromRefDaily(5.5),
+    volumePriceTiers: singleTierFromRetailUnit(12),
     unit: 'each',
     imageUrl: harnessImg,
     images: [harnessImg, vestMeshImg, kaskZenithImg],
@@ -2392,7 +2387,7 @@ const rawCuratedProducts: Product[] = [
     description: '6 ft single-leg shock-absorbing lanyard with steel snap hooks for fall arrest systems',
     longDescription:
       'Exact product line: 6 ft single-leg shock-absorbing lanyard with rebar hooks or steel snap hooks (SKU dependent). Integrates with full-body harness and approved anchor points. Inspect before each use; retire after deployment or per manufacturer limits.',
-    volumePriceTiers: singleTierFromRefDaily(3),
+    volumePriceTiers: singleTierFromRetailUnit(54.7),
     unit: 'each',
     imageUrl: harnessImg,
     images: [harnessImg, harnessImg, kaskZenithImg],
@@ -2456,7 +2451,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Sleeve-style HDPE bollard cover for steel pipe bollards in lots and storefronts',
     longDescription:
       'Exact product line: tall polyethylene bollard cover, ~5 in inner diameter × 52 in height, blue HDPE shell. Slips over installed steel pipe bollards to improve visibility and reduce maintenance painting. UV-stabilized resin for outdoor lots.',
-    volumePriceTiers: singleTierFromRefDaily(3),
+    volumePriceTiers: singleTierFromRetailUnit(32.85),
     unit: 'each',
     imageUrl: bollardCoverImg,
     images: [bollardCoverImg, parkingBlueImg, cone28img],
@@ -2518,7 +2513,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Heavy urethane wheel chock with grip base for service trucks and trailers on grade',
     longDescription:
       'Exact product line: heavy urethane wheel chock, truck/trailer class, aggressive grip base for asphalt and concrete. For DOT-style chocking of unattended trailers on shallow grades when paired with proper procedures and secondary brakes.',
-    volumePriceTiers: singleTierFromRefDaily(1.5),
+    volumePriceTiers: singleTierFromRetailUnit(101.95),
     unit: 'each',
     imageUrl: bollardCoverImg,
     images: [bollardCoverImg, parkingBlueImg, drumImg],
@@ -2582,7 +2577,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Spring-return delineator post with high-intensity sheeting for bike lanes and gore markings',
     longDescription:
       'Exact product line: flexible surface-mounted delineator post, ~42 in height, white post with high-intensity reflective bands. Spring-return base reduces damage from occasional tire strikes while keeping lane edge cues visible for bikes and low-speed traffic.',
-    volumePriceTiers: singleTierFromRefDaily(2.2),
+    volumePriceTiers: singleTierFromRetailUnit(25),
     unit: 'each',
     imageUrl: drumImg,
     images: [drumImg, cone36img, flareImg],
@@ -2644,7 +2639,7 @@ const rawCuratedProducts: Product[] = [
     description: '21-inch amber LED traffic wand with steady, flash, and flashlight modes for flagging',
     longDescription:
       'Exact product line: 21 in amber LED traffic wand with wrist lanyard, steady / flash modes, and flashlight tip (SKU dependent). For night flagging, tapers, and parking direction where illuminated paddles improve motorist recognition beyond handheld flashlights alone.',
-    volumePriceTiers: singleTierFromRefDaily(1.8),
+    volumePriceTiers: singleTierFromRetailUnit(25),
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, flareImg, vestMeshImg],

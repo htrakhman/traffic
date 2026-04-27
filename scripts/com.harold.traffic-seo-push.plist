@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Launchd agent that commits + pushes the Traffic Control Rental repo
+  every day at 9:30 AM local time, after the seo-specialist agent has
+  finished its 9:00 AM run.
+
+  Install:
+    cp scripts/com.harold.traffic-seo-push.plist ~/Library/LaunchAgents/
+    chmod +x scripts/auto-publish-push.sh
+    launchctl load ~/Library/LaunchAgents/com.harold.traffic-seo-push.plist
+
+  Uninstall:
+    launchctl unload ~/Library/LaunchAgents/com.harold.traffic-seo-push.plist
+    rm ~/Library/LaunchAgents/com.harold.traffic-seo-push.plist
+
+  Force a manual run:
+    launchctl start com.harold.traffic-seo-push
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.harold.traffic-seo-push</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/harold/Desktop/traffic/scripts/auto-publish-push.sh</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/harold/Desktop/traffic/scripts/auto-publish-push.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/harold/Desktop/traffic/scripts/auto-publish-push.log</string>
+</dict>
+</plist>

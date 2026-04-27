@@ -1,0 +1,56 @@
+PERMIT MONITOR DIGEST — April 27 2026
+States checked: 50 | Sources live: 3 | Sources blocked: 1
+New permits found: 52 | Contractor matches: 0 | New prospects: 8
+
+CONTRACTOR MATCHES (reach out today)
+--------------------------------------
+(none)
+NEW PROSPECTS (not in your list yet)
+--------------------------------------
+NORA WALSH LAKESHORE ATHLETIC SERVIES
+Permit: Chicago Building Permits 101082412
+Work: PERMIT EXPIRES ON 06/24/2026 ERECTION STARTS: 5/11/2026, ERECTION ENDS: 5/16/2026.  SELF CERT. CBC 2019 - 38 SMALL TENTS AND 2 PLATFORMS FOR THE 2026 JP MORGAN CORPORATE CHALLENGE ON MAY 14, 2026. SET-UP IS MAY 11 AND TAKEDOWN ON MAY 16, 2026. THE 38 SMALL TENT SIZES ARE 1-10X100, 1-30X60, 1-30X40, 1-20X30, 11-40X40, 11-30X30, AND 12-20X40 TENTS WITH 1-12X24 PLATFORM AND 1-12X16 PLATFORM. LAKESHORE ATHLETIC SERVICES, INC
+Filed: 2026-04-24T00:00:00.000
+Source: Chicago Building Permits
+
+SLS ELECTRICAL SERVICE
+Permit: Chicago Building Permits 101080701
+Work: PROPOSED 2 STORY SFR W/BASEMENT AND ROOF DECK/ENCLOSURE, FRONT STAIRS, 6' WOOD FENCE, AND 2 CAR GARAGE W/ROOF DECK, PER PLANS.
+Filed: 2026-04-24T00:00:00.000
+Source: Chicago Building Permits
+
+BALANCED LOAD ELECTRIC
+Permit: Chicago Building Permits 101077766
+Work: SPR 2019 CBC:  INTERIOR AND EXTERIOR ALTERATIONS AND REAR ADDITION TO EXISTING 1-STORY CASUAL DINING RESTAURANT (OCCUPANCY A-2, CONSTRUCTION IIIA)**AS PER HAL EMAIL IT IS OK TO DO CERTIFIED CORRECTIONS 4/20/26**
+Filed: 2026-04-24T00:00:00.000
+Source: Chicago Building Permits
+
+USA ELECTRIC INC.
+Permit: Chicago Building Permits 101081448
+Work: SELF-CERT 2019 CBRC: INTERIOR RENOVATION AND REPAIR OF AN EXISTING 3-STORY MASONRY BUILDING, GROUND FLOOR TENANT BUILD-OUT, 2ND AND 3RD FLOOR UNIT REPAIRS TO ADDRESS VIOLATIONS, WORK TO INCLUDE MECHANICAL, ELECTRICAL, AND PLUMBING (OCCUPANCY GROUP B & R-5, TYPE III-A CONSTRUCTION, B3-2 ZONING DISTRICT, KK & A-3 ZONING OCCUPANCY).
+Filed: 2026-04-24T00:00:00.000
+Source: Chicago Building Permits
+
+DENIS DOBBYN
+Permit: Chicago Building Permits 101075571
+Work: RS-2 - SELF CERT 2019 - ADDITION OF SINGLE STORY GARAGE. NO CHANGE TO ZONING. ADDRESS CITY VIOLATIONS PERTAINING TO GARAGE. OCCUPACY GROUP R-5. TYPE IIIB CONSTRUCTION
+Filed: 2026-04-24T00:00:00.000
+Source: Chicago Building Permits
+
+NORA WALSH LAKESHORE ATHLETIC SERVIES
+Permit: Chicago Building Permits 101082381
+Work: PERMIT EXPIRES ON 06/24/2026 ERECTION STARTS: 5/10/2026, ERECTION ENDS: 5/16/2026.  SELF CERT. CBC 2019. REINSTATEMENT OF 2023 PERMIT 101014811 FOR THE SAME LARGE 1-40X160 TENT AND LOCATION FOR THE 2026 JP MORGAN CHASE CORPORATE CHALLENGE AT GRANT PARK ON MAY 14 2026. SETUP MAY 10 AND TAKEDOWN MAY 16 2026. LAKESHORE ATHLETIC SERVICES, INC.
+Filed: 2026-04-24T00:00:00.000
+Source: Chicago Building Permits
+
+(applicant blank)
+Permit: Seattle SDCI Built-Environment Permits 7093017-CN
+Work: Convert existing west one-family dwelling to DADU  per plan. (Establish use as single family residence with attached accessory dwelling units per land use code. Convert existing single family residence to DADU. Construct new one- and two-family dwellings  per plan. Review and processing for three records under 7083541-CN).
+Filed: 2026-04-25T00:00:00.000
+Source: Seattle SDCI Built-Environment Permits
+
+(applicant blank)
+Permit: Seattle SDCI Built-Environment Permits 7082881-CN
+Work: Allow a detached accessory dwelling unit per the land use code. Construct substantial alterations for a one-family dwelling  per plans
+Filed: 2026-04-24T00:00:00.000
+Source: Seattle SDCI Built-Environment Permits

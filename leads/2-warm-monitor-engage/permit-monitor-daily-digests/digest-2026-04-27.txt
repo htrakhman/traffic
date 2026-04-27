@@ -1,0 +1,806 @@
+BID MONITOR DIGEST — April 27 2026
+States checked: 1 | Sources live: 1 | Sources blocked: 0
+New lettings found: 0 | Contractor bids matched: 0
+Awards to your list: 0 | New prospects from awards: 100
+
+NEW PROSPECTS FROM AWARDS
+--------------------------
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: CDM CONSTRUCTORS INC (not in your list)
+  Contact: not found - manual research needed
+  Project: POJOAQUE BASIN REGIONAL WATER SYSTEM IGF::OT::IGF
+  Award: $357,614,790 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_INR17PC00023_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: JACOBS PROJECT MANAGEMENT CO. (not in your list)
+  Contact: not found - manual research needed
+  Project: SAN JUAN LATERAL WATER TREATMENT PLANT
+  Award: $270,116,821 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4024C0013_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: NW CONSTRUCTION, INC (not in your list)
+  Contact: not found - manual research needed
+  Project: THE WORK REQUIRED IS FOR PHASE II OF B.F. SISK DAM SOD MODIFICATIONS.
+  Award: $257,269,309 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R2025C0004_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KIEWIT INFRASTRUCTURE SOUTH CO (not in your list)
+  Contact: not found - manual research needed
+  Project: MORATORIUM EXCEPTION"  BLI DDVAK725 HURRICANE HELENE VCT DISASTER RECON DESIGN-BUILD HURRICANE HELENE IN VA
+  Award: $241,843,089 | State: VA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_12445126C0001_12C2_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KIEWIT INFRASTRUCTURE WEST CO. (not in your list)
+  Contact: not found - manual research needed
+  Project: YOSE 196416 REHABILITATE EL PORTAL WASTEWATER TREATMENT FACILITY AND ADMINISTRATIVE CAMP  THE WORK OF THIS CONTRACT IS FOR THE CONSTRUCTION OF: YOSE 196416 REHABILITATE EL PORTAL WASTEWATER TREATMENT FACILITY AND ADMINISTRATIVE CAMP IN YOSEMITE NAT
+  Award: $217,706,096 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2025C0038_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: STRONGHOLD ENGINEERING INC (not in your list)
+  Contact: not found - manual research needed
+  Project: GRCA 190083 / 250176 - IMPROVE POTABLE WATER SUPPLY TO INNER-CANYON AND SOUTH RIM, TRANS-CANYON WATER DISTRIBUTION PIPELINE, GRAND CANYON NATIONAL PARK, AZ
+  Award: $216,965,500 | State: AZ
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2023C0001_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: GRANITE CONSTRUCTION COMPANY (not in your list)
+  Contact: not found - manual research needed
+  Project: THE PROJECT CONSISTS OF TWO PHASES: 1) PRE-CONSTRUCTION SERVICES CONTAINED IN THE BASE CONTRACT; AND 2) CONSTRUCTION SERVICES CONTAINED IN TWO OPTIONS. THE PROJECT WILL CONSIST OF SPANNING THE ACTIVE PRETTY ROCKS LANDSLIDE WITH AN APPROXIMATELY 475-F
+  Award: $214,934,133 | State: AK
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056723C000008_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: BWI TPC, A JOINT VENTURE (not in your list)
+  Contact: not found - manual research needed
+  Project: FKC MIDDLE REACH CAPACITY CORRECTION PROJECT PHASE 1
+  Award: $186,849,112 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R2022C0001_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: SKANSKA USA CIVIL NORTHEAST INC (not in your list)
+  Contact: not found - manual research needed
+  Project: NOAA OMAO SHIP & REPAIR FACILITY
+  Award: $149,336,416 | State: RI
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_N4008524C0002_9700_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: WAGMAN HEAVY CIVIL INC (not in your list)
+  Contact: not found - manual research needed
+  Project: NP-COLO 1A21, B42, C18, D51 - THE PROJECT CONSISTS OF THE REHABILITATION OF APPROXIMATELY 10.3 MILES OF THE COLONIAL PARKWAY (PARKWAY) FROM MILEPOST (MP) 0.17 TO MP 1.61 AND MP 6.02 TO MP 14.88 WITHIN COLONIAL NATIONAL HISTORICAL PARK.  THE WORK INCL
+  Award: $134,210,977 | State: VA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7323C000004_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: RECORD STEEL AND CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: YELL 326133 REHABILITATE CANYON VILLAGE WASTEWATER TREATMENT SYSTEMS
+  Award: $129,150,000 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2026C0016_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KOKOSING CONSTRUCTION COMPANY, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT VA ST ANC(1):  THE PROJECT CONSISTS OF THE REALIGNMENT OF COLUMBIA PIKE AND S. JOYCE STREET, REPLACEMENT OF SOUTHGATE ROAD WITH A NEW SEGMENT OF S. NASH STREET, THE EXPANSION OF FOXCROFT HEIGHTS PARK, AND THE MODIFICATION OF THE COLUMBIA PI
+  Award: $122,766,577 | State: VA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7321C000025_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: AMES FEDERAL CONTRACTING GROUP LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: THE WORK ASSOCIATED WITH THE HYRUM DAM SPILLWAY REPLACEMENT PROJECT WILL TAKE PLACE APPROXIMATELY 9 MILES SOUTHWEST OF LOGAN, UTAH IN CACHE COUNTY, UTAH. THE OVERALL WORK IS FOR THE CONSTRUCTION OF A NEW SPILLWAY AND THE REMOVAL OF THE EXISTING SPILL
+  Award: $113,328,890 | State: UT
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4025C0005_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KREW HEAVY CIVIL LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: IGF::CT::IGF - BULL LAKE DAM SPILLWAY MODIFICATIONS, RIVERTON UNIT, PICK-SLOAN MISSOURI BASIN PROGRAM, WYOMING
+  Award: $108,991,096 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R6018C0015_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: MAYMEAD INC (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT NP-BLRI 2B13, 2H17, ETC: THE PROJECT CONSISTS OF THE RECONSTRUCTION AND REHABILITATION OF THE BLUE RIDGE PARKWAY IN NORTH CAROLINA FROM MILEPOST 229.6 TO MP 305.1, INCLUDING OVERLOOKS, PARKING AREAS AND RAMPS. WORK ALSO INCLUDES DRAINAGE ASS
+  Award: $107,397,748 | State: NC
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7322C000009_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: NW CONSTRUCTION, INC (not in your list)
+  Contact: not found - manual research needed
+  Project: IMPROVE OPERATIONS AT ARROYO CANAL FISH SCREEN/SACK DAM FISH PASSAGE PROJECT
+  Award: $93,200,068 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R2025C0006_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: GARCO CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: IGF::OT::IGF CEFP INTAKE, GATE&HELIX PROJECT, YAKIMA RIVER BASIN ENHANCEMENT PROJECT, INTEGRATED YAKIMA PROJECT, WASHINGTON
+  Award: $88,350,971 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1018C0025_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: SEABEE CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION OF TAHOMA NATIONAL CEMETERY PHASE 3 DEVELOPMENT
+  Award: $78,466,361 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F24C0007_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ARCHER WESTERN CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: NGWSP PUMPING PLANTS 2&3
+  Award: $73,268,469 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4022C0012_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: AMES FEDERAL CONTRACTING GROUP LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: NGWSP INTAKE & RIVER PUMPING PLANT
+  Award: $67,726,344 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4026C0006_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: MANSON CONSTRUCTION CO (not in your list)
+  Contact: not found - manual research needed
+  Project: DESIGN BUILD CONSTRUCTION AT PIER ROMEO IN NORTH CHARLESTON SC.
+  Award: $65,770,510 | State: SC
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_1305M423CNAAJ0021_1330_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ESTES BROS. CONST. INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT: NP NP BLRI 1L9, 1M22, ETC - THE PROJECT CONSISTS OF THE REHABILITATION OF APPROXIMATELY 24 MILES OF THE BLUE RIDGE PARKWAY (BLRI) BETWEEN MILEPOST (MP) 97 AND 121 IN BEDFORD, BOTETOURT, AND ROANOKE COUNTIES, VIRGINIA. THE WORK CONSISTS OF RE
+  Award: $64,333,552 | State: VA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7323C000018_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: GARCO CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: CLE ELUM DAM FISH PASSAGE FACILITY ADULT FACILITY, YAKIMA RIVER BASIN WATER ENHANCEMENT PROJECT, WASHINGTON
+  Award: $55,802,987 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1023C0008_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ARCHER WESTERN CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: SAN JUAN LATERAL PUMPING PLANTS NO. 4 & 7
+  Award: $51,280,013 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4020C0013_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: RECORD STEEL AND CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: YELL 310533 REHABILITATE AND IMPROVE OLD FAITHFUL WATER TREATMENT SYSTEM GAOA
+  Award: $45,587,465 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2025C0040_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: COASTAL CONSTRUCTION GROUP, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: SLBE 318729 - REHABILITATION OF MANITOU ISLANDS, AT SLEEPING BEAR DUNES NATIONAL LAKESHORE, MI
+  Award: $44,837,413 | State: MI
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2024C0088_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: H-K CONTRACTORS, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: WY NPS YELL 10(23), GRAND LOOP ROAD-OLD FAITHFUL TO WEST THUMB
+  Award: $44,450,172 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056722F000034_6925_69056719D000006_6925
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: FORT MYER CONSTRUCTION CORP (not in your list)
+  Contact: not found - manual research needed
+  Project: THIS REQUEST FOR PROPOSAL (DESIGN BUILD) FOR GEORGE WASHINGTON MEMORIAL PARKWAY MOUNT VERNON TRAIL RECONSTRUCTION, PROJECT NO. VA NP GWMP MVT(4) LOCATED IN ARLINGTON COUNTY AND THE CITY OF ALEXANDRIA, VIRGINIA AND THE DISTRICT OF COLUMBIA, WASHINGTON
+  Award: $44,366,162 | State: VA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7325C000018_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: AMES CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: GLEN ELDER DAM SPILLWAY CHUTE REPLACEMENT, GLEN ELDER UNIT, SOLOMON DIVISION, PICK-SLOAN MISSOURI BASIN PROGRAM, KANSAS
+  Award: $43,203,128 | State: KS
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R6021C0015_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: PERINI MANAGEMENT SERVICES, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: GLCA 318744 DESIGN BUILD - REPLACE CRITICAL WASTEWATER UTILITIES
+  Award: $42,272,441 | State: AZ
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2025C0058_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: SGC SERVICES 2, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: FORT LOGAN NATIONAL CEMETERY, PHASE 1A EXPANSION
+  Award: $41,327,062 | State: CO
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F23C0008_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: RBVETCO, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: IGAP PHASE 5 CONSTRUCTION
+  Award: $38,940,668 | State: PA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F24C0001_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: STRIDER CONSTRUCTION CO INC (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION SERVICES FOR PROJECT OR NPS CRLA 2018(1), CLEETWOOD TRAIL AND MARINA IMPROVEMENTS. THE WORK CONSISTS OF AGGREGATE BASE TRAIL RECONSTRUCTION, SLOPE STABILIZATION, SLOPE PROTECTION, WALLS (DRY STACK ROCKERY, SOIL NAIL, GABION, MECHANICALLY
+  Award: $36,477,635 | State: OR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056726C000005_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: DDD-DVG JOINT VENTURE LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: THIS IS A REQUEST FOR PROPOSAL (DESIGN BUILD) PROJECT NO. PR ER PRMNT RPR(1), LOCATED IN THE MUNICIPALITY OF CANOVANAS, PUERTO RICO, IS IN STRICT ACCORDANCE WITH THE SOLICITATION/CONTRACT INSTRUCTIONS, NOTICES, CLAUSES, PROVISIONS, ITEMS LISTED BELOW
+  Award: $35,841,000 | State: PR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7326C000008_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: MGC SERVICES A JOINT VENTURE 2 LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: PHASE 2 EXPANSION OF THE GREAT LAKES NATIONAL CEMETERY
+  Award: $34,321,462 | State: MI
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F21C0004_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: HARTMAN-WALSH PAINTING COMPANY (not in your list)
+  Contact: not found - manual research needed
+  Project: JOHN W. KEYS III PUMP-GENERATING PLANT DISCHARGE TUBE COATING-LINING REHABILITATION
+  Award: $34,109,131 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1020C0012_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ANDRITZ HYDRO CORP (not in your list)
+  Contact: not found - manual research needed
+  Project: GRAND COULEE JOHN W. KEYS III PUMP-GENERATING PLANT EXCITATION SYSTEM, GOVERNOR, AND PROTECTIVE RELAY REPLACEMENT AND CONTROLS MODERNIZATION, COLUMBIA BASIN PROJECT, WASHINGTON
+  Award: $33,979,078 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1019C0008_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: M.A. DEATLEY CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: WY NPS YELL 14(1), LEWIS RIVER BRIDGE
+  Award: $33,964,645 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056722F000073_6925_69056719D000005_6925
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: JOSEPH J. ALBANESE, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: CA FLAP SCR T5(1) MONTEREY BAY SANCTUARY SCENIC TRAIL CONSTRUCTION CONTRACT
+  Award: $32,686,559 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_6982AF24C000016_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: DECATUR CONSTRUCTION, INC (not in your list)
+  Contact: not found - manual research needed
+  Project: HOUSTON NATIONAL CEMETERY PH 5 EXPANSION
+  Award: $32,094,482 | State: TX
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F21C0016_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: COVENANT CONSTRUCTION SERVICES LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: DALLAS FORT WORTH NATIONAL CEMETERY, PHASE 5, DESIGN-BID-BUILD
+  Award: $31,412,695 | State: IA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F20C0025_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: PATE CONSTRUCTION CO., INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: AVC BOONE REACH 2
+  Award: $31,046,748 | State: CO
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R6023C0010_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: GE RENEWABLES US LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: NEW MELONES GENERATOR REWIND
+  Award: $30,506,454 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R2022C0015_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: BRYANT'S LAND AND DEVELOPMENT INDUSTRIES, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT NP-GRSM 10N(3), 19(1), 107(1): SCHEDULE A - LAKEVIEW DRIVE EAST (SWAIN COUNTY, NC).  WORK INCLUDES PERFORMING FULL DEPTH RECLAMATION WITH CEMENT STABILIZATION AND CONSTRUCTING ASPHALT CONCRETE PAVEMENT OF 6.41 MILES OF LAKEVIEW DRIVE EAST AN
+  Award: $29,698,622 | State: NC
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7323C000010_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ADVANCED AMERICAN CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: FISH SCREEN REPLACEMENT - ROZA DIVERSION DAM
+  Award: $29,444,079 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1024C0001_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: THALLE CONSTRUCTION CO INC (not in your list)
+  Contact: not found - manual research needed
+  Project: INSTALLATION OF A CHEMICAL INJECTION BUILDING
+  Award: $28,833,054 | State: CO
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R6024C0005_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: TACTICAL INFRASTRUCTURE MAINTENANCE SOLUTIONS LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: TASK ORDER FUNDING FOR IDIQ.
+  Award: $28,672,456 | State: TX
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_70B01C21F00000884_7014_70B01C21D00000031_7014
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: FLATIRON DRAGADOS CONSTRUCTORS, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: CO FLAP US36(1) DOWNTOWN ESTES PARK LOOP  CONSTRUCTION CONTRACT FOR ROADWAY RECONSTRUCTION, REHAB, AND BRIDGE REPLACEMENT
+  Award: $28,195,403 | State: CO
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_6982AF23C000007_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: TECH2 SOLUTIONS (not in your list)
+  Contact: not found - manual research needed
+  Project: IGF::OT::IGF TASK ORDER FOR DESIGN, INTEGRATION, CONSTRUCTION, COMMUNICATION AND ENGINEERING 2 (DICCE2) SERVICES IN CAUCASUS REGION GROUP 1, AZERBAIJAN PROGRAM GROUP 15.
+  Award: $27,990,937 | State: US
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_DEDT0013768_8900_DENA0003366_8900
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: R.C.S. CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: MORU 272051, REHABILITATE AND EXPAND WASTEWATER TREATMENT PLANT, MOUNT RUSHMORE NATIONAL MEMORIAL, KEYSTONE, SOUTH DAKOTA
+  Award: $26,832,774 | State: SD
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2025C0007_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KOMAN CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: UNSCHEDULED MAINTENANCE AND CARRIZO CANE ERADICATION COVERING THE PERIOD OF JUNE 16, 2021 - JUNE 15, 2022.
+  Award: $25,817,477 | State: TX
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_70B01C21F00000575_7014_70B01C20D00000022_7014
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: APOGEE GROUP, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: IGF::OT::IGF TASK ORDER FOR DESIGN, INTEGRATION, CONSTRUCTION, COMMUNICATION AND ENGINEERING 2 (DICCE2) SERVICES IN TAJIKISTAN, GROUP 1, PROGRAM GROUP 1.
+  Award: $25,643,945 | State: US
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_DEDT0013765_8900_DENA0003363_8900
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KOMAN CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: UNSCHEDULED MAINTENANCE COVERING THE BIG BEND NORTH AND EL PASO SECTORS
+  Award: $24,944,489 | State: TX
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_70B01C21F00000597_7014_70B01C20D00000023_7014
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: SCALFO ELECTRIC INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: THE OBJECTIVE OF THIS EFFORT IS TO REPLACE THE EXISTING MAIN SUBSTATION WITH A 69KV RING BUS FEATURING AUTOMATED SWITCHING OPERATIONS. THE NEW RING BUS WILL BE CAPABLE OF FAULT DETECTION AND AUTOMATED SELF-RESTORATION. THE PROJECT WILL BE INTEGRATED
+  Award: $24,218,000 | State: NJ
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_692M1525C00003_6920_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: C & C CONTRACTORS LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION SERVICES FOR A GRAVESITE EXPANSION AND FACILITY RENOVATION PROJECT AT SALISBURY NATIONAL CEMETERY
+  Award: $24,203,981 | State: NC
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C78625C0042_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: GLACIER CONSTRUCTION INC (not in your list)
+  Contact: not found - manual research needed
+  Project: FUNDS CONSTRUCTION PROJECT: AK PFH 58(1), NECK LAKE ROAD RECONSTRUCTION: NPOWI HWY. TO MARINE ACCESS FACILITY JCT. WORK INCLUDES EXCAVATION, ROCK BLASTING, EMBANKMENT, GRADING, DRAINAGE, RETAINING WALL, AND GUARDRAIL.
+  Award: $22,527,340 | State: AK
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056725C000012_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: M.A. DEATLEY CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION SERVICES FOR PROJECT WY NPS YELL 10(26), GARDNER RIVER HIGH BRIDGE. WORK CONSISTS OF CONTAINMENT, LEAD BASED PAINT REMOVAL, PAINTING, APPROACH SPAN REPLACEMENT, DEEP PATCH, GUARDWALL CONSTRUCTION, THIN EPOXY OVERLAY, JOINT REPLACEMENT, M
+  Award: $22,439,479 | State: MT
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056726F00029N_6925_69056724D000011_6925
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KOMAN CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: COMPREHENSIVE TACTICAL MAINTENANCE INFRASTRUCTURE REPAIR RGV SECTOR UNSCHEDULED MAINTENANCE COVERING PERIOD JUNE 4, 2021 - JUNE 3, 2022.
+  Award: $22,352,590 | State: TX
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_70B01C21F00000556_7014_70B01C20D00000018_7014
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: INTERSTATE ROCK PRODUCTS, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: ZION 317454/240254/319664/352304 - REHABILITATE SOUTH CAMPGROUND WITH CAPITAL IMPROVEMENTS AND CONSTRUCT WILDERNESS PERMIT OFFICE AND FEE STATION IN SOUTH CAMPGROUND, ZION NATIONAL PARK.
+  Award: $22,233,179 | State: UT
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2024C0026_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: MARTIN BROTHERS CONSTRUCTION (not in your list)
+  Contact: not found - manual research needed
+  Project: CA FLAP ED CR147(2) ICE HOUSE ROAD AWARD A CONTRACT FOR CONSTRUCTION/REHABILITATION OF 17.62 MILES OF ROADWAY.
+  Award: $21,933,392 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_6982AF24C000005_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: OFTEDAL CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: FUNDS CONSTRUCTION PROJECT WY NPS GRTE 2020(1) MOOSE WILSON ROAD PHASE 2 AND WY NP GRTE 11(1), TETON PARK ROAD - MOOSE TO TAGGART LAKE TRAILHEAD (BASE SCHEDULE AND OPTION X)
+  Award: $21,830,563 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056726F00033N_6925_69056724D000013_6925
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: SOUTHERN CONTRACTING, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: CATO 250011 REHABILITATE PARKWIDE UTILITIES
+  Award: $21,339,436 | State: MD
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2024C0008_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ALLIANCE STEEL CONSTRUCTION, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: APIS - 270691 APOSTLE ISLAND NATIONAL PARK, WI - REHABILITATE WATERFRONT AT LITTLE SAND BAY AND DEVILS ISLAND, RECONSTRUCT BOATHOUSE
+  Award: $21,182,661 | State: WI
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2024C0052_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KMC SOLUTIONS, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT NUMBER 817CM3025 NEW LAND EXPANSION AT MARION NATIONAL CEMETERY
+  Award: $20,383,000 | State: IN
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C78625C0046_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: HARTMAN-WALSH PAINTING COMPANY (not in your list)
+  Contact: not found - manual research needed
+  Project: GRAND COULEE DAM LEFT&RIGHT POWERPLANTS G1-G18 PENSTOCK LINING REHABILITATION
+  Award: $20,110,910 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1020C0014_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: HAWAIIAN DREDGING CONSTRUCTION COMPANY, INC (not in your list)
+  Contact: not found - manual research needed
+  Project: HI STP SR11(2) NINOLE STREAM BRIDGE AND HI STP SR11(1) HILEA STREAM BRIDGE  BRIDGE CONSTRUCTION
+  Award: $20,057,171 | State: HI
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_6982AF18C000020_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: STELLAR J CORP (not in your list)
+  Contact: not found - manual research needed
+  Project: OR DOT 18(1), OR58: COAST FORK WILLAMETTE RIVER TO LOWER SALT CR BRIDGES. THE PRIMARY OBJECTIVE OF THE THIS PROJECT IS TO SEISMICALLY RETROFIT 3 BRIDGES ON OR-58 BETWEEN US-97 AND I-5. THE SCOPE OF WORK CONSISTS OF: STRUCTURE REPAIR, STRUCTURE SEISMI
+  Award: $19,935,806 | State: OR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056723C000016_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: METRO PAVING CORP (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT NP JFK1(2) NAMA16(2) TRL(1):   THE PROJECT CONSISTS OF KENNEDY CENTER PEDESTRIAN/BICYCLE TRAIL ACCESS AND SAFETY IMPROVEMENTS, AND REHABILITATION OF ROCK CREEK AND POTOMAC PARKWAY (ROUTE 16).  THE WORK INCLUDES ASPHALT PAVEMENT MILL AND OVER
+  Award: $19,929,121 | State: DC
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7321C000013_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: IRON MIKE CONSTRUCTION LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: FORT LOGAN NATIONAL CEMETERY PHASE 1B - DAM/SPILLWAYS
+  Award: $19,671,409 | State: CO
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C10F26C0004_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ECLIPSE COMPANIES, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT NC NP BLRI 2M28; NC NP BLRI 2M29: THE PROJECT CONSISTS OF HURRICANE DAMAGE REPAIRS AT MP 336.7, 336.75, 336.85, 336.95, 337.2, 338.2 AND MP 338.4. THE WORK INCLUDES SLIDE REPAIRS, CULVERT CLEANING, CULVERT INSTALLATION, STONE MASONRY HEADWAL
+  Award: $18,953,608 | State: NC
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7326F00006N_6925_693C7320D000007_6925
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: A. WEST ENTERPRISE, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: REPLACE NEIL ARMSTRONG OPERATIONS AND CHECKOUT (O&C) SOUTH WING ELECTRICAL DISTRIBUTION EQUIPMENT AT KENNEDY SPACE CENTER, FL.
+  Award: $18,689,216 | State: FL
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_80KSC023CA014_8000_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: PIPKIN INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: KACHESS DAM MODIFICATION PHASE 3 YAKIMA PROJECT, WASHINGTON, BUREAU OF RECLAMATION C-PN REGION
+  Award: $18,630,155 | State: WA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1024C0002_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: BAIRCO CONSTRUCTION INC (not in your list)
+  Contact: not found - manual research needed
+  Project: GLAC 318705 - PACKAGE #1 CONSTRUCTION SO
+  Award: $18,496,542 | State: MT
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2026C0013_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: OCS INDUSTRIES INC (not in your list)
+  Contact: not found - manual research needed
+  Project: NEW CONSTRUCTION PROJECT FY-24 AT LONG ISLAND NATL CEM, NY.
+  Award: $18,111,618 | State: NY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C78624C0034_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: PRUHS CONSTRUCTION CO., L.L.C. (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION SERVICES FOR PROJECT AK DOT 135(6), GLENN HIGHWAY REHABILITATION, KINGS RIVER BRIDGE SECTION MP 66.0 TO MP 67.2
+  Award: $18,103,046 | State: AK
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056723C000006_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: FEDVET CONSTRUCTION (not in your list)
+  Contact: not found - manual research needed
+  Project: LA NATIONAL CEMETERY FACILITY CONDITION ASSESMENT AND MAINT BUILDING CONSTRUCTION PROJECT
+  Award: $18,060,659 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C78625C0041_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: FORGEN LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: BATTLE CREEK - SOUTH DIVERSION DAM AND CANAL REMOVAL
+  Award: $18,014,447 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R2025C0011_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: AKRON BUILDING & OUTDOOR MAINTENANCE INC (not in your list)
+  Contact: not found - manual research needed
+  Project: CUVA - RIVERBANK STABILIZATION
+  Award: $17,959,952 | State: OH
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2022C0128_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: BLUE WORLD CONSTRUCTION INC (not in your list)
+  Contact: not found - manual research needed
+  Project: BIBE 317515 REPLACE PARK WATER SYSTEM
+  Award: $17,946,872 | State: TX
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2023C0123_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: CITY OF MARION (not in your list)
+  Contact: not found - manual research needed
+  Project: GAOA WATER AND SEWER LINE REPLACEMENT AT CRAB ORCHARD NWR
+  Award: $17,939,710 | State: IL
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140F0821C0004_1448_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: CROWN INNOVATIONS, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: THE CONTRACTOR SHALL PROVIDE ALL PROGRAM SUPPORT
+  Award: $17,733,284 | State: CA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693KA825F00145_6920_693KA825D00004_6920
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: HAMILTON CONSTRUCTION CO (not in your list)
+  Contact: not found - manual research needed
+  Project: FUNDS CONSTRUCTION PROJECT MT FLAP BOR 2980(1), SUN RIVER BRIDGE REPLACEMENT. PROJECT INCLUDES CONSTRUCTION OF A 3 SPAN, 462-FOOT LONG PRECAST-POST-TENSIONED GIRDER BRIDGE WITH A PRECAST CONCRETE DECK.
+  Award: $16,904,108 | State: MT
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056725C000006_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: WCA CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: MENAGERS DAM REHABILITATION, SEE SECTION J FOR ATTACHMENTS.
+  Award: $16,442,433 | State: AZ
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140A1624C0011_1450_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ANDRITZ HYDRO CORP (not in your list)
+  Contact: not found - manual research needed
+  Project: ANDERSON RANCH DAM TURBINE MODERNIZATION AND RUNNER REPLACEMENT.
+  Award: $16,424,073 | State: ID
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R1023C0004_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: TDX POWER SERVICES LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: REHABILITATE UNSAFE AND FAILING ELECTRICAL SYSTEM FOR SETTLEMENT, KALAUPAPA NATIONAL HISTORICAL PARK, KALA-217676
+  Award: $16,379,570 | State: HI
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2023C0070_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: RBA ENGINEERING INTERNATIONAL, PLLC (not in your list)
+  Contact: not found - manual research needed
+  Project: GWMP 335115 BRIDGE PRESERVATION
+  Award: $16,197,004 | State: VA
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2025C0033_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: MGC CONTRACTORS INC (not in your list)
+  Contact: not found - manual research needed
+  Project: BGNDRF TREATMENT BUILDING EXPANSION DESIGN BUILD
+  Award: $15,736,048 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4025C0002_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: NOVEL CONSTRUCTION LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: THE PROJECT CONSISTS OF REPAIRING DAMAGE CAUSED BY HURRICANES IRMA AND MARIA ON PR-5568, KMS 0.7 AND 0.8; PR 568 KM 25.85; PR-157, KMS 1.2, 10.4, 16.4, AND 21.3; PR-155, KM 30.1 AND 30.2; AND PR-156, KMS 3.6, 4.4, 6.3-6.4, AND 3.7-3.8. THE WORK INCLU
+  Award: $15,512,216 | State: PR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7323C000013_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: CARIBBEAN SIGN SUPPLIES MANUFACTURERS, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT PR ER DOT PRMNT RPR(27) THE PROJECT CONSISTS OF REPAIRING SIGNS, GUARDRAILS, AND OTHER MISCELLANEOUS DAMAGES CAUSED BY HURRICANES IRMA AND MARIA IN THE METRO, NORTH, AND SOUTH REGIONS. THE WORK INCLUDES TRAFFIC SIGN ASSEMBLIES (SMALL SIGNS,
+  Award: $14,969,047 | State: PR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7326C000007_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: BLUE CORD DESIGN AND CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: AWARD OF THE CONSTRUCTION PROJECT TO UPGRADE THE WATER TOWER AT THE TAMPA VAMC.
+  Award: $14,873,430 | State: FL
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_36C24825C0037_3600_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: EWS-RSCI LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: BIG SANDY DAM RESERVOIR ENLARGEMENT
+  Award: $14,661,221 | State: WY
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4021C0003_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: BLUE WORLD CONSTRUCTION INC (not in your list)
+  Contact: not found - manual research needed
+  Project: GATE 291531 - REHAB FT. HANCOCK POTABLE WATER & WASTEWATER SYSTEM
+  Award: $14,597,838 | State: NJ
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2023C0025_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: STONE & LIME IMPORTS, INC (not in your list)
+  Contact: not found - manual research needed
+  Project: DRTO 244370/244372 - REPAIRS TO FORT JEFFERSON COUNTERSCARP & MAINTENANCE DREDGING AT DRY TORTUGAS NATIONAL PARK
+  Award: $14,469,755 | State: FL
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140P2023C0121_1443_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: DICKERSON INFRASTRUCTURE INC (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION SERVICES FOR SHORELINE STABILIZATION PROJECT.
+  Award: $14,317,695 | State: FL
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140L0625C0002_1422_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: INTERMOUNTAIN SLURRY SEAL, INC. (not in your list)
+  Contact: not found - manual research needed
+  Project: CONSTRUCTION SERVICES FOR PROJECT OK NP MULTI PMS(1), PAVEMENT PRESERVATION OKLAHOMA AND TX NP MULTI PMS(2), PAVEMENT PRESERVATION NORTH TEXAS
+  Award: $14,202,674 | State: OK
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056726F00026N_6925_69056724D000003_6925
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: HP CIVIL INC (not in your list)
+  Contact: not found - manual research needed
+  Project: OR FLAP DOT CRGNSA 100(8), MULTNOMAH FALLS VIADUCTS REPAIR: THIS 2.6-MILE PROJECT INCLUDES REPAIR OF TWO HISTORIC REINFORCED CONCRETE VIADUCTS. ONE VIADUCT IS A 86-SPAN, 863-FOOT LONG STRUCTURE AND THE OTHER IS A 20-SPAN, 403-FOOT LONG STRUCTURE.
+  Award: $14,190,896 | State: OR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_69056724C000002_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: CARIBE TECNO CRL (not in your list)
+  Contact: not found - manual research needed
+  Project: PROJECT PR ERFO FS 2017 - 1(3) THE PROJECT CONSISTS OF REPAIRING MULTIPLE STORM DAMAGED SITES IN PR-191, PR-930, PR-988, PR-9938, PR-9966, AND PR-186 WITHIN EL YUNQUE NATIONAL FOREST FOR THE UNITED STATES FOREST SERVICE.  THE WORK INCLUDES THE CONST
+  Award: $14,007,070 | State: PR
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_693C7321C000021_6925_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: ORCOM, A DIVISION OF ORTEGA COMPANIES, INC (not in your list)
+  Contact: not found - manual research needed
+  Project: RG- EBHD UTILITY REHAB
+  Award: $13,749,490 | State: NM
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_140R4024C0020_1425_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: PUYENPA CONSTRUCTION, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: BIL FUNDED  MEMPHIS UNDERGROUND UTILITY PROJECT, MEMPHIS AIR ROUTE TRAFFIC CONTROL CENTER, MEMPHIS, TN
+  Award: $13,691,317 | State: TN
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_697DCK24C00146_6920_-NONE-_-NONE-
+
+NEW PROSPECT — Award to Unknown Contractor
+  Contractor: KILGORE COMPANIES, LLC (not in your list)
+  Contact: not found - manual research needed
+  Project: CO FTNP MEVE 100(1) & 101(1) CLIFF PALACE & MESA TOP LOOP ROADS  ROAD CONSTRUCTION
+  Award: $13,431,051 | State: CO
+  ACTION: Research and add to outreach list.
+  URL: https://www.usaspending.gov/award/CONT_AWD_6982AF22C000018_6925_-NONE-_-NONE-

@@ -1,0 +1,39 @@
+[2026-04-27T18:35:56.405767+00:00] CA: CA_LA_Building: auth_required: socrata returned 403
+[2026-04-27T18:35:56.407382+00:00] MA: MA_Boston_Permits: ClientResponseError: 404, message='Not Found', url="https://data.boston.gov/resource/6ddb-23h5.json?$limit=5000&$order=issued_date+DESC&$where=issued_date+%3E%3D+'2026-03-28T00:00:00.000'"
+Traceback (most recent call last):
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 122, in run
+    permits = await self._fetch_with_retries(source)
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 189, in _fetch_with_retries
+    raise last_exc
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 181, in _fetch_with_retries
+    return await self.fetch_one(source)
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 198, in fetch_one
+    return await self._fetch_socrata(source)
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 242, in _fetch_socrata
+    resp.raise_for_status()
+  File "/sessions/vibrant-pensive-ritchie/.local/lib/python3.10/site-packages/aiohttp/client_reqrep.py", line 636, in raise_for_status
+    raise ClientResponseError(
+aiohttp.client_exceptions.ClientResponseError: 404, message='Not Found', url="https://data.boston.gov/resource/6ddb-23h5.json?$limit=5000&$order=issued_date+DESC&$where=issued_date+%3E%3D+'2026-03-28T00:00:00.000'"
+
+[2026-04-27T18:35:56.408053+00:00] TX: TX_Austin_Construction: ClientResponseError: 400, message='Bad Request', url="https://data.austintexas.gov/resource/3syk-w9eu.json?$limit=5000&$order=issued_date+DESC&$where=issued_date+%3E%3D+'2026-03-28T00:00:00.000'"
+Traceback (most recent call last):
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 122, in run
+    permits = await self._fetch_with_retries(source)
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 189, in _fetch_with_retries
+    raise last_exc
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 181, in _fetch_with_retries
+    return await self.fetch_one(source)
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 198, in fetch_one
+    return await self._fetch_socrata(source)
+  File "/sessions/vibrant-pensive-ritchie/mnt/NJ-contractors/scrapers/base.py", line 242, in _fetch_socrata
+    resp.raise_for_status()
+  File "/sessions/vibrant-pensive-ritchie/.local/lib/python3.10/site-packages/aiohttp/client_reqrep.py", line 636, in raise_for_status
+    raise ClientResponseError(
+aiohttp.client_exceptions.ClientResponseError: 400, message='Bad Request', url="https://data.austintexas.gov/resource/3syk-w9eu.json?$limit=5000&$order=issued_date+DESC&$where=issued_date+%3E%3D+'2026-03-28T00:00:00.000'"
+
+[2026-04-27T18:37:13.182964+00:00] CA: CA_LA_Building: auth_required: socrata returned 403
+[2026-04-27T19:26:42.387865+00:00] CA: CA_LA_Building: auth_required: socrata returned 403
+[2026-04-27T19:26:50.051137+00:00] CA: CA_LA_Building: auth_required: socrata returned 403
+[2026-04-27T19:28:00.517814+00:00] CA: CA_LA_Building: auth_required: socrata returned 403
+[2026-04-27T19:28:00.941574+00:00] CA: CA_LA_Building: auth_required: socrata returned 403
+[2026-04-27T19:29:15.123716+00:00] CA: CA_LA_Building: auth_required: socrata returned 403

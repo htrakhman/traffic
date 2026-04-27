@@ -13,51 +13,51 @@ const SITEMAP = 'https://www.trafficsafetystore.com/sitemap.xml'
 const OUT = fileURLToPath(new URL('../public/tss-catalog.json', import.meta.url))
 const SUPPLIER = 'Traffic Safety Store'
 
-/** One open-ended purchase tier from heuristic supplier-reference unit economics (×1.5 retail via app). */
-function purchaseTiersFromRefDaily(refDaily) {
-  const ref = Math.round(refDaily * 100) / 100
+/** One open-ended purchase tier — `tssRetail` is an estimated TSS shelf price; stored ref divides by 1.5 to match `singleTierFromRetailUnit` so app-side ×1.95 yields TSS×1.30 (30% margin). */
+function purchaseTiersFromRefDaily(tssRetail) {
+  const ref = Math.round((tssRetail / 1.5) * 100) / 100
   return {
     volumePriceTiers: [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: ref }],
   }
 }
 
 const RULES = [
-  { re: /fall-?protection|body-?harness|harness-|lanyard|retractable|self-?retract|carabiner|rope-?grab|vertical-?lifeline/i, cat: 'cat-15', slug: 'fall-protection', ref: 5.5 },
-  { re: /speed-?bump|speed-?hump/i, cat: 'cat-10', slug: 'speed-bumps-humps', ref: 4 },
-  { re: /parking-?block|wheel-?stop|parking-?curb/i, cat: 'cat-9', slug: 'parking-blocks', ref: 2.25 },
-  { re: /chock|wheel-?chock/i, cat: 'cat-16', slug: 'bollards-chocks-corners', ref: 1.5 },
-  { re: /bollard|corner-?guard/i, cat: 'cat-16', slug: 'bollards-chocks-corners', ref: 3 },
-  { re: /kask|hard-?hat|safety-?helmet|helmet/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 3.5 },
-  { re: /safety-?shoe|work-?boot|boot waterproof/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 4 },
-  { re: /work-?glove|glove/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 1.4 },
-  { re: /safety-?glass|eye-?protection|goggle/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 1.25 },
-  { re: /hi-?vis|hi-?visibility|vest|ansi class|apparel-?shirt|survey-?vest/i, cat: 'cat-11', slug: 'safety-vests-hi-vis', ref: 2 },
-  { re: /yodock|water-?filled|jersey|plasticade|longitudinal-?channelizer|sand-?filled|concrete-?barrier/i, cat: 'cat-3', slug: 'barricades-barriers', ref: 12 },
-  { re: /cable-?protector|hose-?bridge|drop-?over|cord-?cover/i, cat: 'cat-14', slug: 'fencing-site-safety', ref: 2.8 },
-  { re: /fence|fencing|crowd-?control|plastic-?barrier|net-?ting|site-?safety/i, cat: 'cat-14', slug: 'fencing-site-safety', ref: 4.5 },
-  { re: /striping|marking-?paint|spray-?stripe|thermoplastic|traffic-?paint/i, cat: 'cat-13', slug: 'striping-pavement-paint', ref: 2.5 },
-  { re: /pavement-?marking|preformed|tape-?roll|temporary-?tape/i, cat: 'cat-13', slug: 'striping-pavement-paint', ref: 2 },
-  { re: /reflective-?tape|conspicuity/i, cat: 'cat-8', slug: 'accessories-hardware', ref: 1.5 },
-  { re: /orion|road-?flare|flare/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 3.5 },
-  { re: /marker|delineator|delineation|tab-marker|raised-?pavement/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 2.2 },
-  { re: /wand|paddle|flag(?!ger)/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 1.8 },
-  { re: /triangle|reflector-?kit/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 2 },
-  { re: /valet|velvet-?rope|stanchion/i, cat: 'cat-7', slug: 'pedestrian-control', ref: 2.5 },
-  { re: /pedestrian|urbanite|crowd|bike-?rack|bike-?lane/i, cat: 'cat-7', slug: 'pedestrian-control', ref: 5 },
-  { re: /type-?i{1,3}\b|barricade|a-cade|cade-?barricade|folding-?plastic|mutcd-?(i{1,3})/i, cat: 'cat-3', slug: 'barricades-barriers', ref: 5.5 },
-  { re: /arrow-?board|wanco|gregory.*arrow|solar-?arrow/i, cat: 'cat-4', slug: 'arrow-boards', ref: 95 },
-  { re: /message-?board|PCMS|variable-?message|VMS|ver-?mac.*cms/i, cat: 'cat-5', slug: 'message-boards', ref: 175 },
-  { re: /PCMS|bpcms/i, cat: 'cat-5', slug: 'message-boards', ref: 175 },
-  { re: /sign-?stand|trip-?od|quad-?pod|roll-?up|roll-?up-?sign|mutcd.*sign|rigid-?sign|sign-?mate/i, cat: 'cat-2', slug: 'signs-sign-stands', ref: 3 },
-  { re: /traffic-?sign|warning-?sign|legend|sheet-?sign|aluminum-?sign|mutcd-?w\d/i, cat: 'cat-2', slug: 'signs-sign-stands', ref: 3 },
-  { re: /channelizer|looper|delineator-?tube|tube-?delineator|grabber|channelizing-?cone/i, cat: 'cat-1', slug: 'cones-drums', ref: 3 },
-  { re: /drum\b|traffic-?drum|construction-?barrel/i, cat: 'cat-1', slug: 'cones-drums', ref: 4.5 },
-  { re: /cone\b|cones|enviro-?cone|slimline|traffix|cone-?weight/i, cat: 'cat-1', slug: 'cones-drums', ref: 2.5 },
-  { re: /solar-?assist|flasher|barricade-?light|strobe|warning-?light|beacon|type-?[ab]\b.*flash/i, cat: 'cat-6', slug: 'safety-lighting', ref: 2.25 },
-  { re: /accessory|attachment|bracket|sand-?bag|ballast|weight-?bag|cone-?bar|adapter|clip|mount/i, cat: 'cat-8', slug: 'accessories-hardware', ref: 1.5 },
+  { re: /fall-?protection|body-?harness|harness-|lanyard|retractable|self-?retract|carabiner|rope-?grab|vertical-?lifeline/i, cat: 'cat-15', slug: 'fall-protection', ref: 60 },
+  { re: /speed-?bump|speed-?hump/i, cat: 'cat-10', slug: 'speed-bumps-humps', ref: 80 },
+  { re: /parking-?block|wheel-?stop|parking-?curb/i, cat: 'cat-9', slug: 'parking-blocks', ref: 40 },
+  { re: /chock|wheel-?chock/i, cat: 'cat-16', slug: 'bollards-chocks-corners', ref: 95 },
+  { re: /bollard|corner-?guard/i, cat: 'cat-16', slug: 'bollards-chocks-corners', ref: 35 },
+  { re: /kask|hard-?hat|safety-?helmet|helmet/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 60 },
+  { re: /safety-?shoe|work-?boot|boot waterproof/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 80 },
+  { re: /work-?glove|glove/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 8 },
+  { re: /safety-?glass|eye-?protection|goggle/i, cat: 'cat-12', slug: 'ppe-helmets-gloves-shoes', ref: 15 },
+  { re: /hi-?vis|hi-?visibility|vest|ansi class|apparel-?shirt|survey-?vest/i, cat: 'cat-11', slug: 'safety-vests-hi-vis', ref: 20 },
+  { re: /yodock|water-?filled|jersey|plasticade|longitudinal-?channelizer|sand-?filled|concrete-?barrier/i, cat: 'cat-3', slug: 'barricades-barriers', ref: 425 },
+  { re: /cable-?protector|hose-?bridge|drop-?over|cord-?cover/i, cat: 'cat-14', slug: 'fencing-site-safety', ref: 75 },
+  { re: /fence|fencing|crowd-?control|plastic-?barrier|net-?ting|site-?safety/i, cat: 'cat-14', slug: 'fencing-site-safety', ref: 110 },
+  { re: /striping|marking-?paint|spray-?stripe|thermoplastic|traffic-?paint/i, cat: 'cat-13', slug: 'striping-pavement-paint', ref: 65 },
+  { re: /pavement-?marking|preformed|tape-?roll|temporary-?tape/i, cat: 'cat-13', slug: 'striping-pavement-paint', ref: 95 },
+  { re: /reflective-?tape|conspicuity/i, cat: 'cat-8', slug: 'accessories-hardware', ref: 50 },
+  { re: /orion|road-?flare|flare/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 25 },
+  { re: /marker|delineator|delineation|tab-marker|raised-?pavement/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 30 },
+  { re: /wand|paddle|flag(?!ger)/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 20 },
+  { re: /triangle|reflector-?kit/i, cat: 'cat-17', slug: 'flares-markers-wands-flags', ref: 30 },
+  { re: /valet|velvet-?rope|stanchion/i, cat: 'cat-7', slug: 'pedestrian-control', ref: 80 },
+  { re: /pedestrian|urbanite|crowd|bike-?rack|bike-?lane/i, cat: 'cat-7', slug: 'pedestrian-control', ref: 130 },
+  { re: /type-?i{1,3}\b|barricade|a-cade|cade-?barricade|folding-?plastic|mutcd-?(i{1,3})/i, cat: 'cat-3', slug: 'barricades-barriers', ref: 150 },
+  { re: /arrow-?board|wanco|gregory.*arrow|solar-?arrow/i, cat: 'cat-4', slug: 'arrow-boards', ref: 2500 },
+  { re: /message-?board|PCMS|variable-?message|VMS|ver-?mac.*cms/i, cat: 'cat-5', slug: 'message-boards', ref: 5000 },
+  { re: /PCMS|bpcms/i, cat: 'cat-5', slug: 'message-boards', ref: 5000 },
+  { re: /sign-?stand|trip-?od|quad-?pod|roll-?up|roll-?up-?sign|mutcd.*sign|rigid-?sign|sign-?mate/i, cat: 'cat-2', slug: 'signs-sign-stands', ref: 80 },
+  { re: /traffic-?sign|warning-?sign|legend|sheet-?sign|aluminum-?sign|mutcd-?w\d/i, cat: 'cat-2', slug: 'signs-sign-stands', ref: 50 },
+  { re: /channelizer|looper|delineator-?tube|tube-?delineator|grabber|channelizing-?cone/i, cat: 'cat-1', slug: 'cones-drums', ref: 25 },
+  { re: /drum\b|traffic-?drum|construction-?barrel/i, cat: 'cat-1', slug: 'cones-drums', ref: 70 },
+  { re: /cone\b|cones|enviro-?cone|slimline|traffix|cone-?weight/i, cat: 'cat-1', slug: 'cones-drums', ref: 25 },
+  { re: /solar-?assist|flasher|barricade-?light|strobe|warning-?light|beacon|type-?[ab]\b.*flash/i, cat: 'cat-6', slug: 'safety-lighting', ref: 130 },
+  { re: /accessory|attachment|bracket|sand-?bag|ballast|weight-?bag|cone-?bar|adapter|clip|mount/i, cat: 'cat-8', slug: 'accessories-hardware', ref: 25 },
 ]
 
-const DEFAULT_RULE = { cat: 'cat-8', slug: 'accessories-hardware', ref: 2 }
+const DEFAULT_RULE = { cat: 'cat-8', slug: 'accessories-hardware', ref: 25 }
 
 function classify(slugPath) {
   const s = slugPath.toLowerCase()

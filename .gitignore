@@ -25,3 +25,9 @@ vite.config.ts.timestamp-*.mjs
 # Python
 __pycache__/
 *.py[cod]
+
+# Large lead/contractor data (exceeds GitHub 100MB limit; kept local only)
+leads/3-cold-instantly-campaigns/
+leads/4-source-archive/
+NJ-contractors/*.csv
+NJ-contractors/enrichment_cache.json

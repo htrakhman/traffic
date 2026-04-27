@@ -1,0 +1,439 @@
+"""
+Bid-monitor base classes.
+
+This module is independent from `scrapers.base` (which holds
+`BasePermitScraper` for the permit-pull project). Each state DOT bid
+scraper subclasses `StateScraper` here.
+
+Subclasses override:
+    state_code, state_name, lettings_url, awards_url, parser_kind
+
+If a state needs custom parsing, override `fetch_lettings()` /
+`fetch_awards()` directly. The base class handles retry/backoff,
+error classification, keyword filtering, fuzzy contractor matching,
+and project normalisation so per-state modules stay tiny.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import json
+import logging
+import re
+from dataclasses import dataclass, field, asdict
+from datetime import datetime, timedelta
+from typing import Any, Iterable
+from urllib.parse import urlparse
+
+import aiohttp
+from bs4 import BeautifulSoup
+from dateutil import parser as dateparser
+from fuzzywuzzy import fuzz, process
+
+logger = logging.getLogger("bids.scraper")
+
+# -- Project keyword filter (mirrors spec) ----------------------------
+KEYWORDS = [
+    "paving", "asphalt", "overlay", "resurfacing", "highway", "road",
+    "lane", "traffic control", "earthwork", "excavation", "grading",
+    "drainage", "bridge", "guardrail", "striping", "signing", "signal",
+    "concrete", "culvert", "sitework", "right-of-way", "row", "mill",
+    "chip seal", "slurry", "utility", "underground", "water main",
+    "rehabilitation", "reconstruction", "widening", "interchange",
+    "intersection",
+]
+KEYWORD_RE = re.compile(
+    r"\b(" + "|".join(re.escape(k) for k in KEYWORDS) + r")\b",
+    re.IGNORECASE,
+)
+
+
+# -- Data classes -----------------------------------------------------
+@dataclass
+class Letting:
+    project_number: str
+    name: str
+    description: str
+    state: str
+    location: str
+    letting_date: str | None
+    estimate: float | None
+    naics: str | None
+    source_url: str
+
+    def matches_keyword(self) -> bool:
+        haystack = " ".join([self.name or "", self.description or ""])
+        return bool(KEYWORD_RE.search(haystack))
+
+
+@dataclass
+class Bid:
+    project_number: str
+    project_name: str
+    state: str
+    bidder_name: str
+    bid_amount: float | None
+    rank: int | None
+    total_bidders: int | None
+    bid_opening_date: str | None
+    source_url: str
+
+
+@dataclass
+class Award:
+    project_number: str
+    project_name: str
+    state: str
+    location: str
+    contractor_name: str
+    award_amount: float | None
+    award_date: str | None
+    source_url: str
+
+    def matches_keyword(self) -> bool:
+        return bool(KEYWORD_RE.search(self.project_name or ""))
+
+
+@dataclass
+class StateRunResult:
+    state_code: str
+    state_name: str
+    status: str  # live | blocked | auth_required | no_data | format_changed | timeout | error
+    lettings: list[Letting] = field(default_factory=list)
+    bids: list[Bid] = field(default_factory=list)
+    awards: list[Award] = field(default_factory=list)
+    error: str | None = None
+    elapsed_seconds: float = 0.0
+
+
+# -- Per-domain rate limiter -----------------------------------------
+class DomainRateLimiter:
+    """Limits concurrent requests per domain (default 2)."""
+
+    def __init__(self, per_domain: int = 2) -> None:
+        self._per_domain = per_domain
+        self._sems: dict[str, asyncio.Semaphore] = {}
+
+    def _sem(self, url: str) -> asyncio.Semaphore:
+        host = urlparse(url).netloc.lower()
+        if host not in self._sems:
+            self._sems[host] = asyncio.Semaphore(self._per_domain)
+        return self._sems[host]
+
+    async def acquire(self, url: str) -> asyncio.Semaphore:
+        sem = self._sem(url)
+        await sem.acquire()
+        return sem
+
+
+# -- Errors -----------------------------------------------------------
+class BlockedError(Exception):
+    pass
+
+
+class AuthRequiredError(Exception):
+    pass
+
+
+class FormatChangedError(Exception):
+    pass
+
+
+class TransientError(Exception):
+    pass
+
+
+# -- Base scraper -----------------------------------------------------
+class StateScraper:
+    state_code: str = "??"
+    state_name: str = "Unknown"
+    lettings_url: str | None = None
+    awards_url: str | None = None
+    parser_kind: str = "html_table"
+    needs_playwright: bool = False
+    requires_auth: bool = False
+
+    timeout_seconds: int = 45
+    retry_attempts: int = 3
+    retry_backoff_base: int = 2
+
+    def __init__(self, session: aiohttp.ClientSession,
+                 limiter: DomainRateLimiter,
+                 user_agent: str = "BidMonitor/1.0") -> None:
+        self.session = session
+        self.limiter = limiter
+        self.user_agent = user_agent
+
+    # ---- Fetching -------------------------------------------------
+    async def _fetch(self, url: str) -> tuple[str, int]:
+        headers = {"User-Agent": self.user_agent,
+                   "Accept": "text/html,application/json,application/xhtml+xml,*/*"}
+        sem = await self.limiter.acquire(url)
+        try:
+            last_err: Exception | None = None
+            for attempt in range(self.retry_attempts):
+                try:
+                    timeout = aiohttp.ClientTimeout(total=self.timeout_seconds)
+                    async with self.session.get(url, headers=headers,
+                                                timeout=timeout,
+                                                allow_redirects=True) as resp:
+                        text = await resp.text(errors="replace")
+                        return text, resp.status
+                except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+                    last_err = e
+                    backoff = self.retry_backoff_base ** attempt
+                    logger.debug("[%s] fetch retry %d after %ss: %s",
+                                 self.state_code, attempt + 1, backoff, e)
+                    await asyncio.sleep(backoff)
+            raise last_err if last_err else RuntimeError("unknown fetch error")
+        finally:
+            sem.release()
+
+    # ---- Hooks subclasses may override ----------------------------
+    async def fetch_lettings(self) -> list[Letting]:
+        if not self.lettings_url:
+            return []
+        text, status = await self._fetch(self.lettings_url)
+        self._classify_status(status, text)
+        return self._parse_lettings_html(text, self.lettings_url)
+
+    async def fetch_awards(self) -> list[Award]:
+        if not self.awards_url:
+            return []
+        text, status = await self._fetch(self.awards_url)
+        self._classify_status(status, text)
+        return self._parse_awards_html(text, self.awards_url)
+
+    async def fetch_bids(self) -> list[Bid]:
+        # Most states publish bid tabs on a per-letting basis. Subclasses
+        # that have a consolidated tab page can override this.
+        return []
+
+    # ---- Status classification ------------------------------------
+    def _classify_status(self, http_status: int, body: str) -> None:
+        body_l = body.lower()
+        if http_status == 401 or http_status == 403:
+            raise BlockedError(f"HTTP {http_status} (auth/blocked)")
+        if http_status == 404:
+            raise FormatChangedError("HTTP 404 - URL may have moved")
+        if http_status >= 500:
+            raise TransientError(f"HTTP {http_status}")
+        if "captcha" in body_l or "are you human" in body_l:
+            raise BlockedError("Captcha challenge")
+        if "sign in" in body_l and "password" in body_l and len(body) < 5000:
+            raise AuthRequiredError("Login wall")
+
+    # ---- Generic HTML parsers --------------------------------------
+    def _parse_lettings_html(self, html: str, source_url: str) -> list[Letting]:
+        soup = BeautifulSoup(html, "lxml")
+        results: list[Letting] = []
+        for table in soup.select("table"):
+            headers = [self._norm_header(th.get_text(" ", strip=True))
+                       for th in table.select("thead th") or table.select("tr th")]
+            if not headers:
+                first = table.find("tr")
+                if first:
+                    headers = [self._norm_header(td.get_text(" ", strip=True))
+                               for td in first.find_all(["td", "th"])]
+            for tr in table.select("tr")[1:] if headers else []:
+                cells = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                if not cells or len(cells) < 2:
+                    continue
+                row = dict(zip(headers, cells))
+                lt = self._row_to_letting(row, source_url)
+                if lt:
+                    results.append(lt)
+        return results
+
+    def _parse_awards_html(self, html: str, source_url: str) -> list[Award]:
+        soup = BeautifulSoup(html, "lxml")
+        results: list[Award] = []
+        for table in soup.select("table"):
+            headers = [self._norm_header(th.get_text(" ", strip=True))
+                       for th in table.select("thead th") or table.select("tr th")]
+            if not headers:
+                first = table.find("tr")
+                if first:
+                    headers = [self._norm_header(td.get_text(" ", strip=True))
+                               for td in first.find_all(["td", "th"])]
+            for tr in table.select("tr")[1:] if headers else []:
+                cells = [td.get_text(" ", strip=True) for td in tr.find_all("td")]
+                if not cells:
+                    continue
+                row = dict(zip(headers, cells))
+                aw = self._row_to_award(row, source_url)
+                if aw:
+                    results.append(aw)
+        return results
+
+    @staticmethod
+    def _norm_header(s: str) -> str:
+        return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
+
+    @staticmethod
+    def _parse_money(s: str | None) -> float | None:
+        if not s:
+            return None
+        m = re.search(r"\$?\s*([\d,]+(?:\.\d+)?)", s)
+        if not m:
+            return None
+        try:
+            return float(m.group(1).replace(",", ""))
+        except ValueError:
+            return None
+
+    @staticmethod
+    def _parse_date(s: str | None) -> str | None:
+        if not s:
+            return None
+        try:
+            return dateparser.parse(s, fuzzy=True).date().isoformat()
+        except (ValueError, TypeError, OverflowError):
+            return None
+
+    def _row_to_letting(self, row: dict[str, str], source_url: str) -> Letting | None:
+        pn = first_of(row, ("project", "project_number", "proposal", "call",
+                            "contract", "contract_id", "letting_id"))
+        name = first_of(row, ("name", "project_name", "description", "title"))
+        if not pn and not name:
+            return None
+        desc = first_of(row, ("description", "scope", "work", "type")) or name or ""
+        county = first_of(row, ("county", "location", "city", "route")) or ""
+        let_date = first_of(row, ("letting_date", "let_date", "open_date",
+                                  "bid_open_date", "date"))
+        est = first_of(row, ("estimate", "engineers_estimate",
+                             "engineer_s_estimate", "engineer_estimate", "amount"))
+        naics = first_of(row, ("naics", "type_code", "work_class"))
+        return Letting(
+            project_number=pn or self._fallback_id(name, let_date),
+            name=name or pn or "",
+            description=desc,
+            state=self.state_code,
+            location=county,
+            letting_date=self._parse_date(let_date),
+            estimate=self._parse_money(est),
+            naics=naics,
+            source_url=source_url,
+        )
+
+    def _row_to_award(self, row: dict[str, str], source_url: str) -> Award | None:
+        pn = first_of(row, ("project", "project_number", "proposal",
+                            "contract", "contract_id"))
+        name = first_of(row, ("name", "project_name", "description", "title"))
+        contractor = first_of(row, ("contractor", "awarded_to", "vendor",
+                                    "low_bidder", "winning_bidder"))
+        if not contractor:
+            return None
+        amt = first_of(row, ("award", "award_amount", "amount", "bid",
+                             "low_bid", "winning_bid"))
+        award_date = first_of(row, ("award_date", "awarded", "date"))
+        location = first_of(row, ("county", "location", "city", "route")) or ""
+        return Award(
+            project_number=pn or self._fallback_id(name, award_date),
+            project_name=name or pn or "",
+            state=self.state_code,
+            location=location,
+            contractor_name=contractor,
+            award_amount=self._parse_money(amt),
+            award_date=self._parse_date(award_date),
+            source_url=source_url,
+        )
+
+    @staticmethod
+    def _fallback_id(name: str | None, date_str: str | None) -> str:
+        seed = f"{name or 'unknown'}-{date_str or 'nodate'}"
+        return re.sub(r"[^a-zA-Z0-9]+", "-", seed).strip("-")[:80]
+
+    # ---- Run wrapper ----------------------------------------------
+    async def run(self) -> StateRunResult:
+        started = datetime.utcnow()
+        try:
+            lettings_t, awards_t, bids_t = await asyncio.gather(
+                self._safe(self.fetch_lettings, "lettings"),
+                self._safe(self.fetch_awards, "awards"),
+                self._safe(self.fetch_bids, "bids"),
+            )
+            lettings, awards, bids = lettings_t, awards_t, bids_t
+            status = ("live" if (lettings or awards or bids) else "no_data")
+            return StateRunResult(self.state_code, self.state_name, status,
+                                  lettings, bids, awards,
+                                  elapsed_seconds=self._since(started))
+        except AuthRequiredError as e:
+            return StateRunResult(self.state_code, self.state_name,
+                                  "auth_required", error=str(e),
+                                  elapsed_seconds=self._since(started))
+        except BlockedError as e:
+            return StateRunResult(self.state_code, self.state_name,
+                                  "blocked", error=str(e),
+                                  elapsed_seconds=self._since(started))
+        except FormatChangedError as e:
+            return StateRunResult(self.state_code, self.state_name,
+                                  "format_changed", error=str(e),
+                                  elapsed_seconds=self._since(started))
+        except asyncio.TimeoutError as e:
+            return StateRunResult(self.state_code, self.state_name,
+                                  "timeout", error=str(e),
+                                  elapsed_seconds=self._since(started))
+        except Exception as e:  # noqa: BLE001
+            logger.exception("[%s] unhandled error", self.state_code)
+            return StateRunResult(self.state_code, self.state_name,
+                                  "error", error=f"{type(e).__name__}: {e}",
+                                  elapsed_seconds=self._since(started))
+
+    async def _safe(self, fn, label: str):
+        try:
+            return await fn()
+        except (AuthRequiredError, BlockedError, FormatChangedError):
+            raise
+        except Exception as e:  # noqa: BLE001
+            logger.warning("[%s] %s sub-fetch failed: %s",
+                           self.state_code, label, e)
+            return []
+
+    @staticmethod
+    def _since(started: datetime) -> float:
+        return (datetime.utcnow() - started).total_seconds()
+
+
+# -- Helpers ----------------------------------------------------------
+def first_of(row: dict[str, str], keys: Iterable[str]) -> str | None:
+    """Return the first value whose normalised header contains one of the
+    given keys (substring match)."""
+    for header, val in row.items():
+        for k in keys:
+            if k in header:
+                return val.strip() if val else None
+    return None
+
+
+def fuzzy_contractor_match(name: str,
+                           contractors: list[dict[str, str]],
+                           threshold: int = 80) -> dict[str, str] | None:
+    """Return the contractor row that best matches `name`, or None.
+
+    Tries:
+      1. Exact (case-insensitive) name match
+      2. Email-domain heuristic (company name appears in email domain)
+      3. fuzzywuzzy token_set_ratio >= threshold
+    """
+    if not name or not contractors:
+        return None
+    n = name.lower().strip()
+    for c in contractors:
+        if c.get("business_name", "").lower().strip() == n:
+            return c
+    n_compact = re.sub(r"[^a-z0-9]", "", n)
+    for c in contractors:
+        email = (c.get("email") or "").lower()
+        if "@" in email:
+            domain = email.split("@", 1)[1].split(".", 1)[0]
+            if len(domain) >= 4 and domain in n_compact:
+                return c
+    choices = {c["business_name"]: c for c in contractors if c.get("business_name")}
+    if not choices:
+        return None
+    best, score = process.extractOne(name, list(choices.keys()),
+                                     scorer=fuzz.token_set_ratio)
+    if score >= threshold:
+        return choices[best]
+    return None

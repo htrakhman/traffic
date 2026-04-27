@@ -1,0 +1,314 @@
+{
+  "AL": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "AK": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "AZ": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "AR": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "CA": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "CO": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "CT": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "DE": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "FL": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "GA": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "HI": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "ID": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "IL": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "IN": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "IA": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "KS": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "KY": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "LA": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "ME": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "MD": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "MA": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "MI": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "MN": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "MS": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "MO": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "MT": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "NE": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "NV": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "NH": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "NJ": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "NM": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "NY": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "NC": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "ND": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "OH": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "OK": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "OR": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "PA": {
+    "status": "blocked",
+    "error": "Captcha challenge",
+    "lettings": 0,
+    "awards": 0
+  },
+  "RI": {
+    "status": "blocked",
+    "error": "Captcha challenge",
+    "lettings": 0,
+    "awards": 0
+  },
+  "SC": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "SD": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "TN": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "TX": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "UT": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "VT": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "VA": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "WA": {
+    "status": "blocked",
+    "error": "HTTP 403 (auth/blocked)",
+    "lettings": 0,
+    "awards": 0
+  },
+  "WV": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "WI": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "WY": {
+    "status": "format_changed",
+    "error": "HTTP 404 - URL may have moved",
+    "lettings": 0,
+    "awards": 0
+  },
+  "US-SAM": {
+    "status": "no_data",
+    "error": null,
+    "lettings": 0,
+    "awards": 0
+  },
+  "US-AWD": {
+    "status": "live",
+    "error": null,
+    "lettings": 0,
+    "awards": 100
+  }
+}
