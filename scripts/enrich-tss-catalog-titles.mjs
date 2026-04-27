@@ -15,7 +15,7 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const CATALOG = join(ROOT, 'public/tss-catalog.json')
 const CACHE_DIR = join(ROOT, '.cache/tss-pdp')
 
-const UA = 'TrafficControlRental-catalog-title-enrich/1.0 (+https://trafficcontrolrental.com)'
+const UA = 'TrafficControlRental-catalog-title-enrich/1.0 (+https://trafficcontrolsupply.com)'
 
 function parseArgs(argv) {
   let force = false

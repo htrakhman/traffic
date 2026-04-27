@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
-const ORIGIN = 'https://trafficcontrolrental.com'
+const ORIGIN = 'https://trafficcontrolsupply.com'
 
 function escape(s = '') {
   return String(s)

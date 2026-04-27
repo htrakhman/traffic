@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url'
 const SITEMAP = 'https://www.trafficsafetystore.com/sitemap.xml'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const CATALOG = join(ROOT, 'public/tss-catalog.json')
-const UA = 'TrafficControlRental-catalog-verify/1.0 (+https://trafficcontrolrental.com)'
+const UA = 'TrafficControlRental-catalog-verify/1.0 (+https://trafficcontrolsupply.com)'
 
 const BAD_PATH_PREFIXES = ['/shop/#NAME?/']
 

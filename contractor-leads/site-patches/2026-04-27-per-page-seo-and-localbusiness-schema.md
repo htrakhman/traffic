@@ -40,7 +40,7 @@ Add to the exported `schema` object:
     logo: `${SITE_ORIGIN}${SITE_LOGO_PATH}`,
     image: `${SITE_ORIGIN}${SITE_LOGO_PATH}`,
     telephone: '+1-732-675-2499',
-    email: 'rent@trafficcontrolrental.com',
+    email: 'rent@trafficcontrolsupply.com',
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',

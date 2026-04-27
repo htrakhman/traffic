@@ -266,5 +266,5 @@ This is the SPA fallback. Once prerendering is active, Vercel will serve the pre
 
 1. Run `npm run build` locally and inspect `dist/`.
 2. Deploy to Vercel (`vercel --prod` or push to main).
-3. Use `curl https://trafficcontrolrental.com/product/28-in-traffic-cone-7lb` and confirm the response body contains `<title>` and `<meta name="description">` in the raw HTML (not just in the browser's rendered DOM).
-4. Submit `https://trafficcontrolrental.com/sitemap.xml` to Google Search Console (P0 #6).
+3. Use `curl https://trafficcontrolsupply.com/product/28-in-traffic-cone-7lb` and confirm the response body contains `<title>` and `<meta name="description">` in the raw HTML (not just in the browser's rendered DOM).
+4. Submit `https://trafficcontrolsupply.com/sitemap.xml` to Google Search Console (P0 #6).

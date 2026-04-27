@@ -4,7 +4,7 @@
 
 ## Current baseline
 
-- **Site status:** Domain `trafficcontrolrental.com` acquired BUT **still serving the GoDaddy Website Builder parking page** as of 2026-04-27 (verified via curl — `meta name="generator" content="Go Daddy Website Builder 8.0.0000"`). Deployment to Vercel/Netlify is the **single biggest blocker on the roadmap**. Until DNS flips, every patch and post we ship sits unindexed.
+- **Site status:** Domain `trafficcontrolsupply.com` acquired BUT **still serving the GoDaddy Website Builder parking page** as of 2026-04-27 (verified via curl — `meta name="generator" content="Go Daddy Website Builder 8.0.0000"`). Deployment to Vercel/Netlify is the **single biggest blocker on the roadmap**. Until DNS flips, every patch and post we ship sits unindexed.
 - **Framework:** Vite + React SPA + React Router. Client-side rendered, no SSR/SSG. Prerendering patch drafted (see `site-patches/2026-04-23-vite-prerender-ssg.md`).
 - **Meta tags:** ⚠ **Partial.** `SEO.tsx` is wired into Home, Blog, Article, and Product. Audit 2026-04-27 found it is **NOT mounted** on Browse, Category, Assistant, SiteMapPlanner, or Quote — those routes inherit either `index.html` defaults or whatever the previous-visited page set. Patch drafted: `site-patches/2026-04-27-per-page-seo-and-localbusiness-schema.md`.
 - **Schema.org markup:** Partial. `JsonLd.tsx` exposes Organization, WebSite, BreadcrumbList, Article, FAQPage factories. Article pages use them. Missing: `LocalBusiness` on Home, `Product` factory (Product.tsx has inline `@graph` logic). Both addressed in the 2026-04-27 patch above. robots.txt is excellent — explicitly allows GPTBot, ClaudeBot, OAI-SearchBot, PerplexityBot.
@@ -21,7 +21,7 @@
 
 | # | Item | Effort | Status |
 |---|------|--------|--------|
-| 1 | **Register a domain.** Acquired: `trafficcontrolrental.com` — point DNS at Netlify/Vercel and enable HTTPS. | 10 min | Done |
+| 1 | **Register a domain.** Acquired: `trafficcontrolsupply.com` — point DNS at Netlify/Vercel and enable HTTPS. | 10 min | Done |
 | 2 | **Deploy to Vercel or Netlify** (configs already exist — `vercel.json` and `netlify.toml`). Point domain at it. | 30 min | TODO |
 | 3 | **Add prerendering or SSG.** Option A (fast): `vite-plugin-ssr` / `vite-plugin-prerender`. Option B (nicer long-term): migrate to Next.js. Recommend A for now. | 2–4 hrs | TODO |
 | 4 | **Per-page meta tags** via `react-helmet-async`. Unique title + description for Home, Browse, each Category, each Product, Quote, Assistant, Planner. | 3–5 hrs | **Partial** — `SEO.tsx` wired into Home, Blog, Article, Product. Audit 2026-04-27 found Browse, Category, Assistant, SiteMapPlanner, Quote are NOT using it. Patch drafted (`site-patches/2026-04-27-per-page-seo-and-localbusiness-schema.md`) to fix. |
@@ -100,7 +100,7 @@ Group D — **long-tail AEO** (pure AI-answer-engine wedge):
 ## Changelog
 
 - **2026-04-18** — Initial audit. Site is localhost-only. P0 blockers identified. No keywords ranked yet (site not indexable).
-- **2026-04-18** — Domain acquired: `trafficcontrolrental.com`. Deploying to Vercel. GBP deferred pending demand validation.
+- **2026-04-18** — Domain acquired: `trafficcontrolsupply.com`. Deploying to Vercel. GBP deferred pending demand validation.
 - **2026-04-18** — Added new P0: **ship Vercel serverless proxy for Anthropic API** (`/api/chat`). Current `aiClient.ts` leaks the key in the browser bundle. Patch drafted in `site-patches/2026-04-18-anthropic-serverless-proxy.md`. Until patch ships, cap Anthropic key at $10–20/mo.
 - **2026-04-23** — Week 2 audit. Discovered several items already complete (P0 #4, P1 #8, #9, #10, #12). Updated roadmap statuses accordingly.
 - **2026-04-23** — **Content:** Post 1 ("How Many Traffic Cones Do You Actually Need for a Lane Closure?") fully drafted — `contractor-leads/content/001-how-many-cones-for-lane-closure.md`. Calendar updated to `drafted`. Harold needs to create `src/data/articles/how-many-cones-for-lane-closure-nj.ts` and register it in `articles.ts` to publish.
@@ -108,7 +108,7 @@ Group D — **long-tail AEO** (pure AI-answer-engine wedge):
 - **2026-04-23** — **Competitor scan:** Roadsafe Traffic Systems profiled. Key finding: zero informational content on their site — the entire "how many cones / taper length / barricade types" keyword space is wide open. This validates the content-first AEO strategy.
 - **2026-04-23** — GSC still not set up. No rank data. P0 #6 remains TODO — Harold action needed after deployment.
 - **2026-04-27** — **Week 3 audit (Monday SEO run).**
-  - **Deployment status:** still on GoDaddy parking page (`curl -sI https://trafficcontrolrental.com` returns Go Daddy Website Builder generator). P0 #2 remains the single biggest blocker — every shipped patch is dead weight until DNS flips.
+  - **Deployment status:** still on GoDaddy parking page (`curl -sI https://trafficcontrolsupply.com` returns Go Daddy Website Builder generator). P0 #2 remains the single biggest blocker — every shipped patch is dead weight until DNS flips.
   - **Site audit finding:** `<SEO>` component is missing from 5 routes — Browse, Category, Assistant, SiteMapPlanner, Quote. P0 #4 status corrected from "Done" → "Partial". This explains why those routes have no per-page targeting; Assistant + Planner are our differentiators per `business-profile.md` and they're shipping with the homepage's title.
   - **Patch drafted:** `site-patches/2026-04-27-per-page-seo-and-localbusiness-schema.md` — adds (a) `<SEO>` to the 5 missing routes, (b) `localBusiness()` and `product()` factories in `JsonLd.tsx`, (c) Organization + WebSite + LocalBusiness JSON-LD on Home. Closes P0 #4 gap and most of P1 #7.
   - **Article count corrected:** roadmap previously said "6 articles"; actual count is 11 (Post 1 / cone-count guide was published 2026-04-25, commit 6417ea1; trailer rental and several others also live).

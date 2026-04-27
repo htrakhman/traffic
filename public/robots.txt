@@ -1,4 +1,4 @@
-# Traffic Control Rental — robots.txt
+# Traffic Control Supply — robots.txt
 # Owned by the seo-specialist subagent.
 
 User-agent: *
@@ -22,4 +22,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://trafficcontrolrental.com/sitemap.xml
+Sitemap: https://trafficcontrolsupply.com/sitemap.xml

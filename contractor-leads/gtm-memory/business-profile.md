@@ -5,7 +5,7 @@
 ## Brand / domain
 
 - **Working name:** TrafficKit (page titles + codebase)
-- **Domain:** trafficcontrolrental.com (acquired 2026-04-18, deploying Vercel)
+- **Domain:** trafficcontrolsupply.com (acquired 2026-04-18, deploying Vercel)
 - **Positioning name candidates:** "Traffic Control Rental" (legacy domain — SEO-exact-match for the rental keyword we still appear under), "TrafficKit" (brandable)
   - Domain still says "rental" but the **business model has pivoted to BUY/SELL** as of 2026-04-27 (commit 8137595, "Remove rental framing site-wide after pivot to buy/sell model"). Brand strings, logo, and domain intentionally preserved during the pivot. Future content should be framed around purchase + delivery, not rental.
 
