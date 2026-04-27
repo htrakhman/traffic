@@ -1,19 +1,28 @@
 # TrafficKit — Business Profile
 
-*Last updated: 2026-04-18*
+*Last updated: 2026-04-27 — major pivot from rental → buy/sell model*
 
 ## Brand / domain
 
 - **Working name:** TrafficKit (page titles + codebase)
 - **Domain:** trafficcontrolrental.com (acquired 2026-04-18, deploying Vercel)
-- **Positioning name candidates:** "Traffic Control Rental" (SEO-exact-match), "TrafficKit" (brandable)
-  - Lean toward "Traffic Control Rental" in title tags / meta for SEO exact-match advantage; keep "TrafficKit" as the brand people remember
+- **Positioning name candidates:** "Traffic Control Rental" (legacy domain — SEO-exact-match for the rental keyword we still appear under), "TrafficKit" (brandable)
+  - Domain still says "rental" but the **business model has pivoted to BUY/SELL** as of 2026-04-27 (commit 8137595, "Remove rental framing site-wide after pivot to buy/sell model"). Brand strings, logo, and domain intentionally preserved during the pivot. Future content should be framed around purchase + delivery, not rental.
 
 ## What we are
 
-**TrafficKit** is a traffic-control equipment rental business serving
-contractors working on roadside jobs. We rent cones, barricades, arrow
-boards, message boards, signs, and full MUTCD-compliant TTC packages.
+**TrafficKit** is a traffic-control equipment ***seller*** (with delivery)
+serving contractors working on roadside jobs. We sell cones, barricades,
+arrow boards, message boards, signs, and full MUTCD-compliant TTC packages
+for purchase, with same-day Central NJ delivery.
+
+**Pivot history:** Originally launched as a rental business (Apr 2026).
+Pivoted to buy/sell with delivery on 2026-04-27. Reasons (per commits 8137595
++ 4480967): rental coordination overhead, depreciation/damage liability on
+high-value gear, simpler revenue recognition, easier customer ops. Existing
+rental-targeted SEO content was preserved (still ranks for "rental"
+keywords, which we capture as ambiguous-intent traffic and convert to
+purchase).
 
 **Differentiator:** the site ships with two AI-powered tools that
 competitors don't have:

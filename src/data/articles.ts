@@ -62,8 +62,18 @@ import { articleTrafficControlDevicesGuide } from './articles/traffic-control-de
 import { articleTrafficConeRentalGuide } from './articles/traffic-cone-rental-guide'
 import { articleHowManyConesForLaneClosure } from './articles/how-many-cones-for-lane-closure-nj'
 import { articleTrafficControlTrailerRentalGuide } from './articles/traffic-control-trailer-rental-guide'
+import { articleTypeIiiBarricadeVsTypeITypeIi } from './articles/type-iii-barricade-vs-type-i-type-ii'
+import { articleMutcdTaperLengthFormulaNj } from './articles/mutcd-taper-length-formula-nj'
+import { articleTemporaryTrafficControlPlanUtilityJob } from './articles/temporary-traffic-control-plan-utility-job'
+import { articleRentVsBuyTrafficControlEquipment } from './articles/rent-vs-buy-traffic-control-equipment'
+import { articleNjdotWorkZoneStandardsContractorReference } from './articles/njdot-work-zone-standards-contractor-reference'
 
 export const articles: Article[] = [
+  articleTypeIiiBarricadeVsTypeITypeIi,
+  articleMutcdTaperLengthFormulaNj,
+  articleTemporaryTrafficControlPlanUtilityJob,
+  articleRentVsBuyTrafficControlEquipment,
+  articleNjdotWorkZoneStandardsContractorReference,
   articleTrafficControlTrailerRentalGuide,
   articleHowManyConesForLaneClosure,
   articleTrafficConeRentalGuide,

@@ -27,34 +27,38 @@ Every post:
 - Next step: Harold to create article entry in `src/data/articles/` and add to articles.ts
 
 **Post 2 — "Type I vs Type II vs Type III Barricades: Which One Do You Need?"**
-- Status: outlined (2026-04-27) — outline in `../content/002-type-i-vs-type-ii-vs-type-iii-barricades-outline.md`
+- Status: **published** (2026-04-27) — `src/data/articles/type-iii-barricade-vs-type-i-type-ii.ts`
 - Primary keyword: *Type III barricade*
 - AEO wedge: directly answers a FAQ that contractors/AI engines ask
-- Next step: draft full 1500–2500 word post next Monday run; verify NJDOT spec section + ballast figures at draft time
 
 ### Week 2 (ship by 2026-05-02)
 
 **Post 3 — "Arrow Board Rental in NJ: Everything You Need to Know (Cost, Sizes, When You Need One)"**
+- Status: queued (existing `arrow-board-rental-guide` already covers most of this — consider repositioning as NJ-localized variant or skipping)
 - Primary keyword: *arrow board rental NJ*
 - Commercial intent — this one will move revenue
 
 **Post 4 — "What's the MUTCD Taper Length Formula? (With NJ DOT Examples)"**
+- Status: **published** (2026-04-27) — `src/data/articles/mutcd-taper-length-formula-nj.ts`
 - Primary keyword: *MUTCD taper length*
 - AEO wedge + ranks for DOT engineers and PMs
 
 ### Week 3 (ship by 2026-05-09)
 
 **Post 5 — "How to Build a Temporary Traffic Control Plan for a Small Utility Job"**
+- Status: **published** (2026-04-27) — `src/data/articles/temporary-traffic-control-plan-utility-job.ts`
 - Primary keyword: *temporary traffic control plan*
 - Feeds into the SiteMapPlanner tool — natural CTA
 
 **Post 6 — "Traffic Control Equipment Rental vs. Buy: When Does Each Make Sense?"**
+- Status: **published** (2026-04-27) — `src/data/articles/rent-vs-buy-traffic-control-equipment.ts`
 - Primary keyword: *rent vs buy traffic control*
 - Commercial + informational hybrid — converts well
 
 ### Week 4 (ship by 2026-05-16)
 
 **Post 7 — "NJDOT Work Zone Standards: The Contractor's Quick Reference"**
+- Status: **published** (2026-04-27) — `src/data/articles/njdot-work-zone-standards-contractor-reference.ts`
 - Primary keyword: *NJDOT work zone standards*
 - Pillar piece — links out to many other guides
 
@@ -79,3 +83,4 @@ testimonials when available, local phone number / address.
 - **2026-04-18** — Calendar seeded. Week 1 outline starts below.
 - **2026-04-23** — Post 1 ("How Many Traffic Cones…") moved from `outlined` → `drafted`. Full draft in `../content/001-how-many-cones-for-lane-closure.md`. Needs article entry in `src/data/articles/` to go live.
 - **2026-04-27** — Post 1 confirmed published in codebase: `src/data/articles/how-many-cones-for-lane-closure-nj.ts` exists and is registered in `articles.ts` (commit 6417ea1). Site-side: still un-deployed (domain serves GoDaddy parking page). Post 2 (Type I/II/III barricades) moved `queued` → `outlined`; outline in `../content/002-type-i-vs-type-ii-vs-type-iii-barricades-outline.md`.
+- **2026-04-27 (later)** — **Cadence change:** Harold requested 5 articles/day with auto-commit + push. Today's catch-up batch shipped (5 posts → published): Type III barricade guide, MUTCD taper length, TTC plan for utility job, rent vs buy, NJDOT work zone standards. All registered in `articles.ts`, TypeScript clean. Posts 4–7 from the calendar are now done; Post 3 (arrow board rental NJ) deferred since `arrow-board-rental-guide` already covers most of it. Going forward, the `traffic-seo-autopublish` scheduled task runs daily at 09:00 and produces 5 new posts + auto-commit + push.
