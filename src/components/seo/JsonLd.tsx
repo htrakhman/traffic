@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { SITE_LOGO_PATH, SITE_ORIGIN } from '../../config/site'
+import { SITE_LOGO_PATH, SITE_NAME, SITE_ORIGIN } from '../../config/site'
 
 /**
  * Injects a JSON-LD script tag into <head>. Each instance renders one block.
@@ -30,7 +30,7 @@ export const schema = {
   organization: () => ({
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Traffic Control Rental',
+    name: SITE_NAME,
     url: SITE_ORIGIN,
     logo: `${SITE_ORIGIN}${SITE_LOGO_PATH}`,
     sameAs: [] as string[],
@@ -38,7 +38,7 @@ export const schema = {
   website: () => ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Traffic Control Rental',
+    name: SITE_NAME,
     url: SITE_ORIGIN,
     potentialAction: {
       '@type': 'SearchAction',
@@ -78,11 +78,11 @@ export const schema = {
     dateModified: a.dateModified || a.datePublished,
     author: {
       '@type': 'Organization',
-      name: a.author || 'Traffic Control Rental',
+      name: a.author || SITE_NAME,
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Traffic Control Rental',
+      name: SITE_NAME,
       logo: { '@type': 'ImageObject', url: `${SITE_ORIGIN}${SITE_LOGO_PATH}` },
     },
     image: a.image

@@ -70,7 +70,7 @@ const TRANS = 'Trans-Supply'
 const TSP = 'Traffic Safety Products'
 const CORAL = 'Coral Sales (Ver-Mac)'
 
-export const curatedProducts: Product[] = [
+const rawCuratedProducts: Product[] = [
   // --- Cones & Drums ---
   {
     id: 'prod-1',
@@ -2699,6 +2699,57 @@ export const curatedProducts: Product[] = [
   },
 ]
 
+function cleanCommerceCopy(value: string): string {
+  return value
+    .replace(/\bTraffic Control Rental\b/g, SITE_NAME)
+    .replace(/\btraffic control rental\b/g, 'traffic control equipment')
+    .replace(/\btraffic safety rental\b/g, 'traffic safety equipment')
+    .replace(/\bconstruction barricade rental\b/g, 'construction barricades')
+    .replace(/\btraffic equipment rental\b/g, 'traffic equipment')
+    .replace(/\bminimum rental period\b/gi, 'minimum order quantity')
+    .replace(/\bminimum rental\b/gi, 'minimum order')
+    .replace(/\brental period\b/gi, 'order timeline')
+    .replace(/\brental terms?\b/gi, 'order terms')
+    .replace(/\brental packs?\b/gi, 'equipment packs')
+    .replace(/\brental set\b/gi, 'equipment set')
+    .replace(/\brental inventory\b/gi, 'catalog inventory')
+    .replace(/\brental provider\b/gi, 'equipment supplier')
+    .replace(/\brental company\b/gi, 'equipment supplier')
+    .replace(/\brental quote\b/gi, 'quote')
+    .replace(/\brental rates?\b/gi, 'price tiers')
+    .replace(/\brentals\b/gi, 'orders')
+    .replace(/\brental\b/gi, 'order')
+    .replace(/\bfor rent\b/gi, 'in stock')
+    .replace(/\bRent\b/g, 'Buy')
+    .replace(/\brent\b/g, 'buy')
+    .replace(/\bRenting\b/g, 'Buying')
+    .replace(/\brenting\b/g, 'buying')
+}
+
+function sanitizeProductCopy(product: Product): Product {
+  const sanitize = (value?: string) => (value ? cleanCommerceCopy(value) : value)
+  return {
+    ...product,
+    description: sanitize(product.description) || product.description,
+    longDescription: sanitize(product.longDescription) || product.longDescription,
+    features: product.features.map((v) => cleanCommerceCopy(v)),
+    useCases: product.useCases?.map((u) => ({
+      ...u,
+      title: cleanCommerceCopy(u.title),
+      description: cleanCommerceCopy(u.description),
+    })),
+    faqs: product.faqs?.map((f) => ({
+      question: cleanCommerceCopy(f.question),
+      answer: cleanCommerceCopy(f.answer),
+    })),
+    tags: product.tags.map((t) => cleanCommerceCopy(t)),
+    metaTitle: sanitize(product.metaTitle),
+    metaDescription: sanitize(product.metaDescription),
+  }
+}
+
+export const curatedProducts: Product[] = rawCuratedProducts.map(sanitizeProductCopy)
+
 const curatedSupplierUrls = new Set(curatedProducts.map((p) => p.supplierUrl).filter(Boolean))
 const curatedSlugs = new Set(curatedProducts.map((p) => p.slug))
 let extendedProducts: Product[] = []
@@ -2734,6 +2785,7 @@ export function registerExtendedCatalog(raw: unknown[]) {
   extendedProducts = raw
     .map(migrateLegacyCatalogRow)
     .filter((p): p is Product => p != null)
+    .map(sanitizeProductCopy)
     .filter((p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug))
   mergedProducts = null
   productById = null

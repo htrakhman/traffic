@@ -25,7 +25,7 @@ export function membershipPriceId(): string {
 export async function createMembershipCheckoutSession(params: {
   email: string
   name?: string
-  /** After payment, send the customer back to checkout to finish the rental submission. */
+  /** After payment, send the customer back to checkout to finish the order submission. */
   returnToCheckout?: boolean
 }): Promise<{ url: string }> {
   const stripe = getStripe()

@@ -2478,7 +2478,7 @@ Return VALID JSON ONLY — no markdown fences, no prose before or after:
 
     const polygonCount = getDrawnPolygons().length
 
-    return `You are an expert Traffic Control Supervisor (TCS) and AI assistant for Traffic Control Rental — a professional traffic equipment supplier. Help contractors plan safe, MUTCD Part 6-compliant temporary traffic control setups.
+    return `You are an expert Traffic Control Supervisor (TCS) and AI assistant for Traffic Control Supply — a professional traffic equipment supplier. Help contractors plan safe, MUTCD Part 6-compliant temporary traffic control setups.
 
 CURRENT MAP STATE
 - Location: ${locationHint || 'not specified'}

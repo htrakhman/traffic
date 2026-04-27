@@ -36,6 +36,25 @@ welcome at any time.*
 
 ---
 
+### Traffic Plan
+*Last checked: 2026-04-27*
+
+- **Scale & positioning:** Founded 2012, headquartered in Farmingdale, NJ (Monmouth County — directly inside our target service area). ~500 employees as of late 2025, expanded internationally per ZoomInfo (operations across North America, Europe, Oceania — though core US business is mid-Atlantic). WBENC women-owned business certification (a tendering edge we cannot match — relevant for any DOT/municipal procurement that prioritizes women-owned vendors). Service mix: full-service DOT lane closures, flagging crews, equipment rental & sales, ATSSA flagger training/certification. They sell *people* (certified flaggers + supervised closures) on top of gear — that's the moat.
+- **NJ presence:** Headquartered in our backyard (Monmouth). They are a *direct* geographic competitor — Roadsafe was indirect (urban-corridor-skewed). Traffic Plan likely has the dominant Central-NJ rental footprint by default.
+- **Recent moves (this week / past 90 days):**
+  - Blog cadence: still alive (publishing the "United" employee newsletter — most recent confirmed Vol 19). Content is internal-culture and lifestyle (multitasking-while-driving myths, holiday travel, Mid-Atlantic day trips, traffic jam economics). **No technical contractor-facing posts** — same SEO/AEO content gap as Roadsafe.
+  - No pricing changes detected (still quote-only, no public rate card on the site).
+  - No major acquisition / expansion announcements surfacing in search beyond the 2018 Kiely Equipment acquisition that anchored their rental inventory.
+  - Continued ATSSA training programs ("Progress Institute") — recurring revenue from training that we don't have.
+- **Pricing:** Quote-only. Same posture as us and Roadsafe.
+- **Content / SEO assessment:** Blog content is aimed at employees and brand sentiment, not at the contractor Googling "how many cones for a lane closure." The technical-contractor keyword space remains wide open for us. Our Post 1 (cone-count guide) and Post 2 outline (Type I/II/III barricades) target the exact wedge they're not defending.
+
+**Our edge vs. Traffic Plan:** They beat us on flagging crews, training programs, and existing inventory scale. We can't beat them on services — we win by being the answer to "what gear do I need for X job?" and converting that visit into a rental request before they call Traffic Plan. Speed, content, and the AI Assistant + SiteMapPlanner are the three asymmetries.
+
+**Watch for:** Any sign Traffic Plan starts publishing technical contractor content (taper-length guides, MUTCD walkthroughs, etc.) — that closes our wedge. Worth re-checking blog quarterly.
+
+---
+
 ## Gaps we'll exploit
 
 - Roadsafe publishes no informational content — every "how many cones / what's taper length / barricade types" query is wide open for us to own organically.
@@ -46,3 +65,4 @@ welcome at any time.*
 
 - **2026-04-18** — File seeded, no research yet. First scheduled run on the first Monday of next month will populate.
 - **2026-04-23** — First competitor scan complete. Roadsafe Traffic Systems profiled (web search). Traffic Plan and Safety Services Northeast queued for next month's scan.
+- **2026-04-27** — Traffic Plan profiled. Geographically the most direct competitor (Farmingdale, Monmouth County, in our service area). Same content gap as Roadsafe — their blog is brand/lifestyle content, not technical SEO. Wedge thesis still intact. Safety Services Northeast queued for next month's rotation. Note: consider adding NWTCS (Northwest Traffic Control — also serves NJ/NY/DE/PA per search results) to the rotation list.

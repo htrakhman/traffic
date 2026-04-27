@@ -61,8 +61,10 @@ import { articleTrafficControlEquipmentRental } from './articles/traffic-control
 import { articleTrafficControlDevicesGuide } from './articles/traffic-control-devices-guide'
 import { articleTrafficConeRentalGuide } from './articles/traffic-cone-rental-guide'
 import { articleHowManyConesForLaneClosure } from './articles/how-many-cones-for-lane-closure-nj'
+import { articleTrafficControlTrailerRentalGuide } from './articles/traffic-control-trailer-rental-guide'
 
 export const articles: Article[] = [
+  articleTrafficControlTrailerRentalGuide,
   articleHowManyConesForLaneClosure,
   articleTrafficConeRentalGuide,
   articleTrafficControlDevicesGuide,

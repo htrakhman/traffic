@@ -3,6 +3,7 @@ import { BookOpen, Clock, ArrowRight } from 'lucide-react'
 import { getAllArticles } from '../data/articles'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
+import { SITE_NAME, SITE_ORIGIN } from '../config/site'
 
 /**
  * /blog — article index. SEO-owned by the seo-specialist subagent.
@@ -14,7 +15,7 @@ export default function Blog() {
   return (
     <div className="pt-24 pb-24 bg-slate-950 min-h-screen">
       <SEO
-        title="Work Zone & Traffic Control Guides | Traffic Control Rental"
+        title={`Work Zone & Traffic Control Guides | ${SITE_NAME}`}
         description="Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, arrow boards, barricades, and job-site safety. Written for crews, not SEO bots."
         canonicalPath="/blog"
         ogType="website"
@@ -29,12 +30,12 @@ export default function Blog() {
         data={{
           '@context': 'https://schema.org',
           '@type': 'Blog',
-          name: 'Traffic Control Rental \u2014 Work Zone Guides',
-          url: 'https://trafficcontrolrental.com/blog',
+          name: `${SITE_NAME} \u2014 Work Zone Guides`,
+          url: `${SITE_ORIGIN}/blog`,
           blogPost: posts.map((p) => ({
             '@type': 'BlogPosting',
             headline: p.title,
-            url: `https://trafficcontrolrental.com/blog/${p.slug}`,
+            url: `${SITE_ORIGIN}/blog/${p.slug}`,
             datePublished: p.datePublished,
             description: p.excerpt,
           })),

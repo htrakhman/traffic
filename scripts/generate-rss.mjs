@@ -56,10 +56,10 @@ const rss =
   `<?xml version="1.0" encoding="UTF-8"?>\n` +
   `<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n` +
   `  <channel>\n` +
-  `    <title>Traffic Control Rental — Work Zone Guides</title>\n` +
+  `    <title>Traffic Control Supply — Work Zone Guides</title>\n` +
   `    <link>${ORIGIN}/blog</link>\n` +
   `    <atom:link href="${ORIGIN}/rss.xml" rel="self" type="application/rss+xml" />\n` +
-  `    <description>Practical, contractor-voiced guides on traffic control rental, MUTCD work zone setup, and job-site safety.</description>\n` +
+  `    <description>Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, and job-site safety.</description>\n` +
   `    <language>en-us</language>\n` +
   `    <lastBuildDate>${now}</lastBuildDate>\n` +
   items

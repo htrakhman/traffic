@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Traffic Control Rental — Work Zone Guides</title>
+    <title>Traffic Control Supply — Work Zone Guides</title>
     <link>https://trafficcontrolrental.com/blog</link>
     <atom:link href="https://trafficcontrolrental.com/rss.xml" rel="self" type="application/rss+xml" />
-    <description>Practical, contractor-voiced guides on traffic control rental, MUTCD work zone setup, and job-site safety.</description>
+    <description>Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, and job-site safety.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 Apr 2026 13:05:24 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2026 14:47:51 GMT</lastBuildDate>
+    <item>
+      <title>Traffic Control Trailers: Arrow Boards, PCMS, AFADs, and TMAs Compared</title>
+      <link>https://trafficcontrolrental.com/blog/traffic-control-trailer-rental-guide</link>
+      <guid>https://trafficcontrolrental.com/blog/traffic-control-trailer-rental-guide</guid>
+      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A field-level breakdown of the five trailer-mounted devices that show up on most work zones — what each does, what MUTCD Part 6 requires, and how to pick the right rental.</description>
+    </item>
+    <item>
+      <title>How Many Traffic Cones Do You Actually Need for a Lane Closure? (NJ MUTCD Guide)</title>
+      <link>https://trafficcontrolrental.com/blog/how-many-cones-for-lane-closure-nj</link>
+      <guid>https://trafficcontrolrental.com/blog/how-many-cones-for-lane-closure-nj</guid>
+      <pubDate>Sat, 25 Apr 2026 00:00:00 GMT</pubDate>
+      <description>For a typical single-lane closure on a 40 mph NJ road you need roughly 20–30 cones. Here's the MUTCD formula, worked examples for 25–55 mph roads, nighttime rules, and what NJDOT adds on top.</description>
+    </item>
     <item>
       <title>Traffic Cone Rental: 28&quot; vs. 36&quot;, Spacing Tables, and MUTCD Requirements</title>
       <link>https://trafficcontrolrental.com/blog/traffic-cone-rental-guide</link>

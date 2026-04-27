@@ -42,7 +42,7 @@ function isNonEmptyString(v: unknown): v is string {
   return typeof v === 'string' && v.trim().length > 0
 }
 
-/** Accept legacy rental payloads (rentalDays + dailyRate) and map to purchase shape. */
+/** Accept legacy duration payloads (rentalDays + dailyRate) and map to purchase shape. */
 function normalizeLineRow(r: Record<string, unknown>): CheckoutLinePayload | null {
   if (
     !isNonEmptyString(r.productId) ||
@@ -239,7 +239,7 @@ export async function sendCheckoutNotification(data: unknown): Promise<NotifyRes
   }
 
   const from =
-    process.env.CHECKOUT_EMAIL_FROM?.trim() || 'Traffic Control Rental <onboarding@resend.dev>'
+    process.env.CHECKOUT_EMAIL_FROM?.trim() || 'Traffic Control Supply <onboarding@resend.dev>'
   const to = toRaw
     .split(',')
     .map((s) => s.trim())

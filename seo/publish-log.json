@@ -75,6 +75,16 @@
       "opportunityScore": 27.8,
       "wordCount": 950,
       "notes": "TACTICAL ARTICLE. 28\" vs. 36\" MUTCD Section 6F.64 height requirements, taper and tangent spacing table (MUTCD Table 6C-2), retroreflectivity rules, rental rates, cones vs. drums decision guide. Internal links to 28-inch-traffic-cone, 36-inch-traffic-cone, channelizing-drum products and cones-drums category."
+    },
+    {
+      "date": "2026-04-26",
+      "slug": "traffic-control-trailer-rental-guide",
+      "url": "/blog/traffic-control-trailer-rental-guide",
+      "primaryKeyword": "traffic control trailer",
+      "targetVolume": 500,
+      "opportunityScore": 14.3,
+      "wordCount": 1500,
+      "notes": "TACTICAL/HYBRID ARTICLE. Compares the five trailer-mounted device families on a typical work zone — arrow boards (MUTCD §6F.61, §6L.06), PCMS (§6F.60), AFADs (§6E.04), TMAs (NCHRP 350 / MASH TL-2/TL-3), and light towers (OSHA 1926.56). Includes function-vs-zone comparison table, MASH crashworthiness via the FHWA Office of Safety roadside hardware program, sizing rules by operation class and road speed, 2026 rental rate ranges, and combo-trailer tradeoffs. Internal links to /category/arrow-boards, /category/message-boards, and to arrow-board-rental-guide, automated-flagger-assistance-device-afad-guide, traffic-control-equipment-rental, traffic-control-rental-guide. No heroImage (no verified photography available)."
     }
   ]
 }

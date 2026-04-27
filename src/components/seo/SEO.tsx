@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { SITE_NAME, SITE_ORIGIN } from '../../config/site'
 
 /**
  * Lightweight <head> manager. No react-helmet dependency — mutates document.head
@@ -23,8 +24,6 @@ export interface SEOProps {
   /** Set to true to tell crawlers not to index (e.g. admin pages). */
   noindex?: boolean
 }
-
-const SITE_ORIGIN = 'https://trafficcontrolrental.com'
 
 function absoluteOgImage(url: string | undefined): string | undefined {
   if (!url) return undefined
@@ -84,7 +83,7 @@ export default function SEO(props: SEOProps) {
     tags.push(upsertMeta('property', 'og:description', description))
     tags.push(upsertMeta('property', 'og:type', ogType))
     tags.push(upsertMeta('property', 'og:url', canonical))
-    tags.push(upsertMeta('property', 'og:site_name', 'Traffic Control Rental'))
+    tags.push(upsertMeta('property', 'og:site_name', SITE_NAME))
     tags.push(upsertMeta('name', 'twitter:card', 'summary_large_image'))
     tags.push(upsertMeta('name', 'twitter:title', title))
     tags.push(upsertMeta('name', 'twitter:description', description))

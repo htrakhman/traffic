@@ -4,6 +4,7 @@ import { Clock, ChevronDown, ArrowRight, ArrowLeft } from 'lucide-react'
 import { getArticleBySlug, getRelatedArticles } from '../data/articles'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
+import { SITE_NAME } from '../config/site'
 
 /**
  * /blog/:slug — individual article. SEO-owned by seo-specialist subagent.
@@ -21,7 +22,7 @@ export default function Article() {
   return (
     <div className="pt-24 pb-24 bg-slate-950 min-h-screen">
       <SEO
-        title={`${article.title} | Traffic Control Rental`}
+        title={`${article.title} | ${SITE_NAME}`}
         description={article.metaDescription || article.excerpt}
         canonicalPath={canonical}
         ogType="article"

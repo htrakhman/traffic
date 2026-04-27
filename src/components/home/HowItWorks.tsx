@@ -29,9 +29,9 @@ const steps = [
   {
     number: '04',
     icon: Truck,
-    title: 'We deliver and pick up',
+    title: 'We ship to your site',
     description:
-      "Equipment is delivered to your job site on your start date and picked up when you're done. No trips to a yard, no loading.",
+      "Equipment ships directly to your office or job site. We'll send tracking and delivery timing so your crew can plan install.",
     color: 'blue',
   },
 ]
