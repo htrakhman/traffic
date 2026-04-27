@@ -12,7 +12,7 @@ export default function FeaturedProducts() {
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-widest mb-2">
             <Star size={12} className="fill-current" />
-            Most Rented
+            Best Sellers
           </div>
           <h2 className="section-title">Popular Equipment</h2>
           <p className="section-subtitle">The gear contractors reach for first.</p>

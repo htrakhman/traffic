@@ -14,7 +14,7 @@ export default function Footer() {
               <BrandLogoLink size="footer" />
             </div>
             <p className="text-sm text-slate-400 leading-relaxed mb-6">
-              The modern traffic control equipment rental marketplace. AI-powered job planning for contractors and work-zone operators.
+              The modern traffic control equipment marketplace. AI-powered job planning for contractors and work-zone operators.
             </p>
             <div className="space-y-2.5">
               <a

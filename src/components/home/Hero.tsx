@@ -38,11 +38,11 @@ export default function Hero({
         {/* Headline — single line */}
         <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
           Plan the job.{' '}
-          <span className="gradient-text">Rent the gear.</span>
+          <span className="gradient-text">Get the gear.</span>
         </h1>
 
         <p className="text-slate-400 max-w-lg mx-auto mb-6 text-sm sm:text-base leading-relaxed">
-          Traffic control and safety equipment rental for contractors — draw your work zone on the map, place gear, and book what you need.
+          Traffic control and safety equipment for contractors — draw your work zone on the map, place gear, and order what you need.
         </p>
 
         {/* Tabs */}

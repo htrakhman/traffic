@@ -24,16 +24,6 @@
       "bidHigh": 5.63
     },
     {
-      "keyword": "traffic control rental",
-      "avgMonthlySearches": 500,
-      "competition": "Medium",
-      "competitionIndex": 34,
-      "threeMonthChange": "900%",
-      "yoyChange": "0%",
-      "bidLow": 2.02,
-      "bidHigh": 7.37
-    },
-    {
       "keyword": "traffic control equipment",
       "avgMonthlySearches": 500,
       "competition": "High",
@@ -42,16 +32,6 @@
       "yoyChange": "0%",
       "bidLow": 1.57,
       "bidHigh": 8.19
-    },
-    {
-      "keyword": "barricade rental near me",
-      "avgMonthlySearches": 500,
-      "competition": "High",
-      "competitionIndex": 76,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 7.62,
-      "bidHigh": 36.42
     },
     {
       "keyword": "workzone tools",
@@ -104,16 +84,6 @@
       "bidHigh": 16.81
     },
     {
-      "keyword": "arrow board rental",
-      "avgMonthlySearches": 500,
-      "competition": "Medium",
-      "competitionIndex": 38,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.08,
-      "bidHigh": 5.97
-    },
-    {
       "keyword": "traffic control supplies near me",
       "avgMonthlySearches": 500,
       "competition": "High",
@@ -142,16 +112,6 @@
       "yoyChange": "0%",
       "bidLow": 0.73,
       "bidHigh": 3.91
-    },
-    {
-      "keyword": "construction barricade rental",
-      "avgMonthlySearches": 500,
-      "competition": "High",
-      "competitionIndex": 76,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 5.11,
-      "bidHigh": 17.5
     },
     {
       "keyword": "traffic control truck",
@@ -184,16 +144,6 @@
       "bidHigh": 7.17
     },
     {
-      "keyword": "traffic control equipment rental",
-      "avgMonthlySearches": 500,
-      "competition": "Low",
-      "competitionIndex": 19,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.39,
-      "bidHigh": 7.01
-    },
-    {
       "keyword": "wanco arrow board",
       "avgMonthlySearches": 500,
       "competition": "High",
@@ -202,16 +152,6 @@
       "yoyChange": "0%",
       "bidLow": 1.6,
       "bidHigh": 12.6
-    },
-    {
-      "keyword": "traffic sign rental",
-      "avgMonthlySearches": 500,
-      "competition": "Medium",
-      "competitionIndex": 57,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.65,
-      "bidHigh": 8.0
     },
     {
       "keyword": "portable traffic barrier",
@@ -244,16 +184,6 @@
       "bidHigh": 5.04
     },
     {
-      "keyword": "traffic sign rentals near me",
-      "avgMonthlySearches": 500,
-      "competition": "High",
-      "competitionIndex": 82,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 1.3,
-      "bidHigh": 7.62
-    },
-    {
       "keyword": "traffic control trailer",
       "avgMonthlySearches": 500,
       "competition": "Medium",
@@ -261,17 +191,7 @@
       "threeMonthChange": "0%",
       "yoyChange": "0%",
       "bidLow": 2.55,
-      "bidHigh": 8.0
-    },
-    {
-      "keyword": "traffic safety rental",
-      "avgMonthlySearches": 500,
-      "competition": "Low",
-      "competitionIndex": 19,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.88,
-      "bidHigh": 7.84
+      "bidHigh": 8
     },
     {
       "keyword": "arrow board trailer",
@@ -304,16 +224,6 @@
       "bidHigh": null
     },
     {
-      "keyword": "traffic barricade rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 0,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
       "keyword": "traffic control equipment for sale",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -321,17 +231,7 @@
       "threeMonthChange": "0%",
       "yoyChange": "0%",
       "bidLow": 1.31,
-      "bidHigh": 10.0
-    },
-    {
-      "keyword": "barricades for rent near me",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 98,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 7.19,
-      "bidHigh": 40.8
+      "bidHigh": 10
     },
     {
       "keyword": "traffic equipment",
@@ -340,7 +240,7 @@
       "competitionIndex": 92,
       "threeMonthChange": "900%",
       "yoyChange": "0%",
-      "bidLow": 2.0,
+      "bidLow": 2,
       "bidHigh": 6.73
     },
     {
@@ -374,16 +274,6 @@
       "bidHigh": null
     },
     {
-      "keyword": "pedestrian barricade rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 98,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 7.57,
-      "bidHigh": 27.74
-    },
-    {
       "keyword": "used traffic barricades for sale",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -392,66 +282,6 @@
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
-    },
-    {
-      "keyword": "traffic barrier rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 93,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 4.34,
-      "bidHigh": 20.81
-    },
-    {
-      "keyword": "temporary traffic signal rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 68,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 2.56,
-      "bidHigh": 10.06
-    },
-    {
-      "keyword": "water barricades rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 79,
-      "threeMonthChange": "900%",
-      "yoyChange": "900%",
-      "bidLow": 2.54,
-      "bidHigh": 20.01
-    },
-    {
-      "keyword": "traffic control signs rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 43,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 1.23,
-      "bidHigh": 6.93
-    },
-    {
-      "keyword": "type 3 barricade rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 79,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.83,
-      "bidHigh": 9.41
-    },
-    {
-      "keyword": "traffic barricades rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 92,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 3.49,
-      "bidHigh": 20.93
     },
     {
       "keyword": "traffic control gloves",
@@ -464,26 +294,6 @@
       "bidHigh": 5.1
     },
     {
-      "keyword": "traffic control rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 48,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 2.45,
-      "bidHigh": 15.0
-    },
-    {
-      "keyword": "traffic barriers for rent",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 93,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 4.34,
-      "bidHigh": 20.81
-    },
-    {
       "keyword": "traffic safety equipment near me",
       "avgMonthlySearches": 50,
       "competition": "Medium",
@@ -492,16 +302,6 @@
       "yoyChange": "0%",
       "bidLow": 1.84,
       "bidHigh": 9.97
-    },
-    {
-      "keyword": "road barricades for rent",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 84,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 9.36,
-      "bidHigh": 15.0
     },
     {
       "keyword": "pedestrian channelizing devices",
@@ -550,7 +350,7 @@
       "competitionIndex": 100,
       "threeMonthChange": "0%",
       "yoyChange": "0%",
-      "bidLow": 1.0,
+      "bidLow": 1,
       "bidHigh": 6.44
     },
     {
@@ -594,16 +394,6 @@
       "bidHigh": 21.22
     },
     {
-      "keyword": "street barricades for rent",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 99,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 6.16,
-      "bidHigh": 33.18
-    },
-    {
       "keyword": "barricade equipment",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -612,36 +402,6 @@
       "yoyChange": "0%",
       "bidLow": 4.41,
       "bidHigh": 16.93
-    },
-    {
-      "keyword": "traffic cones for rent near me",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 100,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 0.68,
-      "bidHigh": 8.0
-    },
-    {
-      "keyword": "road barrier rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 93,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 4.34,
-      "bidHigh": 20.81
-    },
-    {
-      "keyword": "plastic barricade rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 100,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 3.48,
-      "bidHigh": 13.71
     },
     {
       "keyword": "road blocking devices",
@@ -674,16 +434,6 @@
       "bidHigh": 8.14
     },
     {
-      "keyword": "arrow board rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 64,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.05,
-      "bidHigh": 4.36
-    },
-    {
       "keyword": "portable barricade system",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -702,16 +452,6 @@
       "yoyChange": "0%",
       "bidLow": 0.73,
       "bidHigh": 9.52
-    },
-    {
-      "keyword": "traffic control sign rental",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 42,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.34,
-      "bidHigh": 3.92
     },
     {
       "keyword": "arrow board traffic control",
@@ -744,16 +484,6 @@
       "bidHigh": 6.15
     },
     {
-      "keyword": "traffic message board rental",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 36,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 2.0,
-      "bidHigh": 5.06
-    },
-    {
       "keyword": "traffic control arrow boards for sale",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -774,26 +504,6 @@
       "bidHigh": 6.64
     },
     {
-      "keyword": "traffic equipment rental",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 33,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.44,
-      "bidHigh": 6.94
-    },
-    {
-      "keyword": "portable traffic signal rental",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 28,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 2.36,
-      "bidHigh": 7.62
-    },
-    {
       "keyword": "traffic control safety vest",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -802,16 +512,6 @@
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
-    },
-    {
-      "keyword": "water filled barricades rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 97,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 2.0,
-      "bidHigh": 20.81
     },
     {
       "keyword": "flagger gear",
@@ -954,36 +654,6 @@
       "bidHigh": 11.43
     },
     {
-      "keyword": "road barricade rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 92,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 3.49,
-      "bidHigh": 20.93
-    },
-    {
-      "keyword": "road sign rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 74,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.32,
-      "bidHigh": 9.6
-    },
-    {
-      "keyword": "traffic control signs for rent near me",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 73,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.61,
-      "bidHigh": 4.71
-    },
-    {
       "keyword": "portable traffic control lights",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -994,27 +664,7 @@
       "bidHigh": 3.98
     },
     {
-      "keyword": "road closure sign rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 100,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.88,
-      "bidHigh": 15.0
-    },
-    {
       "keyword": "flagger safety equipment",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 100,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
-      "keyword": "street barricade rental",
       "avgMonthlySearches": 50,
       "competition": "High",
       "competitionIndex": 100,
@@ -1044,32 +694,12 @@
       "bidHigh": 3.73
     },
     {
-      "keyword": "united rentals traffic control",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 25,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 2.56,
-      "bidHigh": 7.5
-    },
-    {
       "keyword": "flashing arrow boards",
       "avgMonthlySearches": 50,
       "competition": "Medium",
       "competitionIndex": 64,
       "threeMonthChange": "0%",
       "yoyChange": "-90%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
-      "keyword": "road closed signs for rent",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 52,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
     },
@@ -1154,16 +784,6 @@
       "bidHigh": 8.26
     },
     {
-      "keyword": "temporary traffic signal rental cost",
-      "avgMonthlySearches": 50,
-      "competition": "Unknown",
-      "competitionIndex": null,
-      "threeMonthChange": "-100%",
-      "yoyChange": "-100%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
       "keyword": "arrow board replacement lights",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -1172,16 +792,6 @@
       "yoyChange": "0%",
       "bidLow": 0.53,
       "bidHigh": 6.25
-    },
-    {
-      "keyword": "traffic control equipment rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 20,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 1.67,
-      "bidHigh": 10.57
     },
     {
       "keyword": "traffic directing gloves",
@@ -1274,16 +884,6 @@
       "bidHigh": null
     },
     {
-      "keyword": "construction barricade rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 0,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
       "keyword": "flagger equipment for sale",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -1314,21 +914,11 @@
       "bidHigh": null
     },
     {
-      "keyword": "jersey barricades for rent",
-      "avgMonthlySearches": 50,
-      "competition": "Unknown",
-      "competitionIndex": null,
-      "threeMonthChange": "0%",
-      "yoyChange": "-100%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
       "keyword": "jobsite safety supplies",
       "avgMonthlySearches": 50,
       "competition": "Low",
       "competitionIndex": 0,
-      "threeMonthChange": "\u221e",
+      "threeMonthChange": "∞",
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
@@ -1348,7 +938,7 @@
       "avgMonthlySearches": 50,
       "competition": "High",
       "competitionIndex": 100,
-      "threeMonthChange": "\u221e",
+      "threeMonthChange": "∞",
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
@@ -1424,26 +1014,6 @@
       "bidHigh": null
     },
     {
-      "keyword": "road barriers for rent",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 95,
-      "threeMonthChange": "\u221e",
-      "yoyChange": "0%",
-      "bidLow": 4.73,
-      "bidHigh": 21.19
-    },
-    {
-      "keyword": "road construction sign rentals",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 32,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
       "keyword": "smart arrow boards",
       "avgMonthlySearches": 50,
       "competition": "High",
@@ -1462,16 +1032,6 @@
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
-    },
-    {
-      "keyword": "temporary traffic signal rental",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 49,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 2.16,
-      "bidHigh": 13.51
     },
     {
       "keyword": "traffic control batons",
@@ -1514,16 +1074,6 @@
       "bidHigh": 6.64
     },
     {
-      "keyword": "traffic control sign rental near me",
-      "avgMonthlySearches": 50,
-      "competition": "Medium",
-      "competitionIndex": 43,
-      "threeMonthChange": "0%",
-      "yoyChange": "-90%",
-      "bidLow": 1.23,
-      "bidHigh": 6.93
-    },
-    {
       "keyword": "traffic controller sign",
       "avgMonthlySearches": 50,
       "competition": "Low",
@@ -1548,20 +1098,10 @@
       "avgMonthlySearches": 50,
       "competition": "Low",
       "competitionIndex": 24,
-      "threeMonthChange": "\u221e",
+      "threeMonthChange": "∞",
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
-    },
-    {
-      "keyword": "traffic safety equipment rental",
-      "avgMonthlySearches": 50,
-      "competition": "Low",
-      "competitionIndex": 8,
-      "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": 3.53,
-      "bidHigh": 11.5
     },
     {
       "keyword": "traffic signal devices",
@@ -1599,16 +1139,6 @@
       "competition": "Low",
       "competitionIndex": 29,
       "threeMonthChange": "0%",
-      "yoyChange": "0%",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
-      "keyword": "type 1 barricade rental",
-      "avgMonthlySearches": 50,
-      "competition": "High",
-      "competitionIndex": 100,
-      "threeMonthChange": "\u221e",
       "yoyChange": "0%",
       "bidLow": null,
       "bidHigh": null
@@ -1775,16 +1305,6 @@
     },
     {
       "keyword": "wokrzone gear",
-      "avgMonthlySearches": 0,
-      "competition": "Unknown",
-      "competitionIndex": null,
-      "threeMonthChange": "--",
-      "yoyChange": "--",
-      "bidLow": null,
-      "bidHigh": null
-    },
-    {
-      "keyword": "workzone rental",
       "avgMonthlySearches": 0,
       "competition": "Unknown",
       "competitionIndex": null,

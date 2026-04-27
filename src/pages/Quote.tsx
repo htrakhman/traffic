@@ -67,9 +67,7 @@ export default function Quote() {
     phone: '',
     company: '',
     jobSite: '',
-    startDate: '',
     notes: '',
-    deliveryNeeded: true,
   })
 
   const set = <K extends keyof typeof form>(key: K, val: (typeof form)[K]) =>
@@ -255,11 +253,6 @@ export default function Quote() {
               <div>
                 <label className="label">Job site address / location</label>
                 <input value={form.jobSite} onChange={(e) => set('jobSite', e.target.value)} type="text" placeholder="123 Main St or Hwy 45 & Elm" className="input text-sm" />
-              </div>
-
-              <div>
-                <label className="label">Start date</label>
-                <input value={form.startDate} onChange={(e) => set('startDate', e.target.value)} type="date" className="input text-sm" />
               </div>
 
               <div>

@@ -325,7 +325,7 @@ function buildPlannerPrompt(mapArea: MapArea, items: CartItemInput[]): string {
       ? `Axis-aligned bounding box: ~${Math.round(footprintMinSpanFt)} ft (narrow) × ~${Math.round(footprintMaxSpanFt)} ft (long)`
       : ''
 
-  return `You are an expert Traffic Control Supervisor (TCS) with deep MUTCD Part 6 field experience. A contractor has drawn their work zone on a map and has rental equipment in their cart. Your job is to produce professional, MUTCD-informed traffic control layout guidance — placing every cart item at lat/lng positions consistent with typical Part 6 spacing patterns (state DOT / TCP requirements still prevail on real jobs).
+  return `You are an expert Traffic Control Supervisor (TCS) with deep MUTCD Part 6 field experience. A contractor has drawn their work zone on a map and has equipment in their cart. Your job is to produce professional, MUTCD-informed traffic control layout guidance — placing every cart item at lat/lng positions consistent with typical Part 6 spacing patterns (state DOT / TCP requirements still prevail on real jobs).
 
 Regulatory stack: Treat output as planning visualization only — not a stamped TCP. If cart quantities look unrealistic for the drawn footprint (e.g. highway-scale channelization for a small patch), say so clearly in planningNotes instead of scattering devices arbitrarily.
 

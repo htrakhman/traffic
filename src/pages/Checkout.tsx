@@ -503,7 +503,7 @@ export default function Checkout() {
 
                 {/* Delivery toggle hidden — drop-ship only for now. */}
 
-                {/* Membership upsell hidden — platform is focused on drop-ship rentals for now. */}
+                {/* Membership upsell hidden — platform is focused on drop-ship purchases for now. */}
 
                 {submitError ? (
                   <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">

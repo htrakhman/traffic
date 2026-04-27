@@ -403,7 +403,7 @@ export default function WorkzoneVisualizerModal({ mapArea, cartLines, onClose }:
             const iw = infoWindowRef.current!
             iw.setContent(`
               <div style="font-family:system-ui,sans-serif;padding:6px 4px;max-width:220px">
-                <div style="font-weight:600;font-size:13px;color:#1e293b;margin-bottom:4px">${entry.count} rentals</div>
+                <div style="font-weight:600;font-size:13px;color:#1e293b;margin-bottom:4px">${entry.count} items</div>
                 <div style="font-size:11px;color:#475569">Zoom in to see cones, drums, signs, and smaller lights separately.</div>
               </div>
             `)

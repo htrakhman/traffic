@@ -93,7 +93,7 @@ export default function Article() {
 
         {article.relatedProducts && article.relatedProducts.length > 0 && (
           <section className="mt-14 p-6 rounded-xl border border-slate-800 bg-slate-900/50">
-            <h2 className="text-lg font-bold text-white mb-4">Related equipment you can rent</h2>
+            <h2 className="text-lg font-bold text-white mb-4">Related equipment</h2>
             <div className="grid gap-2 sm:grid-cols-2">
               {article.relatedProducts.map((r) => (
                 <Link
@@ -111,7 +111,7 @@ export default function Article() {
             </div>
             <div className="mt-5 pt-5 border-t border-slate-800 flex flex-wrap gap-3">
               <Link to="/quote" className="btn-primary text-sm py-2 px-4">
-                Book your rental
+                Request a quote
               </Link>
               <Link
                 to="/assistant"

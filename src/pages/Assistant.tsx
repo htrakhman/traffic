@@ -21,7 +21,7 @@ export default function Assistant() {
             <div>
               <h1 className="text-3xl font-bold text-white">AI Work Zone Planner</h1>
               <p className="text-slate-400 mt-1 max-w-xl leading-relaxed">
-                Describe your job and get a customized traffic control equipment recommendation — quantities, setup notes, and a direct path to book your rental.
+                Describe your job and get a customized traffic control equipment recommendation — quantities, setup notes, and a direct path to order what you need.
               </p>
             </div>
           </div>
@@ -29,7 +29,7 @@ export default function Assistant() {
           <div className="flex items-start gap-2 mt-6 p-3.5 bg-amber-500/5 border border-amber-500/15 rounded-xl max-w-2xl">
             <AlertCircle size={14} className="text-amber-400 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-amber-200/60 leading-relaxed">
-              Recommendations are planning guidance to help estimate rental needs. Final traffic control requirements depend on project conditions and applicable standards. A certified Traffic Control Supervisor should verify your plan before work begins.
+              Recommendations are planning guidance to help estimate equipment needs. Final traffic control requirements depend on project conditions and applicable standards. A certified Traffic Control Supervisor should verify your plan before work begins.
             </p>
           </div>
         </div>
@@ -64,10 +64,10 @@ export default function Assistant() {
                   ['Road type & speed limit', 'Determines cone sizes, sign distances, and whether drums are needed'],
                   ['Lane impact', 'Shoulder-only vs. full lane closure changes the setup dramatically'],
                   ['Day vs. night work', 'Night work adds retroreflective drums, lights, and higher quantities'],
-                  ['Job duration', 'Drives the right rate tier (daily vs. weekly vs. monthly)'],
+                  ['Job duration', 'Drives the right volume tier for pricing'],
                   ['Pedestrian exposure', 'High-ped areas may need additional channelization or barriers'],
                   ['Crew count', 'Multiple crews may need separate setups at different locations'],
-                  ['Existing equipment', 'Tell the AI what you own so it only recommends what you need to rent'],
+                  ['Existing equipment', 'Tell the AI what you own so it only recommends what you need to buy'],
                   [
                     'Drawn work zone (map)',
                     'Optional polygon on the map gives the AI area and perimeter to tune cone counts, tapers, and barriers',

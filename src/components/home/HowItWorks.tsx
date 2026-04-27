@@ -21,7 +21,7 @@ const steps = [
   {
     number: '03',
     icon: CheckCircle,
-    title: 'Book your rental',
+    title: 'Place your order',
     description:
       'Pricing is already on the site. Review your list, send job details, and we confirm availability and final paperwork—typically within a few hours.',
     color: 'green',

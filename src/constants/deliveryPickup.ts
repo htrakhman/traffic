@@ -1,9 +1,9 @@
-/** One-time service fees for non-members (not multiplied by rental days). */
+/** One-time service fees for non-members. */
 export const NON_MEMBER_DELIVERY_FEE_USD = 150
 export const NON_MEMBER_PICKUP_FEE_USD = 150
 
 // Shipping/delivery/pickup is currently hidden — platform is drop-ship only.
-// Always return $0 so cart/checkout totals are rental-only. Restore original
+// Always return $0 so cart/checkout totals are merchandise-only. Restore original
 // isMember-aware logic when re-enabling delivery/pickup + membership.
 export function getDeliveryPickupFees(_isMember: boolean): {
   delivery: number

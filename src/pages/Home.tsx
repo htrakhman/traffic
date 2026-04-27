@@ -18,7 +18,7 @@ export default function Home() {
     <main>
       <SEO
         title={DEFAULT_PAGE_TITLE}
-        description={`Rent MUTCD-aware traffic control and safety equipment with delivery. Cones, signs, barricades, arrow boards, and more at ${SITE_DOMAIN}.`}
+        description={`Buy MUTCD-aware traffic control and safety equipment with delivery. Cones, signs, barricades, arrow boards, and more at ${SITE_DOMAIN}.`}
         canonicalPath="/"
       />
       <Hero

@@ -15,7 +15,7 @@ export default function Blog() {
     <div className="pt-24 pb-24 bg-slate-950 min-h-screen">
       <SEO
         title="Work Zone & Traffic Control Guides | Traffic Control Rental"
-        description="Practical, contractor-voiced guides on traffic control rental, MUTCD work zone setup, arrow boards, barricades, and job-site safety. Written for crews, not SEO bots."
+        description="Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, arrow boards, barricades, and job-site safety. Written for crews, not SEO bots."
         canonicalPath="/blog"
         ogType="website"
       />
@@ -51,7 +51,7 @@ export default function Blog() {
             Work Zone & Traffic Control Guides
           </h1>
           <p className="mt-4 text-lg text-slate-400 max-w-2xl">
-            Practical writeups on renting, specifying, and running traffic control equipment. Written by people who
+            Practical writeups on buying, specifying, and running traffic control equipment. Written by people who
             have actually dropped 120 cones at 5&nbsp;AM.
           </p>
         </div>

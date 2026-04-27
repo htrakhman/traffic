@@ -184,7 +184,7 @@ export default function Account() {
           </div>
         </div>
 
-        {/* Membership card hidden — platform is focused on drop-ship rentals for now. */}
+        {/* Membership card hidden — platform is focused on drop-ship purchases for now. */}
         {(false as boolean) && (
         <div className="card p-6">
           <h2 className="font-semibold text-white mb-1 flex items-center gap-2">
@@ -192,7 +192,7 @@ export default function Account() {
             Monthly Membership
           </h2>
           <p className="text-slate-400 text-sm mb-5">
-            $150/month via Stripe — no $150 delivery fee and no $150 pickup fee on rentals while your subscription is
+            $150/month via Stripe — no $150 delivery fee and no $150 pickup fee on orders while your subscription is
             active.
           </p>
 

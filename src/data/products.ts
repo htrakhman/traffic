@@ -125,12 +125,12 @@ export const curatedProducts: Product[] = [
         answer: 'The MUTCD requires a minimum cone height of 28" for roads with speed limits of 45 mph or less. For roads 45 mph and above, 36" cones are required. These 28" cones are NCHRP-350 and MASH crash-tested and compliant for lower-speed applications.',
       },
       {
-        question: 'Do your rental cones come with reflective collars?',
-        answer: 'Standard rental cones ship without reflective collars. If your work zone operates at night or in low-visibility conditions, we recommend upgrading to our 36" reflective cone rentals or adding reflective collar sleeves — mention this in your quote request.',
+        question: 'Do your cones come with reflective collars?',
+        answer: 'Standard cones ship without reflective collars. If your work zone operates at night or in low-visibility conditions, we recommend upgrading to our 36" reflective cones or adding reflective collar sleeves — mention this in your quote request.',
       },
       {
-        question: 'How do cones get to and from my job site?',
-        answer: 'Cones ship stacked on pallets or in crates to your job site. We coordinate return at the end of your rental period. Transport fees vary by location — request a quote for exact costs.',
+        question: 'How do cones get to my job site?',
+        answer: 'Cones ship stacked on pallets or in crates to your job site. Transport fees vary by location — request a quote for exact costs.',
       },
     ],
     tags: ['cone', 'channelization', 'lane closure', 'reflective'],
@@ -143,8 +143,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Lakeside Plastics',
     weight: '7 lbs',
     dimensions: '28" H × 15" × 15" base',
-    metaTitle: titleBrand('Rent 28" Traffic Cones | MUTCD / MASH Compliant'),
-    metaDescription: 'Rent NCHRP-350 & MASH-accepted 28" orange traffic cones starting at $2.25/day. 500+ in stock. Perfect for lane closures and shoulder work up to 45 mph. Fast dispatch.',
+    metaTitle: titleBrand('Buy 28" Traffic Cones | MUTCD / MASH Compliant'),
+    metaDescription: 'Buy NCHRP-350 & MASH-accepted 28" orange traffic cones. 500+ in stock. Perfect for lane closures and shoulder work up to 45 mph. Fast dispatch.',
   },
   {
     id: 'prod-2',
@@ -202,10 +202,6 @@ export const curatedProducts: Product[] = [
         question: 'Are these cones suitable for interstate highway work?',
         answer: 'Absolutely. These cones are NCHRP-350 crash-tested and comply with FHWA and FDOT requirements, making them suitable for interstate, US highway, and state route work zones.',
       },
-      {
-        question: 'What is the minimum rental period?',
-        answer: 'Our minimum rental period is 1 day. Weekly and monthly rates offer significant savings for longer projects — a 7-day weekly rental is equivalent to just 4 daily rates.',
-      },
     ],
     tags: ['cone', 'highway', 'high-speed', 'channelization'],
     inStock: true,
@@ -217,8 +213,8 @@ export const curatedProducts: Product[] = [
     supplier: 'JBC Safety Plastic',
     weight: '10 lbs',
     dimensions: '36" H × 14" × 14" base',
-    metaTitle: titleBrand('Rent 36" Reflective Traffic Cones | Highway-Grade MUTCD'),
-    metaDescription: 'Rent MUTCD-compliant 36" orange traffic cones with high-intensity reflective collars. Required for 45+ mph work zones. NCHRP-350 crash tested. From $3.38/day.',
+    metaTitle: titleBrand('Buy 36" Reflective Traffic Cones | Highway-Grade MUTCD'),
+    metaDescription: 'Buy MUTCD-compliant 36" orange traffic cones with high-intensity reflective collars. Required for 45+ mph work zones. NCHRP-350 crash tested.',
   },
   {
     id: 'prod-3',
@@ -277,10 +273,6 @@ export const curatedProducts: Product[] = [
         question: 'How many drums do I need for a standard lane closure taper?',
         answer: 'MUTCD taper length formula is L = W × S (in feet, where W = lane width in feet and S = speed limit in mph). For a 12-foot lane on a 45 mph road, the taper is 540 ft. Drums are typically placed every 40 ft in the taper, requiring about 13–14 drums. Use our AI Job Planner for a site-specific layout.',
       },
-      {
-        question: 'Are the tire ring bases included in the rental?',
-        answer: 'Yes. Every drum rental includes the 23" recycled tire ring base. The base and drum ship as a unit.',
-      },
     ],
     tags: ['drum', 'channelizing', 'lane closure', 'night work', 'reflective'],
     inStock: true,
@@ -292,8 +284,8 @@ export const curatedProducts: Product[] = [
     supplier: 'OEM channelizing drum',
     weight: '~32 lbs (drum + base)',
     dimensions: '37" H × 23" base diameter',
-    metaTitle: titleBrand('Rent Channelizing Drums | 37" HI Reflective Tire Base'),
-    metaDescription: 'Rent MUTCD/NCHRP-350 channelizing drums with 6" high-intensity reflective stripes and 22-lb tire ring base. Ideal for night work and long-duration closures. From $6.75/day.',
+    metaTitle: titleBrand('Buy Channelizing Drums | 37" HI Reflective Tire Base'),
+    metaDescription: 'Buy MUTCD/NCHRP-350 channelizing drums with 6" high-intensity reflective stripes and 22-lb tire ring base. Ideal for night work and long-duration closures.',
   },
 
   // --- Signs & Sign Stands ---
@@ -352,7 +344,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'What sign stand should I use with this roll-up sign?',
-        answer: 'This 36"×36" sign is compatible with our Cortina Tri-Pod Sign Stand rental (SKU: STD-TEL-ALU). The tripod stand accepts both 36" and 48" roll-up and rigid signs and folds flat for truck storage.',
+        answer: 'This 36"×36" sign is compatible with our Cortina Tri-Pod Sign Stand (SKU: STD-TEL-ALU). The tripod stand accepts both 36" and 48" roll-up and rigid signs and folds flat for truck storage.',
       },
       {
         question: 'Is the W20-1 sign required for all construction work zones?',
@@ -369,8 +361,8 @@ export const curatedProducts: Product[] = [
     supplier: 'MUTCD roll-up sign (OEM)',
     weight: '3 lbs',
     dimensions: '36" × 36"',
-    metaTitle: titleBrand('Rent Road Work Ahead Sign (W20-1) | 36" Reflective Roll-Up'),
-    metaDescription: 'Rent MUTCD W20-1 "Road Work Ahead" 36" reflective roll-up signs from $7.50/day. Required for all work zones. Fiberglass ribs, reflective vinyl. Same-day dispatch available.',
+    metaTitle: titleBrand('Buy Road Work Ahead Sign (W20-1) | 36" Reflective Roll-Up'),
+    metaDescription: 'Buy MUTCD W20-1 "Road Work Ahead" 36" reflective roll-up signs. Required for all work zones. Fiberglass ribs, reflective vinyl. Same-day dispatch available.',
   },
   {
     id: 'prod-5',
@@ -426,7 +418,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'Can I use the same sign stand for multiple signs?',
-        answer: 'Each sign requires its own stand. Our Cortina Tri-Pod Stand (STD-TEL-ALU) accommodates 36" roll-up signs and is available to rent alongside your signs.',
+        answer: 'Each sign requires its own stand. Our Cortina Tri-Pod Stand (STD-TEL-ALU) accommodates 36" roll-up signs and is available to include with your signs.',
       },
       {
         question: 'Do I need both a Road Work Ahead and Flagger Ahead sign?',
@@ -443,8 +435,8 @@ export const curatedProducts: Product[] = [
     supplier: 'MUTCD roll-up sign (OEM)',
     weight: '3 lbs',
     dimensions: '36" × 36"',
-    metaTitle: titleBrand('Rent Flagger Ahead Sign (W20-7a) | 36" Reflective Roll-Up'),
-    metaDescription: 'Rent MUTCD W20-7a "Flagger Ahead" 36" reflective roll-up signs from $7.50/day. Required by law when flaggers control traffic. Rapid dispatch to job sites.',
+    metaTitle: titleBrand('Buy Flagger Ahead Sign (W20-7a) | 36" Reflective Roll-Up'),
+    metaDescription: 'Buy MUTCD W20-7a "Flagger Ahead" 36" reflective roll-up signs. Required by law when flaggers control traffic. Rapid dispatch to job sites.',
   },
   {
     id: 'prod-6',
@@ -495,8 +487,8 @@ export const curatedProducts: Product[] = [
         answer: 'The Cortina Tri-Pod Stand is rated for 36" and 48" roll-up and rigid traffic signs. It does not support larger 48"×48" diamond signs — contact us for heavy-duty sign stand options.',
       },
       {
-        question: 'Is the sign stand included when I rent a roll-up sign?',
-        answer: 'No. Signs and stands are rented separately so you can mix and match quantities. Most operations need one stand per sign, but you may need more signs than stands if signs are carried by moving vehicles.',
+        question: 'Is the sign stand included when I buy a roll-up sign?',
+        answer: 'No. Signs and stands are sold separately so you can mix and match quantities. Most operations need one stand per sign, but you may need more signs than stands if signs are carried by moving vehicles.',
       },
       {
         question: 'Can this stand be used in wind?',
@@ -517,8 +509,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Cortina Safety Products',
     weight: '~10 lbs',
     dimensions: 'Folds flat for storage',
-    metaTitle: titleBrand('Rent Cortina Tri-Pod Sign Stand | 36" & 48" Signs'),
-    metaDescription: 'Rent Cortina powder-coated steel tri-pod sign stands for 36" and 48" roll-up traffic signs from $6/day. Folds flat, stable tripod base. Pair with any MUTCD sign rental.',
+    metaTitle: titleBrand('Buy Cortina Tri-Pod Sign Stand | 36" & 48" Signs'),
+    metaDescription: 'Buy Cortina powder-coated steel tri-pod sign stands for 36" and 48" roll-up traffic signs. Folds flat, stable tripod base. Pair with any MUTCD sign.',
   },
   {
     id: 'prod-7',
@@ -586,8 +578,8 @@ export const curatedProducts: Product[] = [
     supplier: 'MUTCD roll-up sign (OEM)',
     weight: '3 lbs',
     dimensions: '36" × 36"',
-    metaTitle: titleBrand('Rent One Lane Road Ahead Sign (W20-4) | 36" Roll-Up'),
-    metaDescription: 'Rent MUTCD W20-4 "One Lane Road Ahead" 36" roll-up signs from $7.50/day. Required for single-lane alternating traffic operations. Fiberglass ribs, durable vinyl.',
+    metaTitle: titleBrand('Buy One Lane Road Ahead Sign (W20-4) | 36" Roll-Up'),
+    metaDescription: 'Buy MUTCD W20-4 "One Lane Road Ahead" 36" roll-up signs. Required for single-lane alternating traffic operations. Fiberglass ribs, durable vinyl.',
   },
 
   // --- Barricades & Barriers ---
@@ -642,7 +634,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'Do these barricades require flashing lights at night?',
-        answer: 'MUTCD requires Type B flashing amber lights on barricades used for road closures at night. Our Type B LED Barricade Flasher (SKU: LGT-B-FLSH) is compatible with these barricades and available to rent alongside them.',
+        answer: 'MUTCD requires Type B flashing amber lights on barricades used for road closures at night. Our Type B LED Barricade Flasher (SKU: LGT-B-FLSH) is compatible with these barricades and available to include with them.',
       },
       {
         question: 'What does "break-away" mean for barricades?',
@@ -650,7 +642,7 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'Can I add custom signage to these barricades?',
-        answer: 'Yes, Type III barricades can accommodate sign panels on the rails. Common additions include detour signs, road closed signs, and directional arrows. Contact us to include sign rentals with your barricade order.',
+        answer: 'Yes, Type III barricades can accommodate sign panels on the rails. Common additions include detour signs, road closed signs, and directional arrows. Contact us to include signs with your barricade order.',
       },
     ],
     tags: ['barricade', 'type III', 'road closure', 'reflective', 'warning'],
@@ -663,8 +655,8 @@ export const curatedProducts: Product[] = [
     supplier: 'OEM Type III barricade',
     weight: '~25 lbs',
     dimensions: '96" W × 60" H',
-    metaTitle: titleBrand('Rent Type III Road Closure Barricades | 8 ft Break-Away'),
-    metaDescription: 'Rent MUTCD Type III break-away barricades with 3×8 ft EG reflective rails from $12/day. NCHRP-350 crash-tested. Required for complete road closures. Flasher-ready.',
+    metaTitle: titleBrand('Buy Type III Road Closure Barricades | 8 ft Break-Away'),
+    metaDescription: 'Buy MUTCD Type III break-away barricades with 3×8 ft EG reflective rails. NCHRP-350 crash-tested. Required for complete road closures. Flasher-ready.',
   },
   {
     id: 'prod-9',
@@ -734,8 +726,8 @@ export const curatedProducts: Product[] = [
     supplier: 'OEM Type II barricade',
     weight: '~12 lbs',
     dimensions: '24" W × 45" H',
-    metaTitle: titleBrand('Rent Type II Traffic Barricades | HI Reflective Sheeting'),
-    metaDescription: 'Rent MUTCD Type II folding plastic barricades with high-intensity reflective sheeting from $8.25/day. 120 in stock. Ideal for lane closures, pedestrian detours, and channelization.',
+    metaTitle: titleBrand('Buy Type II Traffic Barricades | HI Reflective Sheeting'),
+    metaDescription: 'Buy MUTCD Type II folding plastic barricades with high-intensity reflective sheeting. 120 in stock. Ideal for lane closures, pedestrian detours, and channelization.',
   },
   {
     id: 'prod-10',
@@ -796,10 +788,6 @@ export const curatedProducts: Product[] = [
         question: 'Are water-filled barriers NCHRP-350 crash rated?',
         answer: 'Yes. The Yodock 2001MB meets NCHRP Report 350 standards. When filled with water to the specified level, the interlocked barrier system is crash-tested to redirect impacting vehicles and protect the work zone.',
       },
-      {
-        question: 'What is the minimum rental period for water-filled barriers?',
-        answer: 'Our minimum rental for water-filled barriers is 3 days due to the setup and breakdown time involved in filling and draining the barriers. Weekly and monthly rates offer significant savings.',
-      },
     ],
     tags: ['barrier', 'water-filled', 'yodock', 'positive protection', 'long duration'],
     inStock: true,
@@ -811,8 +799,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Yodock / OEM',
     weight: '85 lbs empty / ~900 lbs filled',
     dimensions: '72" L × 18" W × 32" H',
-    metaTitle: titleBrand('Rent Water-Filled Barriers | Yodock 2001MB NCHRP-350'),
-    metaDescription: 'Rent Yodock 2001MB NCHRP-350 water-filled construction barriers from $27/day. 900 lbs filled for positive worker protection. Interlocking 6-ft sections. 3-day minimum.',
+    metaTitle: titleBrand('Buy Water-Filled Barriers | Yodock 2001MB NCHRP-350'),
+    metaDescription: 'Buy Yodock 2001MB NCHRP-350 water-filled construction barriers. 900 lbs filled for positive worker protection. Interlocking 6-ft sections.',
   },
 
   // --- Arrow Boards ---
@@ -890,8 +878,8 @@ export const curatedProducts: Product[] = [
     supplier: TRANS,
     weight: '~1,000 lbs',
     dimensions: '48" H × 96" W panel; 95" L trailer',
-    metaTitle: titleBrand('Rent Arrow Board Trailer | Hi-Way Safety M90 Solar 15-Lamp'),
-    metaDescription: 'Rent Hi-Way Safety M90 solar arrow board trailers with 15 amber LED PAR46 lamps from $142.50/day. 30-day battery backup. MUTCD required for highway lane closures.',
+    metaTitle: titleBrand('Buy Arrow Board Trailer | Hi-Way Safety M90 Solar 15-Lamp'),
+    metaDescription: 'Buy Hi-Way Safety M90 solar arrow board trailers with 15 amber LED PAR46 lamps. 30-day battery backup. MUTCD required for highway lane closures.',
   },
   {
     id: 'prod-12',
@@ -961,8 +949,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '100 lbs',
     dimensions: 'Contact supplier for panel dimensions',
-    metaTitle: titleBrand('Rent Truck-Mounted Arrow Board | Gregory AVP15 15-LED Wireless'),
-    metaDescription: 'Rent Gregory Industries AVP15 truck-mounted 15-LED arrow boards with wireless remote from $97.50/day. Battery powered. Ideal for moving operations and shadow vehicles.',
+    metaTitle: titleBrand('Buy Truck-Mounted Arrow Board | Gregory AVP15 15-LED Wireless'),
+    metaDescription: 'Buy Gregory Industries AVP15 truck-mounted 15-LED arrow boards with wireless remote. Battery powered. Ideal for moving operations and shadow vehicles.',
   },
 
   // --- Message Boards ---
@@ -1020,15 +1008,11 @@ export const curatedProducts: Product[] = [
       },
       {
         question: 'How many characters per line can the display show?',
-        answer: 'The PCMS-1210 Pro displays 8 characters per line across 3 lines. Characters are 18" tall. Common abbreviations are used (e.g., "ROAD CLSD", "DETOUR →", "SLOW DOWN"). We provide a recommended message guide with your rental.',
+        answer: 'The PCMS-1210 Pro displays 8 characters per line across 3 lines. Characters are 18" tall. Common abbreviations are used (e.g., "ROAD CLSD", "DETOUR →", "SLOW DOWN"). We provide a recommended message guide with your order.',
       },
       {
         question: 'Does the message board need to be plugged in?',
         answer: 'No. The unit is fully solar-powered with tilt-and-rotate solar panels and sealed maintenance-free batteries (Ver-Mac Stealth Technology). The batteries provide days of operation in overcast conditions. No generator or shore power is needed.',
-      },
-      {
-        question: 'What is the minimum rental period for a portable message board?',
-        answer: 'Minimum rental is 1 day, but weekly rates offer the best value for most projects. Message boards are a significant investment in driver communication — most projects use them for the full project duration.',
       },
     ],
     tags: ['message board', 'PCMS', 'variable message sign', 'VMS', 'solar', 'ver-mac'],
@@ -1041,8 +1025,8 @@ export const curatedProducts: Product[] = [
     supplier: CORAL,
     weight: 'Contact supplier',
     dimensions: '71" × 133" display',
-    metaTitle: titleBrand('Rent Portable Message Board | Ver-Mac PCMS-1210 Pro 3-Line Solar'),
-    metaDescription: 'Rent Ver-Mac PCMS-1210 Pro 3-line portable message boards from $262.50/day. WiFi + 4G LTE remote programming, solar-powered, NTCIP compliant. Ideal for work zones and events.',
+    metaTitle: titleBrand('Buy Portable Message Board | Ver-Mac PCMS-1210 Pro 3-Line Solar'),
+    metaDescription: 'Buy Ver-Mac PCMS-1210 Pro 3-line portable message boards. WiFi + 4G LTE remote programming, solar-powered, NTCIP compliant. Ideal for work zones and events.',
   },
 
   // --- Safety Lighting ---
@@ -1118,8 +1102,8 @@ export const curatedProducts: Product[] = [
     supplier: 'OEM Type B flasher',
     weight: '~1 lb',
     dimensions: '~5" diameter',
-    metaTitle: titleBrand('Rent Type B Barricade Flashers | Amber LED MUTCD Compliant'),
-    metaDescription: 'Rent MUTCD Type B amber LED barricade flashers from $2.25/day. Photo-cell auto shutoff, steady or flash mode. Required for nighttime barricade and drum lighting. 400+ in stock.',
+    metaTitle: titleBrand('Buy Type B Barricade Flashers | Amber LED MUTCD Compliant'),
+    metaDescription: 'Buy MUTCD Type B amber LED barricade flashers. Photo-cell auto shutoff, steady or flash mode. Required for nighttime barricade and drum lighting. 400+ in stock.',
   },
   {
     id: 'prod-15',
@@ -1174,14 +1158,6 @@ export const curatedProducts: Product[] = [
         question: 'How visible are flares in daylight?',
         answer: 'Orion road flares produce intense red light and smoke visible in daylight at 500+ feet. The bright red flame and smoke column make them highly conspicuous even in sunny conditions.',
       },
-      {
-        question: 'What is included in the 6-pack rental set?',
-        answer: 'Each rental set includes 6 Orion 30-minute road flares, a high-visibility red nylon carrying case, and an orange safety vest. The safety vest is required PPE when deploying flares in active traffic.',
-      },
-      {
-        question: 'Do I return unused flares?',
-        answer: 'Yes. Return unused flares at the end of your rental period. Used/burned flares are consumed and do not need to be returned. We track flare usage and replenish the set between rentals.',
-      },
     ],
     tags: ['flare', 'road flare', 'orion', 'emergency', 'night', 'delineation'],
     inStock: true,
@@ -1193,8 +1169,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Orion Safety Products',
     weight: '~3 lbs (set)',
     dimensions: '6 flares in nylon case',
-    metaTitle: titleBrand('Rent Road Flares | Orion 30-Min 6-Pack DOT Approved'),
-    metaDescription: 'Rent Orion 30-minute DOT-approved road flares (6-pack) from $18/day. Weather-resistant waxed construction, nylon case and safety vest included. Ideal for emergency delineation.',
+    metaTitle: titleBrand('Buy Road Flares | Orion 30-Min 6-Pack DOT Approved'),
+    metaDescription: 'Buy Orion 30-minute DOT-approved road flares (6-pack). Weather-resistant waxed construction, nylon case and safety vest included. Ideal for emergency delineation.',
   },
 
   // --- Safety Lighting (additional) ---
@@ -1250,10 +1226,6 @@ export const curatedProducts: Product[] = [
         answer: 'Solar-assist models charge during daylight and run overnight. Extended overcast periods may shorten runtime—plan spare units or D-cell Type B flashers for critical redundancy.',
       },
       {
-        question: 'What is the minimum rental period?',
-        answer: 'Minimum rental is 1 day. Weekly and monthly rates apply the same ×4 / ×12 retail tiering used across our catalog.',
-      },
-      {
         question: 'Can it mount on traffic cones?',
         answer: 'Many models include adapters for cone tops and drum lids. Specify cone height and collar type in your quote so we ship the correct mounting hardware.',
       },
@@ -1268,8 +1240,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~2 lbs',
     dimensions: 'Compact drum / barricade mount',
-    metaTitle: titleBrand('Rent Solar LED Barricade Lights | Amber High-Output'),
-    metaDescription: 'Rent solar-assist amber LED barricade warning lights with photocell operation. Ideal for drums and barricades on night work. Retail rental rates include 50% markup.',
+    metaTitle: titleBrand('Buy Solar LED Barricade Lights | Amber High-Output'),
+    metaDescription: 'Buy solar-assist amber LED barricade warning lights with photocell operation. Ideal for drums and barricades on night work.',
   },
 
   // --- Pedestrian & Crowd Control ---
@@ -1328,10 +1300,6 @@ export const curatedProducts: Product[] = [
         question: 'How many do I need for a run?',
         answer: 'Interlocking length and corner geometry drive counts. Send a sketch or call with footage — we can estimate a layout and scheduling windows.',
       },
-      {
-        question: 'What is the minimum rental period?',
-        answer: 'Minimum rental is 1 day. Weekly and monthly tiers follow standard catalog pricing.',
-      },
     ],
     tags: ['pedestrian', 'crowd control', 'water filled', 'urbanite', 'event'],
     inStock: true,
@@ -1343,8 +1311,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: 'Empty — fills on site',
     dimensions: 'Low-profile ped barricade module',
-    metaTitle: titleBrand('Rent Urbanite Pedestrian Barricades | Water-Filled'),
-    metaDescription: 'Rent white Urbanite-style water-filled pedestrian barricades for events and sidewalk detours. Stable interlocking runs. Retail rates with 50% markup.',
+    metaTitle: titleBrand('Buy Urbanite Pedestrian Barricades | Water-Filled'),
+    metaDescription: 'Buy white Urbanite-style water-filled pedestrian barricades for events and sidewalk detours. Stable interlocking runs.',
   },
   {
     id: 'prod-18',
@@ -1397,10 +1365,6 @@ export const curatedProducts: Product[] = [
         answer: 'EG is suitable for many low-speed ped environments. For high-contrast night needs near traffic, consider high-intensity sheeting upgrades or supplemental warning lights.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum; weekly and monthly discounts apply.',
-      },
-      {
         question: 'Can these block vehicles?',
         answer: 'They are pedestrian-class devices—not longitudinal vehicle barriers. Use water-filled or crash-tested barriers for vehicle lane protection.',
       },
@@ -1415,8 +1379,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~12–18 lbs (typical)',
     dimensions: 'Folding barricade panel',
-    metaTitle: titleBrand('Rent Economy Pedestrian Barricades | EG Reflective'),
-    metaDescription: 'Rent orange economy pedestrian barricades with engineer-grade reflective sheeting. Fast setup for sidewalk and lot ped control.',
+    metaTitle: titleBrand('Buy Economy Pedestrian Barricades | EG Reflective'),
+    metaDescription: 'Buy orange economy pedestrian barricades with engineer-grade reflective sheeting. Fast setup for sidewalk and lot ped control.',
   },
 
   // --- Accessories & Hardware ---
@@ -1458,19 +1422,11 @@ export const curatedProducts: Product[] = [
     faqs: [
       {
         question: 'Is sand included?',
-        answer: 'Bags rent empty; source clean dry sand or gravel on site. Return empty bags at end of rental unless otherwise agreed.',
+        answer: 'Bags ship empty; source clean dry sand or gravel on site.',
       },
       {
         question: 'How many bags per stand?',
         answer: 'Wind exposure and stand height drive counts—two to four filled bags per leg is common in moderate wind.',
-      },
-      {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
-        question: 'Can I buy instead of rent?',
-        answer: 'Yes—ask for purchase pricing on high-consumption projects.',
       },
     ],
     tags: ['sandbag', 'ballast', 'sign stand', 'weight'],
@@ -1483,8 +1439,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~0.2 lb empty',
     dimensions: '14" × 26" flat',
-    metaTitle: titleBrand('Rent Traffic Sandbags | 14×26 Polypropylene'),
-    metaDescription: 'Rent empty 14×26 woven polypropylene traffic sandbags for sign stand and barricade ballast. Durable UV-treated fabric.',
+    metaTitle: titleBrand('Buy Traffic Sandbags | 14×26 Polypropylene'),
+    metaDescription: 'Buy empty 14×26 woven polypropylene traffic sandbags for sign stand and barricade ballast. Durable UV-treated fabric.',
   },
   {
     id: 'prod-20',
@@ -1527,10 +1483,6 @@ export const curatedProducts: Product[] = [
         answer: 'Compatibility varies by mast diameter and foot design. Send your stand model or a photo of the foot plate—we match weights to common Traffic Safety Store stand families.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Do I still need sandbags?',
         answer: 'In extreme wind, yes—layer sandbags in addition to rubber weights.',
       },
@@ -1549,8 +1501,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~28–40 lb (SKU dependent)',
     dimensions: 'Fits common mast tubes',
-    metaTitle: titleBrand('Rent Sign Stand Rubber Weights | Dual-Handle'),
-    metaDescription: 'Rent recycled rubber base weights for telescoping sign stands. Faster ballast handling for roll-up signs in wind.',
+    metaTitle: titleBrand('Buy Sign Stand Rubber Weights | Dual-Handle'),
+    metaDescription: 'Buy recycled rubber base weights for telescoping sign stands. Faster ballast handling for roll-up signs in wind.',
   },
 
   // --- Parking Blocks ---
@@ -1596,10 +1548,6 @@ export const curatedProducts: Product[] = [
         answer: 'Yes with wedge anchors or epoxy—specify substrate in your quote so we ship the correct fastener kit.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum; weekly and monthly tiers available.',
-      },
-      {
         question: 'Can you place these on site?',
         answer: 'On-site placement can be quoted separately; ask when you request a quote.',
       },
@@ -1618,8 +1566,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~34 lb (typical)',
     dimensions: '6 ft × ~7–8 in height (typical)',
-    metaTitle: titleBrand('Rent 6 ft Rubber Parking Blocks | Blue Wheel Stops'),
-    metaDescription: 'Rent 6 ft commercial recycled rubber parking blocks with asphalt spikes. High-visibility blue for lots and garages.',
+    metaTitle: titleBrand('Buy 6 ft Rubber Parking Blocks | Blue Wheel Stops'),
+    metaDescription: 'Buy 6 ft commercial recycled rubber parking blocks with asphalt spikes. High-visibility blue for lots and garages.',
   },
   {
     id: 'prod-22',
@@ -1662,10 +1610,6 @@ export const curatedProducts: Product[] = [
         answer: 'Both improve visibility vs. plain black. Pick based on owner standards and contrast with pavement color.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Do I return damaged units?',
         answer: 'Normal wear is expected; cracked or cut units should be noted at return for fair billing.',
       },
@@ -1684,8 +1628,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~22–28 lb (typical)',
     dimensions: '4 ft length',
-    metaTitle: titleBrand('Rent 4 ft Rubber Wheel Stops | Yellow Stripes'),
-    metaDescription: 'Rent 4 ft recycled rubber wheel stops with yellow visibility stripes. Ideal for compact stalls and garages.',
+    metaTitle: titleBrand('Buy 4 ft Rubber Wheel Stops | Yellow Stripes'),
+    metaDescription: 'Buy 4 ft recycled rubber wheel stops with yellow visibility stripes. Ideal for compact stalls and garages.',
   },
 
   // --- Speed Bumps & Humps ---
@@ -1708,7 +1652,7 @@ export const curatedProducts: Product[] = [
       System: 'Requires matching end caps',
       Use: 'Private roads / lots (verify public ROW rules)',
     },
-    features: ['Modular layout for any road width', 'Durable rubber compound', 'Asphalt spike pattern', 'Reflective tape options', 'Repeatable rental inventory'],
+    features: ['Modular layout for any road width', 'Durable rubber compound', 'Asphalt spike pattern', 'Reflective tape options'],
     compliance: ['Local fire / EMS clearance rules apply'],
     useCases: [
       {
@@ -1727,15 +1671,11 @@ export const curatedProducts: Product[] = [
     faqs: [
       {
         question: 'Can I install this on a public street?',
-        answer: 'Public roadway installations require engineering, fire/EMS clearance, and municipal approval. Many rentals are for private property only—confirm jurisdiction.',
+        answer: 'Public roadway installations require engineering, fire/EMS clearance, and municipal approval. Many orders are for private property only—confirm jurisdiction.',
       },
       {
         question: 'Do I need end caps?',
         answer: 'Yes. Middle sections alone are incomplete—quote end caps for tapered entry geometry.',
-      },
-      {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
       },
       {
         question: 'Removal marks?',
@@ -1752,8 +1692,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~45–60 lb (section dependent)',
     dimensions: 'Modular middle section',
-    metaTitle: titleBrand('Rent Rubber Speed Hump Sections | Modular'),
-    metaDescription: 'Rent economy modular rubber speed hump middle sections with asphalt spikes. Pair with end caps for full-width calming.',
+    metaTitle: titleBrand('Buy Rubber Speed Hump Sections | Modular'),
+    metaDescription: 'Buy economy modular rubber speed hump middle sections with asphalt spikes. Pair with end caps for full-width calming.',
   },
   {
     id: 'prod-24',
@@ -1774,7 +1714,7 @@ export const curatedProducts: Product[] = [
       Reflectors: 'Molded or adhesive reflectors',
       Portable: 'Handles for two-person carry',
     },
-    features: ['Portable for events and seasonal lots', 'High visibility reflectors', 'Asphalt or concrete anchoring options', 'Durable rubber wear surface', 'Reusable rental inventory'],
+    features: ['Portable for events and seasonal lots', 'High visibility reflectors', 'Asphalt or concrete anchoring options', 'Durable rubber wear surface'],
     compliance: ['Private property typical—verify public ROW'],
     useCases: [
       {
@@ -1796,10 +1736,6 @@ export const curatedProducts: Product[] = [
         answer: 'Portable bumps are often single-piece or two-piece kits for narrower paths; modular humps span full road widths with middle + end geometry.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Fire lane concerns?',
         answer: 'Do not block required fire lanes—confirm AHJ requirements before placement.',
       },
@@ -1818,8 +1754,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~50–70 lb (typical)',
     dimensions: '6 ft length',
-    metaTitle: titleBrand('Rent Portable Rubber Speed Bumps | 6 ft'),
-    metaDescription: 'Rent 6 ft portable rubber speed bumps for temporary lot and lane calming. Reflectors and handles for crew handling.',
+    metaTitle: titleBrand('Buy Portable Rubber Speed Bumps | 6 ft'),
+    metaDescription: 'Buy 6 ft portable rubber speed bumps for temporary lot and lane calming. Reflectors and handles for crew handling.',
   },
 
   // --- Safety Vests & Hi-Vis ---
@@ -1864,14 +1800,6 @@ export const curatedProducts: Product[] = [
         answer: 'Class 3 adds more background and reflective square inches for higher speeds and complex backgrounds. Use your TCP or ANSI risk assessment to pick Class 2 vs. 3.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum; volume pricing for large crews.',
-      },
-      {
-        question: 'Do you rent laundered sets?',
-        answer: 'Yes—ask for laundered multi-week crew packs.',
-      },
-      {
         question: 'Sizing?',
         answer: 'Provide chest size ranges—we ship SM–5XL mixes to match rosters.',
       },
@@ -1886,8 +1814,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~0.4 lb',
     dimensions: 'Sized garment',
-    metaTitle: titleBrand('Rent ANSI Class 2 Safety Vests | Orange Mesh'),
-    metaDescription: 'Rent ANSI/ISEA Class 2 orange mesh safety vests with reflective trim. Ideal for roadway and utility crews.',
+    metaTitle: titleBrand('Buy ANSI Class 2 Safety Vests | Orange Mesh'),
+    metaDescription: 'Buy ANSI/ISEA Class 2 orange mesh safety vests with reflective trim. Ideal for roadway and utility crews.',
   },
   {
     id: 'prod-26',
@@ -1930,16 +1858,12 @@ export const curatedProducts: Product[] = [
         answer: 'No—fall protection requires an ANSI Z359 harness system. Some vests include harness pass-throughs; verify compatibility.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Lime vs. orange?',
         answer: 'Both are common; lime often contrasts against orange work zone devices—pick per company standard.',
       },
       {
         question: 'Laundry?',
-        answer: 'Industrial laundry extends garment life—ask for laundered rental packs.',
+        answer: 'Industrial laundry extends garment life—ask about laundered packs.',
       },
     ],
     tags: ['Class 3', 'surveyors vest', 'lime', 'hi-vis'],
@@ -1952,8 +1876,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~0.7 lb',
     dimensions: 'Sized garment',
-    metaTitle: titleBrand('Rent ANSI Class 3 Surveyors Vests | Lime Hi-Vis'),
-    metaDescription: 'Rent ANSI Class 3 lime surveyors vests with expanded reflective for highway and night operations.',
+    metaTitle: titleBrand('Buy ANSI Class 3 Surveyors Vests | Lime Hi-Vis'),
+    metaDescription: 'Buy ANSI Class 3 lime surveyors vests with expanded reflective for highway and night operations.',
   },
 
   // --- PPE ---
@@ -1998,11 +1922,7 @@ export const curatedProducts: Product[] = [
         answer: 'Helmets often add lateral coverage and accessory integration beyond traditional cap-style hard hats. Both must meet ANSI Z89.1 when used as head protection PPE.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum; disinfect between users per your safety plan.',
-      },
-      {
-        question: 'Do you rent visors and earmuffs?',
+        question: 'Do you sell visors and earmuffs?',
         answer: 'Yes—request faceshield and hearing protection bundles in your quote.',
       },
       {
@@ -2020,8 +1940,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Kask',
     weight: '~1.3 lb',
     dimensions: 'Universal shell sizes',
-    metaTitle: titleBrand('Rent Kask Zenith X2 Safety Helmets | ANSI Z89.1'),
-    metaDescription: 'Rent Kask Zenith X2 vented safety helmets (white). ANSI Z89.1 Type I head protection with wheel ratchet fit.',
+    metaTitle: titleBrand('Buy Kask Zenith X2 Safety Helmets | ANSI Z89.1'),
+    metaDescription: 'Buy Kask Zenith X2 vented safety helmets (white). ANSI Z89.1 Type I head protection with wheel ratchet fit.',
   },
   {
     id: 'prod-28',
@@ -2064,10 +1984,6 @@ export const curatedProducts: Product[] = [
         answer: 'ANSI/ISEA 105 assigns A1–A9 cut scores. A4 is mid-high protection—match to your JHA.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum; box quantities for large crews.',
-      },
-      {
         question: 'Latex allergies?',
         answer: 'Nitrile coatings are latex-free—confirm if you need powder-free liners.',
       },
@@ -2086,8 +2002,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~0.15 lb / pair',
     dimensions: 'SM–2XL mixes',
-    metaTitle: titleBrand('Rent Cut-Resistant Work Gloves | ANSI A4 Nitrile'),
-    metaDescription: 'Rent ANSI A4 cut-level work gloves with sandy nitrile palms for grip and durability on job sites.',
+    metaTitle: titleBrand('Buy Cut-Resistant Work Gloves | ANSI A4 Nitrile'),
+    metaDescription: 'Buy ANSI A4 cut-level work gloves with sandy nitrile palms for grip and durability on job sites.',
   },
   {
     id: 'prod-29',
@@ -2108,7 +2024,7 @@ export const curatedProducts: Product[] = [
       UV: 'UV400',
       Standard: 'ANSI Z87.1+ (verify label)',
     },
-    features: ['Wide field of view', 'Lightweight for all-day wear', 'Compatible with many helmets', 'UV protection for outdoor crews', 'Bulk rental packs'],
+    features: ['Wide field of view', 'Lightweight for all-day wear', 'Compatible with many helmets', 'UV protection for outdoor crews'],
     compliance: ['ANSI Z87.1+ (verify label)'],
     useCases: [
       {
@@ -2130,10 +2046,6 @@ export const curatedProducts: Product[] = [
         answer: 'Some crews need OTG (over-the-glass) models—request OTG in your quote if needed.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Anti-fog lifetime?',
         answer: 'Coatings wear with cleaning—replace when fogging returns.',
       },
@@ -2152,8 +2064,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~1 oz',
     dimensions: 'One size fits most',
-    metaTitle: titleBrand('Rent ANSI Z87 Safety Glasses | Clear Anti-Fog'),
-    metaDescription: 'Rent clear anti-fog polycarbonate safety glasses with UV400. ANSI Z87.1+ eye protection for crews.',
+    metaTitle: titleBrand('Buy ANSI Z87 Safety Glasses | Clear Anti-Fog'),
+    metaDescription: 'Buy clear anti-fog polycarbonate safety glasses with UV400. ANSI Z87.1+ eye protection for crews.',
   },
 
   // --- Striping, Paint & Pavement Marking ---
@@ -2198,10 +2110,6 @@ export const curatedProducts: Product[] = [
         answer: 'Construction marking paints are often formulated for temporary marks; long-life traffic enamels differ. Tell us expected wear life and we match chemistry.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum per case.',
-      },
-      {
         question: 'Returns on partial cases?',
         answer: 'We bill per opened case; unopened cans may credit depending on contract.',
       },
@@ -2220,8 +2128,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Aervoe',
     weight: '~18 lb / case (approx.)',
     dimensions: '12 cans',
-    metaTitle: titleBrand('Rent Construction Marking Paint | Case of 12'),
-    metaDescription: 'Rent Aervoe-style water-based construction marking paint by the case. Ideal for layout and utility locates.',
+    metaTitle: titleBrand('Buy Construction Marking Paint | Case of 12'),
+    metaDescription: 'Buy Aervoe-style water-based construction marking paint by the case. Ideal for layout and utility locates.',
   },
   {
     id: 'prod-31',
@@ -2264,10 +2172,6 @@ export const curatedProducts: Product[] = [
         answer: 'Many high-performance tapes require primer on asphalt—specify substrate and expected duration.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum per roll.',
-      },
-      {
         question: 'Removal?',
         answer: 'Heat or grind removal may be needed if left too long—follow manufacturer limits.',
       },
@@ -2286,8 +2190,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~15–25 lb / roll (SKU dependent)',
     dimensions: '4 in × roll length',
-    metaTitle: titleBrand('Rent Temporary Pavement Marking Tape | White'),
-    metaDescription: 'Rent temporary white pavement marking tape for short-duration lines and pilot layouts.',
+    metaTitle: titleBrand('Buy Temporary Pavement Marking Tape | White'),
+    metaDescription: 'Buy temporary white pavement marking tape for short-duration lines and pilot layouts.',
   },
 
   // --- Fencing, Cable Covers & Site Safety ---
@@ -2310,7 +2214,7 @@ export const curatedProducts: Product[] = [
       Feet: 'Bridge feet (ballast as needed)',
       Mesh: 'Welded wire mesh',
     },
-    features: ['Fast interlocking install', 'Galvanized corrosion resistance', 'Reusable rental inventory', 'Compatible with privacy screens (request)', 'Stable on varied surfaces with ballast'],
+    features: ['Fast interlocking install', 'Galvanized corrosion resistance', 'Compatible with privacy screens (request)', 'Stable on varied surfaces with ballast'],
     compliance: ['Event and fire code reviews required'],
     useCases: [
       {
@@ -2332,10 +2236,6 @@ export const curatedProducts: Product[] = [
         answer: 'Panel width drives counts—roughly ten 10 ft panels per 100 ft of run before corners.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Wind bracing?',
         answer: 'Add ballast or angled braces per engineer or venue requirements.',
       },
@@ -2354,8 +2254,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~55–75 lb / panel (typical)',
     dimensions: '6 ft × 10 ft panel',
-    metaTitle: titleBrand('Rent Crowd Control Fence Panels | Galvanized 6×10'),
-    metaDescription: 'Rent galvanized steel crowd control fence panels with bridge feet for events and secured sites.',
+    metaTitle: titleBrand('Buy Crowd Control Fence Panels | Galvanized 6×10'),
+    metaDescription: 'Buy galvanized steel crowd control fence panels with bridge feet for events and secured sites.',
   },
   {
     id: 'prod-33',
@@ -2398,10 +2298,6 @@ export const curatedProducts: Product[] = [
         answer: 'Measure your bundle diameter—channels vary by SKU. Oversized bundles need 3- or 5-channel models.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'ADA aisles?',
         answer: 'Covers change rolling resistance—confirm slope and width with your accessibility reviewer.',
       },
@@ -2420,8 +2316,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~18–28 lb / section (typical)',
     dimensions: 'Modular length per SKU',
-    metaTitle: titleBrand('Rent 2-Channel Cable Protectors | Drop-Over'),
-    metaDescription: 'Rent two-channel drop-over cable protectors for cords and hoses in lots, venues, and work zones.',
+    metaTitle: titleBrand('Buy 2-Channel Cable Protectors | Drop-Over'),
+    metaDescription: 'Buy two-channel drop-over cable protectors for cords and hoses in lots, venues, and work zones.',
   },
 
   // --- Fall Protection ---
@@ -2466,16 +2362,12 @@ export const curatedProducts: Product[] = [
         answer: 'No. You need an approved anchor capable of 5,000 lb per worker (typical rule of thumb), a shock-absorbing lanyard or SRL, clearance calculations, and rescue planning.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum; inspection required before each use.',
-      },
-      {
         question: 'Sizing?',
         answer: 'Universal fits many workers—XL harnesses available on request.',
       },
       {
-        question: 'Can I rent without training?',
-        answer: 'Employers must provide competent person oversight—rental does not replace training.',
+        question: 'Can I buy without training?',
+        answer: 'Employers must provide competent person oversight—purchase does not replace training.',
       },
     ],
     tags: ['harness', 'fall protection', 'ANSI Z359', 'hi-vis'],
@@ -2488,8 +2380,8 @@ export const curatedProducts: Product[] = [
     supplier: 'Radians',
     weight: '~3 lb',
     dimensions: 'Universal adjustable',
-    metaTitle: titleBrand('Rent Hi-Vis Full-Body Harnesses | ANSI Z359'),
-    metaDescription: 'Rent Radians-style hi-vis ANSI Z359.11 full-body harnesses with dorsal D-ring. Pair with approved anchors and lanyards.',
+    metaTitle: titleBrand('Buy Hi-Vis Full-Body Harnesses | ANSI Z359'),
+    metaDescription: 'Buy Radians-style hi-vis ANSI Z359.11 full-body harnesses with dorsal D-ring. Pair with approved anchors and lanyards.',
   },
   {
     id: 'prod-35',
@@ -2532,10 +2424,6 @@ export const curatedProducts: Product[] = [
         answer: 'Calculate total fall distance including sag, deceleration, harness stretch, and safety margin—competent person required.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Twin-leg needed?',
         answer: '100% tie-off while moving anchors often needs a twin-leg Y lanyard or SRL—request upgrade.',
       },
@@ -2554,8 +2442,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~2.5 lb',
     dimensions: '6 ft single leg',
-    metaTitle: titleBrand('Rent Shock-Absorbing Lanyards | 6 ft Single Leg'),
-    metaDescription: 'Rent 6 ft single-leg shock-absorbing lanyards with steel snap hooks. Use only as part of a complete fall protection system.',
+    metaTitle: titleBrand('Buy Shock-Absorbing Lanyards | 6 ft Single Leg'),
+    metaDescription: 'Buy 6 ft single-leg shock-absorbing lanyards with steel snap hooks. Use only as part of a complete fall protection system.',
   },
 
   // --- Bollards, Chocks & Corner Guards ---
@@ -2600,10 +2488,6 @@ export const curatedProducts: Product[] = [
         answer: 'Measure outside diameter and squareness—covers are slightly oversized for slip fit. Ask for sizing chart.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Reflective tape?',
         answer: 'Yes—request reflective collar kits.',
       },
@@ -2622,8 +2506,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~3 lb',
     dimensions: '5" ID × 52" H',
-    metaTitle: titleBrand('Rent Bollard Covers | 5" Blue HDPE Sleeves'),
-    metaDescription: 'Rent tall blue polyethylene bollard covers for 5 in posts. UV-stable sleeves for lots and storefronts.',
+    metaTitle: titleBrand('Buy Bollard Covers | 5" Blue HDPE Sleeves'),
+    metaDescription: 'Buy tall blue polyethylene bollard covers for 5 in posts. UV-stable sleeves for lots and storefronts.',
   },
   {
     id: 'prod-37',
@@ -2666,10 +2550,6 @@ export const curatedProducts: Product[] = [
         answer: 'Best practice is chocking both sides of a tire set on grade—ask your safety officer.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Ice and snow?',
         answer: 'Grip decreases on ice—clean surface or use grit.',
       },
@@ -2688,8 +2568,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~8–12 lb (typical)',
     dimensions: 'Truck class chock',
-    metaTitle: titleBrand('Rent Truck Wheel Chocks | Urethane'),
-    metaDescription: 'Rent heavy urethane truck and trailer wheel chocks with aggressive grip bases for lot and yard use.',
+    metaTitle: titleBrand('Buy Truck Wheel Chocks | Urethane'),
+    metaDescription: 'Buy heavy urethane truck and trailer wheel chocks with aggressive grip bases for lot and yard use.',
   },
 
   // --- Flares, Markers, Wands & Flags (additional) ---
@@ -2712,7 +2592,7 @@ export const curatedProducts: Product[] = [
       Base: 'Surface mount spring-return (SKU dependent)',
       Color: 'White post (typical)',
     },
-    features: ['Flexible post reduces knockdown damage', 'HI reflective for night bike lanes', 'Surface anchor kits available', 'Repeatable rental inventory', 'Pairs with pavement epoxy anchors'],
+    features: ['Flexible post reduces knockdown damage', 'HI reflective for night bike lanes', 'Surface anchor kits available', 'Pairs with pavement epoxy anchors'],
     compliance: ['MUTCD bike facility markings (verify design)'],
     useCases: [
       {
@@ -2734,10 +2614,6 @@ export const curatedProducts: Product[] = [
         answer: 'Asphalt epoxy vs. mechanical anchors depend on substrate—specify in quote.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Snow plow hits?',
         answer: 'Spring-return helps but is not immune—inspect after storms.',
       },
@@ -2756,8 +2632,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~4–6 lb',
     dimensions: '42 in post typical',
-    metaTitle: titleBrand('Rent Flexible Delineator Posts | 42" White HI'),
-    metaDescription: 'Rent 42 in flexible surface-mounted delineator posts with high-intensity reflective sheeting.',
+    metaTitle: titleBrand('Buy Flexible Delineator Posts | 42" White HI'),
+    metaDescription: 'Buy 42 in flexible surface-mounted delineator posts with high-intensity reflective sheeting.',
   },
   {
     id: 'prod-39',
@@ -2778,7 +2654,7 @@ export const curatedProducts: Product[] = [
       Modes: 'Steady / flash / flashlight (SKU dependent)',
       Power: 'AA or rechargeable (SKU dependent)',
     },
-    features: ['High visibility amber LEDs', 'Wrist lanyard reduces drops', 'Multiple flash patterns on some models', 'Lightweight for long shifts', 'Bulk rental for large flagging teams'],
+    features: ['High visibility amber LEDs', 'Wrist lanyard reduces drops', 'Multiple flash patterns on some models', 'Lightweight for long shifts'],
     compliance: ['MUTCD flagger illumination supplements (verify TCP)'],
     useCases: [
       {
@@ -2800,10 +2676,6 @@ export const curatedProducts: Product[] = [
         answer: 'We ship ready-to-use with fresh cells or charged packs—specify rechargeable preference.',
       },
       {
-        question: 'Minimum rental?',
-        answer: '1 day minimum.',
-      },
-      {
         question: 'Does this replace a paddle?',
         answer: 'No—wands supplement proper STOP/SLOW procedures per MUTCD and agency training.',
       },
@@ -2822,8 +2694,8 @@ export const curatedProducts: Product[] = [
     supplier: TSP,
     weight: '~0.4 lb',
     dimensions: '21 in length',
-    metaTitle: titleBrand('Rent LED Traffic Wands | 21" Amber'),
-    metaDescription: 'Rent 21 in amber LED traffic wands with flash and flashlight modes for night flagging and parking control.',
+    metaTitle: titleBrand('Buy LED Traffic Wands | 21" Amber'),
+    metaDescription: 'Buy 21 in amber LED traffic wands with flash and flashlight modes for night flagging and parking control.',
   },
 ]
 
