@@ -39,8 +39,6 @@ const barT3img = cdn(
 )
 const barT2img = cdn('i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp')
 const barWFimg = cdn('i/yodock-2001mb-barrier-orange-without-optional-fence-water-filled-barricade.webp')
-const msgBoardImg =
-  'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png'
 const flasherImg = cdn('i/economy-solar-assist-type-b-flasher-red.webp')
 const flareImg = cdn('i/orion-15-minute-road-flares-case-of-72-without-wire-stand.webp')
 const urbanitePedImg = cdn('i/urbanite-crowd-control-barricades-white-none-no-sheeting-water-filled-barricade.webp')
@@ -60,7 +58,6 @@ const harnessImg = cdn('i/radians-high-visibility-breakaway-by-back-safety-harne
 const bollardCoverImg = cdn('i/tall-bollard-cover-5-inch-diameter-52in-blue.webp')
 
 const TSP = 'Traffic Safety Products'
-const CORAL = 'Coral Sales (Ver-Mac)'
 
 const rawCuratedProducts: Product[] = [
   // --- Cones & Drums ---
@@ -793,82 +790,6 @@ const rawCuratedProducts: Product[] = [
     dimensions: '72" L × 18" W × 32" H',
     metaTitle: titleBrand('Buy Water-Filled Barriers | Yodock 2001MB NCHRP-350'),
     metaDescription: 'Buy Yodock 2001MB NCHRP-350 water-filled construction barriers. 900 lbs filled for positive worker protection. Interlocking 6-ft sections.',
-  },
-
-  // --- Message Boards ---
-  {
-    id: 'prod-13',
-    categoryId: 'cat-5',
-    categorySlug: 'message-boards',
-    name: 'Ver-Mac PCMS-1210 Pro — 3-Line Portable Message Board',
-    slug: 'portable-message-board-3line',
-    description: 'Ver-Mac PCMS-1210 Pro solar trailer-mounted 3-line LED portable changeable message sign, NTCIP compliant',
-    longDescription:
-      'Exact product: Ver-Mac PCMS-1210 Pro (available via Coral Sales). Full-size trailer-mounted 3-line portable changeable message sign. 71"×133" display, 18" character height per line, 8 characters per line. V-Touch touchscreen controller, V-Sync WiFi + 4G LTE, tilt-and-rotate solar panels, sealed maintenance-free batteries (Stealth Technology). NTCIP compliant. JamLogic fleet management ready.',
-    volumePriceTiers: singleTierFromRetailUnit(262.5),
-    unit: 'each',
-    imageUrl: msgBoardImg,
-    images: [msgBoardImg],
-    specs: {
-      Brand: 'Ver-Mac',
-      Model: 'PCMS-1210 Pro',
-      Display: '3-line, 8 chars/line',
-      'Character Height': '18" per line',
-      'Display Size': '71" × 133"',
-      Controller: 'V-Touch (touchscreen)',
-      Communication: 'WiFi V-Sync + 4G LTE',
-      Power: 'Tilt/rotate solar + sealed batteries',
-      Compliance: 'NTCIP compliant',
-    },
-    features: [
-      '3-line × 8-character LED display',
-      'Touchscreen V-Touch controller',
-      'WiFi + 4G LTE remote programming',
-      'Solar-powered with theft-proof sealed batteries',
-      'NTCIP compliant',
-      'JamLogic fleet management ready',
-    ],
-    compliance: ['NTCIP', 'MUTCD', 'FHWA'],
-    useCases: [
-      {
-        title: 'Work Zone Motorist Messaging',
-        description: 'Display real-time messages to approaching drivers: lane closure schedules, detour routes, speed reductions, and safety warnings. Far more flexible than static signs for changing work zone conditions.',
-      },
-      {
-        title: 'Traffic Management During Events',
-        description: 'Festivals, sporting events, and large gatherings use portable message boards to direct parking, communicate road closures, and manage pedestrian flow — programmable remotely via 4G LTE.',
-      },
-      {
-        title: 'Emergency & Incident Response',
-        description: 'Emergency management agencies deploy portable message boards to communicate evacuation routes, shelter locations, and road conditions during natural disasters and major incidents.',
-      },
-    ],
-    faqs: [
-      {
-        question: 'Can the message board be programmed remotely?',
-        answer: 'Yes. The Ver-Mac PCMS-1210 Pro includes WiFi (V-Sync) and 4G LTE connectivity. You can program messages, schedule display changes, and monitor the unit from any internet-connected device. JamLogic fleet management software enables centralized control of multiple boards.',
-      },
-      {
-        question: 'How many characters per line can the display show?',
-        answer: 'The PCMS-1210 Pro displays 8 characters per line across 3 lines. Characters are 18" tall. Common abbreviations are used (e.g., "ROAD CLSD", "DETOUR →", "SLOW DOWN"). We provide a recommended message guide with your order.',
-      },
-      {
-        question: 'Does the message board need to be plugged in?',
-        answer: 'No. The unit is fully solar-powered with tilt-and-rotate solar panels and sealed maintenance-free batteries (Ver-Mac Stealth Technology). The batteries provide days of operation in overcast conditions. No generator or shore power is needed.',
-      },
-    ],
-    tags: ['message board', 'PCMS', 'variable message sign', 'VMS', 'solar', 'ver-mac'],
-    inStock: true,
-    stockCount: 8,
-    popular: true,
-    sku: 'MSG-3L-SOL',
-    supplierSku: 'PCMS-1210-PRO',
-    supplierUrl: 'https://coralsales.com/products/pcms-1210-pro-message-board',
-    supplier: CORAL,
-    weight: 'Contact supplier',
-    dimensions: '71" × 133" display',
-    metaTitle: titleBrand('Buy Portable Message Board | Ver-Mac PCMS-1210 Pro 3-Line Solar'),
-    metaDescription: 'Buy Ver-Mac PCMS-1210 Pro 3-line portable message boards. WiFi + 4G LTE remote programming, solar-powered, NTCIP compliant. Ideal for work zones and events.',
   },
 
   // --- Safety Lighting ---

@@ -29,15 +29,6 @@ export const categories: Category[] = [
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp',
   },
   {
-    id: 'cat-5',
-    name: 'Message Boards',
-    slug: 'message-boards',
-    description: 'Portable changeable message signs (PCMS)',
-    icon: '',
-    imageUrl:
-      'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png',
-  },
-  {
     id: 'cat-6',
     name: 'Safety Lighting',
     slug: 'safety-lighting',

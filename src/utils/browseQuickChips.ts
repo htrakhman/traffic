@@ -8,7 +8,6 @@ const SLUG_LABEL: Record<string, string> = {
   'cones-drums': 'Traffic Cones',
   'signs-sign-stands': 'Roll-Up Signs',
   'barricades-barriers': 'Barricades',
-  'message-boards': 'Message Boards',
   'safety-lighting': 'Warning Lights',
   'pedestrian-control': 'Pedestrian',
   'accessories-hardware': 'Accessories',
@@ -27,7 +26,6 @@ const DEFAULT_CHIPS: BrowseQuickChip[] = [
   { label: 'Traffic Cones', category: 'cones-drums' },
   { label: 'Roll-Up Signs', category: 'signs-sign-stands' },
   { label: 'Barricades', category: 'barricades-barriers' },
-  { label: 'Message Boards', category: 'message-boards' },
   { label: 'Warning Lights', category: 'safety-lighting' },
 ]
 
