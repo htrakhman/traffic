@@ -23,6 +23,7 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
   ],
   targetVolume: 500,
   datePublished: '2026-04-19',
+  dateModified: '2026-04-28',
   readMinutes: 8,
   heroImage:
     'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png',

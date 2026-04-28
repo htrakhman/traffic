@@ -23,6 +23,7 @@ export const articleRentVsBuyTrafficControlEquipment: Article = {
   ],
   targetVolume: 590,
   datePublished: '2026-04-27',
+  dateModified: '2026-04-28',
   readMinutes: 9,
   body: h(
     Fragment,

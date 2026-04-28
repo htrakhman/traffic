@@ -7,6 +7,27 @@ export interface Category {
   /** Static fallback; UI prefers live counts from `getProducts()` when catalog is loaded */
   productCount?: number
   imageUrl: string
+  /** Custom 150-char SEO meta description targeting the category's primary keyword. */
+  seoDescription?: string
+}
+
+export interface ProductReview {
+  id: string
+  author: string
+  location: string
+  rating: number
+  title: string
+  body: string
+  date: string
+  verified: boolean
+  helpful: number
+}
+
+export interface ReviewAggregate {
+  count: number
+  average: number
+  distribution: { 5: number; 4: number; 3: number; 2: number; 1: number }
+  recommendPct: number
 }
 
 export interface ProductFAQ {

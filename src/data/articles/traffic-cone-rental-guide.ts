@@ -26,6 +26,7 @@ export const articleTrafficConeRentalGuide: Article = {
   ],
   targetVolume: 500,
   datePublished: '2026-04-24',
+  dateModified: '2026-04-28',
   readMinutes: 7,
   body: h(
     Fragment,

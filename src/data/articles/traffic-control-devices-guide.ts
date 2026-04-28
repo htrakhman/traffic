@@ -26,6 +26,7 @@ export const articleTrafficControlDevicesGuide: Article = {
   ],
   targetVolume: 5000,
   datePublished: '2026-04-22',
+  dateModified: '2026-04-28',
   readMinutes: 11,
   body: h(
     Fragment,

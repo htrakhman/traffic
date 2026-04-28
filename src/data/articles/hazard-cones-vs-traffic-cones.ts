@@ -26,6 +26,7 @@ export const articleHazardConesVsTrafficCones: Article = {
   ],
   targetVolume: 50000,
   datePublished: '2026-04-28',
+  dateModified: '2026-04-28',
   readMinutes: 8,
   body: h(
     Fragment,

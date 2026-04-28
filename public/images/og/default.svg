@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f172a"/>
+  <!-- Orange accent bar -->
+  <rect x="0" y="0" width="1200" height="8" fill="#f97316"/>
+  <!-- Site wordmark -->
+  <text x="600" y="270" font-family="system-ui, -apple-system, Arial, sans-serif" font-size="72" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="-1">Traffic Control Supply</text>
+  <!-- Tagline -->
+  <text x="600" y="340" font-family="system-ui, -apple-system, Arial, sans-serif" font-size="32" fill="#94a3b8" text-anchor="middle">MUTCD-Compliant Work Zone Equipment</text>
+  <!-- Domain -->
+  <text x="600" y="420" font-family="system-ui, -apple-system, Arial, sans-serif" font-size="24" fill="#f97316" text-anchor="middle">trafficcontrolsupply.com</text>
+  <!-- Bottom divider -->
+  <rect x="0" y="622" width="1200" height="8" fill="#1e293b"/>
+</svg>

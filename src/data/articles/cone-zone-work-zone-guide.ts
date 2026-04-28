@@ -25,6 +25,7 @@ export const articleConeZoneWorkZoneGuide: Article = {
   ],
   targetVolume: 50000,
   datePublished: '2026-04-27',
+  dateModified: '2026-04-28',
   readMinutes: 11,
   body: h(
     Fragment,

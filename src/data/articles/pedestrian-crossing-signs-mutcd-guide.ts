@@ -26,6 +26,7 @@ export const articlePedestrianCrossingSignsMutcdGuide: Article = {
   ],
   targetVolume: 50000,
   datePublished: '2026-04-28',
+  dateModified: '2026-04-28',
   readMinutes: 10,
   body: h(
     Fragment,

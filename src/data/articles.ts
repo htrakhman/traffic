@@ -19,35 +19,33 @@ export interface RelatedLink {
   path: string
 }
 
-export interface Article {
+/**
+ * Metadata-only slice of an article — everything the blog listing needs.
+ * Does NOT include `body`, so the listing page does not pull in heavy ReactNode
+ * trees for articles the visitor has not clicked into yet.
+ */
+export interface ArticleMeta {
   slug: string
   title: string
-  /** Short dek shown on the listing card, also used as meta description fallback. */
   excerpt: string
-  /** Meta description (150–160 chars). If omitted, excerpt is used. */
   metaDescription?: string
-  /** Primary keyword this article targets (must exist in seo/keywords.json). */
   primaryKeyword: string
-  /** Secondary/semantic keywords, for internal tracking + meta keywords tag. */
   secondaryKeywords?: string[]
-  /** Average monthly search volume for the primary keyword, at publish time. */
   targetVolume: number
-  /** ISO 8601 date (YYYY-MM-DD). */
   datePublished: string
   dateModified?: string
   author?: string
-  /** Estimated read time in minutes. */
   readMinutes: number
-  /** Hero image URL (absolute or root-relative). */
   heroImage?: string
+  faqs?: ArticleFAQ[]
+  relatedProducts?: RelatedLink[]
+  relatedArticles?: string[]
+}
+
+/** Full article — ArticleMeta plus the rendered body. Used by /blog/:slug. */
+export interface Article extends ArticleMeta {
   /** The article body. Use article-body Tailwind utilities. */
   body: ReactNode
-  /** 5–8 Q/A pairs rendered as accordion + FAQPage JSON-LD. */
-  faqs?: ArticleFAQ[]
-  /** Internal links shown in a "Related equipment" block. */
-  relatedProducts?: RelatedLink[]
-  /** Sibling articles shown in "Keep reading". */
-  relatedArticles?: string[]
 }
 
 // Imports are kept static so Vite tree-shakes and includes the bodies in the bundle.
@@ -122,6 +120,15 @@ export const articles: Article[] = [
 /** Returns articles sorted newest-first. */
 export function getAllArticles(): Article[] {
   return [...articles].sort((a, b) => (a.datePublished < b.datePublished ? 1 : -1))
+}
+
+/**
+ * Returns article metadata sorted newest-first, with `body` stripped.
+ * Use this on the /blog listing page so ReactNode bodies are not evaluated
+ * for articles the visitor has not navigated to.
+ */
+export function getAllArticlesMeta(): ArticleMeta[] {
+  return getAllArticles().map(({ body: _body, ...meta }) => meta)
 }
 
 export function getArticleBySlug(slug: string): Article | undefined {

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { BookOpen, Clock, ArrowRight } from 'lucide-react'
-import { getAllArticles } from '../data/articles'
+import { getAllArticlesMeta } from '../data/articles'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import { SITE_NAME, SITE_ORIGIN } from '../config/site'
@@ -10,7 +10,7 @@ import { SITE_NAME, SITE_ORIGIN } from '../config/site'
  * Lists articles newest-first with keyword-rich excerpts + read time.
  */
 export default function Blog() {
-  const posts = getAllArticles()
+  const posts = getAllArticlesMeta()
 
   return (
     <div className="pt-24 pb-24 bg-slate-950 min-h-screen">

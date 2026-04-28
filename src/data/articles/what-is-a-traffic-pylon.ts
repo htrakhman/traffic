@@ -25,6 +25,7 @@ export const articleWhatIsATrafficPylon: Article = {
   ],
   targetVolume: 50000,
   datePublished: '2026-04-28',
+  dateModified: '2026-04-28',
   readMinutes: 7,
   body: h(
     Fragment,

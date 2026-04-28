@@ -28,6 +28,7 @@ export const articleTrafficControlTrailerRentalGuide: Article = {
   ],
   targetVolume: 500,
   datePublished: '2026-04-26',
+  dateModified: '2026-04-28',
   readMinutes: 9,
   body: h(
     Fragment,

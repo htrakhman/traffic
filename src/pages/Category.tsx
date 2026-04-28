@@ -35,7 +35,9 @@ export default function Category() {
 
   const productCount = products.length
   const metaTitle = `${category.name} | ${SITE_NAME}`
-  const metaDesc = `Shop ${productCount > 0 ? productCount + ' ' : ''}${category.name.toLowerCase()} — ${category.description}. MUTCD-compliant traffic safety equipment with volume pricing and free shipping.`
+  const metaDesc =
+    category.seoDescription ||
+    `Shop ${productCount > 0 ? productCount + ' ' : ''}${category.name.toLowerCase()} — ${category.description}. MUTCD-compliant traffic safety equipment with volume pricing and free shipping.`
 
   return (
     <main className="min-h-screen pt-20">

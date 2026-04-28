@@ -25,6 +25,7 @@ export const articleTrafficControlEquipmentRental: Article = {
   ],
   targetVolume: 500,
   datePublished: '2026-04-20',
+  dateModified: '2026-04-28',
   readMinutes: 10,
   body: h(
     Fragment,

@@ -26,6 +26,7 @@ export const articleHowManyConesForLaneClosure: Article = {
   ],
   targetVolume: 1200,
   datePublished: '2026-04-25',
+  dateModified: '2026-04-28',
   readMinutes: 8,
   body: h(
     Fragment,

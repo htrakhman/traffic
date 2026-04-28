@@ -23,6 +23,7 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
   ],
   targetVolume: 50,
   datePublished: '2026-04-27',
+  dateModified: '2026-04-28',
   readMinutes: 7,
   body: h(
     Fragment,

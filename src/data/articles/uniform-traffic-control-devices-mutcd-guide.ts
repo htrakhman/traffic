@@ -23,6 +23,7 @@ export const articleUniformTrafficControlDevicesMutcdGuide: Article = {
   ],
   targetVolume: 50000,
   datePublished: '2026-04-19',
+  dateModified: '2026-04-28',
   readMinutes: 13,
   body: h(
     Fragment,

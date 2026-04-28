@@ -26,6 +26,7 @@ export const articleTrafficControllerSignMutcd: Article = {
   ],
   targetVolume: 50,
   datePublished: '2026-04-27',
+  dateModified: '2026-04-28',
   readMinutes: 6,
   body: h(
     Fragment,

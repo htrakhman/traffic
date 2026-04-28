@@ -54,6 +54,16 @@ function upsertLink(rel: string, href: string) {
   return el
 }
 
+/**
+ * Brand OG fallback — shown when a route does not supply an ogImage.
+ * NOTE: SVG is not rendered by Facebook/Twitter/LinkedIn crawlers.
+ * A rasterized 1200×630 PNG at this path is needed for full social-sharing
+ * coverage. Until one is produced, the SVG serves Google and schema validators.
+ * To produce the PNG: open public/images/og/default.svg in a browser, screenshot
+ * at 1200×630, and save as public/images/og/default.png — then update this constant.
+ */
+const DEFAULT_OG_IMAGE = '/images/og/default.svg'
+
 export default function SEO(props: SEOProps) {
   const {
     title,
@@ -87,7 +97,7 @@ export default function SEO(props: SEOProps) {
     tags.push(upsertMeta('name', 'twitter:card', 'summary_large_image'))
     tags.push(upsertMeta('name', 'twitter:title', title))
     tags.push(upsertMeta('name', 'twitter:description', description))
-    const ogImageResolved = absoluteOgImage(ogImage)
+    const ogImageResolved = absoluteOgImage(ogImage ?? DEFAULT_OG_IMAGE)
     if (ogImageResolved) {
       tags.push(upsertMeta('property', 'og:image', ogImageResolved))
       tags.push(upsertMeta('name', 'twitter:image', ogImageResolved))
