@@ -73,8 +73,18 @@ import { articleBarricadesTypesUsesGuide } from './articles/barricades-types-use
 import { articleJerseyBarricadesGuide } from './articles/jersey-barricades-guide'
 import { articleRoadSignalsAndSignsGuide } from './articles/road-signals-and-signs-guide'
 import { articlePedestrianCrosswalkSignsMutcd } from './articles/pedestrian-crosswalk-signs-mutcd'
+import { articleParkingConesBuyingGuide } from './articles/parking-cones-buying-guide'
+import { articleTrafficSafetyConesPillarGuide } from './articles/traffic-safety-cones-pillar-guide'
+import { articlePedestrianCrossingSignsMutcdGuide } from './articles/pedestrian-crossing-signs-mutcd-guide'
+import { articleWhatIsATrafficPylon } from './articles/what-is-a-traffic-pylon'
+import { articleHazardConesVsTrafficCones } from './articles/hazard-cones-vs-traffic-cones'
 
 export const articles: Article[] = [
+  articleParkingConesBuyingGuide,
+  articleTrafficSafetyConesPillarGuide,
+  articlePedestrianCrossingSignsMutcdGuide,
+  articleWhatIsATrafficPylon,
+  articleHazardConesVsTrafficCones,
   articleConeZoneWorkZoneGuide,
   articleBarricadesTypesUsesGuide,
   articleJerseyBarricadesGuide,
