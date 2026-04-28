@@ -68,8 +68,18 @@ import { articleTemporaryTrafficControlPlanUtilityJob } from './articles/tempora
 import { articleRentVsBuyTrafficControlEquipment } from './articles/rent-vs-buy-traffic-control-equipment'
 import { articleNjdotWorkZoneStandardsContractorReference } from './articles/njdot-work-zone-standards-contractor-reference'
 import { articleRoadConesVsTrafficCones } from './articles/road-cones-vs-traffic-cones'
+import { articleConeZoneWorkZoneGuide } from './articles/cone-zone-work-zone-guide'
+import { articleBarricadesTypesUsesGuide } from './articles/barricades-types-uses-guide'
+import { articleJerseyBarricadesGuide } from './articles/jersey-barricades-guide'
+import { articleRoadSignalsAndSignsGuide } from './articles/road-signals-and-signs-guide'
+import { articlePedestrianCrosswalkSignsMutcd } from './articles/pedestrian-crosswalk-signs-mutcd'
 
 export const articles: Article[] = [
+  articleConeZoneWorkZoneGuide,
+  articleBarricadesTypesUsesGuide,
+  articleJerseyBarricadesGuide,
+  articleRoadSignalsAndSignsGuide,
+  articlePedestrianCrosswalkSignsMutcd,
   articleRoadConesVsTrafficCones,
   articleTypeIiiBarricadeVsTypeITypeIi,
   articleMutcdTaperLengthFormulaNj,

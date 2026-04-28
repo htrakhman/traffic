@@ -6,7 +6,7 @@
     <atom:link href="https://trafficcontrolsupply.com/rss.xml" rel="self" type="application/rss+xml" />
     <description>Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, and job-site safety.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 27 Apr 2026 20:58:43 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 28 Apr 2026 03:07:05 GMT</lastBuildDate>
     <item>
       <title>Type I vs Type II vs Type III Barricades: Which One Do You Need? (Contractor's Quick Guide)</title>
       <link>https://trafficcontrolsupply.com/blog/type-iii-barricade-vs-type-i-type-ii</link>
@@ -36,6 +36,20 @@
       <description>A practical, MUTCD-compliant template for building a TTC plan for a small utility job — water service, gas tap, fiber pull. Includes the gear list, sign placement, taper math, and what NJ municipalities actually want to see on the permit.</description>
     </item>
     <item>
+      <title>Road Signals and Signs: A Contractor Guide to Work-Zone Devices</title>
+      <link>https://trafficcontrolsupply.com/blog/road-signals-and-signs-guide</link>
+      <guid>https://trafficcontrolsupply.com/blog/road-signals-and-signs-guide</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Signs warn, regulate, and guide. Signals control. The MUTCD splits the road-device world into distinct families, and a contractor needs to know which one to deploy when. Here is the working reference.</description>
+    </item>
+    <item>
+      <title>Road Cones vs. Traffic Cones: Sizes, Colors, and What MUTCD Actually Requires</title>
+      <link>https://trafficcontrolsupply.com/blog/road-cones-vs-traffic-cones</link>
+      <guid>https://trafficcontrolsupply.com/blog/road-cones-vs-traffic-cones</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description>&quot;Road cones,&quot; &quot;traffic cones,&quot; and &quot;street cones&quot; all describe the same gear — but only some sizes and reflectivity grades actually pass MUTCD inspection. Here is the size-by-application guide and what to buy.</description>
+    </item>
+    <item>
       <title>What Traffic Control Gear Should You Stock vs. Order Per Job? (Contractor's Guide)</title>
       <link>https://trafficcontrolsupply.com/blog/rent-vs-buy-traffic-control-equipment</link>
       <guid>https://trafficcontrolsupply.com/blog/rent-vs-buy-traffic-control-equipment</guid>
@@ -48,6 +62,13 @@
       <guid>https://trafficcontrolsupply.com/blog/portable-traffic-barrier-rental-guide</guid>
       <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
       <description>A practical comparison of the three portable longitudinal barriers contractors actually rent — water-filled plastic, precast concrete, and steel — with MASH test levels, deflection, and 2026 rental rates.</description>
+    </item>
+    <item>
+      <title>Pedestrian Crosswalk Signs: MUTCD Specs, Sizes, and Placement</title>
+      <link>https://trafficcontrolsupply.com/blog/pedestrian-crosswalk-signs-mutcd</link>
+      <guid>https://trafficcontrolsupply.com/blog/pedestrian-crosswalk-signs-mutcd</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Pedestrian crosswalk signs warn drivers and route walkers around hazards. The MUTCD defines distinct sign types for crosswalks, school zones, and work-zone pedestrian routing. Here is the working reference.</description>
     </item>
     <item>
       <title>What Is an Official Traffic Control Device? MUTCD Definition</title>
@@ -76,6 +97,27 @@
       <guid>https://trafficcontrolsupply.com/blog/massdot-qualified-traffic-control-equipment</guid>
       <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
       <description>What &quot;MassDOT qualified&quot; actually means for traffic control equipment, which devices need formal qualification, and how Massachusetts contractors keep their work zones inspection-ready.</description>
+    </item>
+    <item>
+      <title>Jersey Barricades: Plastic vs. Concrete, Sizes, and When to Use Them</title>
+      <link>https://trafficcontrolsupply.com/blog/jersey-barricades-guide</link>
+      <guid>https://trafficcontrolsupply.com/blog/jersey-barricades-guide</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A &quot;Jersey barricade&quot; is the J-shape barrier born on New Jersey highways and now made in plastic for events and parking lots, concrete for highway work. Here is the working guide to choosing and renting them.</description>
+    </item>
+    <item>
+      <title>Cone Zone: How Contractors Build a Compliant Work Zone</title>
+      <link>https://trafficcontrolsupply.com/blog/cone-zone-work-zone-guide</link>
+      <guid>https://trafficcontrolsupply.com/blog/cone-zone-work-zone-guide</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description>A &quot;cone zone&quot; is the everyday name for a temporary traffic control work zone — the cones, drums, signs, and arrow boards that protect a crew on the road. Here is how to build one that actually passes inspection.</description>
+    </item>
+    <item>
+      <title>Barricades: Types, Uses, and How to Pick the Right One</title>
+      <link>https://trafficcontrolsupply.com/blog/barricades-types-uses-guide</link>
+      <guid>https://trafficcontrolsupply.com/blog/barricades-types-uses-guide</guid>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
+      <description>Barricades come in five families — Type I, Type II, Type III, water-filled, and pedestrian — each one solving a different MUTCD problem. Here is the working contractor reference.</description>
     </item>
     <item>
       <title>Traffic Control Trailers: Arrow Boards, PCMS, AFADs, and TMAs Compared</title>
