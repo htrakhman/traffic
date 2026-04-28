@@ -67,8 +67,10 @@ import { articleMutcdTaperLengthFormulaNj } from './articles/mutcd-taper-length-
 import { articleTemporaryTrafficControlPlanUtilityJob } from './articles/temporary-traffic-control-plan-utility-job'
 import { articleRentVsBuyTrafficControlEquipment } from './articles/rent-vs-buy-traffic-control-equipment'
 import { articleNjdotWorkZoneStandardsContractorReference } from './articles/njdot-work-zone-standards-contractor-reference'
+import { articleRoadConesVsTrafficCones } from './articles/road-cones-vs-traffic-cones'
 
 export const articles: Article[] = [
+  articleRoadConesVsTrafficCones,
   articleTypeIiiBarricadeVsTypeITypeIi,
   articleMutcdTaperLengthFormulaNj,
   articleTemporaryTrafficControlPlanUtilityJob,
