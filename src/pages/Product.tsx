@@ -16,9 +16,14 @@ import {
 } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useCatalogSync } from '../context/CatalogSyncContext'
-import { getProductBySlug, getProductsByCategory } from '../data/products'
+import { getProductBySlug } from '../data/products'
 import { categories } from '../data/categories'
-import ProductCard from '../components/marketplace/ProductCard'
+import { getAggregate, getReviews } from '../lib/reviews'
+import ReviewsSection from '../components/product/ReviewsSection'
+import HighlightsBlock from '../components/product/HighlightsBlock'
+import ExpandedDescription from '../components/product/ExpandedDescription'
+import RelatedRails from '../components/product/RelatedRails'
+import StarRating from '../components/product/StarRating'
 import { SITE_CONTACT_PHONE_E164, SITE_NAME } from '../config/site'
 import type { VolumePriceTier } from '../types'
 import {
@@ -57,12 +62,7 @@ export default function Product() {
     setQuantity((q) => Math.max(moq, q))
   }, [product?.id])
 
-  const related = useMemo(() => {
-    if (!product) return []
-    return getProductsByCategory(product.categorySlug)
-      .filter((p) => p.id !== product.id)
-      .slice(0, 4)
-  }, [product, tick])
+  const aggregate = useMemo(() => (product ? getAggregate(product) : null), [product?.slug, tick])
 
   const sortedTiers = useMemo(
     () => (product ? sortVolumePriceTiers(product.volumePriceTiers) : []),
@@ -128,6 +128,12 @@ export default function Product() {
     }
     canonical.href = pageUrl
 
+    const agg = getAggregate(product)
+    const sampleReviews = getReviews(product)
+      .slice()
+      .sort((a, b) => b.helpful - a.helpful)
+      .slice(0, 5)
+
     const graph: object[] = [
       {
         '@type': 'Product',
@@ -139,6 +145,26 @@ export default function Product() {
         url: pageUrl,
         brand: { '@type': 'Brand', name: product.supplier },
         category: category?.name,
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: agg.average,
+          reviewCount: agg.count,
+          bestRating: 5,
+          worstRating: 1,
+        },
+        review: sampleReviews.map((r) => ({
+          '@type': 'Review',
+          author: { '@type': 'Person', name: r.author },
+          datePublished: r.date,
+          name: r.title,
+          reviewBody: r.body,
+          reviewRating: {
+            '@type': 'Rating',
+            ratingValue: r.rating,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        })),
         offers: {
           '@type': 'AggregateOffer',
           url: pageUrl,
@@ -386,6 +412,20 @@ export default function Product() {
             </div>
 
             <h1 className="text-3xl font-bold text-white mb-2">{product.name}</h1>
+            {aggregate && (
+              <a
+                href="#reviews-heading"
+                className="inline-flex items-center gap-2 mb-3 hover:opacity-90 transition-opacity"
+              >
+                <StarRating rating={aggregate.average} size={16} />
+                <span className="text-sm font-semibold text-white tabular-nums">
+                  {aggregate.average.toFixed(1)}
+                </span>
+                <span className="text-xs text-slate-400 underline decoration-dotted underline-offset-2">
+                  ({aggregate.count} review{aggregate.count === 1 ? '' : 's'})
+                </span>
+              </a>
+            )}
             <p className="text-slate-300 text-sm font-medium leading-relaxed mb-4">{product.description}</p>
 
             {(product.colorLabel || product.finishLabel) && (
@@ -765,19 +805,13 @@ export default function Product() {
           </div>
         </section>
 
-        {/* ── Related products ── */}
-        {related.length > 0 && (
-          <section aria-labelledby="related-heading" className="mt-16">
-            <h2 id="related-heading" className="text-xl font-bold text-white mb-6">
-              More in {category?.name}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {related.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} />
-              ))}
-            </div>
-          </section>
-        )}
+        <HighlightsBlock product={product} />
+
+        <ExpandedDescription product={product} />
+
+        <ReviewsSection product={product} />
+
+        <RelatedRails product={product} />
       </div>
     </main>
   )
