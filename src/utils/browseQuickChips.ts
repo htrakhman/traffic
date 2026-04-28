@@ -6,7 +6,6 @@ export type BrowseQuickChip = { label: string; category: string }
 /** Short labels for common slugs (matches hero defaults where possible). */
 const SLUG_LABEL: Record<string, string> = {
   'cones-drums': 'Traffic Cones',
-  'arrow-boards': 'Arrow Boards',
   'signs-sign-stands': 'Roll-Up Signs',
   'barricades-barriers': 'Barricades',
   'message-boards': 'Message Boards',
@@ -26,7 +25,6 @@ const SLUG_LABEL: Record<string, string> = {
 
 const DEFAULT_CHIPS: BrowseQuickChip[] = [
   { label: 'Traffic Cones', category: 'cones-drums' },
-  { label: 'Arrow Boards', category: 'arrow-boards' },
   { label: 'Roll-Up Signs', category: 'signs-sign-stands' },
   { label: 'Barricades', category: 'barricades-barriers' },
   { label: 'Message Boards', category: 'message-boards' },

@@ -39,8 +39,6 @@ const barT3img = cdn(
 )
 const barT2img = cdn('i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp')
 const barWFimg = cdn('i/yodock-2001mb-barrier-orange-without-optional-fence-water-filled-barricade.webp')
-const arrowTrailerImg = 'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg'
-const arrowTruckImg = 'https://www.wanco.com/wp-content/uploads/2017/02/featr-prod-arrowbd-truck.jpg'
 const msgBoardImg =
   'https://vermaccom-218d5.kxcdn.com/media/product/image/image/bpcms-1210_deploye_g3_face_1000x1000_left_lane_closed_v2.png.1000x1000_q85_crop-center_upscale.png'
 const flasherImg = cdn('i/economy-solar-assist-type-b-flasher-red.webp')
@@ -798,156 +796,6 @@ const rawCuratedProducts: Product[] = [
     metaDescription: 'Buy Yodock 2001MB NCHRP-350 water-filled construction barriers. 900 lbs filled for positive worker protection. Interlocking 6-ft sections.',
   },
 
-  // --- Arrow Boards ---
-  {
-    id: 'prod-11',
-    categoryId: 'cat-4',
-    categorySlug: 'arrow-boards',
-    name: 'Hi-Way Safety M90 Solar Arrow Board Trailer — 15-Lamp',
-    slug: 'trailer-mounted-arrow-board-15',
-    description: 'Hi-Way Safety M90 solar-assisted towable arrow board trailer, 15 amber LED PAR46 lamps',
-    longDescription:
-      'Exact product: Hi-Way Safety / Trans-Supply WAAW-PL25C (15-lamp configuration). M90 Next Generation Solar-Assisted Arrow Board Trailer. 15 amber PAR 46 sealed-beam LED lamps. 48"H × 96"W sign panel. Solar panel + two 12V 22AH sealed batteries with 30-day backup. 5-year lamp warranty. Optional GPS/remote modem. Easily towed by most full-size trucks.',
-    volumePriceTiers: singleTierFromRetailUnit(142.5),
-    unit: 'each',
-    imageUrl: arrowTrailerImg,
-    images: [arrowTrailerImg, arrowTruckImg],
-    specs: {
-      Brand: 'Hi-Way Safety',
-      Model: 'M90 Next Generation',
-      Lamps: '15 amber PAR 46 LED',
-      'Panel Size': '48" H × 96" W',
-      Power: 'Solar + 2× 12V 22AH sealed battery',
-      'Battery Backup': '30-day',
-      'Tongue Weight': '95–100 lbs',
-      'Lamp Warranty': '5 years',
-    },
-    features: [
-      '15 amber PAR 46 LED lamps',
-      'Solar-assisted — 2.5 hrs sun = 24 hrs operation',
-      '30-day battery backup',
-      'Optional GPS/remote modem',
-      '5-year lamp warranty',
-      'Easily towed by most full-size trucks',
-    ],
-    compliance: ['MUTCD', 'FHWA', 'NCHRP-350'],
-    useCases: [
-      {
-        title: 'Highway Lane Closure Advance Warning',
-        description: 'Arrow boards are required by MUTCD for lane closures on high-speed roadways. The trailer-mounted unit positions conspicuously in the advance warning area, displaying directional arrows that guide drivers out of closed lanes with ample stopping distance.',
-      },
-      {
-        title: 'Moving Work Zone Operations',
-        description: 'Slow-moving operations like pothole patching, striping, and highway mowing use arrow boards on the rear of work vehicles to warn following traffic. The trailer version can be towed alongside the operation or stationed upstream.',
-      },
-      {
-        title: 'Night Construction on Interstates',
-        description: '15 amber LED lamps provide maximum nighttime conspicuity required for interstate work zones. Solar + battery power means no generator noise or fuel management for the board itself.',
-      },
-    ],
-    faqs: [
-      {
-        question: 'What display modes does the arrow board support?',
-        answer: 'The M90 arrow board supports sequential arrow (right, left, or double), caution/chevron mode (all lamps flashing), and off. The controller allows instant mode switching. Sequential arrow mode provides the clearest lane-change guidance for drivers.',
-      },
-      {
-        question: 'Do I need a special hitch to tow the arrow board trailer?',
-        answer: 'The trailer uses a standard 2" ball hitch. Most full-size trucks, SUVs, or heavy equipment with a standard 2" receiver can tow the M90 trailer. Tongue weight is 95–100 lbs — well within the capacity of any tow-rated vehicle.',
-      },
-      {
-        question: 'How long will the battery run without solar charging?',
-        answer: 'The dual 12V 22AH sealed batteries provide up to 30 days of battery backup in case of extended cloudy conditions. Under normal solar charging conditions (2.5 hours of direct sun), the batteries maintain a full charge indefinitely.',
-      },
-      {
-        question: 'Is an arrow board required for all highway lane closures?',
-        answer: 'MUTCD recommends arrow boards for all high-speed roadway lane closures. Many state DOT specifications mandate them for closures on roads above 45 mph. They are effectively required for interstate and US highway lane closures on all projects.',
-      },
-    ],
-    tags: ['arrow board', 'lane closure', 'sequential', 'trailer', 'solar'],
-    inStock: true,
-    stockCount: 15,
-    popular: true,
-    sku: 'ARR-TRL-15L',
-    supplierSku: 'WAAW-PL25C',
-    supplierUrl: 'https://www.trans-supply.com/pg/187/solar-arrow-board-trailers?ProductID=7382',
-    supplier: TRANS,
-    weight: '~1,000 lbs',
-    dimensions: '48" H × 96" W panel; 95" L trailer',
-    metaTitle: titleBrand('Buy Arrow Board Trailer | Hi-Way Safety M90 Solar 15-Lamp'),
-    metaDescription: 'Buy Hi-Way Safety M90 solar arrow board trailers with 15 amber LED PAR46 lamps. 30-day battery backup. MUTCD required for highway lane closures.',
-  },
-  {
-    id: 'prod-12',
-    categoryId: 'cat-4',
-    categorySlug: 'arrow-boards',
-    name: 'Gregory Industries AVP15 Arrow Board — 15-Light LED, Battery Powered',
-    slug: 'truck-mounted-arrow-board-15',
-    description: 'Gregory Industries AVP15 vehicle-mounted 15-light LED arrow board panel with wireless controller',
-    longDescription:
-      'Exact product: Traffic Safety Products AVP15. Gregory Industries 15-light LED arrow board panel with wireless remote controller, battery powered. 100 lbs. Mounts to truck bed or hitch mount bracket (sold separately). Wireless controller for remote operation. Same directional modes as trailer units. Compact and easily transferred between vehicles.',
-    volumePriceTiers: singleTierFromRetailUnit(97.5),
-    unit: 'each',
-    imageUrl: arrowTruckImg,
-    images: [arrowTruckImg, arrowTrailerImg],
-    specs: {
-      Brand: 'Gregory Industries',
-      Model: 'AVP15',
-      Lights: '15 LED',
-      Controller: 'Wireless remote included',
-      Power: 'Battery powered',
-      Weight: '100 lbs',
-      Mounting: 'Vehicle bed / hitch bracket',
-    },
-    features: [
-      '15 LED lights with wireless remote',
-      'Battery powered — no shore power needed',
-      'Vehicle bed or hitch mount',
-      'Compact at 100 lbs',
-      'Remote control operation',
-    ],
-    compliance: ['MUTCD', 'FHWA'],
-    useCases: [
-      {
-        title: 'Moving Operations & Shadow Vehicles',
-        description: 'Truck-mounted arrow boards are the standard for moving work zone shadow vehicles — they mount directly to the truck bed and face following traffic to warn of the slow-moving work operation.',
-      },
-      {
-        title: 'Urban Lane Closures with Limited Space',
-        description: 'When road shoulder space prevents trailer deployment, a truck-mounted panel integrates into the work zone vehicle setup without requiring additional towing equipment.',
-      },
-      {
-        title: 'Multi-Site Operations',
-        description: 'The AVP15 panel can be quickly transferred between vehicles throughout the day. Ideal for contractors running multiple simultaneous work zones with a shared equipment pool.',
-      },
-    ],
-    faqs: [
-      {
-        question: 'How does a truck-mounted arrow board differ from a trailer arrow board?',
-        answer: 'Trailer arrow boards are standalone units that are towed and parked independently of the work vehicle. Truck-mounted panels attach directly to a work truck and move with it. Trailers offer more flexibility in positioning; truck-mounted panels are more compact and easier to deploy.',
-      },
-      {
-        question: 'What vehicle do I need to mount the AVP15?',
-        answer: 'The AVP15 mounts to any standard truck bed or hitch receiver. A 2" receiver hitch bracket is needed for hitch-mount configuration (available separately). The panel weighs 100 lbs — most half-ton and larger trucks handle this without issue.',
-      },
-      {
-        question: 'How long does the battery last?',
-        answer: 'Battery runtime varies by lamp brightness setting and mode. Typical operation yields 8–12 hours per charge. Units ship with fully charged batteries. For multi-day operations, a solar charging kit can be requested.',
-      },
-    ],
-    tags: ['arrow board', 'truck mounted', 'vehicle mounted', 'LED', 'wireless'],
-    inStock: true,
-    stockCount: 12,
-    popular: false,
-    sku: 'ARR-TCK-15L',
-    supplierSku: 'AVP15',
-    supplierUrl: 'https://trafficsafetyproducts.net/workzone-products/workzone-lighting/arrow-board-15-light-led-panel-wireless-controller-battery-poweredavp15.html',
-    supplier: TSP,
-    weight: '100 lbs',
-    dimensions: 'Contact supplier for panel dimensions',
-    metaTitle: titleBrand('Buy Truck-Mounted Arrow Board | Gregory AVP15 15-LED Wireless'),
-    metaDescription: 'Buy Gregory Industries AVP15 truck-mounted 15-LED arrow boards with wireless remote. Battery powered. Ideal for moving operations and shadow vehicles.',
-  },
-
   // --- Message Boards ---
   {
     id: 'prod-13',
@@ -961,7 +809,7 @@ const rawCuratedProducts: Product[] = [
     volumePriceTiers: singleTierFromRetailUnit(262.5),
     unit: 'each',
     imageUrl: msgBoardImg,
-    images: [msgBoardImg, arrowTrailerImg],
+    images: [msgBoardImg],
     specs: {
       Brand: 'Ver-Mac',
       Model: 'PCMS-1210 Pro',

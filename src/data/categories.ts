@@ -29,14 +29,6 @@ export const categories: Category[] = [
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/break-away-system-type-3-barricade-with-8-ft-plastic-rails-no-customization-engineer-grade-eg-single.webp',
   },
   {
-    id: 'cat-4',
-    name: 'Arrow Boards',
-    slug: 'arrow-boards',
-    description: 'Trailer- and truck-mounted arrow panels for lane shifts',
-    icon: '',
-    imageUrl: 'https://www.wanco.com/wp-content/uploads/2020/03/featr-prod-arrowbd-trailer-folding-585x400.jpg',
-  },
-  {
     id: 'cat-5',
     name: 'Message Boards',
     slug: 'message-boards',

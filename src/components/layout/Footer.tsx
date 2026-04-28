@@ -43,7 +43,6 @@ export default function Footer() {
                 { label: 'Cones & Drums', href: '/category/cones-drums' },
                 { label: 'Signs & Sign Stands', href: '/category/signs-sign-stands' },
                 { label: 'Barricades & Barriers', href: '/category/barricades-barriers' },
-                { label: 'Arrow Boards', href: '/category/arrow-boards' },
                 { label: 'Message Boards', href: '/category/message-boards' },
                 { label: 'Safety Lighting', href: '/category/safety-lighting' },
               ].map((item) => (
