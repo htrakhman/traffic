@@ -5,6 +5,9 @@ import { useCatalogSync } from '../context/CatalogSyncContext'
 import { categories } from '../data/categories'
 import { getProductsByCategory } from '../data/products'
 import ProductCard from '../components/marketplace/ProductCard'
+import SEO from '../components/seo/SEO'
+import JsonLd, { schema } from '../components/seo/JsonLd'
+import { SITE_NAME } from '../config/site'
 
 export default function Category() {
   const { slug } = useParams<{ slug: string }>()
@@ -30,8 +33,25 @@ export default function Category() {
     )
   }
 
+  const productCount = products.length
+  const metaTitle = `${category.name} | ${SITE_NAME}`
+  const metaDesc = `Shop ${productCount > 0 ? productCount + ' ' : ''}${category.name.toLowerCase()} — ${category.description}. MUTCD-compliant traffic safety equipment with volume pricing and free shipping.`
+
   return (
     <main className="min-h-screen pt-20">
+      <SEO
+        title={metaTitle}
+        description={metaDesc.slice(0, 160)}
+        canonicalPath={`/category/${category.slug}`}
+        ogType="website"
+      />
+      <JsonLd
+        data={schema.breadcrumb([
+          { name: 'Home', path: '/' },
+          { name: 'Equipment', path: '/browse' },
+          { name: category.name, path: `/category/${category.slug}` },
+        ])}
+      />
       {/* Header */}
       <div className="bg-slate-900/50 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">

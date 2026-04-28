@@ -78,6 +78,11 @@ import { articleTrafficSafetyConesPillarGuide } from './articles/traffic-safety-
 import { articlePedestrianCrossingSignsMutcdGuide } from './articles/pedestrian-crossing-signs-mutcd-guide'
 import { articleWhatIsATrafficPylon } from './articles/what-is-a-traffic-pylon'
 import { articleHazardConesVsTrafficCones } from './articles/hazard-cones-vs-traffic-cones'
+import { articleMassDotQualifiedTrafficControlEquipment } from './articles/massdot-qualified-traffic-control-equipment'
+import { articleOfficialTrafficControlDeviceMutcd } from './articles/official-traffic-control-device-mutcd'
+import { articlePortableTrafficBarrierRentalGuide } from './articles/portable-traffic-barrier-rental-guide'
+import { articleTrafficControllerSignMutcd } from './articles/traffic-controller-sign-mutcd'
+import { articleTrafficControlTruckRentalGuide } from './articles/traffic-control-truck-rental-guide'
 
 export const articles: Article[] = [
   articleParkingConesBuyingGuide,
@@ -85,6 +90,11 @@ export const articles: Article[] = [
   articlePedestrianCrossingSignsMutcdGuide,
   articleWhatIsATrafficPylon,
   articleHazardConesVsTrafficCones,
+  articleMassDotQualifiedTrafficControlEquipment,
+  articleOfficialTrafficControlDeviceMutcd,
+  articlePortableTrafficBarrierRentalGuide,
+  articleTrafficControllerSignMutcd,
+  articleTrafficControlTruckRentalGuide,
   articleConeZoneWorkZoneGuide,
   articleBarricadesTypesUsesGuide,
   articleJerseyBarricadesGuide,

@@ -55,18 +55,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://trafficcontrolsupply.com/category/arrow-boards</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://trafficcontrolsupply.com/category/message-boards</loc>
-    <lastmod>2026-04-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://trafficcontrolsupply.com/category/safety-lighting</loc>
     <lastmod>2026-04-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -65167,6 +65155,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://trafficcontrolsupply.com/blog/hazard-cones-vs-traffic-cones</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://trafficcontrolsupply.com/blog/how-many-cones-for-lane-closure-nj</loc>
     <lastmod>2026-04-25</lastmod>
     <changefreq>monthly</changefreq>
@@ -65199,6 +65193,18 @@
   <url>
     <loc>https://trafficcontrolsupply.com/blog/official-traffic-control-device-mutcd</loc>
     <lastmod>2026-04-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://trafficcontrolsupply.com/blog/parking-cones-buying-guide</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://trafficcontrolsupply.com/blog/pedestrian-crossing-signs-mutcd-guide</loc>
+    <lastmod>2026-04-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -65287,6 +65293,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://trafficcontrolsupply.com/blog/traffic-safety-cones-pillar-guide</loc>
+    <lastmod>2026-04-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://trafficcontrolsupply.com/blog/type-iii-barricade-vs-type-i-type-ii</loc>
     <lastmod>2026-04-27</lastmod>
     <changefreq>monthly</changefreq>
@@ -65295,6 +65307,12 @@
   <url>
     <loc>https://trafficcontrolsupply.com/blog/uniform-traffic-control-devices-mutcd-guide</loc>
     <lastmod>2026-04-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://trafficcontrolsupply.com/blog/what-is-a-traffic-pylon</loc>
+    <lastmod>2026-04-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

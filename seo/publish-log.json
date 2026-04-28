@@ -135,6 +135,168 @@
       "opportunityScore": 531.91,
       "wordCount": 1500,
       "notes": "PILLAR ARTICLE — pedestrian-side device family (vol 50k, comp 94). Absorbs 'pedestrian crossing signs' (50k) and 'pedestrian crossing signal' (50k) as secondary keywords. Solution-hub covering W11-2, S1-1, W11-15, R1-6, R9-9/R9-10/R9-11, fluorescent yellow-green sheeting per §2A.11, RRFB and PHB beacon thresholds, ADA / PROWAG TPAR requirements (48-inch clear width, 5% grade, detectable edges), Type IX/XI prismatic sheeting requirement. Inline research link to FHWA MUTCD Knowledge Center. Internal links to economy-pedestrian-barricade-orange-eg, urbanite-water-filled-pedestrian-barricade, telescoping-sign-stand, galvanized-crowd-control-fence-panel-6x10 products and /category/pedestrian-control. No heroImage."
+    },
+    {
+      "date": "2026-04-20",
+      "slug": "traffic-control-equipment-rental",
+      "url": "/blog/traffic-control-equipment-rental",
+      "primaryKeyword": "traffic control equipment rental",
+      "targetVolume": 500,
+      "wordCount": 1200,
+      "notes": "Backfilled to publish log during audit 2026-04-28. Published before log formalization."
+    },
+    {
+      "date": "2026-04-25",
+      "slug": "how-many-cones-for-lane-closure-nj",
+      "url": "/blog/how-many-cones-for-lane-closure-nj",
+      "primaryKeyword": "how many cones for lane closure",
+      "targetVolume": 1200,
+      "wordCount": 950,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "type-iii-barricade-vs-type-i-type-ii",
+      "url": "/blog/type-iii-barricade-vs-type-i-type-ii",
+      "primaryKeyword": "Type III barricade",
+      "targetVolume": 880,
+      "wordCount": 1200,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "mutcd-taper-length-formula-nj",
+      "url": "/blog/mutcd-taper-length-formula-nj",
+      "primaryKeyword": "MUTCD taper length",
+      "targetVolume": 720,
+      "wordCount": 1100,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "temporary-traffic-control-plan-utility-job",
+      "url": "/blog/temporary-traffic-control-plan-utility-job",
+      "primaryKeyword": "temporary traffic control plan",
+      "targetVolume": 1300,
+      "wordCount": 1200,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "rent-vs-buy-traffic-control-equipment",
+      "url": "/blog/rent-vs-buy-traffic-control-equipment",
+      "primaryKeyword": "traffic control equipment to buy",
+      "targetVolume": 590,
+      "wordCount": 1100,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "njdot-work-zone-standards-contractor-reference",
+      "url": "/blog/njdot-work-zone-standards-contractor-reference",
+      "primaryKeyword": "NJDOT work zone standards",
+      "targetVolume": 480,
+      "wordCount": 1100,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "road-cones-vs-traffic-cones",
+      "url": "/blog/road-cones-vs-traffic-cones",
+      "primaryKeyword": "road cones",
+      "targetVolume": 50000,
+      "wordCount": 1000,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-28",
+      "slug": "parking-cones-buying-guide",
+      "url": "/blog/parking-cones-buying-guide",
+      "primaryKeyword": "parking cones",
+      "targetVolume": 50000,
+      "wordCount": 1200,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-28",
+      "slug": "traffic-safety-cones-pillar-guide",
+      "url": "/blog/traffic-safety-cones-pillar-guide",
+      "primaryKeyword": "traffic safety cones",
+      "targetVolume": 50000,
+      "wordCount": 1400,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-28",
+      "slug": "pedestrian-crossing-signs-mutcd-guide",
+      "url": "/blog/pedestrian-crossing-signs-mutcd-guide",
+      "primaryKeyword": "pedestrian crossing signs",
+      "targetVolume": 50000,
+      "wordCount": 1300,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-28",
+      "slug": "what-is-a-traffic-pylon",
+      "url": "/blog/what-is-a-traffic-pylon",
+      "primaryKeyword": "traffic pylon",
+      "targetVolume": 50000,
+      "wordCount": 900,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-28",
+      "slug": "hazard-cones-vs-traffic-cones",
+      "url": "/blog/hazard-cones-vs-traffic-cones",
+      "primaryKeyword": "hazard cones",
+      "targetVolume": 50000,
+      "wordCount": 1000,
+      "notes": "Backfilled to publish log during audit 2026-04-28."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "massdot-qualified-traffic-control-equipment",
+      "url": "/blog/massdot-qualified-traffic-control-equipment",
+      "primaryKeyword": "massdot qualified traffic control equipment",
+      "targetVolume": 50,
+      "wordCount": 1100,
+      "notes": "Geo-tactical article. Registered in articles.ts during audit 2026-04-28 (was missing from registry)."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "official-traffic-control-device-mutcd",
+      "url": "/blog/official-traffic-control-device-mutcd",
+      "primaryKeyword": "official traffic control device",
+      "targetVolume": 50,
+      "wordCount": 1000,
+      "notes": "Registered in articles.ts during audit 2026-04-28 (was missing from registry)."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "portable-traffic-barrier-rental-guide",
+      "url": "/blog/portable-traffic-barrier-rental-guide",
+      "primaryKeyword": "portable traffic barrier",
+      "targetVolume": 500,
+      "wordCount": 1300,
+      "notes": "Registered in articles.ts during audit 2026-04-28 (was missing from registry)."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "traffic-controller-sign-mutcd",
+      "url": "/blog/traffic-controller-sign-mutcd",
+      "primaryKeyword": "traffic controller sign",
+      "targetVolume": 50,
+      "wordCount": 900,
+      "notes": "Registered in articles.ts during audit 2026-04-28 (was missing from registry)."
+    },
+    {
+      "date": "2026-04-27",
+      "slug": "traffic-control-truck-rental-guide",
+      "url": "/blog/traffic-control-truck-rental-guide",
+      "primaryKeyword": "traffic control truck",
+      "targetVolume": 500,
+      "wordCount": 1300,
+      "notes": "Registered in articles.ts during audit 2026-04-28 (was missing from registry)."
     }
   ]
 }

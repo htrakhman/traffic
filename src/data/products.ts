@@ -1243,7 +1243,7 @@ const rawCuratedProducts: Product[] = [
     faqs: [
       {
         question: 'Will it fit my stand?',
-        answer: 'Compatibility varies by mast diameter and foot design. Send your stand model or a photo of the foot plate—we match weights to common Traffic Safety Store stand families.',
+        answer: 'Compatibility varies by mast diameter and foot design. Send your stand model or a photo of the foot plate and we will match the weight to your setup.',
       },
       {
         question: 'Do I still need sandbags?',

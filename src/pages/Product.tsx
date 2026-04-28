@@ -437,7 +437,7 @@ export default function Product() {
                   })}
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
-                  Same product line as Traffic Safety Store; each SKU is a separate listing with its own volume pricing.
+                  Each SKU is a separate listing with its own volume pricing.
                 </p>
               </div>
             )}

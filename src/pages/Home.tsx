@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import SEO from '../components/seo/SEO'
+import JsonLd, { schema } from '../components/seo/JsonLd'
 import Hero from '../components/home/Hero'
 import CategoryGrid from '../components/home/CategoryGrid'
 import FeaturedProducts from '../components/home/FeaturedProducts'
@@ -21,6 +22,8 @@ export default function Home() {
         description={`Buy MUTCD-aware traffic control and safety equipment with delivery. Cones, signs, barricades, arrow boards, and more at ${SITE_DOMAIN}.`}
         canonicalPath="/"
       />
+      <JsonLd data={schema.organization()} />
+      <JsonLd data={schema.website()} />
       <Hero
         browseSearchQuery={browseSearchQuery}
         browseSearchQueryDebounced={debouncedBrowseSearch}
