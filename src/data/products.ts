@@ -59,7 +59,6 @@ const fenceBridgeImg = cdn('i/galv-steel-crowd-control-fence-bridge-feet.webp')
 const harnessImg = cdn('i/radians-high-visibility-breakaway-by-back-safety-harness-lime.webp')
 const bollardCoverImg = cdn('i/tall-bollard-cover-5-inch-diameter-52in-blue.webp')
 
-const TRANS = 'Trans-Supply'
 const TSP = 'Traffic Safety Products'
 const CORAL = 'Coral Sales (Ver-Mac)'
 
