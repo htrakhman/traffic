@@ -1,13 +1,15 @@
 # TrafficKit — Business Profile
 
-*Last updated: 2026-04-27 — major pivot from rental → buy/sell model*
+*Last updated: 2026-04-27 — pivot from rental → buy/sell + domain migration to trafficcontrolsupply.com*
 
 ## Brand / domain
 
-- **Working name:** TrafficKit (page titles + codebase)
-- **Domain:** trafficcontrolsupply.com (acquired 2026-04-18, deploying Vercel)
-- **Positioning name candidates:** "Traffic Control Rental" (legacy domain — SEO-exact-match for the rental keyword we still appear under), "TrafficKit" (brandable)
-  - Domain still says "rental" but the **business model has pivoted to BUY/SELL** as of 2026-04-27 (commit 8137595, "Remove rental framing site-wide after pivot to buy/sell model"). Brand strings, logo, and domain intentionally preserved during the pivot. Future content should be framed around purchase + delivery, not rental.
+- **Working name:** Traffic Control Supply (per `src/config/site.ts` `SITE_NAME`); "TrafficKit" still in page titles / brand kit as the secondary handle
+- **Canonical domain:** **`trafficcontrolsupply.com`** (migrated 2026-04-27, commit `e359be1` — "seo: migrate canonical domain to trafficcontrolsupply.com")
+- **Legacy domain:** `trafficcontrolrental.com` (originally acquired 2026-04-18). **Action item for Harold:** keep DNS for the legacy domain pointed at the new site with a permanent 301 redirect to `https://trafficcontrolsupply.com` so existing rental-targeted SEO equity carries over. If the legacy domain is dropped, all the rental-keyword content on the site loses its inbound links the moment Google re-crawls.
+- **Email:** `orders@trafficcontrolsupply.com` (per `src/config/site.ts`)
+- **Phone:** `(732) 675-2499`
+- **Pivot context:** business model moved from RENTAL → BUY/SELL on 2026-04-27 (commits `8137595` + `4480967`), and the canonical domain followed (`e359be1`). All NEW content must be framed around purchase + same-day delivery, not rental. Existing rental-framed articles are preserved for SEO continuity (they still rank under rental keywords, which we capture as ambiguous-intent traffic and convert to purchase).
 
 ## What we are
 
