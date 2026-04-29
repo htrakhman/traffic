@@ -81,8 +81,18 @@ import { articleOfficialTrafficControlDeviceMutcd } from './articles/official-tr
 import { articlePortableTrafficBarrierRentalGuide } from './articles/portable-traffic-barrier-rental-guide'
 import { articleTrafficControllerSignMutcd } from './articles/traffic-controller-sign-mutcd'
 import { articleTrafficControlTruckRentalGuide } from './articles/traffic-control-truck-rental-guide'
+import { articleTrafficConesBuyingGuide } from './articles/traffic-cones-buying-guide'
+import { articleOrangeConesExplained } from './articles/orange-cones-explained'
+import { articleStreetConesGuide } from './articles/street-cones-guide'
+import { articleSafetyPylonsVsTrafficCones } from './articles/safety-pylons-vs-traffic-cones'
+import { articlePedestrianCrossingSignalMutcdGuide } from './articles/pedestrian-crossing-signal-mutcd-guide'
 
 export const articles: Article[] = [
+  articleTrafficConesBuyingGuide,
+  articleOrangeConesExplained,
+  articleStreetConesGuide,
+  articleSafetyPylonsVsTrafficCones,
+  articlePedestrianCrossingSignalMutcdGuide,
   articleParkingConesBuyingGuide,
   articleTrafficSafetyConesPillarGuide,
   articlePedestrianCrossingSignsMutcdGuide,
