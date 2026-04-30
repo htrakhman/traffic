@@ -86,8 +86,18 @@ import { articleOrangeConesExplained } from './articles/orange-cones-explained'
 import { articleStreetConesGuide } from './articles/street-cones-guide'
 import { articleSafetyPylonsVsTrafficCones } from './articles/safety-pylons-vs-traffic-cones'
 import { articlePedestrianCrossingSignalMutcdGuide } from './articles/pedestrian-crossing-signal-mutcd-guide'
+import { articleCrowdControlBarriersBuyingGuide } from './articles/crowd-control-barriers-buying-guide'
+import { articleTrafficBarriersTypesComparison } from './articles/traffic-barriers-types-comparison'
+import { articleTrafficBarrelsBuyingGuide } from './articles/traffic-barrels-buying-guide'
+import { articleRubberSpeedBumpsBuyingGuide } from './articles/rubber-speed-bumps-buying-guide'
+import { articleCollapsibleTrafficConesGuide } from './articles/collapsible-traffic-cones-guide'
 
 export const articles: Article[] = [
+  articleCrowdControlBarriersBuyingGuide,
+  articleTrafficBarriersTypesComparison,
+  articleTrafficBarrelsBuyingGuide,
+  articleRubberSpeedBumpsBuyingGuide,
+  articleCollapsibleTrafficConesGuide,
   articleTrafficConesBuyingGuide,
   articleOrangeConesExplained,
   articleStreetConesGuide,
