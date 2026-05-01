@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useLayoutEffect, useCallback, useMemo, type SetStateAction } from 'react'
-import { extractGeocodeQueryFromMessage, parseLatLngFromMessage } from '../../utils/locationParse'
 import {
   Sparkles,
   Send,
@@ -7,23 +6,14 @@ import {
   X,
   RefreshCw,
   AlertCircle,
-  MapPin,
   MessageSquare,
-  Maximize2,
-  Minimize2,
-  UnfoldVertical,
-  FoldVertical,
-  PenLine,
   Plus,
   Eraser,
 } from 'lucide-react'
 import { streamJobChat, recoverJobChatCart } from '../../utils/aiClient'
-import {
-  normalizeRecommendationPricing,
-  type RecommendationFootprintGuard,
-} from '../../utils/pricing'
+import { normalizeRecommendationPricing, type RecommendationFootprintGuard } from '../../utils/pricing'
 import { extractChatCartRecommendation, tryParseTailAfterCartStart } from '../../utils/chatCartParse'
-import type { ChatMessage, AIRecommendation, MapArea } from '../../types'
+import type { ChatMessage, AIRecommendation } from '../../types'
 import {
   buildPersistPayload,
   clearJobAssistantSession,
@@ -32,7 +22,6 @@ import {
   type JobAssistantChatTabState,
 } from '../../utils/jobAssistantSessionStorage'
 import CartWidget from './CartWidget'
-import MapAreaSelector, { type MapAreaSelectorHandle } from './MapAreaSelector'
 import { parseQASegments as parseQASegmentsFromUtil } from '../../utils/chatQAParse'
 
 type Segment =
@@ -94,10 +83,6 @@ interface Props {
   initialPrompt?: string
   /** Tighter empty state when the planner is embedded (e.g. homepage) so it does not repeat the page headline. */
   embedded?: boolean
-  /**
-   * Fires when the planner needs extra vertical space (tall map, chat + map columns, etc.) so the host card can grow.
-   */
-  onMapExpandedLayoutChange?: (expanded: boolean) => void
 }
 
 function newChatTabId(): string {
@@ -133,7 +118,7 @@ function ThinkingIndicator() {
   )
 }
 
-export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLayoutChange }: Props) {
+export default function JobAssistant({ initialPrompt, embedded }: Props) {
   const [boot] = useState(() => {
     const session = readJobAssistantSession(embedded)
     let tabs: JobAssistantChatTabState[]
@@ -229,9 +214,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     )
   }, [])
 
-  /** Taller map inside the planner card (still on the Job Planner page — not browser fullscreen). */
-  const [mapExpanded, setMapExpanded] = useState(() => boot.session?.mapExpanded ?? false)
-  const [mapPanelFullscreen, setMapPanelFullscreen] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
   const [recommendation, setRecommendation] = useState<AIRecommendation | null>(
     () => boot.session?.recommendation ?? null,
@@ -239,35 +221,9 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
   const imageFileRef = useRef<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [mapArea, setMapArea] = useState<MapArea | undefined>(() => boot.session?.mapArea)
-  /** Passed into cart normalization so cone/drum totals can be capped vs. a modest drawn footprint. */
-  const recommendationFootprintGuard = useMemo((): RecommendationFootprintGuard | undefined => {
-    if (!mapArea || mapArea.perimeterFt <= 0 || mapArea.areaFt2 <= 0) return undefined
-    return { perimeterFt: mapArea.perimeterFt, areaFt2: mapArea.areaFt2 }
-  }, [mapArea])
-  /** User moved the pin via map search, suggestions, chat location, or geolocation — drives the setup checklist. */
-  const [mapSiteLocated, setMapSiteLocated] = useState(() => boot.session?.mapSiteLocated ?? false)
-  const handleMapSiteLocated = useCallback(() => setMapSiteLocated(true), [])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const mapSelectorRef = useRef<MapAreaSelectorHandle>(null)
-  const mapPanelRef = useRef<HTMLDivElement>(null)
-
-  const mapUsesExtraHeight = true
-
-  useLayoutEffect(() => {
-    onMapExpandedLayoutChange?.(true)
-    return () => {
-      onMapExpandedLayoutChange?.(false)
-    }
-  }, [onMapExpandedLayoutChange])
-
-  useEffect(() => {
-    const syncFs = () => setMapPanelFullscreen(document.fullscreenElement === mapPanelRef.current)
-    document.addEventListener('fullscreenchange', syncFs)
-    return () => document.removeEventListener('fullscreenchange', syncFs)
-  }, [])
 
   const persistSig = useMemo(
     () =>
@@ -285,19 +241,9 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
           cs: [...t.choiceSelections.entries()].sort((a, b) => a[0].localeCompare(b[0])),
           lq: [...t.lockedQuestionMessages].sort((a, b) => a - b),
         })),
-        mapArea,
-        mapSiteLocated,
         recommendation,
-        mapExpanded,
       }),
-    [
-      activeChatTabId,
-      chatTabs,
-      mapArea,
-      mapSiteLocated,
-      recommendation,
-      mapExpanded,
-    ],
+    [activeChatTabId, chatTabs, recommendation],
   )
 
   useEffect(() => {
@@ -309,10 +255,10 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
           mode: 'chat',
           chatTabs,
           activeChatTabId,
-          mapArea,
-          mapSiteLocated,
+          mapArea: undefined,
+          mapSiteLocated: false,
           recommendation,
-          mapExpanded,
+          mapExpanded: false,
         }),
       )
     }, 400)
@@ -344,15 +290,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     setError(null)
 
     const trimmed = text.trim()
-    const coords = parseLatLngFromMessage(trimmed)
-    if (coords) {
-      mapSelectorRef.current?.flyTo(coords.lat, coords.lng, 17)
-    } else {
-      const place = extractGeocodeQueryFromMessage(trimmed)
-      if (place) {
-        await mapSelectorRef.current?.searchAndFocus(place)
-      }
-    }
 
     const userMsg: ChatMessage = { role: 'user', content: trimmed, timestamp: new Date() }
     const newMessages = [...messages, userMsg]
@@ -381,15 +318,14 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
           })
         },
         () => {},
-        { mapArea },
       )
 
-      const cartOk = extractChatCartRecommendation(streamedAssistant, recommendationFootprintGuard)
+      const cartOk = extractChatCartRecommendation(streamedAssistant, undefined)
       if (streamedAssistant.includes('[CART_START]') && !cartOk) {
         const merged = await recoverJobChatCart(
           newMessages.map((m) => ({ role: m.role, content: m.content })),
           streamedAssistant,
-          { mapArea, mapFootprint: recommendationFootprintGuard },
+          {},
         )
         streamedAssistant = merged
         setMessages((prev) => {
@@ -452,6 +388,32 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     }
   }
 
+  const submitSingleChoiceAnswer = async (
+    msgIndex: number,
+    segIndex: number,
+    question: string,
+    option: string,
+  ) => {
+    if (isStreaming || lockedQuestionMessages.has(msgIndex)) return
+    const key = `${msgIndex}-${segIndex}`
+    setChoiceSelections((prev) => new Map(prev).set(key, option))
+    setLockedQuestionMessages((prev) => new Set(prev).add(msgIndex))
+    try {
+      await sendMessage(`Here are my answers:\n• ${question} ${option}`)
+    } catch {
+      setLockedQuestionMessages((prev) => {
+        const next = new Set(prev)
+        next.delete(msgIndex)
+        return next
+      })
+      setChoiceSelections((prev) => {
+        const next = new Map(prev)
+        next.delete(key)
+        return next
+      })
+    }
+  }
+
   const handleReset = () => {
     clearJobAssistantSession(embedded)
     const id = newChatTabId()
@@ -461,12 +423,6 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
     imageFileRef.current = null
     setImagePreview(null)
     setError(null)
-    setMapArea(undefined)
-    setMapSiteLocated(false)
-    setMapExpanded(false)
-    if (mapPanelRef.current && document.fullscreenElement === mapPanelRef.current) {
-      void document.exitFullscreen().catch(() => {})
-    }
   }
 
   const handleClearChat = useCallback(() => {
@@ -521,8 +477,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
 
   const isEmpty = messages.length === 0 && !recommendation
   const anyTabHasChat = chatTabs.some((t) => t.messages.length > 0 || t.input.trim().length > 0)
-  const showReset =
-    anyTabHasChat || Boolean(recommendation) || mapArea !== undefined || mapSiteLocated || chatTabs.length > 1
+  const showReset = anyTabHasChat || Boolean(recommendation) || chatTabs.length > 1
 
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -599,7 +554,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 type="button"
                 disabled={isStreaming || (messages.length === 0 && !input.trim())}
                 onClick={handleClearChat}
-                title="Clear messages in this tab (map is unchanged)"
+                title="Clear messages in this tab"
                 className="flex shrink-0 items-center gap-1 self-center rounded-lg border border-slate-700 bg-slate-800/50 px-2 py-1.5 text-[11px] font-medium text-slate-400 hover:border-slate-600 hover:bg-slate-800 hover:text-slate-200 disabled:opacity-35 disabled:cursor-not-allowed"
               >
                 <Eraser size={12} />
@@ -615,13 +570,13 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     </div>
                     <h3 className="font-semibold text-white mb-2">Work Zone AI Planner</h3>
                     <p className="text-sm text-slate-400 max-w-sm mx-auto mb-6 leading-relaxed">
-                      For the best equipment counts, use the work zone map: search your job site, draw the work zone polygon, then describe the job here and send.
+                      Describe the road, speeds, lane impact, how long you will be set up, and day or night work — add distances in feet if you know them. Then send to get quantities and a cart-ready list.
                     </p>
                   </>
                 )}
                 {embedded && (
                   <p className="text-sm text-slate-500 max-w-md mx-auto mb-4 leading-relaxed">
-                    Best results: use the work zone map — search the address first, draw your work zone, then type your job (or a sample) and send.
+                    Include road type, speed, lane closure, duration, and day vs night. Linear feet of closure or taper help tune counts.
                   </p>
                 )}
                 <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
@@ -669,9 +624,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     .trim()
                   const afterCart =
                     cartIdx === -1 ? '' : msg.content.slice(cartIdx + '[CART_START]'.length)
-                  const streamingCart = afterCart
-                    ? tryParseTailAfterCartStart(afterCart, recommendationFootprintGuard)?.rec
-                    : undefined
+                  const streamingCart = afterCart ? tryParseTailAfterCartStart(afterCart, undefined)?.rec : undefined
                   return (
                     <div key={i} className="space-y-2 animate-slide-up">
                       <div className="flex gap-3">
@@ -696,7 +649,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                         <div className="flex gap-3">
                           <div className="w-7 flex-shrink-0" aria-hidden />
                           <div className="min-h-0 flex-1 min-w-0">
-                            <CartWidget recommendation={streamingCart} layout="modal" mapArea={mapArea} />
+                            <CartWidget recommendation={streamingCart} layout="modal" />
                           </div>
                         </div>
                       )}
@@ -711,7 +664,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                 }
 
                 // Parse segments for completed assistant messages
-                const segments = parseSegments(msg.content, recommendationFootprintGuard)
+                const segments = parseSegments(msg.content, undefined)
                 const nonCartSegs = segments.filter((s) => s.type !== 'cart')
                 const cartSegs = segments.filter((s) => s.type === 'cart') as { type: 'cart'; recommendation: AIRecommendation }[]
                 const choiceSegIndices = nonCartSegs
@@ -721,7 +674,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                   choiceSegIndices.length > 0 &&
                   choiceSegIndices.every(({ si }) => choiceSelections.has(`${i}-${si}`))
                 const showBatchSubmit =
-                  choiceSegIndices.length > 0 && !lockedQuestionMessages.has(i) && !isStreaming
+                  choiceSegIndices.length > 1 && !lockedQuestionMessages.has(i) && !isStreaming
 
                 return (
                   <div key={i} className="animate-slide-up space-y-2">
@@ -750,7 +703,14 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                                         <button
                                           key={opt}
                                           type="button"
-                                          onClick={() => !isDisabled && selectChoiceOption(i, si, opt)}
+                                          onClick={() => {
+                                            if (isDisabled) return
+                                            if (choiceSegIndices.length === 1 && seg.type === 'choices') {
+                                              void submitSingleChoiceAnswer(i, si, seg.question, opt)
+                                            } else {
+                                              selectChoiceOption(i, si, opt)
+                                            }
+                                          }}
                                           className={`px-3 py-1.5 text-xs rounded-lg border transition-all duration-150 ${
                                             isSelected
                                               ? 'bg-brand-500/30 border-brand-500/60 text-brand-200 font-medium'
@@ -797,7 +757,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                         )}
                         {nonCartSegs.length > 0 && <div className="w-7 flex-shrink-0" />}
                         <div className="min-h-0 flex-1 min-w-0">
-                          <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} layout="modal" mapArea={mapArea} />
+                          <CartWidget key={`cart-${i}-${si}`} recommendation={seg.recommendation} layout="modal" />
                         </div>
                       </div>
                     ))}
@@ -822,102 +782,10 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
             {/* Recommendation result (legacy session from older guided form) */}
             {recommendation && (
               <div className="p-4 border-t border-slate-800">
-                <CartWidget key="cart-form" recommendation={recommendation} layout="modal" mapArea={mapArea} />
+                <CartWidget key="cart-form" recommendation={recommendation} layout="modal" />
               </div>
             )}
           </>
-        )
-
-        const mapPanel = (
-          <div
-            ref={mapPanelRef}
-            className={`rounded-xl border border-slate-700/90 bg-slate-900/50 overflow-hidden shadow-inner [&:fullscreen]:rounded-none [&:fullscreen]:bg-slate-950 [&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:h-full [&:fullscreen]:min-h-0 ${
-              mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col' : ''
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2 px-2.5 py-1.5 border-b border-slate-800 bg-slate-800/40">
-              <span className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wide min-w-0">
-                <MapPin size={12} className="text-brand-400 flex-shrink-0" />
-                <span className="truncate">Work zone map</span>
-              </span>
-              <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  title={
-                    mapExpanded
-                      ? 'Use default map height'
-                      : 'Larger map (stays on this page — drag and draw as usual)'
-                  }
-                  aria-pressed={mapExpanded}
-                  disabled={mapPanelFullscreen}
-                  onClick={() => setMapExpanded((v) => !v)}
-                  className={`rounded-md border border-slate-700/90 p-1 transition-colors ${
-                    mapPanelFullscreen
-                      ? 'cursor-not-allowed opacity-35 text-slate-500'
-                      : mapExpanded
-                        ? 'bg-slate-600 text-white hover:bg-slate-500'
-                        : 'bg-slate-900/70 text-slate-400 hover:text-white hover:bg-slate-700/80'
-                  }`}
-                >
-                  {mapExpanded ? <FoldVertical size={13} /> : <UnfoldVertical size={13} />}
-                </button>
-                <button
-                  type="button"
-                  title={mapPanelFullscreen ? 'Exit full screen' : 'Full screen map'}
-                  onClick={() => {
-                    void (async () => {
-                      const el = mapPanelRef.current
-                      if (!el) return
-                      try {
-                        if (document.fullscreenElement) await document.exitFullscreen()
-                        else {
-                          await el.requestFullscreen()
-                        }
-                      } catch {
-                        /* unsupported or denied */
-                      }
-                    })()
-                  }}
-                  className="rounded-md border border-slate-700/90 bg-slate-900/70 p-1 text-slate-400 hover:text-white hover:bg-slate-700/80 transition-colors"
-                >
-                  {mapPanelFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
-                </button>
-                <button
-                  type="button"
-                  title={
-                    mapArea
-                      ? 'Redraw work zone — click the map to place corners, double-click the last point to finish'
-                      : 'Draw work zone — click the map to place corners, double-click the last point to finish'
-                  }
-                  onClick={() => mapSelectorRef.current?.startWorkZoneDraw()}
-                  className={`flex max-w-[7.5rem] items-center gap-1 rounded-md border px-1.5 py-1 text-[11px] font-medium transition-colors sm:max-w-none ${
-                    mapArea
-                      ? 'border-brand-500/35 bg-brand-500/15 text-brand-200/95 hover:bg-brand-500/25'
-                      : 'border-brand-500/40 bg-brand-500/20 text-brand-100 hover:bg-brand-500/30'
-                  }`}
-                >
-                  <PenLine size={13} className="shrink-0 opacity-90" aria-hidden />
-                  <span className="truncate">{mapArea ? 'Redraw zone' : 'Draw zone'}</span>
-                </button>
-              </div>
-            </div>
-            <div
-              className={`px-2 pb-2 pt-2 ${
-                mapUsesExtraHeight ? 'flex flex-1 min-h-0 flex-col min-h-0' : ''
-              }`}
-            >
-              <MapAreaSelector
-                ref={mapSelectorRef}
-                value={mapArea}
-                onChange={setMapArea}
-                onUserRecenteredMap={handleMapSiteLocated}
-                variant="compact"
-                fillHeight={mapUsesExtraHeight}
-                tallFrame={mapPanelFullscreen}
-                fillHeightBoost={mapExpanded && !mapPanelFullscreen}
-              />
-            </div>
-          </div>
         )
 
         const composerBlock = (
@@ -932,7 +800,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                   Message
                 </label>
                 <span className="hidden min-[380px]:inline text-[10px] text-slate-500">
-                  Describe your job — I will help you integrate the map with your site
+                  Road, speed, lanes, duration, day or night — distances in feet if you have them
                 </span>
               </div>
               <div className="flex gap-2 items-end">
@@ -942,7 +810,7 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
                     ref={textareaRef}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="After the map is set: lane closure, duration, day/night… (A place name in your message still moves the map when you send.)"
+                    placeholder="Example: one lane closed, 45 mph county road, 400 ft closure, 5 days, day work…"
                     rows={4}
                     className="w-full rounded-2xl px-3.5 py-3 pr-11 bg-transparent text-sm leading-relaxed text-slate-100 placeholder-slate-500 outline-none resize-none min-h-[6.25rem] max-h-44"
                     onKeyDown={(e) => {
@@ -1005,19 +873,14 @@ export default function JobAssistant({ initialPrompt, embedded, onMapExpandedLay
         ) : null
 
         return (
-          <div className="flex min-h-0 flex-1 flex-row gap-3">
-            <div className="flex min-h-0 min-w-0 max-w-[52%] flex-1 flex-col lg:max-w-[55%]">
-              <div ref={scrollContainerRef} className={scrollAreaClassName}>
-                {inner}
-              </div>
-              {errorBlock}
-              <div className="shrink-0 space-y-2.5 border-t border-slate-800 p-3 sm:p-4">
-                {composerBlock}
-                {fileInput}
-              </div>
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div ref={scrollContainerRef} className={scrollAreaClassName}>
+              {inner}
             </div>
-            <div className="flex min-h-0 min-w-0 flex-1 flex-col border-l border-slate-800 pl-3">
-              {mapPanel}
+            {errorBlock}
+            <div className="shrink-0 space-y-2.5 border-t border-slate-800 p-3 sm:p-4">
+              {composerBlock}
+              {fileInput}
             </div>
           </div>
         )

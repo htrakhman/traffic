@@ -128,7 +128,6 @@ export default function AIPlannerWidget() {
             })
           },
           () => {},
-          undefined,
         )
 
         const cartOk = extractChatCartRecommendation(streamedAssistant, undefined)
@@ -200,6 +199,31 @@ export default function AIPlannerWidget() {
       }
     },
     [streaming, lockedQuestionMessages, choiceSelections, sendMessage],
+  )
+
+  /** One Q&A block: send immediately on chip click (no extra Send step). */
+  const submitSingleChoiceAnswer = useCallback(
+    async (msgIndex: number, segIndex: number, question: string, option: string) => {
+      if (streaming || lockedQuestionMessages.has(msgIndex)) return
+      const key = `${msgIndex}-${segIndex}`
+      setChoiceSelections((prev) => new Map(prev).set(key, option))
+      setLockedQuestionMessages((prev) => new Set(prev).add(msgIndex))
+      try {
+        await sendMessage(`Here are my answers:\n• ${question} ${option}`)
+      } catch {
+        setLockedQuestionMessages((prev) => {
+          const next = new Set(prev)
+          next.delete(msgIndex)
+          return next
+        })
+        setChoiceSelections((prev) => {
+          const next = new Map(prev)
+          next.delete(key)
+          return next
+        })
+      }
+    },
+    [streaming, lockedQuestionMessages, sendMessage],
   )
 
   const send = useCallback(() => {
@@ -323,7 +347,7 @@ export default function AIPlannerWidget() {
                 choiceSegIndices.length > 0 &&
                 choiceSegIndices.every(({ si }) => choiceSelections.has(`${i}-${si}`))
               const showBatchSubmit =
-                choiceSegIndices.length > 0 && !lockedQuestionMessages.has(i) && !streaming
+                choiceSegIndices.length > 1 && !lockedQuestionMessages.has(i) && !streaming
 
               return (
                 <div key={i} className="space-y-2">
@@ -357,7 +381,14 @@ export default function AIPlannerWidget() {
                                       <button
                                         key={opt}
                                         type="button"
-                                        onClick={() => !isDisabled && selectChoiceOption(i, si, opt)}
+                                        onClick={() => {
+                                          if (isDisabled) return
+                                          if (choiceSegIndices.length === 1 && seg.type === 'choices') {
+                                            void submitSingleChoiceAnswer(i, si, seg.question, opt)
+                                          } else {
+                                            selectChoiceOption(i, si, opt)
+                                          }
+                                        }}
                                         className={`px-2 py-1 text-[10px] rounded-lg border transition-colors ${
                                           isSelected
                                             ? 'bg-brand-500/30 border-brand-500/60 text-brand-200 font-medium'
@@ -413,8 +444,7 @@ export default function AIPlannerWidget() {
                   type="button"
                   onClick={() => {
                     setStarterPromptsDismissed(true)
-                    setInput(prompt)
-                    setTimeout(() => inputRef.current?.focus(), 0)
+                    void sendMessage(prompt)
                   }}
                   className="px-2.5 py-1 bg-slate-800 border border-slate-700 text-slate-400 hover:text-brand-300 hover:border-brand-500/30 text-[10px] rounded-full transition-colors"
                 >

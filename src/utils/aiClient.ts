@@ -108,28 +108,6 @@ function mapAreaPromptLines(mapArea: MapArea): string[] {
   return lines
 }
 
-function mapWorkZoneChatSuffix(mapArea: MapArea): string {
-  return `\n\n[Map work zone]\n${mapAreaPromptLines(mapArea).join('\n')}`
-}
-
-function augmentLastUserMessageWithMapArea(
-  messages: { role: 'user' | 'assistant'; content: string }[],
-  mapArea: MapArea | undefined,
-): { role: 'user' | 'assistant'; content: string }[] {
-  if (!mapArea || messages.length === 0) return messages
-  let lastUser = -1
-  for (let i = messages.length - 1; i >= 0; i--) {
-    if (messages[i].role === 'user') {
-      lastUser = i
-      break
-    }
-  }
-  if (lastUser < 0) return messages
-  return messages.map((m, i) =>
-    i === lastUser ? { ...m, content: m.content + mapWorkZoneChatSuffix(mapArea) } : m,
-  )
-}
-
 function buildJobPrompt(jobDetails: Partial<JobDetails>, userMessage?: string): string {
   const parts: string[] = []
 
@@ -160,6 +138,12 @@ const TTC_EXPERT_DOCTRINE = `Expert doctrine (follow in every reply):
 - Right-sizing: Default to the smallest professional equipment set that matches the described operation, drawn map footprint, posted speed, lane impact, and work time. Use priority "optional" aggressively for extras and redundant messaging hardware.
 - Answer discipline: Answer the user's actual question first in the fewest words that stay safe and useful. Ask clarifying questions only when blocking for safety or sizing—when collecting context, batch questions instead of ping-ponging.
 - Catalog honesty: Recommend catalog SKUs only where there is a clear operational need; omit unrelated categories instead of padding the list.`
+
+/** Same as TTC_EXPERT_DOCTRINE but for text-only chat (no map / drawn footprint). */
+const TTC_EXPERT_DOCTRINE_CHAT = TTC_EXPERT_DOCTRINE.replace(
+  'drawn map footprint, posted speed',
+  'linear limits or footprint the user describes, posted speed',
+)
 
 const SYSTEM_PROMPT = `You are the AI Work Zone Planner for ${SITE_NAME} — an expert assistant that helps contractors determine what temporary traffic control (TTC) equipment they need to purchase for work zones. You have deep knowledge of MUTCD (Manual on Uniform Traffic Control Devices) frameworks, ATSSA guidance, and common work zone setups.
 
@@ -255,15 +239,49 @@ export async function getJobRecommendation(
   return normalizeRecommendationPricing(JSON.parse(jsonMatch[0]) as AIRecommendation, mapFootprint)
 }
 
+/** Streaming chat for the AI Job Planner — text-only; map/drawing live on the Site Map Planner page only. */
+const STREAM_JOB_CHAT_SYSTEM = `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to purchase. Be brief and direct.
+
+${TTC_EXPERT_DOCTRINE_CHAT}
+
+Chat output discipline:
+- Outside [Q]/[A] blocks and the single cart lead-in sentence ("Here's your recommended equipment setup."), avoid long essays, markdown tables, and generic MUTCD lectures.
+- Never duplicate a full equipment list in free text when a [CART_START]…[CART_END] JSON block is the right output.
+
+This planner is chat-only: do not tell users to draw on a map, search a map, or outline a polygon. If you need distances or limits, ask them to state approximate linear feet of closure, taper length, lane width, or work limits in plain text.
+
+When you need info, ask ALL remaining questions at once using this EXACT format for each question (each [Q:] followed by its [A:] lines):
+
+[Q: Question?]
+[A: Option 1]
+[A: Option 2]
+[A: Option 3]
+
+Rules:
+- If the user's message already gives enough context for a safe, reasonable cart (road class, speed, lane impact, duration, day/night, and approximate work limits), skip extra questions and output the cart.
+- Otherwise, no preamble — go straight to the question blocks. Batch every still-needed question in one message (e.g. road type, regulatory/design speed, lane impact, duration, day vs night, pedestrian exposure, linear feet of lane closure or work limits if not stated).
+- 3–5 options per question, include "Not sure" when useful
+- Users may answer every question in one reply (bulleted list); treat all answers as your new context — do not re-ask what they already answered
+- Once you have road type, speed limit, lane impact, duration, and day/night (and any critical limits they can give in text): OUTPUT A CART WIDGET (see below) — do NOT list equipment in plain text
+- When the user gives distances in feet (closure length, taper, lane width), use those for taper/channelization and cone/drum counts; if distances are missing and matter for quantities, ask once in the batched questions
+- Right-size quantities to the described scope — avoid highway-style fleet counts for small local jobs unless lane impact and speeds clearly justify it. Prefer one primary high-visibility message source per approach (PCMS or trailer arrow board), not both by default. Mark aggressive extras as "optional" when scope is ambiguous.
+
+WHEN READY TO RECOMMEND — output exactly this (a brief sentence, then the cart block):
+Here's your recommended equipment setup.
+[CART_START]
+{"summary":"...","items":[{"productId":"prod-X","productName":"...","category":"...","quantity":N,"rationale":"...","priority":"required|recommended|optional","unitPrice":X.XX}],"estimatedMerchandiseSubtotal":XX.XX,"estimatedDurationDays":N,"setupNotes":["..."],"disclaimer":"These recommendations are planning guidance only. Verify with your project engineer or state DOT."}
+[CART_END]
+
+Product IDs and catalog unit pricing (use these exact unitPrice values for each quantity in the cart JSON):
+${STREAM_CART_PRODUCT_RATES}`
+
 export async function streamJobChat(
   messages: { role: 'user' | 'assistant'; content: string }[],
   onChunk: (chunk: string) => void,
   onDone: () => void,
-  options?: { mapArea?: MapArea },
 ): Promise<void> {
   if (DEMO_MODE) {
-    const messagesForDemo = augmentLastUserMessageWithMapArea(messages, options?.mapArea)
-    const lastUser = [...messagesForDemo].reverse().find((m) => m.role === 'user')?.content ?? ''
+    const lastUser = [...messages].reverse().find((m) => m.role === 'user')?.content ?? ''
     if (lastUser.includes('Here are my answers')) {
       const rec = normalizeRecommendationPricing(
         getDemoRecommendation({
@@ -289,29 +307,9 @@ ${JSON.stringify(rec)}
       return
     }
 
-    const hasMapBlock = lastUser.includes('[Map work zone]')
-    const mapQuestion = hasMapBlock
-      ? ''
-      : `[Q: Work zone on the map — what's your next step?]
-[A: Polygon is drawn — ready]
-[A: Not yet — I'll search / move the map, then draw the outline]
-[A: I'll describe the footprint in text instead]
+    const demo = `Thanks for describing your job! A few quick details:
 
-`
-    const ma = options?.mapArea
-    const mapBits: string[] = []
-    if (ma?.address) mapBits.push(`location ${ma.address}`)
-    if (ma?.postedSpeedLabel) mapBits.push(ma.postedSpeedLabel)
-    if (ma?.footprintMinSpanFt != null && ma?.footprintMaxSpanFt != null) {
-      mapBits.push(`outline ~${Math.round(ma.footprintMinSpanFt)}×${Math.round(ma.footprintMaxSpanFt)} ft`)
-    }
-    const mapLead =
-      hasMapBlock && mapBits.length > 0
-        ? `From your map (${mapBits.join('; ')}), I'm using that outline for sizing — please confirm a few details:\n\n`
-        : hasMapBlock
-          ? `From your drawn work zone on the map, I'm using that outline for sizing — please confirm a few details:\n\n`
-          : ''
-    const demo = `${mapLead}${hasMapBlock ? '' : `Thanks for describing your job! Use the search bar on the map (or type Location: … / lat,lng in chat) to jump to the site, then draw your work zone polygon — that calibrates quantities. A few quick details:\n\n`}${mapQuestion}[Q: What type of road is this on?]
+[Q: What type of road is this on?]
 [A: Interstate / Freeway (65+ mph)]
 [A: US or State Highway (45–65 mph)]
 [A: County or Arterial Road (35–45 mph)]
@@ -330,8 +328,6 @@ ${JSON.stringify(rec)}
     return
   }
 
-  const messagesForApi = augmentLastUserMessageWithMapArea(messages, options?.mapArea)
-
   const response = await fetch(CHAT_PROXY_URL, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -340,51 +336,8 @@ ${JSON.stringify(rec)}
       /** Cart JSON + rationales for many SKUs needs headroom; prefer recovery over user-visible truncation. */
       max_tokens: 8192,
       stream: true,
-      system: `You are the AI Work Zone Planner for ${SITE_NAME}. Help contractors find the right temporary traffic control equipment to purchase. Be brief and direct.
-
-${TTC_EXPERT_DOCTRINE}
-
-Chat output discipline:
-- Outside [Q]/[A] blocks and the single cart lead-in sentence ("Here's your recommended equipment setup."), avoid long essays, markdown tables, and generic MUTCD lectures.
-- Never duplicate a full equipment list in free text when a [CART_START]…[CART_END] JSON block is the right output.
-
-The UI shows a Google Map directly above the chat input with a search field: users can jump to an address, highway + milepost (Geocoder resolves natural language), or decimal lat/lng. In chat they can also type "Location: …" / "Address: …" or a coordinate pair such as 40.7128, -74.0060 — the client recenters the map when they send. They still need a drawn polygon for the [Map work zone] block (area/perimeter); search only moves the map view.
-
-When you need info, ask ALL remaining questions at once using this EXACT format for each question (each [Q:] followed by its [A:] lines):
-
-[Q: Question?]
-[A: Option 1]
-[A: Option 2]
-[A: Option 3]
-
-Rules:
-- If the latest user message does NOT contain a [Map work zone] block: no preamble — go straight to the question blocks.
-- If the latest user message DOES contain [Map work zone]: FIRST output one short sentence (max ~35 words) that explicitly references what that block says (Map location/address, posted speed if present, area/perimeter, footprint spans if present). Treat that block as the user's prior map work — do not tell them to search or draw again unless something is inconsistent or missing.
-- Map-informed follow-ups: use posted speed (when present) to pick the most likely road-type bucket and ask confirmation (put your best match as the first [A:] option). Use footprint min/max spans heuristically (~≤18 ft narrow vs ~≥22–40+ ft often suggests multiple lanes or full roadway width vs shoulder/single lane) combined with the user's text to propose a default lane-impact option first — still offer alternatives and "Not sure".
-- Do not ask generic road-type or lane-impact questions as if no map context exists when [Map work zone] is present; prefer "Confirm …" phrasing grounded in the map fields.
-- If the latest user message does NOT contain a [Map work zone] block, your FIRST batch of questions MUST start with a map question before road/lane questions, using this exact wording:
-  [Q: Work zone on the map — what's your next step?]
-  [A: Polygon is drawn — ready]
-  [A: Not yet — I'll search / move the map, then draw the outline]
-  [A: I'll describe the footprint in text instead]
-  If [Map work zone] is already present, skip that map question — do not ask them to draw again unless something is unclear
-- Ask all other still-needed questions in the same message (anything not inferable: duration, day/night, regulatory speed if it clearly differs from posted map speed, etc.)
-- Users may answer every question in one reply (bulleted list); treat all answers as your new context — do not re-ask what they already answered
-- 3–5 options per question, include "Not sure" when useful
-- Once you have road type, speed limit, lane impact, duration, and day/night: OUTPUT A CART WIDGET (see below) — do NOT list equipment in plain text
-- If a user message ends with a [Map work zone] block (sq ft, perimeter ft, optional address), use those dimensions to calibrate cone/drum counts, taper and channelization length, and barrier quantities—do not ignore the drawn area when recommending
-- Small-drawn-footprint rule: When [Map work zone] is compact (rough guide: area under ~12,000 sq ft and/or the smaller footprint span under ~40 ft), treat the polygon as a localized work patch on the roadway—not evidence of a long-distance lane closure unless the user said so. Keep drums/barricades/flashers proportional to lining that footprint and reasonable, user-described tapers; do not inflate counts to template values meant for long high-speed closures. As a soft sanity cap for a simple patch, total channelizing drums (or equivalent cones) needed just to edge the drawn zone is often on the order of ceil(perimeter_ft / 25) or less unless multi-lane or multi-leg channelization is explicit. Avoid recommending both a portable changeable message sign and a trailer arrow board for the same small local job unless the user clearly needs redundancy on separate approaches.
-- When quantities would look excessive next to the given sq ft / perimeter (e.g. dozens of Type III barricades for under ~10k sq ft), reduce counts, explain the assumption in each rationale, and push nice-to-have duplicates to "optional" priority.
-
-WHEN READY TO RECOMMEND — output exactly this (a brief sentence, then the cart block):
-Here's your recommended equipment setup.
-[CART_START]
-{"summary":"...","items":[{"productId":"prod-X","productName":"...","category":"...","quantity":N,"rationale":"...","priority":"required|recommended|optional","unitPrice":X.XX}],"estimatedMerchandiseSubtotal":XX.XX,"estimatedDurationDays":N,"setupNotes":["..."],"disclaimer":"These recommendations are planning guidance only. Verify with your project engineer or state DOT."}
-[CART_END]
-
-Product IDs and catalog unit pricing (use these exact unitPrice values for each quantity in the cart JSON):
-${STREAM_CART_PRODUCT_RATES}`,
-      messages: messagesForApi,
+      system: STREAM_JOB_CHAT_SYSTEM,
+      messages,
     }),
   })
 
@@ -453,7 +406,7 @@ ${STREAM_CART_PRODUCT_RATES}`
 export async function recoverJobChatCart(
   priorMessages: { role: 'user' | 'assistant'; content: string }[],
   truncatedAssistantReply: string,
-  options?: { mapArea?: MapArea; mapFootprint?: RecommendationFootprintGuard },
+  options?: { mapFootprint?: RecommendationFootprintGuard },
 ): Promise<string> {
   const openIdx = truncatedAssistantReply.indexOf('[CART_START]')
   const head = (openIdx === -1 ? truncatedAssistantReply : truncatedAssistantReply.slice(0, openIdx)).trimEnd()
@@ -474,10 +427,11 @@ export async function recoverJobChatCart(
     return `${head}\n\n[CART_START]\n${JSON.stringify(rec)}\n[CART_END]`
   }
 
-  const recoveryMessages = augmentLastUserMessageWithMapArea(
-    [...priorMessages, { role: 'assistant' as const, content: truncatedAssistantReply }, { role: 'user' as const, content: CART_RECOVERY_USER }],
-    options?.mapArea,
-  )
+  const recoveryMessages = [
+    ...priorMessages,
+    { role: 'assistant' as const, content: truncatedAssistantReply },
+    { role: 'user' as const, content: CART_RECOVERY_USER },
+  ]
 
   const response = await fetch(CHAT_PROXY_URL, {
     method: 'POST',
