@@ -24,7 +24,7 @@ export default function Category() {
 
   if (!category) {
     return (
-      <main className="min-h-screen pt-24 flex items-center justify-center">
+      <main className="min-h-screen pt-28 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">Category not found</h1>
           <Link to="/browse" className="btn-primary">Browse All Equipment</Link>
@@ -40,7 +40,7 @@ export default function Category() {
     `Shop ${productCount > 0 ? productCount + ' ' : ''}${category.name.toLowerCase()} — ${category.description}. MUTCD-compliant traffic safety equipment with volume pricing and free shipping.`
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-24">
       <SEO
         title={metaTitle}
         description={metaDesc.slice(0, 160)}

@@ -101,7 +101,7 @@ export default function Quote() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen pt-24 flex items-center justify-center px-4">
+      <main className="min-h-screen pt-28 flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <CheckCircle size={28} className="text-emerald-400" />
@@ -128,7 +128,7 @@ export default function Quote() {
   }
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-24">
       <div className="border-b border-slate-800/60 bg-slate-900/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
           <h1 className="text-3xl font-bold text-white mb-1">Request a quote</h1>

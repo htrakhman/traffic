@@ -79,7 +79,7 @@ export default function Account() {
 
   if (!user) {
     return (
-      <main className="min-h-screen pt-24 flex items-center justify-center px-4">
+      <main className="min-h-screen pt-28 flex items-center justify-center px-4">
         {showAuth && (
           <AuthModal defaultMode={authMode} onClose={() => setShowAuth(false)} />
         )}
@@ -144,7 +144,7 @@ export default function Account() {
   }
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-24">
       <div className="border-b border-slate-800/60 bg-slate-900/30">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>

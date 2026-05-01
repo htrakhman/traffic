@@ -1353,7 +1353,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       )
     }
     return (
-      <main className="min-h-screen pt-24 px-4 pb-16 bg-slate-950">
+      <main className="min-h-screen pt-28 px-4 pb-16 bg-slate-950">
         <div className="max-w-lg mx-auto rounded-xl border border-slate-700 bg-slate-900/60 p-8 text-center text-slate-300">
           {noKeyBody}
         </div>
@@ -1381,7 +1381,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
       )
     }
     return (
-      <main className="min-h-screen pt-24 px-4 pb-16 bg-slate-950">
+      <main className="min-h-screen pt-28 px-4 pb-16 bg-slate-950">
         <div className="max-w-lg mx-auto rounded-xl border border-red-800/40 bg-red-950/30 p-6">{errBody}</div>
       </main>
     )
@@ -1389,7 +1389,7 @@ export default function SiteMapPlanner({ embedded = false }: SiteMapPlannerProps
 
   const rootClass = embedded
     ? 'h-full min-h-0 flex flex-col overflow-hidden bg-slate-950'
-    : 'h-screen pt-16 bg-slate-950 flex flex-col overflow-hidden'
+    : 'h-screen pt-[6.25rem] bg-slate-950 flex flex-col overflow-hidden'
 
   const PlannerShell = embedded ? 'div' : 'main'
   const plannerShellProps = embedded

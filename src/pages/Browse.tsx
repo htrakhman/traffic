@@ -75,7 +75,7 @@ export default function Browse() {
   }
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-24">
       {/* Page header */}
       <div className="bg-slate-900/50 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">

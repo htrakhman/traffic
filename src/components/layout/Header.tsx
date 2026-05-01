@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Search, Phone, ChevronDown, ShoppingCart, User, LogOut } from 'lucide-react'
+import { Menu, X, Search, Phone, ChevronDown, ShoppingCart, User, LogOut, Truck } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { categories } from '../../data/categories'
@@ -57,6 +57,12 @@ export default function Header() {
             : 'bg-transparent'
         }`}
       >
+        {/* Sitewide delivery trust bar */}
+        <div className="bg-brand-500 text-white text-xs font-semibold text-center py-1.5 px-4 flex items-center justify-center gap-2">
+          <Truck size={12} className="flex-shrink-0" />
+          Free Delivery on Every Order — No Minimum
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between gap-3 min-h-16 py-2 lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:justify-normal lg:gap-x-3 xl:gap-x-5 lg:py-0 lg:min-h-[4.25rem]">
             {/* Logo — PNG wordmark (public/brand); sr-only site name for assistive tech */}

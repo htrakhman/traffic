@@ -20,7 +20,7 @@ export default function Article() {
   const canonical = `/blog/${article.slug}`
 
   return (
-    <div className="pt-24 pb-24 bg-slate-950 min-h-screen">
+    <div className="pt-28 pb-24 bg-slate-950 min-h-screen">
       <SEO
         title={`${article.title} | ${SITE_NAME}`}
         description={article.metaDescription || article.excerpt}

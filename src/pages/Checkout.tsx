@@ -286,7 +286,7 @@ export default function Checkout() {
     const displayName = successContact?.name?.trim() || 'there'
     const displayEmail = successContact?.email?.trim() || 'the address you provided'
     return (
-      <main className="min-h-screen pt-24 flex items-center justify-center px-4">
+      <main className="min-h-screen pt-28 flex items-center justify-center px-4">
         <div className="text-center max-w-md">
           <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <CheckCircle size={28} className="text-emerald-400" />
@@ -329,7 +329,7 @@ export default function Checkout() {
 
   if (stripeResume === 'working') {
     return (
-      <main className="min-h-screen pt-24 flex items-center justify-center px-4">
+      <main className="min-h-screen pt-28 flex items-center justify-center px-4">
         <p className="text-slate-400 text-center">Finishing your checkout after membership payment…</p>
       </main>
     )
@@ -338,7 +338,7 @@ export default function Checkout() {
   const showEmptyCart = resolved.length === 0 && !sessionIdParam
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-24">
       <div className="border-b border-slate-800/60 bg-slate-900/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
           <Link

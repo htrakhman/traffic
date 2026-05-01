@@ -13,7 +13,7 @@ export default function Blog() {
   const posts = getAllArticlesMeta()
 
   return (
-    <div className="pt-24 pb-24 bg-slate-950 min-h-screen">
+    <div className="pt-28 pb-24 bg-slate-950 min-h-screen">
       <SEO
         title={`Work Zone & Traffic Control Guides | ${SITE_NAME}`}
         description="Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, arrow boards, barricades, and job-site safety. Written for crews, not SEO bots."

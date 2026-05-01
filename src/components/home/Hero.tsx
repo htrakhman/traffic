@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, ExternalLink, X, Layers } from 'lucide-react'
-import SiteMapPlanner from '../../pages/SiteMapPlanner'
+import { Search, X, ArrowRight } from 'lucide-react'
 import { useCatalogSync } from '../../context/CatalogSyncContext'
 import { getBrowseQuickChips } from '../../utils/browseQuickChips'
 
@@ -19,7 +18,6 @@ export default function Hero({
   onBrowseSearchClear,
 }: HeroProps) {
   const { tick } = useCatalogSync()
-  const [activeTab, setActiveTab] = useState<'map' | 'browse'>('map')
   const navigate = useNavigate()
 
   const browseChips = useMemo(
@@ -29,114 +27,83 @@ export default function Hero({
   const browseQ = browseSearchQuery.trim()
 
   return (
-    <section className="relative overflow-hidden bg-slate-950 pt-20 pb-10">
+    <section className="relative overflow-hidden bg-slate-950 pt-28 pb-14">
       <div className="absolute inset-0 bg-grid-slate opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 to-slate-950" />
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-brand-500/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-brand-500/8 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-        {/* Headline — single line */}
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
-          Plan the job.{' '}
-          <span className="gradient-text">Get the gear.</span>
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        {/* Headline */}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-4">
+          Traffic Control Equipment.{' '}
+          <span className="gradient-text">Free Delivery.</span>
         </h1>
 
-        <p className="text-slate-400 max-w-lg mx-auto mb-6 text-sm sm:text-base leading-relaxed">
-          Traffic control and safety equipment for contractors — draw your work zone on the map, place gear, and order what you need.
+        <p className="text-slate-400 max-w-xl mx-auto mb-8 text-base sm:text-lg leading-relaxed">
+          Order what you actually need. Our AI job planner builds your equipment list before you spend a dollar — and every order ships free.
         </p>
 
-        {/* Tabs */}
-        <div className="inline-flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 mb-4">
-          <button
-            onClick={() => {
-              setActiveTab('map')
-              onBrowseSearchClear()
-            }}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeTab === 'map' ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/25' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Layers size={12} />
-            Site Map
-          </button>
-          <button
-            onClick={() => setActiveTab('browse')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeTab === 'browse' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Search size={12} />
-            Browse
-          </button>
+        {/* Search bar */}
+        <div className="max-w-xl mx-auto mb-4">
+          <div className="relative">
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={browseSearchQuery}
+              onChange={(e) => onBrowseSearchQueryChange(e.target.value)}
+              placeholder="Search cones, signs, arrow boards, barricades..."
+              className="w-full pl-11 pr-12 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500/50 transition-all shadow-lg"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const t = browseSearchQuery.trim()
+                  navigate(t ? `/browse?q=${encodeURIComponent(t)}` : '/browse')
+                }
+              }}
+              aria-label="Search equipment catalog"
+            />
+            {browseSearchQuery ? (
+              <button
+                type="button"
+                onClick={onBrowseSearchClear}
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-300 rounded"
+                aria-label="Clear search"
+              >
+                <X size={14} />
+              </button>
+            ) : null}
+          </div>
         </div>
 
-        {/* Site map — same card footprint as the former AI + map panel */}
-        {activeTab === 'map' && (
-          <div className="w-full max-w-4xl mx-auto animate-fade-in text-left">
-            <div
-              className="card flex flex-col overflow-hidden shadow-2xl shadow-black/40 min-h-[460px] h-[min(720px,calc(100dvh-11rem))]"
+        {/* Category quick chips */}
+        <div className="flex flex-wrap justify-center gap-1.5 mb-8">
+          {browseChips.map(({ label, category }) => (
+            <Link
+              key={category}
+              to={
+                browseQ
+                  ? `/browse?category=${encodeURIComponent(category)}&q=${encodeURIComponent(browseQ)}`
+                  : `/browse?category=${encodeURIComponent(category)}`
+              }
+              className="px-3 py-1.5 bg-slate-800/70 hover:bg-slate-800 border border-slate-700 hover:border-brand-500/40 text-slate-400 hover:text-brand-300 text-xs rounded-full transition-colors duration-150"
             >
-              <SiteMapPlanner embedded />
-            </div>
-            <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
-              <Link
-                to="/planner"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-400 hover:text-brand-300 transition-colors"
-              >
-                Open full site map
-                <ExternalLink size={12} className="opacity-80" />
-              </Link>
-            </div>
-          </div>
-        )}
+              {label}
+            </Link>
+          ))}
+        </div>
 
-        {/* Browse panel */}
-        {activeTab === 'browse' && (
-          <div className="max-w-xl mx-auto animate-fade-in">
-            <div className="relative mb-3">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
-                type="text"
-                value={browseSearchQuery}
-                onChange={(e) => onBrowseSearchQueryChange(e.target.value)}
-                placeholder="Search cones, signs, arrow boards, barricades..."
-                className="w-full pl-10 pr-11 py-3 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500/50 transition-all"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    const t = browseSearchQuery.trim()
-                    navigate(t ? `/browse?q=${encodeURIComponent(t)}` : '/browse')
-                  }
-                }}
-                aria-label="Search equipment catalog"
-              />
-              {browseSearchQuery ? (
-                <button
-                  type="button"
-                  onClick={onBrowseSearchClear}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-500 hover:text-slate-300 rounded"
-                  aria-label="Clear search"
-                >
-                  <X size={14} />
-                </button>
-              ) : null}
-            </div>
-            <div className="flex flex-wrap justify-center gap-1.5 transition-opacity duration-150">
-              {browseChips.map(({ label, category }) => (
-                <Link
-                  key={category}
-                  to={
-                    browseQ
-                      ? `/browse?category=${encodeURIComponent(category)}&q=${encodeURIComponent(browseQ)}`
-                      : `/browse?category=${encodeURIComponent(category)}`
-                  }
-                  className="px-2.5 py-1 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 hover:border-brand-500/30 text-slate-400 hover:text-brand-300 text-xs rounded-full transition-colors duration-150"
-                >
-                  {label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link to="/browse" className="btn-secondary px-6 py-3 text-sm font-semibold">
+            Browse All Equipment
+            <ArrowRight size={15} />
+          </Link>
+          <Link
+            to="/assistant"
+            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-brand-300 transition-colors px-4 py-3"
+          >
+            Not sure what you need? Try the AI Planner →
+          </Link>
+        </div>
       </div>
     </section>
   )

@@ -8,6 +8,7 @@ import { CatalogSyncProvider, useCatalogSync } from './context/CatalogSyncContex
 import { registerExtendedCatalog } from './data/products'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
+import AIPlannerWidget from './components/ai/AIPlannerWidget'
 import Home from './pages/Home'
 
 const Browse = lazy(() => import('./pages/Browse'))
@@ -101,6 +102,7 @@ function AppLayout() {
         </Suspense>
       </div>
       <Footer />
+      <AIPlannerWidget />
     </div>
   )
 }

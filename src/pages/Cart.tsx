@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight, CreditCard, Map } from 'lucide-react'
+import { ShoppingCart, Trash2, Plus, Minus, Package, ArrowRight, CreditCard, Map, Truck } from 'lucide-react'
 import { useCart } from '../context/CartContext'
 import { useMembership } from '../context/MembershipContext'
 import { getDeliveryPickupFees } from '../constants/deliveryPickup'
@@ -38,7 +38,7 @@ export default function Cart() {
   const grandTotal = merchandiseSubtotal + deliveryPickupCombined
 
   return (
-    <main className="min-h-screen pt-20">
+    <main className="min-h-screen pt-24">
       <div className="border-b border-slate-800/60 bg-slate-900/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
@@ -157,8 +157,12 @@ export default function Cart() {
                 <span>Estimated total</span>
                 <span>${grandTotal.toFixed(2)}</span>
               </div>
+              <div className="flex items-center gap-2 py-2 px-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+                <Truck size={13} className="flex-shrink-0" />
+                Your order ships free — no minimum required.
+              </div>
               <p className="text-xs text-slate-500">
-                Volume tier pricing is applied per line. Standard shipping is free at checkout.
+                Volume tier pricing is applied per line.
               </p>
               <button
                 type="button"

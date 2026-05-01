@@ -10,7 +10,7 @@ export default function Assistant() {
   const [plannerMapBoost, setPlannerMapBoost] = useState(false)
 
   return (
-    <main className="min-h-screen pt-20 bg-slate-950">
+    <main className="min-h-screen pt-24 bg-slate-950">
       {/* Page header */}
       <div className="border-b border-slate-800/60 bg-slate-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
