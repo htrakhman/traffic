@@ -91,8 +91,18 @@ import { articleTrafficBarriersTypesComparison } from './articles/traffic-barrie
 import { articleTrafficBarrelsBuyingGuide } from './articles/traffic-barrels-buying-guide'
 import { articleRubberSpeedBumpsBuyingGuide } from './articles/rubber-speed-bumps-buying-guide'
 import { articleCollapsibleTrafficConesGuide } from './articles/collapsible-traffic-cones-guide'
+import { articleTrafficConesForSaleBuyingGuide } from './articles/traffic-cones-for-sale-buying-guide'
+import { articleConstructionConesExplained } from './articles/construction-cones-explained'
+import { articleRoadBarriersTypesComparison } from './articles/road-barriers-types-comparison'
+import { articleTrafficDelineatorsGuide } from './articles/traffic-delineators-guide'
+import { articleTrafficControlSignsMutcdGuide } from './articles/traffic-control-signs-mutcd-guide'
 
 export const articles: Article[] = [
+  articleTrafficConesForSaleBuyingGuide,
+  articleConstructionConesExplained,
+  articleRoadBarriersTypesComparison,
+  articleTrafficDelineatorsGuide,
+  articleTrafficControlSignsMutcdGuide,
   articleCrowdControlBarriersBuyingGuide,
   articleTrafficBarriersTypesComparison,
   articleTrafficBarrelsBuyingGuide,
