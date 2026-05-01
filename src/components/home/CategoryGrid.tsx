@@ -39,7 +39,7 @@ export default function CategoryGrid({
   return (
     <section id="categories" className="pt-12 pb-20 px-4 sm:px-6 max-w-7xl mx-auto">
       {/* Section header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
           <div className="text-xs font-semibold text-brand-400 uppercase tracking-widest mb-2">Equipment Catalog</div>
           {displayQ ? (
@@ -91,44 +91,46 @@ export default function CategoryGrid({
           </div>
         )
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          {categories.map((cat, i) => (
-            <Link
-              key={cat.id}
-              to={`/category/${cat.slug}`}
-              className="group relative overflow-hidden rounded-xl animate-fade-in"
-              style={{ animationDelay: `${i * 60}ms`, aspectRatio: '4/3' }}
-            >
-              {/* Photo */}
-              <img
-                src={cat.imageUrl}
-                alt={cat.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
-
-              {/* Dark gradient — bottom-heavy for text legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10 transition-opacity duration-300 group-hover:from-black/90" />
-
-              {/* Top-right arrow badge */}
-              <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:bg-brand-500 transition-all duration-200">
-                <ArrowRight size={12} className="text-white" />
-              </div>
-
-              {/* Bottom content */}
-              <div className="absolute bottom-0 left-0 right-0 p-4">
-                <h3 className="font-bold text-white text-sm sm:text-base leading-snug">
-                  {cat.name}
-                </h3>
-                <p className="text-xs text-slate-300 mt-0.5 line-clamp-1 opacity-90">
-                  {cat.description}
-                </p>
-                <div className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-brand-400">
-                  {countsBySlug[cat.slug] ?? cat.productCount ?? 0} items available
+        <div className="rounded-2xl border border-slate-800/90 bg-slate-900/35 p-3 sm:p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            {categories.map((cat, i) => (
+              <Link
+                key={cat.id}
+                to={`/category/${cat.slug}`}
+                className="group relative overflow-hidden rounded-xl border border-slate-700/80 bg-slate-900 animate-fade-in transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-500/50 hover:shadow-lg hover:shadow-brand-500/10"
+                style={{ animationDelay: `${i * 60}ms` }}
+              >
+                {/* Photo */}
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <img
+                    src={cat.imageUrl}
+                    alt={cat.name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-900/10 to-transparent" />
                 </div>
-              </div>
-            </Link>
-          ))}
+
+                {/* Content */}
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-semibold text-white text-sm sm:text-base leading-snug">
+                      {cat.name}
+                    </h3>
+                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-800 text-slate-300 border border-slate-700 transition-colors duration-200 group-hover:bg-brand-500 group-hover:border-brand-500 group-hover:text-white">
+                      <ArrowRight size={12} />
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1.5 line-clamp-2 min-h-[2.5rem]">
+                    {cat.description}
+                  </p>
+                  <div className="mt-3 inline-flex items-center rounded-full border border-brand-500/30 bg-brand-500/10 px-2.5 py-1 text-[11px] font-medium text-brand-300">
+                    {countsBySlug[cat.slug] ?? cat.productCount ?? 0} items
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </section>
