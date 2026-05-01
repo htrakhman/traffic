@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Sparkles, X, Minimize2, Send, ChevronRight } from 'lucide-react'
 import { streamJobChat } from '../../utils/aiClient'
+import PlannerMiniMap from './PlannerMiniMap'
 
 type Msg = { role: 'user' | 'assistant'; content: string }
 
@@ -63,7 +64,7 @@ export default function AIPlannerWidget() {
       {/* Expanded panel */}
       {open && (
         <div className="w-[340px] sm:w-[380px] bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl shadow-black/60 flex flex-col overflow-hidden animate-fade-in"
-          style={{ height: '480px' }}>
+          style={{ height: '580px' }}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-slate-800 border-b border-slate-700 flex-shrink-0">
             <div className="flex items-center gap-2">
@@ -94,6 +95,8 @@ export default function AIPlannerWidget() {
               Stop over-ordering. Get the right list before you buy.
             </p>
           </div>
+
+          <PlannerMiniMap active={open} />
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 text-sm">
