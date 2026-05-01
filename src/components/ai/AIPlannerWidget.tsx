@@ -18,6 +18,15 @@ type Segment =
 const WELCOME =
   "Describe your job and I'll ask a few quick questions, then recommend equipment with quantities. When you're ready, add the list straight to your cart from the card below my reply."
 
+const STARTER_PROMPTS = [
+  'Road paving job, 2 lanes, 400ft',
+  'Utility work in a parking lot',
+  'Sidewalk closure, pedestrians nearby',
+  'Overnight lane closure, 35 mph, 500ft',
+  'Road milling, single lane, flaggers',
+  'Bridge deck repair, narrow shoulder',
+] as const
+
 function parseSegments(content: string, mapFootprint?: RecommendationFootprintGuard): Segment[] {
   const cartRegex = /\[CART_START\]([\s\S]*?)\[CART_END\]/g
   const segments: Segment[] = []
@@ -73,12 +82,12 @@ function ThinkingDots() {
 
 export default function AIPlannerWidget() {
   const [open, setOpen] = useState(false)
-  const [dismissed, setDismissed] = useState(false)
   const [messages, setMessages] = useState<Msg[]>([])
   const [input, setInput] = useState('')
   const [streaming, setStreaming] = useState(false)
   const [choiceSelections, setChoiceSelections] = useState<Map<string, string>>(() => new Map())
   const [lockedQuestionMessages, setLockedQuestionMessages] = useState<Set<number>>(() => new Set())
+  const [starterPromptsDismissed, setStarterPromptsDismissed] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
@@ -197,8 +206,6 @@ export default function AIPlannerWidget() {
     void sendMessage(input)
   }, [input, sendMessage])
 
-  if (dismissed) return null
-
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
       {open && (
@@ -222,10 +229,7 @@ export default function AIPlannerWidget() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setOpen(false)
-                  setDismissed(true)
-                }}
+                onClick={() => setOpen(false)}
                 className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700 transition-colors"
                 aria-label="Close"
               >
@@ -401,17 +405,14 @@ export default function AIPlannerWidget() {
             <div ref={bottomRef} />
           </div>
 
-          {messages.filter((m) => m.role === 'user').length === 0 && (
+          {messages.filter((m) => m.role === 'user').length === 0 && !starterPromptsDismissed && (
             <div className="px-4 pb-2 flex flex-wrap gap-1.5 flex-shrink-0 border-t border-slate-800/80 pt-2">
-              {[
-                'Road paving job, 2 lanes, 400ft',
-                'Utility work in a parking lot',
-                'Sidewalk closure, pedestrians nearby',
-              ].map((prompt) => (
+              {STARTER_PROMPTS.map((prompt) => (
                 <button
                   key={prompt}
                   type="button"
                   onClick={() => {
+                    setStarterPromptsDismissed(true)
                     setInput(prompt)
                     setTimeout(() => inputRef.current?.focus(), 0)
                   }}
