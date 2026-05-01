@@ -27,7 +27,7 @@ export default function Hero({
   const browseQ = browseSearchQuery.trim()
 
   return (
-    <section className="relative overflow-hidden bg-slate-950 pt-28 pb-14">
+    <section className="relative overflow-hidden bg-slate-950 pt-28 pb-10">
       <div className="absolute inset-0 bg-grid-slate opacity-40" />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 to-slate-950" />
       <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-brand-500/8 rounded-full blur-3xl pointer-events-none" />
@@ -99,7 +99,7 @@ export default function Hero({
           </Link>
           <Link
             to="/assistant"
-            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-brand-300 transition-colors px-4 py-3"
+            className="btn-primary px-6 py-3 text-sm font-semibold"
           >
             Not sure what you need? Try the AI Planner →
           </Link>

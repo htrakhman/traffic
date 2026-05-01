@@ -37,7 +37,7 @@ export default function CategoryGrid({
   }, [liveSearchQuery, liveQ, tick])
 
   return (
-    <section id="categories" className="py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+    <section id="categories" className="pt-12 pb-20 px-4 sm:px-6 max-w-7xl mx-auto">
       {/* Section header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>

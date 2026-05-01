@@ -203,7 +203,7 @@ export default function AIPlannerWidget() {
           className="flex items-center gap-2.5 px-4 py-3 bg-brand-500 hover:bg-brand-400 text-white rounded-2xl shadow-lg shadow-brand-500/30 font-semibold text-sm transition-all hover:scale-105 active:scale-95"
         >
           <Sparkles size={15} />
-          Plan your job free
+          Plan your job with AI
         </button>
       )}
     </div>
