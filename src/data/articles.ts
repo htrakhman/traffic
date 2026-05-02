@@ -96,8 +96,14 @@ import { articleConstructionConesExplained } from './articles/construction-cones
 import { articleRoadBarriersTypesComparison } from './articles/road-barriers-types-comparison'
 import { articleTrafficDelineatorsGuide } from './articles/traffic-delineators-guide'
 import { articleTrafficControlSignsMutcdGuide } from './articles/traffic-control-signs-mutcd-guide'
+import { articleWaterFilledBarriersBuyingGuide } from './articles/water-filled-barriers-buying-guide'
+import { articleYellowCautionTapeBuyingGuide } from './articles/yellow-caution-tape-buying-guide'
+import { articleBikeRackBarricadesEventsGuide } from './articles/bike-rack-barricades-events-guide'
 
 export const articles: Article[] = [
+  articleWaterFilledBarriersBuyingGuide,
+  articleYellowCautionTapeBuyingGuide,
+  articleBikeRackBarricadesEventsGuide,
   articleTrafficConesForSaleBuyingGuide,
   articleConstructionConesExplained,
   articleRoadBarriersTypesComparison,
