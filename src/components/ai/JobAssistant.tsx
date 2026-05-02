@@ -22,6 +22,7 @@ import {
   type JobAssistantChatTabState,
 } from '../../utils/jobAssistantSessionStorage'
 import CartWidget from './CartWidget'
+import ChoiceChipsWithCustom from './ChoiceChipsWithCustom'
 import { parseQASegments as parseQASegmentsFromUtil } from '../../utils/chatQAParse'
 
 type Segment =
@@ -366,7 +367,10 @@ export default function JobAssistant({ initialPrompt, embedded }: Props) {
       .map((seg, si) => ({ seg, si }))
       .filter((x): x is { seg: Extract<Segment, { type: 'choices' }>; si: number } => x.seg.type === 'choices')
     if (choiceBlocks.length === 0) return
-    const allChosen = choiceBlocks.every(({ si }) => choiceSelections.has(`${msgIndex}-${si}`))
+    const allChosen = choiceBlocks.every(({ si }) => {
+      const v = choiceSelections.get(`${msgIndex}-${si}`)
+      return typeof v === 'string' && v.trim().length > 0
+    })
     if (!allChosen) return
 
     const body = choiceBlocks
@@ -672,7 +676,10 @@ export default function JobAssistant({ initialPrompt, embedded }: Props) {
                   .filter((x): x is { seg: Extract<Segment, { type: 'choices' }>; si: number } => x.seg.type === 'choices')
                 const allChoicesPicked =
                   choiceSegIndices.length > 0 &&
-                  choiceSegIndices.every(({ si }) => choiceSelections.has(`${i}-${si}`))
+                  choiceSegIndices.every(({ si }) => {
+                    const v = choiceSelections.get(`${i}-${si}`)
+                    return typeof v === 'string' && v.trim().length > 0
+                  })
                 const showBatchSubmit =
                   choiceSegIndices.length > 1 && !lockedQuestionMessages.has(i) && !isStreaming
 
@@ -690,47 +697,34 @@ export default function JobAssistant({ initialPrompt, embedded }: Props) {
                               seg.type === 'text' ? (
                                 seg.content.trim() ? <p key={si} className="whitespace-pre-wrap leading-relaxed">{seg.content.trim()}</p> : null
                               ) : seg.type === 'choices' ? (
-                                <div key={si} className="pt-0.5">
-                                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">{seg.question}</p>
-                                  <div className="flex flex-wrap gap-2">
-                                    {seg.options.map((opt) => {
-                                      const mapKey = `${i}-${si}`
-                                      const picked = choiceSelections.get(mapKey)
-                                      const isSelected = picked === opt
-                                      const locked = lockedQuestionMessages.has(i)
-                                      const isDisabled = locked || isStreaming
-                                      return (
-                                        <button
-                                          key={opt}
-                                          type="button"
-                                          onClick={() => {
-                                            if (isDisabled) return
-                                            if (choiceSegIndices.length === 1 && seg.type === 'choices') {
-                                              void submitSingleChoiceAnswer(i, si, seg.question, opt)
-                                            } else {
-                                              selectChoiceOption(i, si, opt)
-                                            }
-                                          }}
-                                          className={`px-3 py-1.5 text-xs rounded-lg border transition-all duration-150 ${
-                                            isSelected
-                                              ? 'bg-brand-500/30 border-brand-500/60 text-brand-200 font-medium'
-                                              : isDisabled
-                                              ? 'bg-slate-800/30 border-slate-700/30 text-slate-600 cursor-default'
-                                              : 'bg-slate-700/60 hover:bg-brand-500/20 border-slate-600 hover:border-brand-500/50 text-slate-300 hover:text-white cursor-pointer'
-                                          }`}
-                                        >
-                                          {opt}
-                                        </button>
-                                      )
-                                    })}
-                                  </div>
-                                </div>
+                                <ChoiceChipsWithCustom
+                                  key={si}
+                                  question={seg.question}
+                                  options={seg.options}
+                                  picked={choiceSelections.get(`${i}-${si}`)}
+                                  locked={lockedQuestionMessages.has(i)}
+                                  disabled={isStreaming}
+                                  onPickPreset={(opt) => {
+                                    if (choiceSegIndices.length === 1) {
+                                      void submitSingleChoiceAnswer(i, si, seg.question, opt)
+                                    } else {
+                                      selectChoiceOption(i, si, opt)
+                                    }
+                                  }}
+                                  onApplyCustom={(text) => {
+                                    if (choiceSegIndices.length === 1) {
+                                      void submitSingleChoiceAnswer(i, si, seg.question, text)
+                                    } else {
+                                      selectChoiceOption(i, si, text)
+                                    }
+                                  }}
+                                />
                               ) : null
                             )}
                             {showBatchSubmit && (
                               <div className="pt-2 border-t border-slate-700/60 space-y-2">
                                 <p className="text-[11px] text-slate-500">
-                                  Pick one option for each question, then send them together.
+                                  Pick one option per question (or Custom for your own wording), then send them together.
                                 </p>
                                 <button
                                   type="button"

@@ -7,6 +7,7 @@ import { extractChatCartRecommendation, tryParseTailAfterCartStart } from '../..
 import { parseQASegments as parseQASegmentsFromUtil } from '../../utils/chatQAParse'
 import type { AIRecommendation } from '../../types'
 import CartWidget from './CartWidget'
+import ChoiceChipsWithCustom from './ChoiceChipsWithCustom'
 
 type Msg = { role: 'user' | 'assistant'; content: string }
 
@@ -177,7 +178,10 @@ export default function AIPlannerWidget() {
         .map((seg, si) => ({ seg, si }))
         .filter((x): x is { seg: Extract<Segment, { type: 'choices' }>; si: number } => x.seg.type === 'choices')
       if (choiceBlocks.length === 0) return
-      const allChosen = choiceBlocks.every(({ si }) => choiceSelections.has(`${msgIndex}-${si}`))
+      const allChosen = choiceBlocks.every(({ si }) => {
+        const v = choiceSelections.get(`${msgIndex}-${si}`)
+        return typeof v === 'string' && v.trim().length > 0
+      })
       if (!allChosen) return
 
       const body = choiceBlocks
@@ -345,7 +349,10 @@ export default function AIPlannerWidget() {
                 .filter((x): x is { seg: Extract<Segment, { type: 'choices' }>; si: number } => x.seg.type === 'choices')
               const allChoicesPicked =
                 choiceSegIndices.length > 0 &&
-                choiceSegIndices.every(({ si }) => choiceSelections.has(`${i}-${si}`))
+                choiceSegIndices.every(({ si }) => {
+                  const v = choiceSelections.get(`${i}-${si}`)
+                  return typeof v === 'string' && v.trim().length > 0
+                })
               const showBatchSubmit =
                 choiceSegIndices.length > 1 && !lockedQuestionMessages.has(i) && !streaming
 
@@ -366,48 +373,36 @@ export default function AIPlannerWidget() {
                                 </p>
                               ) : null
                             ) : seg.type === 'choices' ? (
-                              <div key={si}>
-                                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">
-                                  {seg.question}
-                                </p>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {seg.options.map((opt) => {
-                                    const mapKey = `${i}-${si}`
-                                    const picked = choiceSelections.get(mapKey)
-                                    const isSelected = picked === opt
-                                    const locked = lockedQuestionMessages.has(i)
-                                    const isDisabled = locked || streaming
-                                    return (
-                                      <button
-                                        key={opt}
-                                        type="button"
-                                        onClick={() => {
-                                          if (isDisabled) return
-                                          if (choiceSegIndices.length === 1 && seg.type === 'choices') {
-                                            void submitSingleChoiceAnswer(i, si, seg.question, opt)
-                                          } else {
-                                            selectChoiceOption(i, si, opt)
-                                          }
-                                        }}
-                                        className={`px-2 py-1 text-[10px] rounded-lg border transition-colors ${
-                                          isSelected
-                                            ? 'bg-brand-500/30 border-brand-500/60 text-brand-200 font-medium'
-                                            : isDisabled
-                                              ? 'bg-slate-800/30 border-slate-700/30 text-slate-600 cursor-default'
-                                              : 'bg-slate-800 hover:bg-brand-500/15 border-slate-600 hover:border-brand-500/40 text-slate-300'
-                                        }`}
-                                      >
-                                        {opt}
-                                      </button>
-                                    )
-                                  })}
-                                </div>
-                              </div>
+                              <ChoiceChipsWithCustom
+                                key={si}
+                                variant="compact"
+                                question={seg.question}
+                                options={seg.options}
+                                picked={choiceSelections.get(`${i}-${si}`)}
+                                locked={lockedQuestionMessages.has(i)}
+                                disabled={streaming}
+                                onPickPreset={(opt) => {
+                                  if (choiceSegIndices.length === 1) {
+                                    void submitSingleChoiceAnswer(i, si, seg.question, opt)
+                                  } else {
+                                    selectChoiceOption(i, si, opt)
+                                  }
+                                }}
+                                onApplyCustom={(text) => {
+                                  if (choiceSegIndices.length === 1) {
+                                    void submitSingleChoiceAnswer(i, si, seg.question, text)
+                                  } else {
+                                    selectChoiceOption(i, si, text)
+                                  }
+                                }}
+                              />
                             ) : null,
                           )}
                           {showBatchSubmit && (
                             <div className="pt-2 border-t border-slate-700/60 space-y-1.5">
-                              <p className="text-[10px] text-slate-500">Pick one answer per question, then send.</p>
+                              <p className="text-[10px] text-slate-500">
+                                Pick one answer per question (or Custom), then send.
+                              </p>
                               <button
                                 type="button"
                                 onClick={() => void submitChoiceBatch(i, nonCartSegs)}
