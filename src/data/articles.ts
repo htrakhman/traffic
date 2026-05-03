@@ -104,7 +104,10 @@ import { articleYellowCautionTapeBuyingGuide } from './articles/yellow-caution-t
 import { articleWaterFilledBarriersBuyingGuide } from './articles/water-filled-barriers-buying-guide'
 import { articleBikeRackBarricadesEventsGuide } from './articles/bike-rack-barricades-events-guide'
 
+import { articlePedestrianSignsPillarGuide } from './articles/pedestrian-signs-pillar-guide'
+
 export const articles: Article[] = [
+  articlePedestrianSignsPillarGuide,
   articleSafetyConesBuyingGuide,
   articleTrafficBarricadesPillarGuide,
   articleRubberSpeedHumpsVsSpeedBumps,
