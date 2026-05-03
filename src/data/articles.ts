@@ -106,7 +106,10 @@ import { articleBikeRackBarricadesEventsGuide } from './articles/bike-rack-barri
 
 import { articlePedestrianSignsPillarGuide } from './articles/pedestrian-signs-pillar-guide'
 
+import { articleConstructionCautionTapeBuyingGuide } from './articles/construction-caution-tape-buying-guide'
+
 export const articles: Article[] = [
+  articleConstructionCautionTapeBuyingGuide,
   articlePedestrianSignsPillarGuide,
   articleSafetyConesBuyingGuide,
   articleTrafficBarricadesPillarGuide,
