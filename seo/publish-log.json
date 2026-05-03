@@ -27,7 +27,7 @@
       "primaryKeyword": "arrow board rental",
       "targetVolume": 500,
       "wordCount": 1480,
-      "notes": "Type A/B/C specs, trailer vs truck-mounted decision matrix, daily/weekly/monthly rates, lamp requirements per MUTCD §6L.06."
+      "notes": "Type A/B/C specs, trailer vs truck-mounted decision matrix, daily/weekly/monthly rates, lamp requirements per MUTCD \u00a76L.06."
     },
     {
       "date": "2026-04-19",
@@ -36,7 +36,7 @@
       "primaryKeyword": "automated flagger assistance device",
       "targetVolume": 500,
       "wordCount": 1520,
-      "notes": "MUTCD §6E.04 operational rules, STOP/SLOW vs Red/Yellow Lens types, single-lane traffic requirement, purchase vs rental economics."
+      "notes": "MUTCD \u00a76E.04 operational rules, STOP/SLOW vs Red/Yellow Lens types, single-lane traffic requirement, purchase vs rental economics."
     },
     {
       "date": "2026-04-19",
@@ -45,7 +45,7 @@
       "primaryKeyword": "barricade rental near me",
       "targetVolume": 500,
       "wordCount": 1650,
-      "notes": "Type I/II/III per MUTCD §6F.63, material comparison (steel vs plastic vs water-filled), speed/duration decision tree, provider vetting checklist."
+      "notes": "Type I/II/III per MUTCD \u00a76F.63, material comparison (steel vs plastic vs water-filled), speed/duration decision tree, provider vetting checklist."
     },
     {
       "date": "2026-04-19",
@@ -84,7 +84,7 @@
       "targetVolume": 500,
       "opportunityScore": 14.3,
       "wordCount": 1500,
-      "notes": "TACTICAL/HYBRID ARTICLE. Compares the five trailer-mounted device families on a typical work zone — arrow boards (MUTCD §6F.61, §6L.06), PCMS (§6F.60), AFADs (§6E.04), TMAs (NCHRP 350 / MASH TL-2/TL-3), and light towers (OSHA 1926.56). Includes function-vs-zone comparison table, MASH crashworthiness via the FHWA Office of Safety roadside hardware program, sizing rules by operation class and road speed, 2026 rental rate ranges, and combo-trailer tradeoffs. Internal links to /category/arrow-boards, /category/message-boards, and to arrow-board-rental-guide, automated-flagger-assistance-device-afad-guide, traffic-control-equipment-rental, traffic-control-rental-guide. No heroImage (no verified photography available)."
+      "notes": "TACTICAL/HYBRID ARTICLE. Compares the five trailer-mounted device families on a typical work zone \u2014 arrow boards (MUTCD \u00a76F.61, \u00a76L.06), PCMS (\u00a76F.60), AFADs (\u00a76E.04), TMAs (NCHRP 350 / MASH TL-2/TL-3), and light towers (OSHA 1926.56). Includes function-vs-zone comparison table, MASH crashworthiness via the FHWA Office of Safety roadside hardware program, sizing rules by operation class and road speed, 2026 rental rate ranges, and combo-trailer tradeoffs. Internal links to /category/arrow-boards, /category/message-boards, and to arrow-board-rental-guide, automated-flagger-assistance-device-afad-guide, traffic-control-equipment-rental, traffic-control-rental-guide. No heroImage (no verified photography available)."
     },
     {
       "date": "2026-04-27",
@@ -94,7 +94,7 @@
       "targetVolume": 50000,
       "opportunityScore": 50000,
       "wordCount": 1480,
-      "notes": "PILLAR ARTICLE — highest opportunity score in the new keyword set (vol 50k, comp 1). Solution-hub pattern with 8 sections: cone zone meaning + DOT public-awareness origin, why setup matters, equipment list with inline links to 28-inch-traffic-cone, 36-inch-traffic-cone, channelizing-drum, roll-up-road-work-ahead, telescoping-sign-stand, trailer-mounted-arrow-board-15, MUTCD Part 6 + OSHA 1926.200/.201, sizing table by speed (advance warning, taper, cone spacing, count), five common mistakes, rental flow. Inline research link to FHWA MUTCD Knowledge Center. /category/cones-drums in related products. No heroImage."
+      "notes": "PILLAR ARTICLE \u2014 highest opportunity score in the new keyword set (vol 50k, comp 1). Solution-hub pattern with 8 sections: cone zone meaning + DOT public-awareness origin, why setup matters, equipment list with inline links to 28-inch-traffic-cone, 36-inch-traffic-cone, channelizing-drum, roll-up-road-work-ahead, telescoping-sign-stand, trailer-mounted-arrow-board-15, MUTCD Part 6 + OSHA 1926.200/.201, sizing table by speed (advance warning, taper, cone spacing, count), five common mistakes, rental flow. Inline research link to FHWA MUTCD Knowledge Center. /category/cones-drums in related products. No heroImage."
     },
     {
       "date": "2026-04-27",
@@ -104,7 +104,7 @@
       "targetVolume": 50000,
       "opportunityScore": 602.41,
       "wordCount": 1450,
-      "notes": "PILLAR ARTICLE — head category term (vol 50k, comp 83). Solution-hub covering five barricade families: Type I, Type II, Type III, water-filled plastic, pedestrian. Includes barricade-vs-barrier distinction, MUTCD §6F.63 spec table (rails, height, use, reference), spacing/lights table by application, MASH crashworthiness via FHWA roadside hardware program, service-life expectations. Inline research link to FHWA MUTCD Knowledge Center. Internal links to type-iii-barricade, type-ii-barricade, economy-pedestrian-barricade-orange-eg, urbanite-water-filled-pedestrian-barricade, type-b-flashing-warning-light products and /category/barricades-barriers. No heroImage."
+      "notes": "PILLAR ARTICLE \u2014 head category term (vol 50k, comp 83). Solution-hub covering five barricade families: Type I, Type II, Type III, water-filled plastic, pedestrian. Includes barricade-vs-barrier distinction, MUTCD \u00a76F.63 spec table (rails, height, use, reference), spacing/lights table by application, MASH crashworthiness via FHWA roadside hardware program, service-life expectations. Inline research link to FHWA MUTCD Knowledge Center. Internal links to type-iii-barricade, type-ii-barricade, economy-pedestrian-barricade-orange-eg, urbanite-water-filled-pedestrian-barricade, type-b-flashing-warning-light products and /category/barricades-barriers. No heroImage."
     },
     {
       "date": "2026-04-27",
@@ -114,7 +114,7 @@
       "targetVolume": 50000,
       "opportunityScore": 520.83,
       "wordCount": 1480,
-      "notes": "PILLAR ARTICLE — specific subtype with consumer/event intent (vol 50k, comp 96). Solution-hub: Jersey-shape origin and engineering history, plastic-vs-concrete tradeoff matrix, five common use cases (events, parking lots, low-speed work zones, highway work, security perimeters), MASH TL-2/TL-3/TL-4 by speed, run-length sizing math with end-treatment requirement, ASTM F2656 anti-vehicle distinction. Inline research link to FHWA Office of Safety roadside hardware program. Internal links to water-filled-barrier-6ft, urbanite-water-filled-pedestrian-barricade, type-iii-barricade products and /category/barricades-barriers. No heroImage."
+      "notes": "PILLAR ARTICLE \u2014 specific subtype with consumer/event intent (vol 50k, comp 96). Solution-hub: Jersey-shape origin and engineering history, plastic-vs-concrete tradeoff matrix, five common use cases (events, parking lots, low-speed work zones, highway work, security perimeters), MASH TL-2/TL-3/TL-4 by speed, run-length sizing math with end-treatment requirement, ASTM F2656 anti-vehicle distinction. Inline research link to FHWA Office of Safety roadside hardware program. Internal links to water-filled-barrier-6ft, urbanite-water-filled-pedestrian-barricade, type-iii-barricade products and /category/barricades-barriers. No heroImage."
     },
     {
       "date": "2026-04-27",
@@ -124,7 +124,7 @@
       "targetVolume": 50000,
       "opportunityScore": 819.67,
       "wordCount": 1490,
-      "notes": "PILLAR ARTICLE — head pillar (vol 50k, comp 61). Solution-hub covering the four MUTCD sign families (regulatory/warning/guide/signal) plus work-zone orange-warning subset. Includes family color/shape/MUTCD-Part comparison table, work-zone sign sequence (W20-1 → W21-7 → W20-5 → R2-5b), Table 6F-1 sign sizing by speed, FHWA Minimum Retroreflectivity Standards (23 CFR 655). Inline research link to FHWA MUTCD Knowledge Center. Internal links to roll-up-road-work-ahead, roll-up-flagger-ahead, roll-up-one-lane-road, telescoping-sign-stand, trailer-mounted-arrow-board-15, portable-message-board-3line products and /category/signs-sign-stands. No heroImage."
+      "notes": "PILLAR ARTICLE \u2014 head pillar (vol 50k, comp 61). Solution-hub covering the four MUTCD sign families (regulatory/warning/guide/signal) plus work-zone orange-warning subset. Includes family color/shape/MUTCD-Part comparison table, work-zone sign sequence (W20-1 \u2192 W21-7 \u2192 W20-5 \u2192 R2-5b), Table 6F-1 sign sizing by speed, FHWA Minimum Retroreflectivity Standards (23 CFR 655). Inline research link to FHWA MUTCD Knowledge Center. Internal links to roll-up-road-work-ahead, roll-up-flagger-ahead, roll-up-one-lane-road, telescoping-sign-stand, trailer-mounted-arrow-board-15, portable-message-board-3line products and /category/signs-sign-stands. No heroImage."
     },
     {
       "date": "2026-04-27",
@@ -134,7 +134,7 @@
       "targetVolume": 50000,
       "opportunityScore": 531.91,
       "wordCount": 1500,
-      "notes": "PILLAR ARTICLE — pedestrian-side device family (vol 50k, comp 94). Absorbs 'pedestrian crossing signs' (50k) and 'pedestrian crossing signal' (50k) as secondary keywords. Solution-hub covering W11-2, S1-1, W11-15, R1-6, R9-9/R9-10/R9-11, fluorescent yellow-green sheeting per §2A.11, RRFB and PHB beacon thresholds, ADA / PROWAG TPAR requirements (48-inch clear width, 5% grade, detectable edges), Type IX/XI prismatic sheeting requirement. Inline research link to FHWA MUTCD Knowledge Center. Internal links to economy-pedestrian-barricade-orange-eg, urbanite-water-filled-pedestrian-barricade, telescoping-sign-stand, galvanized-crowd-control-fence-panel-6x10 products and /category/pedestrian-control. No heroImage."
+      "notes": "PILLAR ARTICLE \u2014 pedestrian-side device family (vol 50k, comp 94). Absorbs 'pedestrian crossing signs' (50k) and 'pedestrian crossing signal' (50k) as secondary keywords. Solution-hub covering W11-2, S1-1, W11-15, R1-6, R9-9/R9-10/R9-11, fluorescent yellow-green sheeting per \u00a72A.11, RRFB and PHB beacon thresholds, ADA / PROWAG TPAR requirements (48-inch clear width, 5% grade, detectable edges), Type IX/XI prismatic sheeting requirement. Inline research link to FHWA MUTCD Knowledge Center. Internal links to economy-pedestrian-barricade-orange-eg, urbanite-water-filled-pedestrian-barricade, telescoping-sign-stand, galvanized-crowd-control-fence-panel-6x10 products and /category/pedestrian-control. No heroImage."
     },
     {
       "date": "2026-04-20",
@@ -297,6 +297,61 @@
       "targetVolume": 500,
       "wordCount": 1300,
       "notes": "Registered in articles.ts during audit 2026-04-28 (was missing from registry)."
+    },
+    {
+      "date": "2026-05-03",
+      "slug": "pedestrian-signs-pillar-guide",
+      "url": "/blog/pedestrian-signs-pillar-guide",
+      "primaryKeyword": "pedestrian signs",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 17.91,
+      "wordCount": 1450,
+      "commit": "5c387d6"
+    },
+    {
+      "date": "2026-05-03",
+      "slug": "construction-caution-tape-buying-guide",
+      "url": "/blog/construction-caution-tape-buying-guide",
+      "primaryKeyword": "construction caution tape",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 16.02,
+      "wordCount": 1300,
+      "commit": "bcafe6d"
+    },
+    {
+      "date": "2026-05-03",
+      "slug": "traffic-safety-stores-buying-guide",
+      "url": "/blog/traffic-safety-stores-buying-guide",
+      "primaryKeyword": "traffic safety stores",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 36.0,
+      "wordCount": 1500,
+      "commit": "5519b5b"
+    },
+    {
+      "date": "2026-05-03",
+      "slug": "what-are-barricade-covers",
+      "url": "/blog/what-are-barricade-covers",
+      "primaryKeyword": "barricade covers",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 16.88,
+      "wordCount": 1200,
+      "commit": "2a36760"
+    },
+    {
+      "date": "2026-05-03",
+      "slug": "no-parking-cones-guide",
+      "url": "/blog/no-parking-cones-guide",
+      "primaryKeyword": "no parking cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 10.92,
+      "wordCount": 1350,
+      "commit": "65305f2"
     }
   ]
 }
