@@ -112,7 +112,10 @@ import { articleTrafficSafetyStoresBuyingGuide } from './articles/traffic-safety
 
 import { articleWhatAreBarricadeCovers } from './articles/what-are-barricade-covers'
 
+import { articleNoParkingConesGuide } from './articles/no-parking-cones-guide'
+
 export const articles: Article[] = [
+  articleNoParkingConesGuide,
   articleWhatAreBarricadeCovers,
   articleTrafficSafetyStoresBuyingGuide,
   articleConstructionCautionTapeBuyingGuide,
