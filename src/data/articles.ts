@@ -114,11 +114,13 @@ import { articleWhatAreBarricadeCovers } from './articles/what-are-barricade-cov
 
 import { articleNoParkingConesGuide } from './articles/no-parking-cones-guide'
 
+import { articleTrafficSignsForSaleBuyingGuide } from './articles/traffic-signs-for-sale-buying-guide'
 import { articleSafetyConesNearMeNj } from './articles/safety-cones-near-me-nj'
 import { articleLargeTrafficConesBuyingGuide } from './articles/large-traffic-cones-buying-guide'
 import { articleHighwayConesGuide } from './articles/highway-cones-guide'
 
 export const articles: Article[] = [
+  articleTrafficSignsForSaleBuyingGuide,
   articleSafetyConesNearMeNj,
   articleLargeTrafficConesBuyingGuide,
   articleHighwayConesGuide,
