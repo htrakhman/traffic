@@ -352,6 +352,61 @@
       "bidHigh": 10.92,
       "wordCount": 1350,
       "commit": "65305f2"
+    },
+    {
+      "date": "2026-05-05",
+      "slug": "highway-cones-guide",
+      "url": "/blog/highway-cones-guide",
+      "primaryKeyword": "highway cones",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 10.99,
+      "wordCount": 1500,
+      "commit": "87549dd"
+    },
+    {
+      "date": "2026-05-05",
+      "slug": "large-traffic-cones-buying-guide",
+      "url": "/blog/large-traffic-cones-buying-guide",
+      "primaryKeyword": "large traffic cones",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 6.74,
+      "wordCount": 1400,
+      "commit": "f7e9bab"
+    },
+    {
+      "date": "2026-05-05",
+      "slug": "safety-cones-near-me-nj",
+      "url": "/blog/safety-cones-near-me-nj",
+      "primaryKeyword": "safety cones near me",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 8.81,
+      "wordCount": 1350,
+      "commit": "bb433d5"
+    },
+    {
+      "date": "2026-05-05",
+      "slug": "traffic-signs-for-sale-buying-guide",
+      "url": "/blog/traffic-signs-for-sale-buying-guide",
+      "primaryKeyword": "traffic signs for sale",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 5.32,
+      "wordCount": 1450,
+      "commit": "3b21fae"
+    },
+    {
+      "date": "2026-05-05",
+      "slug": "red-cones-explained",
+      "url": "/blog/red-cones-explained",
+      "primaryKeyword": "red cones",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 8.76,
+      "wordCount": 1300,
+      "commit": "8a6b4fa"
     }
   ]
 }
