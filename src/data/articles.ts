@@ -114,9 +114,11 @@ import { articleWhatAreBarricadeCovers } from './articles/what-are-barricade-cov
 
 import { articleNoParkingConesGuide } from './articles/no-parking-cones-guide'
 
+import { articleLargeTrafficConesBuyingGuide } from './articles/large-traffic-cones-buying-guide'
 import { articleHighwayConesGuide } from './articles/highway-cones-guide'
 
 export const articles: Article[] = [
+  articleLargeTrafficConesBuyingGuide,
   articleHighwayConesGuide,
   articleNoParkingConesGuide,
   articleWhatAreBarricadeCovers,
