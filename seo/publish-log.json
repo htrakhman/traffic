@@ -407,6 +407,56 @@
       "bidHigh": 8.76,
       "wordCount": 1300,
       "commit": "8a6b4fa"
+    },
+    {
+      "date": "2026-05-06",
+      "slug": "traffic-safety-supply-buying-guide",
+      "url": "/blog/traffic-safety-supply-buying-guide",
+      "primaryKeyword": "traffic safety supply",
+      "targetVolume": 5000,
+      "wordCount": 1300,
+      "commit": "7a4eafe",
+      "notes": "Daily SEO autopublish 2026-05-06 (iter 1/5)."
+    },
+    {
+      "date": "2026-05-06",
+      "slug": "small-traffic-cones-buying-guide",
+      "url": "/blog/small-traffic-cones-buying-guide",
+      "primaryKeyword": "small cones",
+      "targetVolume": 5000,
+      "wordCount": 1100,
+      "commit": "f3ed1d0",
+      "notes": "Daily SEO autopublish 2026-05-06 (iter 2/5)."
+    },
+    {
+      "date": "2026-05-06",
+      "slug": "traffic-safety-signs-buying-guide",
+      "url": "/blog/traffic-safety-signs-buying-guide",
+      "primaryKeyword": "traffic safety signs",
+      "targetVolume": 500,
+      "wordCount": 1200,
+      "commit": "107c7c6",
+      "notes": "Daily SEO autopublish 2026-05-06 (iter 3/5)."
+    },
+    {
+      "date": "2026-05-06",
+      "slug": "pedestrian-barriers-guide",
+      "url": "/blog/pedestrian-barriers-guide",
+      "primaryKeyword": "pedestrian barriers",
+      "targetVolume": 500,
+      "wordCount": 1150,
+      "commit": "11dacef",
+      "notes": "Daily SEO autopublish 2026-05-06 (iter 4/5)."
+    },
+    {
+      "date": "2026-05-06",
+      "slug": "plastic-jersey-barriers-vs-concrete",
+      "url": "/blog/plastic-jersey-barriers-vs-concrete",
+      "primaryKeyword": "plastic jersey barriers",
+      "targetVolume": 500,
+      "wordCount": 1250,
+      "commit": "672e7b3",
+      "notes": "Daily SEO autopublish 2026-05-06 (iter 5/5)."
     }
   ]
 }
