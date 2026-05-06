@@ -119,8 +119,10 @@ import { articleTrafficSignsForSaleBuyingGuide } from './articles/traffic-signs-
 import { articleSafetyConesNearMeNj } from './articles/safety-cones-near-me-nj'
 import { articleLargeTrafficConesBuyingGuide } from './articles/large-traffic-cones-buying-guide'
 import { articleHighwayConesGuide } from './articles/highway-cones-guide'
+import { articleTrafficSafetySupplyBuyingGuide } from './articles/traffic-safety-supply-buying-guide'
 
 export const articles: Article[] = [
+  articleTrafficSafetySupplyBuyingGuide,
   articleRedConesExplained,
   articleTrafficSignsForSaleBuyingGuide,
   articleSafetyConesNearMeNj,
