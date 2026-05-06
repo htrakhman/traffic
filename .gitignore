@@ -21,6 +21,7 @@ vite.config.ts.timestamp-*.mjs
 # Local tooling
 .claude
 .cache
+public/.tss-price-cache.json
 
 # Python
 __pycache__/

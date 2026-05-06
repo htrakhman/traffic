@@ -5,15 +5,113 @@
  * public/tss-catalog.json with purchase volume tiers (supplier ref ×1.5 at checkout).
  */
 import { createHash } from 'node:crypto'
-import { writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs'
+import { writeFileSync, mkdirSync, renameSync, unlinkSync, existsSync, readFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const SITEMAP = 'https://www.trafficsafetystore.com/sitemap.xml'
 const OUT = fileURLToPath(new URL('../public/tss-catalog.json', import.meta.url))
+const CACHE = fileURLToPath(new URL('../public/.tss-price-cache.json', import.meta.url))
 const SUPPLIER = 'Traffic Safety Store'
 
-/** One open-ended purchase tier — `tssRetail` is an estimated TSS shelf price; stored ref divides by 1.5 to match `singleTierFromRetailUnit` so app-side ×1.95 yields TSS×1.30 (30% margin). */
+const FETCH_DELAY_MS = 350
+const PRICE_FETCH_TIMEOUT_MS = 12_000
+const MAX_RETRIES = 2
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms))
+}
+
+function loadPriceCache() {
+  if (existsSync(CACHE)) {
+    try { return JSON.parse(readFileSync(CACHE, 'utf8')) } catch { /* ignore */ }
+  }
+  return {}
+}
+
+function savePriceCache(cache) {
+  writeFileSync(CACHE, JSON.stringify(cache), 'utf8')
+}
+
+/**
+ * Parse the TSS "Volume Pricing:" table from a product page HTML.
+ * Returns { volumePriceTiers } or null if the table is absent / unparseable.
+ */
+function parseVolumePricingFromHtml(html) {
+  const vpIdx = html.indexOf('Volume Pricing:')
+  if (vpIdx === -1) return null
+  const tableStart = html.indexOf('<table', vpIdx)
+  if (tableStart === -1) return null
+  const tableEnd = html.indexOf('</table>', tableStart)
+  if (tableEnd === -1) return null
+  const tableHtml = html.slice(tableStart, tableEnd + 8)
+
+  const theadMatch = tableHtml.match(/<thead[^>]*>([\s\S]*?)<\/thead>/i)
+  if (!theadMatch) return null
+  // "Quantity<br /> 1-14"  or  "Quantity<br /> 50+"
+  const qtyRe = /Quantity<br\s*\/?>\s*(\d+)(?:\s*[-–]\s*(\d+)|\+)/gi
+  const ranges = []
+  let qm
+  while ((qm = qtyRe.exec(theadMatch[1]))) {
+    ranges.push({ min: parseInt(qm[1], 10), max: qm[2] ? parseInt(qm[2], 10) : null })
+  }
+  if (!ranges.length) return null
+
+  const tbodyMatch = tableHtml.match(/<tbody[^>]*>([\s\S]*?)<\/tbody>/i)
+  if (!tbodyMatch) return null
+  const priceRe = /\$(\d+\.\d{2})/g
+  const allPrices = []
+  let pm
+  while ((pm = priceRe.exec(tbodyMatch[1]))) allPrices.push(parseFloat(pm[1]))
+  if (!allPrices.length) return null
+
+  const n = ranges.length
+  const rows = []
+  for (let i = 0; i + n <= allPrices.length; i += n) rows.push(allPrices.slice(i, i + n))
+  if (!rows.length) return null
+
+  // TSS sometimes shows original (black) and sale (orange) rows; pick lowest-sum row = current active price
+  const bestRow = rows.reduce((best, row) =>
+    row.reduce((s, p) => s + p, 0) < best.reduce((s, p) => s + p, 0) ? row : best,
+  )
+
+  return {
+    volumePriceTiers: ranges.map((range, i) => ({
+      minQty: range.min,
+      maxQty: range.max,
+      supplierReferenceUnitPrice: Math.round((bestRow[i] / 1.5) * 100) / 100,
+    })),
+  }
+}
+
+/**
+ * Fetch a TSS product page and extract real volume price tiers.
+ * Returns { volumePriceTiers } or null on failure (caller falls back to category estimate).
+ */
+async function fetchProductPriceTiers(url) {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const controller = new AbortController()
+      const timer = setTimeout(() => controller.abort(), PRICE_FETCH_TIMEOUT_MS)
+      const res = await fetch(url, {
+        headers: { 'user-agent': 'TrafficControlRental-catalog-sync/1.0' },
+        signal: controller.signal,
+      })
+      clearTimeout(timer)
+      if (res.status === 429) { await sleep(2000 * (attempt + 1)); continue }
+      if (!res.ok) return null
+      return parseVolumePricingFromHtml(await res.text())
+    } catch {
+      if (attempt < MAX_RETRIES) await sleep(1000 * (attempt + 1))
+    }
+  }
+  return null
+}
+
+/**
+ * Fallback: one open-ended purchase tier from a category-level TSS estimate.
+ * Stored ref divides by 1.5; app-side ×2.025 yields TSS×1.35 (35% markup).
+ */
 function purchaseTiersFromRefDaily(tssRetail) {
   const ref = Math.round((tssRetail / 1.5) * 100) / 100
   return {
@@ -386,6 +484,10 @@ async function main() {
   }
   console.log('Found', shopUrls.length, '/shop/ URLs')
 
+  const priceCache = loadPriceCache()
+  let cacheHits = 0
+  let cacheMisses = 0
+
   const slugUsed = new Set()
   const seenPaths = new Set()
   const products = []
@@ -405,7 +507,22 @@ async function main() {
     const skuRaw = decodeURIComponent(parts.slice(2).join('/'))
 
     const { categoryId, categorySlug, refDaily } = classify(slugSeg)
-    const pricing = purchaseTiersFromRefDaily(refDaily)
+
+    let pricing
+    if (priceCache[url]) {
+      pricing = priceCache[url]
+      cacheHits++
+    } else {
+      await sleep(FETCH_DELAY_MS)
+      const scraped = await fetchProductPriceTiers(url)
+      pricing = scraped ?? purchaseTiersFromRefDaily(refDaily)
+      priceCache[url] = pricing
+      cacheMisses++
+      if (cacheMisses % 100 === 0) {
+        savePriceCache(priceCache)
+        console.log(`  …${products.length + 1} processed, ${cacheMisses} fetched, ${cacheHits} cached`)
+      }
+    }
 
     let baseSlug = slugSeg.replace(/[^a-z0-9-]+/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').toLowerCase()
     if (!baseSlug) baseSlug = 'item'
@@ -464,6 +581,9 @@ async function main() {
   }
 
   attachVariantGroups(products)
+
+  savePriceCache(priceCache)
+  console.log(`Price cache: ${cacheHits} hits, ${cacheMisses} fetched (${Object.keys(priceCache).length} total stored)`)
 
   mkdirSync(dirname(OUT), { recursive: true })
   const tmp = `${OUT}.tmp`

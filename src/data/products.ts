@@ -10,11 +10,11 @@ function singleTierFromRetailUnit(retailUnit: number): VolumePriceTier[] {
   return [{ minQty: 1, maxQty: null, supplierReferenceUnitPrice: ref }]
 }
 
-/** TSS-style volume bands (shelf prices $24.85 / $23.25 / $21.85 on comparable 28" cone listing). */
+/** TSS volume bands for 28" orange 7 lb cone (C28S): $20.90 / $19.15 / $17.45. */
 const cone28TssVolumeTiers: VolumePriceTier[] = [
-  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(20.9 / RETAIL_REFERENCE_DIVISOR) },
-  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(19.55 / RETAIL_REFERENCE_DIVISOR) },
-  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(18.4 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(20.90 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(19.15 / RETAIL_REFERENCE_DIVISOR) },
+  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(17.45 / RETAIL_REFERENCE_DIVISOR) },
 ]
 
 /**
@@ -144,7 +144,7 @@ const rawCuratedProducts: Product[] = [
     description: 'JBC 36" 10 lb orange injection-molded cone with 6" & 4" high-intensity reflective collars',
     longDescription:
       'Exact product: JBC CR36SRC64, 36" 10 lb orange traffic cone with black recycled rubber base and two molded-in high-intensity reflective collars (6" + 4"). Injection-molded for durability. Over 50% post-consumer recycled materials. Meets MUTCD, FDOT, FHWA, NFPA, and NCHRP-350 crash test standards. Required by many state DOTs for 55+ mph work zones.',
-    volumePriceTiers: singleTierFromRetailUnit(39.45),
+    volumePriceTiers: singleTierFromRetailUnit(22.25),
     unit: 'each',
     imageUrl: cone36img,
     images: [cone36img, cone28img, drumImg],
@@ -436,7 +436,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Cortina tri-pod steel sign stand, MPN 07-822, for 36" or 48" roll-up or rigid signs',
     longDescription:
       'Exact product: Cortina TRI-POD-STD (MPN 07-822). Economical, versatile powder-coated steel tripod stand designed for 36" or 48" rigid or roll-up traffic signs. Compact, lightweight, and folds flat for storage. Three-leg configuration for stable deployment on varied terrain.',
-    volumePriceTiers: singleTierFromRetailUnit(66.9),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 10, supplierReferenceUnitPrice: roundMoney(66.90 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 11, maxQty: 24, supplierReferenceUnitPrice: roundMoney(60.55 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 25, maxQty: null, supplierReferenceUnitPrice: roundMoney(55.40 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: signStandImg,
     images: [signStandImg, signRWAimg, signFLGimg],
@@ -581,7 +585,11 @@ const rawCuratedProducts: Product[] = [
     description: '60" tall MUTCD Type III break-away barricade with three 8 ft EG reflective plastic rails',
     longDescription:
       'Exact product: T3-BA-EG-8 (MPN 313-ASBL). 60" tall MUTCD Type III barricade with break-away fold-flat design. Three 8-foot plastic rails with engineer grade (EG) orange and white reflective sheeting. NCHRP-350 accepted. Accommodates two barricade flashers. Complete assembly with plastic uprights, feet, and hardware.',
-    volumePriceTiers: singleTierFromRetailUnit(375),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 9, supplierReferenceUnitPrice: roundMoney(375 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: 19, supplierReferenceUnitPrice: roundMoney(352 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 20, maxQty: null, supplierReferenceUnitPrice: roundMoney(331 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: barT3img,
     images: [barT3img, barT2img, barWFimg],
@@ -656,7 +664,11 @@ const rawCuratedProducts: Product[] = [
     description: '45"×24" folding plastic MUTCD Type II barricade with high-intensity reflective sheeting',
     longDescription:
       'Exact product: TYPE 2HI (MPN 37408-FHIP). 45" tall × 24" wide folding plastic Type II barricade with high-intensity (HI) reflective sheeting. Impact-resistant polyethylene, stackable with molded lugs. ~12 lbs. Commonly used for lane closures, channelization, and temporary closures where traffic may still pass.',
-    volumePriceTiers: singleTierFromRetailUnit(90.6),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(90.60 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(83.15 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(76.60 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: barT2img,
     images: [barT2img, barT3img, barWFimg],
@@ -727,7 +739,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Yodock 2001MB HDPE water-filled construction barrier, 72"L × 32"H × 18"W, NCHRP-350',
     longDescription:
       'Exact product: Yodock 2001MBORG (MPN 148002B). Orange HDPE water-filled construction barrier. 72"L × 32"H × 18"W. Ships at 85 lbs empty; weighs ~900 lbs when filled with water. Links together for any run length. Meets NCHRP Report 350 standards. Compatible with optional fence panel toppers.',
-    volumePriceTiers: singleTierFromRetailUnit(509.3),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 25, supplierReferenceUnitPrice: roundMoney(509.30 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 26, maxQty: 74, supplierReferenceUnitPrice: roundMoney(470.55 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 75, maxQty: null, supplierReferenceUnitPrice: roundMoney(436.10 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: barWFimg,
     images: [barWFimg, barT3img, barT2img],
@@ -802,7 +818,11 @@ const rawCuratedProducts: Product[] = [
     description: '3-volt D-cell LED amber barricade flasher, photo-cell controlled, MUTCD Type B',
     longDescription:
       'Exact product: OEM 3VOLT LED (MPN 99-02006). Amber 3-volt D-cell LED barricade flasher. Photo-cell activated — automatically turns off during daylight to conserve battery. Two modes: Steady-On or Flash. Mounts to barricades, drums, cones, and sign stands. Made in USA. Ships same day.',
-    volumePriceTiers: singleTierFromRetailUnit(39.2),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(39.20 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(36.00 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(32.95 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, flareImg],
@@ -877,7 +897,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Six Orion 30-minute waxed road flares in nylon carrying case with orange safety vest',
     longDescription:
       'Exact product: Orion ORION6030 (MPN 6030). Six-pack of Orion 30-minute waxed road flares. Includes high-visibility red nylon carrying case and orange safety vest. Waxed construction is weather-resistant — works in fog, rain, and snow. DOT approved. Visible day or night. Standard for work zone and emergency delineation where open-flame flares are permitted.',
-    volumePriceTiers: singleTierFromRetailUnit(24.5),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 4, supplierReferenceUnitPrice: roundMoney(24.50 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 5, maxQty: 9, supplierReferenceUnitPrice: roundMoney(22.75 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: null, supplierReferenceUnitPrice: roundMoney(21.00 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'set',
     imageUrl: flareImg,
     images: [flareImg, flasherImg],
@@ -946,7 +970,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Solar-charged amber LED barricade light with dusk-to-dawn operation for drums, barricades, and sign stands',
     longDescription:
       'Exact product line: solar-assist LED barricade warning light (amber lens). High-output LEDs for MUTCD nighttime conspicuity on channelizing devices. Integrated photocell, sealed housing, and rechargeable battery pack reduce D-cell swaps vs. traditional flashers. Mounts to Type I–III barricades, drums, and compatible sign hardware.',
-    volumePriceTiers: singleTierFromRetailUnit(148),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(148.00 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(135.40 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(124.75 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, drumImg, barT2img],
@@ -1017,7 +1045,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Low-profile water-filled pedestrian barricade for crowd lines, festivals, and sidewalk closures',
     longDescription:
       'Exact product family: Urbanite-style water-filled pedestrian barricade (white shell, interlocking feet). Ballast with water on site for stability without heavy steel barriers. Common for sidewalk detours, outdoor retail queues, stadium ingress, and short-term pedestrian channelization adjacent to low-speed traffic.',
-    volumePriceTiers: singleTierFromRetailUnit(160),
+    volumePriceTiers: singleTierFromRetailUnit(136),
     unit: 'each',
     imageUrl: urbanitePedImg,
     images: [urbanitePedImg, barWFimg, barT2img],
@@ -1278,7 +1306,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Six-foot recycled rubber wheel stop with galvanized spikes for asphalt installs',
     longDescription:
       'Exact product line: commercial recycled rubber parking block, 6 ft length, blue with pre-drilled galvanized spike holes. Low-profile design for cars and light trucks in lots and garages. Spikes anchor into asphalt; alternate hardware available for concrete (request in quote).',
-    volumePriceTiers: singleTierFromRetailUnit(35.7),
+    volumePriceTiers: singleTierFromRetailUnit(54.40),
     unit: 'each',
     imageUrl: parkingBlueImg,
     images: [parkingBlueImg, cone28img, barT2img],
@@ -1341,7 +1369,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Four-foot recycled rubber wheel stop with molded yellow chevron or stripe visibility',
     longDescription:
       'Exact product line: 4 ft recycled rubber wheel stop with high-visibility yellow stripe or chevron molding. Shorter length fits compact stalls and angled parking. Pre-drilled for mechanical anchoring; specify asphalt vs. concrete in your quote.',
-    volumePriceTiers: singleTierFromRetailUnit(43.35),
+    volumePriceTiers: singleTierFromRetailUnit(36.80),
     unit: 'each',
     imageUrl: parkingBlueImg,
     images: [parkingBlueImg, parkingBlueImg, cone28img],
@@ -1405,7 +1433,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Modular rubber speed hump middle section with asphalt spikes for traffic calming',
     longDescription:
       'Exact product line: economy modular rubber speed hump middle section with integrated cable channels (model dependent) and galvanized spikes for asphalt. Combine with end caps to create full-width humps on private drives, logistics yards, and temporary lot controls.',
-    volumePriceTiers: singleTierFromRetailUnit(58.1),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 10, supplierReferenceUnitPrice: roundMoney(58.10 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 11, maxQty: 24, supplierReferenceUnitPrice: roundMoney(53.75 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 25, maxQty: null, supplierReferenceUnitPrice: roundMoney(49.90 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: speedHumpImg,
     images: [speedHumpImg, parkingBlueImg, cone28img],
@@ -1467,7 +1499,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Six-foot portable rubber speed bump for temporary lot and lane speed reduction',
     longDescription:
       'Exact product line: 6 ft portable rubber speed bump kit with carry handles and cat’s-eye reflectors (model dependent). Designed for repeated deploy/strike on lots where permanent asphalt milling is not allowed. Anchor with spikes or lag bolts per substrate.',
-    volumePriceTiers: singleTierFromRetailUnit(267.05),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 4, supplierReferenceUnitPrice: roundMoney(329.65 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 5, maxQty: 9, supplierReferenceUnitPrice: roundMoney(294.55 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: null, supplierReferenceUnitPrice: roundMoney(267.05 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: speedHumpImg,
     images: [speedHumpImg, barT2img, cone28img],
@@ -1531,7 +1567,7 @@ const rawCuratedProducts: Product[] = [
     description: 'ANSI/ISEA 107 Class 2 mesh vest with contrasting trim for roadway work',
     longDescription:
       'Exact product line: ANSI/ISEA 107 Class 2 mesh safety vest, fluorescent orange with contrasting silver reflective trim. Breathable mesh for warm climates. Sized for roadway workers in 25 mph+ applications where Class 2 minimum applies—confirm your state hi-vis rules.',
-    volumePriceTiers: singleTierFromRetailUnit(15.5),
+    volumePriceTiers: singleTierFromRetailUnit(13.25),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, cone36img, signFLGimg],
@@ -1589,7 +1625,7 @@ const rawCuratedProducts: Product[] = [
     description: 'Class 3 hi-vis surveyors vest with expanded reflective for high-speed or complex backgrounds',
     longDescription:
       'Exact product line: ANSI/ISEA 107 Class 3 surveyors vest, fluorescent lime with silver reflective stripes on torso and shoulders. Additional background material for complex visual environments. Common for highway work, night operations, and layouts requiring maximum conspicuity.',
-    volumePriceTiers: singleTierFromRetailUnit(23.25),
+    volumePriceTiers: singleTierFromRetailUnit(19.95),
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, vestMeshImg, signRWAimg],
@@ -1653,7 +1689,7 @@ const rawCuratedProducts: Product[] = [
     description: 'ANSI Z89.1 Type I safety helmet with wheel ratchet suspension and vented shell',
     longDescription:
       'Exact product line: Kask Zenith X2 safety helmet, vented ABS shell, wheel ratchet harness, chin strap included. ANSI Z89.1 Type I for top-of-head protection. Popular upgrade from hard hats for crews wanting improved retention, accessory mounts, and comfort padding.',
-    volumePriceTiers: singleTierFromRetailUnit(164.95),
+    volumePriceTiers: singleTierFromRetailUnit(149.95),
     unit: 'each',
     imageUrl: kaskZenithImg,
     images: [kaskZenithImg, vestMeshImg, cone28img],
@@ -1777,7 +1813,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Polycarbonate wraparound safety glasses with anti-fog and UV400 protection',
     longDescription:
       'Exact product line: polycarbonate wraparound safety glasses, clear lens, anti-fog coating (model dependent), UV400 protection, scratch-resistant hardcoat. For dust, wind, and incidental impact hazards during daytime flagging and utility work.',
-    volumePriceTiers: singleTierFromRetailUnit(15.75),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 9, supplierReferenceUnitPrice: roundMoney(9.15 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: 99, supplierReferenceUnitPrice: roundMoney(7.75 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 100, maxQty: null, supplierReferenceUnitPrice: roundMoney(6.70 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: vestMeshImg,
     images: [vestMeshImg, kaskZenithImg, signStandImg],
@@ -1841,7 +1881,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Case of 12 aerosol marking paint cans for layout, utility locate, and temp marks',
     longDescription:
       'Exact product line: Aervoe-style water-based construction marking paint, case of 12 aerosol cans. Bright colors for survey layout, utility locates, and short-duration pavement marks that wear with traffic. VOC and color availability vary by SKU—specify color in quote.',
-    volumePriceTiers: singleTierFromRetailUnit(65.5),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 4, supplierReferenceUnitPrice: roundMoney(65.50 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 5, maxQty: 9, supplierReferenceUnitPrice: roundMoney(60.50 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: null, supplierReferenceUnitPrice: roundMoney(56.00 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'case',
     imageUrl: aervoePaintImg,
     images: [aervoePaintImg, cone28img, speedHumpImg],
@@ -1967,7 +2011,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Interlocking steel crowd control fence panel with bridge feet for events and sites',
     longDescription:
       'Exact product line: galvanized steel crowd control fence panel, ~6 ft × 10 ft mesh panel with tubular frame and interlocking hooks. Bridge feet distribute load on turf, asphalt, and concrete. Common for concerts, parades, construction laydown yards, and secured pedestrian corridors.',
-    volumePriceTiers: singleTierFromRetailUnit(112.75),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(112.75 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(103.50 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(95.50 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: fenceBridgeImg,
     images: [fenceBridgeImg, urbanitePedImg, barWFimg],
@@ -2029,7 +2077,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Two-channel drop-over cable guard for hoses and cords up to ~2 in OD in work zones',
     longDescription:
       'Exact product line: economy two-channel drop-over cable protector, black lid with yellow lid hinges / sides (brand varies). Protects extension cords, ethernet, and small hoses from cart and vehicle crush in lots and indoor venues. Modular end caps available for tapered entries.',
-    volumePriceTiers: singleTierFromRetailUnit(76.45),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 9, supplierReferenceUnitPrice: roundMoney(76.90 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: 19, supplierReferenceUnitPrice: roundMoney(67.85 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 20, maxQty: null, supplierReferenceUnitPrice: roundMoney(60.40 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: fenceBridgeImg,
     images: [fenceBridgeImg, parkingBlueImg, speedHumpImg],
@@ -2093,7 +2145,11 @@ const rawCuratedProducts: Product[] = [
     description: 'ANSI Z359.11-style full-body harness with hi-vis webbing and pass-through buckles',
     longDescription:
       'Exact product line: Radians-style hi-vis full-body harness with dorsal D-ring, pass-through leg and chest buckles, and breakaway / friction chest styles (SKU dependent). For fall arrest systems when paired with an approved anchor, lanyard, and competent person inspection per OSHA 1926 Subpart M.',
-    volumePriceTiers: singleTierFromRetailUnit(12),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 9, supplierReferenceUnitPrice: roundMoney(9.35 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: 24, supplierReferenceUnitPrice: roundMoney(8.95 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 25, maxQty: null, supplierReferenceUnitPrice: roundMoney(8.40 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: harnessImg,
     images: [harnessImg, vestMeshImg, kaskZenithImg],
@@ -2219,7 +2275,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Sleeve-style HDPE bollard cover for steel pipe bollards in lots and storefronts',
     longDescription:
       'Exact product line: tall polyethylene bollard cover, ~5 in inner diameter × 52 in height, blue HDPE shell. Slips over installed steel pipe bollards to improve visibility and reduce maintenance painting. UV-stabilized resin for outdoor lots.',
-    volumePriceTiers: singleTierFromRetailUnit(32.85),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(32.85 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(29.40 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(26.10 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: bollardCoverImg,
     images: [bollardCoverImg, parkingBlueImg, cone28img],
@@ -2281,7 +2341,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Heavy urethane wheel chock with grip base for service trucks and trailers on grade',
     longDescription:
       'Exact product line: heavy urethane wheel chock, truck/trailer class, aggressive grip base for asphalt and concrete. For DOT-style chocking of unattended trailers on shallow grades when paired with proper procedures and secondary brakes.',
-    volumePriceTiers: singleTierFromRetailUnit(101.95),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 4, supplierReferenceUnitPrice: roundMoney(76.45 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 5, maxQty: 9, supplierReferenceUnitPrice: roundMoney(72.70 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 10, maxQty: null, supplierReferenceUnitPrice: roundMoney(68.85 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: bollardCoverImg,
     images: [bollardCoverImg, parkingBlueImg, drumImg],
@@ -2345,7 +2409,11 @@ const rawCuratedProducts: Product[] = [
     description: 'Spring-return delineator post with high-intensity sheeting for bike lanes and gore markings',
     longDescription:
       'Exact product line: flexible surface-mounted delineator post, ~42 in height, white post with high-intensity reflective bands. Spring-return base reduces damage from occasional tire strikes while keeping lane edge cues visible for bikes and low-speed traffic.',
-    volumePriceTiers: singleTierFromRetailUnit(25),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(45.15 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(41.10 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(37.85 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: drumImg,
     images: [drumImg, cone36img, flareImg],
@@ -2407,7 +2475,11 @@ const rawCuratedProducts: Product[] = [
     description: '21-inch amber LED traffic wand with steady, flash, and flashlight modes for flagging',
     longDescription:
       'Exact product line: 21 in amber LED traffic wand with wrist lanyard, steady / flash modes, and flashlight tip (SKU dependent). For night flagging, tapers, and parking direction where illuminated paddles improve motorist recognition beyond handheld flashlights alone.',
-    volumePriceTiers: singleTierFromRetailUnit(25),
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: roundMoney(26.30 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: roundMoney(21.90 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 50, maxQty: null, supplierReferenceUnitPrice: roundMoney(19.65 / RETAIL_REFERENCE_DIVISOR) },
+    ],
     unit: 'each',
     imageUrl: flasherImg,
     images: [flasherImg, flareImg, vestMeshImg],
@@ -2459,6 +2531,58 @@ const rawCuratedProducts: Product[] = [
     dimensions: '21 in length',
     metaTitle: titleBrand('Buy LED Traffic Wands | 21" Amber'),
     metaDescription: 'Buy 21 in amber LED traffic wands with flash and flashlight modes for night flagging and parking control.',
+  },
+  {
+    id: 'prod-40',
+    categoryId: 'cat-17',
+    categorySlug: 'flares-markers-wands-flags',
+    name: 'Orion 15-Minute Road Flares — Case of 72',
+    slug: 'road-flares-case-72',
+    description: 'Case of 72 Orion 15-minute waxed road flares — bulk supply for work zones and emergency crews',
+    longDescription:
+      'Exact product: Orion ORION0715 (SKU ORION0715). Full case of 72 Orion 15-minute waxed road flares. DOT-approved, weather-resistant construction. Industry-standard for sustained work-zone delineation, emergency detours, and contractor stockpile. Ships as sealed case of 72.',
+    volumePriceTiers: [
+      { minQty: 1, maxQty: 10, supplierReferenceUnitPrice: roundMoney(153.55 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 11, maxQty: 24, supplierReferenceUnitPrice: roundMoney(141.30 / RETAIL_REFERENCE_DIVISOR) },
+      { minQty: 25, maxQty: null, supplierReferenceUnitPrice: roundMoney(131.10 / RETAIL_REFERENCE_DIVISOR) },
+    ],
+    unit: 'case',
+    imageUrl: flareImg,
+    images: [flareImg],
+    specs: {
+      Brand: 'Orion',
+      SKU: 'ORION0715',
+      Quantity: '72 flares per case',
+      'Burn Time': '15 minutes each',
+      Construction: 'Waxed — weather resistant',
+      Compliance: 'DOT approved',
+    },
+    features: [
+      '72 flares per sealed case',
+      '15-minute burn time per flare',
+      'Weather-resistant waxed construction',
+      'DOT approved for work zones',
+      'Volume discounts at 11+ and 25+ cases',
+    ],
+    compliance: ['DOT approved'],
+    useCases: [
+      { title: 'Work Zone Delineation', description: 'Contractor bulk supply for sustained lane closures and detours.' },
+      { title: 'Emergency Stockpile', description: 'Keep cases on hand for rapid deployment at incident scenes.' },
+    ],
+    faqs: [
+      { question: 'How many flares per case?', answer: '72 flares per sealed case.' },
+      { question: 'What is the burn time?', answer: '15 minutes per flare — sufficient for most short-duration work zone deployments.' },
+    ],
+    tags: ['flare', 'road flare', 'orion', 'bulk', 'case of 72'],
+    inStock: true,
+    popular: false,
+    sku: 'FLR-ORION0715',
+    supplierSku: 'ORION0715',
+    supplierUrl: 'https://www.trafficsafetystore.com/shop/orion-15-minute-road-flares-case-of-72-without-wire-stand/ORION0715',
+    supplier: 'Traffic Safety Store',
+    dimensions: 'Case of 72',
+    metaTitle: titleBrand('Buy Orion Road Flares | Case of 72 (15-Min) DOT Approved'),
+    metaDescription: 'Buy Orion 15-minute DOT-approved road flares in bulk — case of 72. Volume discounts available. Ships sealed case.',
   },
 ]
 
