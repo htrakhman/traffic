@@ -103,10 +103,44 @@ import { articleTrafficConesNearMeSameDayDelivery } from './articles/traffic-con
 import { articleYellowCautionTapeBuyingGuide } from './articles/yellow-caution-tape-buying-guide'
 import { articleWaterFilledBarriersBuyingGuide } from './articles/water-filled-barriers-buying-guide'
 import { articleBikeRackBarricadesEventsGuide } from './articles/bike-rack-barricades-events-guide'
+
+import { articlePedestrianSignsPillarGuide } from './articles/pedestrian-signs-pillar-guide'
+
 import { articleConstructionCautionTapeBuyingGuide } from './articles/construction-caution-tape-buying-guide'
 
+import { articleTrafficSafetyStoresBuyingGuide } from './articles/traffic-safety-stores-buying-guide'
+
+import { articleWhatAreBarricadeCovers } from './articles/what-are-barricade-covers'
+
+import { articleNoParkingConesGuide } from './articles/no-parking-cones-guide'
+
+import { articleRedConesExplained } from './articles/red-cones-explained'
+import { articleTrafficSignsForSaleBuyingGuide } from './articles/traffic-signs-for-sale-buying-guide'
+import { articleSafetyConesNearMeNj } from './articles/safety-cones-near-me-nj'
+import { articleLargeTrafficConesBuyingGuide } from './articles/large-traffic-cones-buying-guide'
+import { articleHighwayConesGuide } from './articles/highway-cones-guide'
+import { articleTrafficSafetySupplyBuyingGuide } from './articles/traffic-safety-supply-buying-guide'
+import { articleSmallTrafficConesBuyingGuide } from './articles/small-traffic-cones-buying-guide'
+import { articleTrafficSafetySignsBuyingGuide } from './articles/traffic-safety-signs-buying-guide'
+import { articlePedestrianBarriersGuide } from './articles/pedestrian-barriers-guide'
+import { articlePlasticJerseyBarriersVsConcrete } from './articles/plastic-jersey-barriers-vs-concrete'
+
 export const articles: Article[] = [
+  articlePlasticJerseyBarriersVsConcrete,
+  articlePedestrianBarriersGuide,
+  articleTrafficSafetySignsBuyingGuide,
+  articleSmallTrafficConesBuyingGuide,
+  articleTrafficSafetySupplyBuyingGuide,
+  articleRedConesExplained,
+  articleTrafficSignsForSaleBuyingGuide,
+  articleSafetyConesNearMeNj,
+  articleLargeTrafficConesBuyingGuide,
+  articleHighwayConesGuide,
+  articleNoParkingConesGuide,
+  articleWhatAreBarricadeCovers,
+  articleTrafficSafetyStoresBuyingGuide,
   articleConstructionCautionTapeBuyingGuide,
+  articlePedestrianSignsPillarGuide,
   articleSafetyConesBuyingGuide,
   articleTrafficBarricadesPillarGuide,
   articleRubberSpeedHumpsVsSpeedBumps,

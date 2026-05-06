@@ -26,7 +26,7 @@ export const articleConstructionCautionTapeBuyingGuide: Article = {
     'yellow construction tape',
   ],
   targetVolume: 5000,
-  datePublished: '2026-05-06',
+  datePublished: '2026-05-03',
   readMinutes: 9,
   body: h(
     Fragment,
