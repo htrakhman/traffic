@@ -103,8 +103,10 @@ import { articleTrafficConesNearMeSameDayDelivery } from './articles/traffic-con
 import { articleYellowCautionTapeBuyingGuide } from './articles/yellow-caution-tape-buying-guide'
 import { articleWaterFilledBarriersBuyingGuide } from './articles/water-filled-barriers-buying-guide'
 import { articleBikeRackBarricadesEventsGuide } from './articles/bike-rack-barricades-events-guide'
+import { articleConstructionCautionTapeBuyingGuide } from './articles/construction-caution-tape-buying-guide'
 
 export const articles: Article[] = [
+  articleConstructionCautionTapeBuyingGuide,
   articleSafetyConesBuyingGuide,
   articleTrafficBarricadesPillarGuide,
   articleRubberSpeedHumpsVsSpeedBumps,
