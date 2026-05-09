@@ -135,8 +135,10 @@ import { articleRoadBarricadesExplained } from './articles/road-barricades-expla
 import { articleWhiteTrafficConesGuide } from './articles/white-traffic-cones-guide'
 import { articleBlueTrafficConesGuide } from './articles/blue-traffic-cones-guide'
 import { articleSafeBarriersPillarGuide } from './articles/safe-barriers-pillar-guide'
+import { articlePedestrianWalkSignalGuide } from './articles/pedestrian-walk-signal-guide'
 
 export const articles: Article[] = [
+  articlePedestrianWalkSignalGuide,
   articleSafeBarriersPillarGuide,
   articleBlueTrafficConesGuide,
   articleWhiteTrafficConesGuide,
