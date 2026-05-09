@@ -137,8 +137,10 @@ import { articleBlueTrafficConesGuide } from './articles/blue-traffic-cones-guid
 import { articleSafeBarriersPillarGuide } from './articles/safe-barriers-pillar-guide'
 import { articlePedestrianWalkSignalGuide } from './articles/pedestrian-walk-signal-guide'
 import { articleGreenTrafficConesGuide } from './articles/green-traffic-cones-guide'
+import { articleJerseyBarriersForSaleNearMe } from './articles/jersey-barriers-for-sale-near-me'
 
 export const articles: Article[] = [
+  articleJerseyBarriersForSaleNearMe,
   articleGreenTrafficConesGuide,
   articlePedestrianWalkSignalGuide,
   articleSafeBarriersPillarGuide,
