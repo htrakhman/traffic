@@ -457,6 +457,216 @@
       "wordCount": 1250,
       "commit": "672e7b3",
       "notes": "Daily SEO autopublish 2026-05-06 (iter 5/5)."
+    },
+    {
+      "date": "2026-05-07",
+      "slug": "a-frame-barricades-guide",
+      "url": "/blog/a-frame-barricades-guide",
+      "primaryKeyword": "a frame barricades",
+      "targetVolume": 500,
+      "wordCount": 1280,
+      "commit": "2a2eb7f",
+      "notes": "Daily SEO autopublish 2026-05-07 (iter 1/5)."
+    },
+    {
+      "date": "2026-05-07",
+      "slug": "danger-tape-vs-caution-tape-guide",
+      "url": "/blog/danger-tape-vs-caution-tape-guide",
+      "primaryKeyword": "danger tape",
+      "targetVolume": 500,
+      "wordCount": 1320,
+      "commit": "f5f5fa8",
+      "notes": "Daily SEO autopublish 2026-05-07 (iter 2/5)."
+    },
+    {
+      "date": "2026-05-07",
+      "slug": "metal-barricades-buying-guide",
+      "url": "/blog/metal-barricades-buying-guide",
+      "primaryKeyword": "metal barricades",
+      "targetVolume": 500,
+      "wordCount": 1380,
+      "commit": "be4a8dc",
+      "notes": "Daily SEO autopublish 2026-05-07 (iter 3/5)."
+    },
+    {
+      "date": "2026-05-07",
+      "slug": "parking-lot-barricades-guide",
+      "url": "/blog/parking-lot-barricades-guide",
+      "primaryKeyword": "parking lot barricades",
+      "targetVolume": 500,
+      "wordCount": 1410,
+      "commit": "56217d3",
+      "notes": "Daily SEO autopublish 2026-05-07 (iter 4/5)."
+    },
+    {
+      "date": "2026-05-07",
+      "slug": "traffic-cone-signs-guide",
+      "url": "/blog/traffic-cone-signs-guide",
+      "primaryKeyword": "traffic cone signs",
+      "targetVolume": 500,
+      "wordCount": 1310,
+      "commit": "e53c397",
+      "notes": "Daily SEO autopublish 2026-05-07 (iter 5/5)."
+    },
+    {
+      "date": "2026-05-08",
+      "slug": "concrete-barriers-for-sale-guide",
+      "url": "/blog/concrete-barriers-for-sale-guide",
+      "primaryKeyword": "concrete barriers for sale",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 5.27,
+      "wordCount": 1500,
+      "commit": "9118271",
+      "notes": "Daily SEO autopublish 2026-05-08 (iter 1/5). Commercial comparison structure."
+    },
+    {
+      "date": "2026-05-08",
+      "slug": "plastic-barricades-pillar-guide",
+      "url": "/blog/plastic-barricades-pillar-guide",
+      "primaryKeyword": "plastic barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 20.61,
+      "wordCount": 1600,
+      "commit": "5a7f3d1",
+      "notes": "Daily SEO autopublish 2026-05-08 (iter 2/5). Pillar guide structure."
+    },
+    {
+      "date": "2026-05-08",
+      "slug": "road-barricades-explained",
+      "url": "/blog/road-barricades-explained",
+      "primaryKeyword": "road barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 21.9,
+      "wordCount": 1500,
+      "commit": "f7d285a",
+      "notes": "Daily SEO autopublish 2026-05-08 (iter 3/5). What-is definitional structure."
+    },
+    {
+      "date": "2026-05-08",
+      "slug": "white-traffic-cones-guide",
+      "url": "/blog/white-traffic-cones-guide",
+      "primaryKeyword": "white traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 10.16,
+      "wordCount": 1450,
+      "commit": "4c4afcb",
+      "notes": "Daily SEO autopublish 2026-05-08 (iter 4/5). Decision-tree structure."
+    },
+    {
+      "date": "2026-05-08",
+      "slug": "blue-traffic-cones-guide",
+      "url": "/blog/blue-traffic-cones-guide",
+      "primaryKeyword": "blue traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 10.98,
+      "wordCount": 1400,
+      "commit": "2712d15",
+      "notes": "Daily SEO autopublish 2026-05-08 (iter 5/5). FAQ-heavy AEO structure."
+    },
+    {
+      "date": "2026-05-09",
+      "slug": "safe-barriers-pillar-guide",
+      "url": "/blog/safe-barriers-pillar-guide",
+      "primaryKeyword": "safe barriers",
+      "targetVolume": 5000,
+      "wordCount": 1450,
+      "commit": "a796e8b",
+      "notes": "Pillar guide. 5-bucket framework (vehicle/pedestrian/fall/crowd/work-zone) tied to MASH/MUTCD/OSHA. Buy/sell framing."
+    },
+    {
+      "date": "2026-05-09",
+      "slug": "pedestrian-walk-signal-guide",
+      "url": "/blog/pedestrian-walk-signal-guide",
+      "primaryKeyword": "pedestrian walk signal",
+      "targetVolume": 5000,
+      "wordCount": 1380,
+      "commit": "c51a127",
+      "notes": "FAQ-heavy AEO. MUTCD 4E phases, 2023 11th Edition countdown rule, APS, replacement spec."
+    },
+    {
+      "date": "2026-05-09",
+      "slug": "green-traffic-cones-guide",
+      "url": "/blog/green-traffic-cones-guide",
+      "primaryKeyword": "green traffic cones",
+      "targetVolume": 500,
+      "wordCount": 1340,
+      "commit": "a6caca8",
+      "notes": "Definitional / color guide. APWA sewer marking, golf wayfinding, sports training. Mirrors blue/red/white series."
+    },
+    {
+      "date": "2026-05-09",
+      "slug": "jersey-barriers-for-sale-near-me",
+      "url": "/blog/jersey-barriers-for-sale-near-me",
+      "primaryKeyword": "jersey barriers for sale near me",
+      "targetVolume": 500,
+      "wordCount": 1450,
+      "commit": "d50e449",
+      "notes": "Commercial / decision-tree. Concrete vs water-filled vs empty plastic vs steel. Delivery economics for NJ."
+    },
+    {
+      "date": "2026-05-09",
+      "slug": "custom-traffic-cones-buying-guide",
+      "url": "/blog/custom-traffic-cones-buying-guide",
+      "primaryKeyword": "custom traffic cones",
+      "targetVolume": 500,
+      "wordCount": 1480,
+      "commit": "c3d510b",
+      "notes": "Commercial buying guide. Print methods, MOQs, MUTCD print-placement rules, real cost example."
+    },
+    {
+      "date": "2026-05-10",
+      "slug": "black-traffic-cones-guide",
+      "url": "/blog/black-traffic-cones-guide",
+      "primaryKeyword": "black traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "dbf9d18",
+      "notes": "Color-cone guide; explains MUTCD non-compliance + valid non-roadway use cases."
+    },
+    {
+      "date": "2026-05-10",
+      "slug": "channelizer-cones-guide",
+      "url": "/blog/channelizer-cones-guide",
+      "primaryKeyword": "channelizer cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "2f07c4c",
+      "notes": "Definitional/AEO. Distinguishes channelizers from cones, drums, tubular markers, vertical panels."
+    },
+    {
+      "date": "2026-05-10",
+      "slug": "low-profile-barricades-guide",
+      "url": "/blog/low-profile-barricades-guide",
+      "primaryKeyword": "low profile barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "772c052",
+      "notes": "Commercial comparison. Plowable barricades for winter contractors, price math, model comparison."
+    },
+    {
+      "date": "2026-05-10",
+      "slug": "pink-traffic-cones-guide",
+      "url": "/blog/pink-traffic-cones-guide",
+      "primaryKeyword": "pink traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "4ab1552",
+      "notes": "Decision-tree style. Covers 2023 MUTCD pink-orange addition for incident response."
+    },
+    {
+      "date": "2026-05-10",
+      "slug": "18-inch-traffic-cones-guide",
+      "url": "/blog/18-inch-traffic-cones-guide",
+      "primaryKeyword": "18 inch traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "3a381ca",
+      "notes": "Pillar guide for the smallest MUTCD-allowed cone size. Size-by-speed rules + buying guide."
     }
   ]
 }
