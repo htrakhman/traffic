@@ -140,8 +140,10 @@ import { articleGreenTrafficConesGuide } from './articles/green-traffic-cones-gu
 import { articleJerseyBarriersForSaleNearMe } from './articles/jersey-barriers-for-sale-near-me'
 import { articleCustomTrafficConesBuyingGuide } from './articles/custom-traffic-cones-buying-guide'
 import { articleBlackTrafficConesGuide } from './articles/black-traffic-cones-guide'
+import { articleChannelizerConesGuide } from './articles/channelizer-cones-guide'
 
 export const articles: Article[] = [
+  articleChannelizerConesGuide,
   articleBlackTrafficConesGuide,
   articleCustomTrafficConesBuyingGuide,
   articleJerseyBarriersForSaleNearMe,
