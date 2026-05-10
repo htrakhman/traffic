@@ -141,8 +141,10 @@ import { articleJerseyBarriersForSaleNearMe } from './articles/jersey-barriers-f
 import { articleCustomTrafficConesBuyingGuide } from './articles/custom-traffic-cones-buying-guide'
 import { articleBlackTrafficConesGuide } from './articles/black-traffic-cones-guide'
 import { articleChannelizerConesGuide } from './articles/channelizer-cones-guide'
+import { articleLowProfileBarricadesGuide } from './articles/low-profile-barricades-guide'
 
 export const articles: Article[] = [
+  articleLowProfileBarricadesGuide,
   articleChannelizerConesGuide,
   articleBlackTrafficConesGuide,
   articleCustomTrafficConesBuyingGuide,
