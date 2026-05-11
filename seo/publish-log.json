@@ -667,6 +667,56 @@
       "competition": "High",
       "commit": "3a381ca",
       "notes": "Pillar guide for the smallest MUTCD-allowed cone size. Size-by-speed rules + buying guide."
+    },
+    {
+      "date": "2026-05-11",
+      "slug": "construction-barricade-guide",
+      "url": "/blog/construction-barricade-guide",
+      "primaryKeyword": "construction barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "1b74494",
+      "notes": "Pillar/definitional. Disambiguates Type I/II/III + water-filled barriers; buy playbook."
+    },
+    {
+      "date": "2026-05-11",
+      "slug": "plastic-traffic-barriers-guide",
+      "url": "/blog/plastic-traffic-barriers-guide",
+      "primaryKeyword": "plastic traffic barriers",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "b5e9411",
+      "notes": "Commercial comparison. Plastic vs concrete/steel/water-filled with crash ratings + cost math."
+    },
+    {
+      "date": "2026-05-11",
+      "slug": "expandable-barricade-guide",
+      "url": "/blog/expandable-barricade-guide",
+      "primaryKeyword": "expandable barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "518b47a",
+      "notes": "FAQ-heavy AEO. Accordion-style barriers; indoor/event/emergency use cases; size/cost table."
+    },
+    {
+      "date": "2026-05-11",
+      "slug": "steel-barricades-guide",
+      "url": "/blog/steel-barricades-guide",
+      "primaryKeyword": "steel barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "b228dd4",
+      "notes": "Decision-tree. Steel vs aluminum vs plastic; galv vs powder-coat; cost-per-year math."
+    },
+    {
+      "date": "2026-05-11",
+      "slug": "low-profile-airport-barricades-guide",
+      "url": "/blog/low-profile-airport-barricades-guide",
+      "primaryKeyword": "low profile airport barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "commit": "9b92c89",
+      "notes": "Niche definitional. FAA AC 150/5370-2G; frangibility; aircraft-movement-area spec."
     }
   ]
 }
