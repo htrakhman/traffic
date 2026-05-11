@@ -148,8 +148,10 @@ import { articleConstructionBarricadeGuide } from './articles/construction-barri
 import { articlePlasticTrafficBarriersGuide } from './articles/plastic-traffic-barriers-guide'
 import { articleExpandableBarricadeGuide } from './articles/expandable-barricade-guide'
 import { articleSteelBarricadesGuide } from './articles/steel-barricades-guide'
+import { articleLowProfileAirportBarricadesGuide } from './articles/low-profile-airport-barricades-guide'
 
 export const articles: Article[] = [
+  articleLowProfileAirportBarricadesGuide,
   articleSteelBarricadesGuide,
   articleExpandableBarricadeGuide,
   articlePlasticTrafficBarriersGuide,
