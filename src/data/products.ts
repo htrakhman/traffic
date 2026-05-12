@@ -2675,6 +2675,9 @@ const CUSTOMIZATION_VARIANT_PATTERNS = [
   'custom black lettering',
   'custom reflective text',
   'custom black text',
+  'custom reflective lettering',
+  'with graphic',
+  'with full color graphic',
 ]
 
 function isCustomizationVariant(name: string): boolean {
