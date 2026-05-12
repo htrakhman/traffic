@@ -2639,6 +2639,7 @@ export const curatedProducts: Product[] = rawCuratedProducts.map(sanitizeProduct
 
 const curatedSupplierUrls = new Set(curatedProducts.map((p) => p.supplierUrl).filter(Boolean))
 const curatedSlugs = new Set(curatedProducts.map((p) => p.slug))
+const curatedNames = new Set(curatedProducts.map((p) => p.name.toLowerCase()))
 let extendedProducts: Product[] = []
 
 /** Merged list + id index — rebuilt when `registerExtendedCatalog` runs. */
@@ -2669,11 +2670,18 @@ function migrateLegacyCatalogRow(row: unknown): Product | null {
 
 /** Merge extended catalog from `public/tss-catalog.json` (generated; see `scripts/generate-tss-catalog.mjs`). */
 export function registerExtendedCatalog(raw: unknown[]) {
+  const seenNames = new Set(curatedNames)
   extendedProducts = raw
     .map(migrateLegacyCatalogRow)
     .filter((p): p is Product => p != null)
     .map(sanitizeProductCopy)
     .filter((p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug))
+    .filter((p) => {
+      const key = p.name.toLowerCase()
+      if (seenNames.has(key)) return false
+      seenNames.add(key)
+      return true
+    })
   mergedProducts = null
   productById = null
   if (extendedProducts.length) rebuildExtendedIndexes()
