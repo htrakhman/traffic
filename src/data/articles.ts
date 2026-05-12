@@ -153,8 +153,10 @@ import { articleDelineatorConesGuide } from './articles/delineator-cones-guide'
 import { articleReflectiveTrafficConesGuide } from './articles/reflective-traffic-cones-guide'
 import { articleYellowTrafficConesGuide } from './articles/yellow-traffic-cones-guide'
 import { articleEventBarricadesBuyingGuide } from './articles/event-barricades-buying-guide'
+import { articleCheapTrafficConesGuide } from './articles/cheap-traffic-cones-guide'
 
 export const articles: Article[] = [
+  articleCheapTrafficConesGuide,
   articleEventBarricadesBuyingGuide,
   articleYellowTrafficConesGuide,
   articleReflectiveTrafficConesGuide,
