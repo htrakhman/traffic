@@ -717,6 +717,61 @@
       "competition": "High",
       "commit": "9b92c89",
       "notes": "Niche definitional. FAA AC 150/5370-2G; frangibility; aircraft-movement-area spec."
+    },
+    {
+      "date": "2026-05-12",
+      "slug": "delineator-cones-guide",
+      "url": "/blog/delineator-cones-guide",
+      "primaryKeyword": "delineator cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 20.24,
+      "commit": "a8b2531",
+      "notes": "Decision-tree structure. Distinguishes channelizer cones / tubular delineators / drums / standard cones."
+    },
+    {
+      "date": "2026-05-12",
+      "slug": "reflective-traffic-cones-guide",
+      "url": "/blog/reflective-traffic-cones-guide",
+      "primaryKeyword": "reflective traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 10.99,
+      "commit": "ba75267",
+      "notes": "Pillar guide. ASTM D4956 Type IV vs Engineer Grade; collar geometry per MUTCD \u00a76F.65."
+    },
+    {
+      "date": "2026-05-12",
+      "slug": "yellow-traffic-cones-guide",
+      "url": "/blog/yellow-traffic-cones-guide",
+      "primaryKeyword": "yellow traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 9.82,
+      "commit": "3887e94",
+      "notes": "Definitional / what-is. MUTCD \u00a76F.02 color reservation; private-property use cases."
+    },
+    {
+      "date": "2026-05-12",
+      "slug": "event-barricades-buying-guide",
+      "url": "/blog/event-barricades-buying-guide",
+      "primaryKeyword": "event barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 27.56,
+      "commit": "c1d5f86",
+      "notes": "Commercial comparison. Bike-rack vs plastic vs Mojo crowd-control gates. Footprint math."
+    },
+    {
+      "date": "2026-05-12",
+      "slug": "cheap-traffic-cones-guide",
+      "url": "/blog/cheap-traffic-cones-guide",
+      "primaryKeyword": "cheap traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 5.49,
+      "commit": "27b77b2",
+      "notes": "FAQ-heavy AEO. Pricing tier table; honest framing about when cheap is OK vs road-illegal."
     }
   ]
 }
