@@ -2668,6 +2668,20 @@ function migrateLegacyCatalogRow(row: unknown): Product | null {
   return null
 }
 
+const CUSTOMIZATION_VARIANT_PATTERNS = [
+  'lettering single side',
+  'lettering double sided',
+  'custom stencil',
+  'custom black lettering',
+  'custom reflective text',
+  'custom black text',
+]
+
+function isCustomizationVariant(name: string): boolean {
+  const lower = name.toLowerCase()
+  return CUSTOMIZATION_VARIANT_PATTERNS.some((pat) => lower.includes(pat))
+}
+
 /** Merge extended catalog from `public/tss-catalog.json` (generated; see `scripts/generate-tss-catalog.mjs`). */
 export function registerExtendedCatalog(raw: unknown[]) {
   const seenNames = new Set(curatedNames)
@@ -2676,6 +2690,7 @@ export function registerExtendedCatalog(raw: unknown[]) {
     .filter((p): p is Product => p != null)
     .map(sanitizeProductCopy)
     .filter((p) => !curatedSupplierUrls.has(p.supplierUrl) && !curatedSlugs.has(p.slug))
+    .filter((p) => !isCustomizationVariant(p.name))
     .filter((p) => {
       const key = p.name.toLowerCase()
       if (seenNames.has(key)) return false
