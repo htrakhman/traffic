@@ -154,8 +154,10 @@ import { articleReflectiveTrafficConesGuide } from './articles/reflective-traffi
 import { articleYellowTrafficConesGuide } from './articles/yellow-traffic-cones-guide'
 import { articleEventBarricadesBuyingGuide } from './articles/event-barricades-buying-guide'
 import { articleCheapTrafficConesGuide } from './articles/cheap-traffic-cones-guide'
+import { articleOrangeTrafficConesGuide } from './articles/orange-traffic-cones-guide'
 
 export const articles: Article[] = [
+  articleOrangeTrafficConesGuide,
   articleCheapTrafficConesGuide,
   articleEventBarricadesBuyingGuide,
   articleYellowTrafficConesGuide,
