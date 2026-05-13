@@ -772,6 +772,61 @@
       "bidHigh": 5.49,
       "commit": "27b77b2",
       "notes": "FAQ-heavy AEO. Pricing tier table; honest framing about when cheap is OK vs road-illegal."
+    },
+    {
+      "date": "2026-05-13",
+      "slug": "orange-traffic-cones-guide",
+      "url": "/blog/orange-traffic-cones-guide",
+      "primaryKeyword": "orange traffic cones",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 9.89,
+      "commit": "3cc1685",
+      "notes": "Definitional / what-is. MUTCD orange-color spec, height table, variant explainer."
+    },
+    {
+      "date": "2026-05-13",
+      "slug": "safety-cones-for-sale-guide",
+      "url": "/blog/safety-cones-for-sale-guide",
+      "primaryKeyword": "safety cones for sale",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 6.48,
+      "commit": "be0e17e",
+      "notes": "Commercial comparison. Four price tiers (budget/parking/contractor/highway), where each fails, retail kit recipe."
+    },
+    {
+      "date": "2026-05-13",
+      "slug": "28-inch-traffic-cones-guide",
+      "url": "/blog/28-inch-traffic-cones-guide",
+      "primaryKeyword": "28 inch traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 9.54,
+      "commit": "ca80bd6",
+      "notes": "FAQ-heavy AEO. Spec sheet, MUTCD use thresholds, base-weight matrix, NJ kit recipe."
+    },
+    {
+      "date": "2026-05-13",
+      "slug": "foldable-traffic-cones-guide",
+      "url": "/blog/foldable-traffic-cones-guide",
+      "primaryKeyword": "foldable traffic cones",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 7.76,
+      "commit": "e71d568",
+      "notes": "Pillar guide. Spring/pop-up/accordion mechanisms, foldable-vs-rigid table, MUTCD reality check, mixed-kit recipe."
+    },
+    {
+      "date": "2026-05-13",
+      "slug": "road-traffic-barrier-guide",
+      "url": "/blog/road-traffic-barrier-guide",
+      "primaryKeyword": "road traffic barrier",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 15.0,
+      "commit": "37886bf",
+      "notes": "Decision-tree. Speed/duration/impact-risk walk; MASH TL ratings table; four worked scenarios (sidewalk excavation through bridge deck)."
     }
   ]
 }
