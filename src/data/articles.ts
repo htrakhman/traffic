@@ -161,8 +161,10 @@ import { articleFoldableTrafficConesGuide } from './articles/foldable-traffic-co
 import { articleRoadTrafficBarrierGuide } from './articles/road-traffic-barrier-guide'
 import { article36InchTrafficConesGuide } from './articles/36-inch-traffic-cones-guide'
 import { articleRedDangerTapeGuide } from './articles/red-danger-tape-guide'
+import { articleRoadClosedBarricadeGuide } from './articles/road-closed-barricade-guide'
 
 export const articles: Article[] = [
+  articleRoadClosedBarricadeGuide,
   articleRedDangerTapeGuide,
   article36InchTrafficConesGuide,
   articleRoadTrafficBarrierGuide,
