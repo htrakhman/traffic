@@ -169,8 +169,10 @@ import { articleWaterFilledJerseyBarriersGuide } from './articles/water-filled-j
 import { articleType1BarricadeGuide } from './articles/type-1-barricade-guide'
 import { articleRoadDelineatorsGuide } from './articles/road-delineators-guide'
 import { articleParadeBarricadesGuide } from './articles/parade-barricades-guide'
+import { articleBarricadesForSaleBuyingGuide } from './articles/barricades-for-sale-buying-guide'
 
 export const articles: Article[] = [
+  articleBarricadesForSaleBuyingGuide,
   articleParadeBarricadesGuide,
   articleRoadDelineatorsGuide,
   articleType1BarricadeGuide,

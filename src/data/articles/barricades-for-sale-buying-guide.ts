@@ -1,0 +1,322 @@
+import { createElement as h, Fragment } from 'react'
+import type { Article } from '../articles'
+
+/**
+ * Targets "barricades for sale" (~500/mo, High comp, $14.93 bid).
+ * Commercial comparison structure: side-by-side product class table,
+ * pricing tiers, who sells, what to skip.
+ */
+export const articleBarricadesForSaleBuyingGuide: Article = {
+  slug: 'barricades-for-sale-buying-guide',
+  title: 'Barricades for Sale: Product Classes, Pricing, and Where to Buy in 2026',
+  excerpt:
+    'When you search "barricades for sale," you get six different product classes treated as one category — from $30 plastic A-frames to $260 water-filled jersey units. The right call depends on use case, not search volume. Here is the side-by-side.',
+  metaDescription:
+    'Barricades for sale — Type 1/2/3, bike rack, A-frame, water-filled, and steel barricades compared by price, durability, and use case. NJ same-day delivery.',
+  primaryKeyword: 'barricades for sale',
+  secondaryKeywords: [
+    'buy barricades',
+    'barricades for sale near me',
+    'construction barricades for sale',
+    'event barricades for sale',
+    'cheap barricades',
+    'barricades for sale online',
+  ],
+  targetVolume: 500,
+  datePublished: '2026-05-17',
+  readMinutes: 7,
+  body: h(
+    Fragment,
+    null,
+    h(
+      'p',
+      { className: 'lead' },
+      'A search for "barricades for sale" returns six structurally different product classes priced from $30 to $260+ per unit. ',
+      h('strong', null, 'The right purchase depends on your use case (work zone vs event vs property), not on price comparison alone — a $30 plastic A-frame fails the spec on a state-route work zone, while a $200 Type 3 is overkill in a parking lot.'),
+      ' This guide breaks down the six classes side by side, with pricing, durability, and the contractor profile each fits.',
+    ),
+
+    h('h2', null, 'The six classes available'),
+    h(
+      'div',
+      { className: 'overflow-x-auto my-4' },
+      h(
+        'table',
+        { className: 'min-w-full text-sm border-collapse' },
+        h(
+          'thead',
+          null,
+          h('tr', { className: 'border-b' },
+            h('th', { className: 'text-left p-2' }, 'Class'),
+            h('th', { className: 'text-left p-2' }, 'Typical price'),
+            h('th', { className: 'text-left p-2' }, 'Lifespan'),
+            h('th', { className: 'text-left p-2' }, 'Best fit'),
+          ),
+        ),
+        h(
+          'tbody',
+          null,
+          h('tr', { className: 'border-b' },
+            h('td', { className: 'p-2' }, 'Plastic A-frame'),
+            h('td', { className: 'p-2' }, '$30–$60'),
+            h('td', { className: 'p-2' }, '2–4 yrs'),
+            h('td', { className: 'p-2' }, 'Light channelizing, sidewalk work'),
+          ),
+          h('tr', { className: 'border-b' },
+            h('td', { className: 'p-2' }, 'Type 1 barricade'),
+            h('td', { className: 'p-2' }, '$40–$80'),
+            h('td', { className: 'p-2' }, '4–6 yrs'),
+            h('td', { className: 'p-2' }, 'Short-duration ≤35 mph'),
+          ),
+          h('tr', { className: 'border-b' },
+            h('td', { className: 'p-2' }, 'Type 2 barricade'),
+            h('td', { className: 'p-2' }, '$70–$140'),
+            h('td', { className: 'p-2' }, '4–6 yrs'),
+            h('td', { className: 'p-2' }, 'Intermediate duration ≤45 mph'),
+          ),
+          h('tr', { className: 'border-b' },
+            h('td', { className: 'p-2' }, 'Type 3 barricade'),
+            h('td', { className: 'p-2' }, '$120–$280'),
+            h('td', { className: 'p-2' }, '6–10 yrs'),
+            h('td', { className: 'p-2' }, 'Road closures, detours'),
+          ),
+          h('tr', { className: 'border-b' },
+            h('td', { className: 'p-2' }, 'Bike rack (French)'),
+            h('td', { className: 'p-2' }, '$110–$180'),
+            h('td', { className: 'p-2' }, '8–15 yrs'),
+            h('td', { className: 'p-2' }, 'Events, crowds'),
+          ),
+          h('tr', { className: 'border-b' },
+            h('td', { className: 'p-2' }, 'Water-filled jersey'),
+            h('td', { className: 'p-2' }, '$175–$260'),
+            h('td', { className: 'p-2' }, '6–10 yrs'),
+            h('td', { className: 'p-2' }, 'Positive separation, lane closures'),
+          ),
+        ),
+      ),
+    ),
+    h(
+      'p',
+      null,
+      'The price column above is per single unit. The "lifespan" column reflects field-grade outdoor use — heavy commercial use shortens these numbers; light parking-lot or warehouse use extends them.',
+    ),
+
+    h('h2', null, 'Match the barricade to the use case'),
+    h(
+      'h3',
+      null,
+      'Work zone use',
+    ),
+    h(
+      'ul',
+      null,
+      h('li', null, h('strong', null, 'Residential street, ≤35 mph: '), 'Type 1, 4–8 units, ~$320–$640 total'),
+      h('li', null, h('strong', null, 'Collector / arterial, ≤45 mph: '), 'Type 2, 8–12 units, ~$700–$1,680 total'),
+      h('li', null, h('strong', null, 'Highway, ramp, or closure: '), 'Type 3, 4–8 units, ~$580–$2,240 total'),
+      h('li', null, h('strong', null, 'Lane closure with positive protection: '), 'water-filled jersey, 16 units per 100 ft = ~$2,800–$4,200'),
+    ),
+    h(
+      'h3',
+      null,
+      'Event use',
+    ),
+    h(
+      'ul',
+      null,
+      h('li', null, h('strong', null, 'Crowd separation (parade, festival, race): '), 'bike rack, ~165 units per 1,320 ft side = ~$18,000–$30,000 owned'),
+      h('li', null, h('strong', null, 'Cross-street closure: '), 'Type 3, ~$200 each'),
+      h('li', null, h('strong', null, 'VIP / soft-target protection: '), 'water-filled or concrete jersey at vehicle approaches'),
+    ),
+    h(
+      'h3',
+      null,
+      'Property / parking lot use',
+    ),
+    h(
+      'ul',
+      null,
+      h('li', null, h('strong', null, 'Striping protection: '), 'plastic A-frame, ~$40 each'),
+      h('li', null, h('strong', null, 'Construction site fencing: '), 'Type 2 with caution tape between'),
+      h('li', null, h('strong', null, 'Reserved parking spaces: '), 'Type 1 or low-profile A-frame'),
+    ),
+
+    h('h2', null, 'What to look for when buying'),
+    h(
+      'p',
+      null,
+      'Four properties separate field-grade barricades from commodity imports:',
+    ),
+    h(
+      'ul',
+      null,
+      h(
+        'li',
+        null,
+        h('strong', null, 'Retroreflective sheeting tier '),
+        '— Type III prismatic is the practical floor for MUTCD-compliant new work. Engineer-grade and Type I sheeting still appears on cheap imports and is no longer compliant on most state DOT projects. Look for "Type III prismatic" or "Type IV" called out on the spec sheet.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'UV stabilization '),
+        '— PE rails sold at $25 with no UV inhibitor crumble in 18 months of NJ sun. Look for "UV-stabilized" in the material description.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Base type '),
+        '— sandbag pocket, water-fill, or steel feet. A-frame with a water-fill base costs $15–$30 more than a basic A-frame but stays put in 25+ mph wind. Worth the upcharge for any roadside work.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Stripe direction at purchase '),
+        '— some manufacturers ship barricades with stripes already oriented; some ship them blank for field application. If you need a mix of left-redirect and right-redirect orientations, confirm sheeting application before ordering.',
+      ),
+    ),
+
+    h('h2', null, 'Pricing — where the money actually goes'),
+    h(
+      'p',
+      null,
+      'Three line items move the unit cost more than anything else:',
+    ),
+    h(
+      'ul',
+      null,
+      h('li', null, h('strong', null, 'Sheeting upgrade '), '— Type IV prismatic adds $10–$20 per unit over Type III. Required on most state and federal contracts; optional for private and municipal.'),
+      h('li', null, h('strong', null, 'Heavy / large rail '), '— a 48" wide rail costs ~$15 more than a 36" rail. Wider rails are more visible from a distance.'),
+      h('li', null, h('strong', null, 'Heavy base / wind kit '), '— water-fill or steel feet add $15–$30 per unit over a sandbag pocket. Worth it for outdoor use.'),
+    ),
+    h(
+      'p',
+      null,
+      'Volume discounts matter less than they look. A 10% discount on 50 Type 2 barricades is ~$500, which is real money but smaller than the $1,500+ savings you get from picking the right tier in the first place. Buy fewer good barricades, not more cheap ones.',
+    ),
+
+    h('h2', null, 'Where to buy — distribution channels'),
+    h(
+      'ul',
+      null,
+      h(
+        'li',
+        null,
+        h('strong', null, 'Regional traffic safety dealer (us): '),
+        'central NJ delivery, contractor pricing, stock breadth on cones, barricades, signs, and barriers. Best for contractors who want one source for the full kit.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'National catalog (Lyle, Cortina, Plasticade direct): '),
+        'lowest unit price on volume orders, but lead times are 7–14 days and freight is a separate line item. Best for state and federal contract bids where price wins.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Hardware big-box (Home Depot, Lowe\'s): '),
+        'limited to plastic A-frames and a couple of Type 1 SKUs. OK for one-off residential work; not a contractor supply source.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Online marketplace (Amazon, eBay): '),
+        'mostly imports without retroreflective tier disclosure. Risk a non-compliant unit if you skip the spec sheet. Acceptable for parking-lot use; not for work zone.',
+      ),
+    ),
+
+    h('h2', null, 'Common buying mistakes'),
+    h(
+      'ul',
+      null,
+      h(
+        'li',
+        null,
+        h('strong', null, 'Mixing manufacturers in one kit: '),
+        'sheeting colors and stripe directions vary by manufacturer. A row that mixes brands looks unprofessional and confuses drivers. Buy a single brand per device type.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Buying Type 1 when the job spec requires Type 2 or 3: '),
+        'specs on NJDOT and FHWA projects name the barricade type. Showing up with a lower tier is a citable error and can hold up an inspection.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Skipping the base upgrade: '),
+        'a base barricade is $40 cheaper but blows over in a thunderstorm. The base upcharge pays back the first time you do not have to redeploy a row of fallen units mid-shift.',
+      ),
+      h(
+        'li',
+        null,
+        h('strong', null, 'Renting forever: '),
+        'a contractor renting 8 Type 2 barricades for 6 jobs/year at $12/day for 3-day jobs spends ~$1,700/year. The same kit bought outright costs $700–$1,100 and lasts 4+ seasons.',
+      ),
+    ),
+
+    h('h2', null, 'Where to buy barricades for sale in NJ'),
+    h(
+      'p',
+      null,
+      'We stock all six classes — plastic A-frame, Type 1/2/3, bike rack, and water-filled jersey — with Type III or Type IV prismatic sheeting and same-day Central NJ delivery. Browse the ',
+      h('a', { href: '/category/barricades-barriers' }, 'barricades and barriers category'),
+      ' or ',
+      h('a', { href: '/quote' }, 'request a quote'),
+      ' for a kit sized to your typical jobs. For a use-case match — what tier fits your speed and duration — the ',
+      h('a', { href: '/assistant' }, 'Assistant'),
+      ' walks through the decision in 2 minutes.',
+    ),
+    h(
+      'p',
+      null,
+      'Related reading: ',
+      h('a', { href: '/blog/barricades-types-uses-guide' }, 'barricades types and uses'),
+      ', ',
+      h('a', { href: '/blog/type-iii-barricade-vs-type-i-type-ii' }, 'Type III vs Type I/II comparison'),
+      ', and ',
+      h('a', { href: '/blog/traffic-barricades-pillar-guide' }, 'traffic barricades pillar guide'),
+      '.',
+    ),
+  ),
+  faqs: [
+    {
+      q: 'How much do barricades cost to buy?',
+      a: 'Per unit: plastic A-frames $30–$60, Type 1 $40–$80, Type 2 $70–$140, Type 3 $120–$280, bike rack $110–$180, and water-filled jersey $175–$260. Contractor kit pricing varies widely by use case; a typical residential contractor kit is $700–$1,200, a paving contractor kit is $1,800–$2,500, and a municipal full kit runs $2,200–$3,500.',
+    },
+    {
+      q: 'Where can I buy barricades online?',
+      a: 'Regional traffic safety dealers (like us) are the best fit for contractors needing same-day delivery and contractor pricing. National catalogs (Lyle, Cortina, Plasticade) offer the lowest unit price on volume orders with 7–14 day lead times. Hardware big-box stores stock only plastic A-frames and a few Type 1 SKUs. Online marketplaces (Amazon, eBay) carry imports of varying compliance — check the retroreflective sheeting tier before buying.',
+    },
+    {
+      q: 'What barricade do I need for a state DOT job?',
+      a: 'Read the job spec — it names the barricade type. NJDOT and most state DOTs require Type III prismatic retroreflective sheeting (or higher) and call out Type 2 for intermediate work, Type 3 for closures. Bringing a lower tier than the spec calls for is a citable error.',
+    },
+    {
+      q: 'Should I buy plastic or steel barricades?',
+      a: 'Plastic (PE rail with A-frame base) for short-duration, light-handling work — cheap, light, faster to deploy. Steel (Type 3 with steel uprights, bike rack frames) for long-duration, high-traffic, or crowd applications — heavier and more durable but $50–$200 more per unit. Most contractor kits mix both.',
+    },
+    {
+      q: 'Can I reuse barricades across jobs?',
+      a: 'Yes — a contractor-grade Type 2 lasts 4–6 seasons of regular outdoor use, a Type 3 lasts 6–10 seasons, and bike rack barricades commonly run 10–15 years. Plan on 80–120 deployments per unit over its life. Stripes and sheeting fade before the structure fails; re-sheet rather than replace when reflectivity drops.',
+    },
+    {
+      q: 'Do I need MUTCD-compliant barricades for private property work?',
+      a: 'Not strictly — MUTCD applies to public roadways. But contractor liability and standard-of-care practice push you toward compliant gear even on private jobs. A non-compliant barricade involved in an incident makes the contractor an easier target in litigation. Most buyers default to MUTCD-compliant for any outdoor work.',
+    },
+    {
+      q: 'What is the cheapest barricade that is still MUTCD-compliant?',
+      a: 'A Type 1 with PE rail, Type III prismatic sheeting, and a basic A-frame base — typically $40–$50 per unit at contractor pricing. That meets MUTCD §6F.63 for short-duration, low-speed work. Below $40 you usually lose the prismatic sheeting tier, which takes you out of compliance for new public-road work.',
+    },
+  ],
+  relatedProducts: [
+    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
+    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Safety Lighting', path: '/category/safety-lighting' },
+    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
+  ],
+  relatedArticles: [
+    'barricades-types-uses-guide',
+    'type-iii-barricade-vs-type-i-type-ii',
+    'traffic-barricades-pillar-guide',
+  ],
+}
