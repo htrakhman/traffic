@@ -827,6 +827,127 @@
       "bidHigh": 15.0,
       "commit": "37886bf",
       "notes": "Decision-tree. Speed/duration/impact-risk walk; MASH TL ratings table; four worked scenarios (sidewalk excavation through bridge deck)."
+    },
+    {
+      "date": "2026-05-15",
+      "slug": "36-inch-traffic-cones-guide",
+      "url": "/blog/36-inch-traffic-cones-guide",
+      "primaryKeyword": "36 inch traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 14.35,
+      "commit": "b14643a",
+      "notes": "Pillar buying guide. Size-by-speed table, base-weight ladder (10/12/15-lb), price ranges, drum-vs-cone substitution, NJDOT permit nuance."
+    },
+    {
+      "date": "2026-05-16",
+      "slug": "red-danger-tape-guide",
+      "url": "/blog/red-danger-tape-guide",
+      "primaryKeyword": "red danger tape",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 49.02,
+      "commit": "304dff7",
+      "notes": "Daily SEO autopublish 2026-05-16 (iter 1/5). Commercial comparison structure \u2014 ANSI Z535 color hierarchy, electrical/fire/asbestos use cases."
+    },
+    {
+      "date": "2026-05-16",
+      "slug": "road-closed-barricade-guide",
+      "url": "/blog/road-closed-barricade-guide",
+      "primaryKeyword": "road closed barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 15.63,
+      "commit": "b71971c",
+      "notes": "Daily SEO autopublish 2026-05-16 (iter 2/5). Decision-tree structure \u2014 4 closure types \u00d7 Type I/II/III + R11-2/3a/4 sign logic."
+    },
+    {
+      "date": "2026-05-16",
+      "slug": "retractable-barricade-guide",
+      "url": "/blog/retractable-barricade-guide",
+      "primaryKeyword": "retractable barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 15.09,
+      "commit": "afea343",
+      "notes": "Daily SEO autopublish 2026-05-16 (iter 3/5). What-is definitional structure \u2014 disambiguates belt stanchion / accordion / retractable bollard."
+    },
+    {
+      "date": "2026-05-16",
+      "slug": "traffic-cone-lights-guide",
+      "url": "/blog/traffic-cone-lights-guide",
+      "primaryKeyword": "traffic cone lights",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 13.54,
+      "commit": "982282d",
+      "notes": "Daily SEO autopublish 2026-05-16 (iter 4/5). FAQ-heavy AEO structure \u2014 MUTCD Type A/B/C lights, LED vs incandescent TCO, 8 FAQs."
+    },
+    {
+      "date": "2026-05-16",
+      "slug": "weighted-traffic-cones-guide",
+      "url": "/blog/weighted-traffic-cones-guide",
+      "primaryKeyword": "weighted traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 7.99,
+      "commit": "5314a79",
+      "notes": "Daily SEO autopublish 2026-05-16 (iter 5/5). Pillar buying guide structure \u2014 base weight ladder (3/7/10/12/15 lb), wind math, MUTCD \u00a76F.65 stability interpretation, 3-profile kit recipes."
+    },
+    {
+      "date": "2026-05-17",
+      "slug": "water-filled-jersey-barriers-guide",
+      "url": "/blog/water-filled-jersey-barriers-guide",
+      "primaryKeyword": "water filled jersey barriers",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 31.13,
+      "commit": "52af4c8",
+      "notes": "Daily SEO autopublish 2026-05-17 (iter 1/5). Pillar guide \u2014 ballast math, MASH TL ratings, deployment workflow, closure-ladder placement."
+    },
+    {
+      "date": "2026-05-17",
+      "slug": "type-1-barricade-guide",
+      "url": "/blog/type-1-barricade-guide",
+      "primaryKeyword": "type 1 barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 25.18,
+      "commit": "97428ee",
+      "notes": "Daily SEO autopublish 2026-05-17 (iter 2/5). Definitional 'what is X' \u2014 MUTCD \u00a76F.63 spec, Type 1/2/3 comparison table, 3-profile kit recipes."
+    },
+    {
+      "date": "2026-05-17",
+      "slug": "road-delineators-guide",
+      "url": "/blog/road-delineators-guide",
+      "primaryKeyword": "road delineators",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 14.94,
+      "commit": "cdcb63a",
+      "notes": "Daily SEO autopublish 2026-05-17 (iter 3/5). FAQ-heavy AEO \u2014 MUTCD \u00a73F definition, post types (flexible/semi-rigid/rigid), mounting methods, 7 FAQs."
+    },
+    {
+      "date": "2026-05-17",
+      "slug": "parade-barricades-guide",
+      "url": "/blog/parade-barricades-guide",
+      "primaryKeyword": "parade barricades",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 17.86,
+      "commit": "bb90bf3",
+      "notes": "Daily SEO autopublish 2026-05-17 (iter 4/5). Decision-tree \u2014 4 barricade categories, 3-step picker (crowd density, vehicle risk, route length), worked example, rent vs buy math."
+    },
+    {
+      "date": "2026-05-17",
+      "slug": "barricades-for-sale-buying-guide",
+      "url": "/blog/barricades-for-sale-buying-guide",
+      "primaryKeyword": "barricades for sale",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 14.93,
+      "commit": "1ea3dc3",
+      "notes": "Daily SEO autopublish 2026-05-17 (iter 5/5). Commercial comparison \u2014 6 product classes side-by-side table, pricing tiers, distribution channels, buyer mistakes."
     }
   ]
 }
