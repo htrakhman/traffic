@@ -167,8 +167,10 @@ import { articleTrafficConeLightsGuide } from './articles/traffic-cone-lights-gu
 import { articleWeightedTrafficConesGuide } from './articles/weighted-traffic-cones-guide'
 import { articleWaterFilledJerseyBarriersGuide } from './articles/water-filled-jersey-barriers-guide'
 import { articleType1BarricadeGuide } from './articles/type-1-barricade-guide'
+import { articleRoadDelineatorsGuide } from './articles/road-delineators-guide'
 
 export const articles: Article[] = [
+  articleRoadDelineatorsGuide,
   articleType1BarricadeGuide,
   articleWaterFilledJerseyBarriersGuide,
   articleWeightedTrafficConesGuide,
