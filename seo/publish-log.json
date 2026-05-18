@@ -948,6 +948,61 @@
       "bidHigh": 14.93,
       "commit": "1ea3dc3",
       "notes": "Daily SEO autopublish 2026-05-17 (iter 5/5). Commercial comparison \u2014 6 product classes side-by-side table, pricing tiers, distribution channels, buyer mistakes."
+    },
+    {
+      "date": "2026-05-18",
+      "slug": "type-2-barricade-guide",
+      "url": "/blog/type-2-barricade-guide",
+      "primaryKeyword": "type 2 barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 18.25,
+      "commit": "31b6a8e",
+      "notes": "Daily SEO autopublish 2026-05-18 (iter 1/5). Definitional + decision-tree \u2014 Type 1\u2192Type 2 escalation criteria, Type 2\u2192Type 3 ceiling, 3-pattern buyer shortlist."
+    },
+    {
+      "date": "2026-05-18",
+      "slug": "rubber-traffic-cones-guide",
+      "url": "/blog/rubber-traffic-cones-guide",
+      "primaryKeyword": "rubber traffic cones",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 10.99,
+      "commit": "9ee54d1",
+      "notes": "Daily SEO autopublish 2026-05-18 (iter 2/5). Commercial comparison \u2014 solid rubber vs rubber-base PVC vs PVC, 7-row spec table, quick picker by job, buying mistakes."
+    },
+    {
+      "date": "2026-05-18",
+      "slug": "used-jersey-barriers-for-sale-guide",
+      "url": "/blog/used-jersey-barriers-for-sale-guide",
+      "primaryKeyword": "used jersey barriers for sale",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 7.03,
+      "commit": "f3b2f7b",
+      "notes": "Daily SEO autopublish 2026-05-18 (iter 3/5). FAQ-heavy AEO \u2014 2026 used pricing bands, 5-point inspection checklist, supply sources, used vs water-filled comparison table."
+    },
+    {
+      "date": "2026-05-18",
+      "slug": "temporary-barricade-guide",
+      "url": "/blog/temporary-barricade-guide",
+      "primaryKeyword": "temporary barricade",
+      "targetVolume": 500,
+      "competition": "High",
+      "bidHigh": 20.67,
+      "commit": "ef7e44b",
+      "notes": "Daily SEO autopublish 2026-05-18 (iter 4/5). Pillar guide \u2014 7 temporary barricade families, MUTCD coverage, 9-row picker table by job type."
+    },
+    {
+      "date": "2026-05-18",
+      "slug": "orange-cones-on-the-road-meaning",
+      "url": "/blog/orange-cones-on-the-road-meaning",
+      "primaryKeyword": "orange cones on the road",
+      "targetVolume": 5000,
+      "competition": "High",
+      "bidHigh": 10.99,
+      "commit": "8d28e48",
+      "notes": "Daily SEO autopublish 2026-05-18 (iter 5/5). What-is-X definitional \u2014 driver-facing audience, cone pattern decoder, double-fine zones, multi-color cone reference, contractor bridge at end."
     }
   ]
 }
