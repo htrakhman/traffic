@@ -170,8 +170,10 @@ import { articleType1BarricadeGuide } from './articles/type-1-barricade-guide'
 import { articleRoadDelineatorsGuide } from './articles/road-delineators-guide'
 import { articleParadeBarricadesGuide } from './articles/parade-barricades-guide'
 import { articleBarricadesForSaleBuyingGuide } from './articles/barricades-for-sale-buying-guide'
+import { articleType2BarricadeGuide } from './articles/type-2-barricade-guide'
 
 export const articles: Article[] = [
+  articleType2BarricadeGuide,
   articleBarricadesForSaleBuyingGuide,
   articleParadeBarricadesGuide,
   articleRoadDelineatorsGuide,
