@@ -179,8 +179,10 @@ import { articleRoadConesForSaleBuyingGuide } from './articles/road-cones-for-sa
 import { articleOrangeConstructionConesGuide } from './articles/orange-construction-cones-guide'
 import { articleConstructionConesForSalePillarGuide } from './articles/construction-cones-for-sale-pillar-guide'
 import { articleBarricadeForTrafficFaqGuide } from './articles/barricade-for-traffic-faq-guide'
+import { articleRoadConstructionConesDecisionGuide } from './articles/road-construction-cones-decision-guide'
 
 export const articles: Article[] = [
+  articleRoadConstructionConesDecisionGuide,
   articleBarricadeForTrafficFaqGuide,
   articleConstructionConesForSalePillarGuide,
   articleOrangeConstructionConesGuide,
