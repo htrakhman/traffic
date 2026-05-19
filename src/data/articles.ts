@@ -176,8 +176,10 @@ import { articleUsedJerseyBarriersForSaleGuide } from './articles/used-jersey-ba
 import { articleTemporaryBarricadeGuide } from './articles/temporary-barricade-guide'
 import { articleOrangeConesOnTheRoadMeaning } from './articles/orange-cones-on-the-road-meaning'
 import { articleRoadConesForSaleBuyingGuide } from './articles/road-cones-for-sale-buying-guide'
+import { articleOrangeConstructionConesGuide } from './articles/orange-construction-cones-guide'
 
 export const articles: Article[] = [
+  articleOrangeConstructionConesGuide,
   articleRoadConesForSaleBuyingGuide,
   articleOrangeConesOnTheRoadMeaning,
   articleTemporaryBarricadeGuide,
