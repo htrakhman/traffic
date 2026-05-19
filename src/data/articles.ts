@@ -178,8 +178,10 @@ import { articleOrangeConesOnTheRoadMeaning } from './articles/orange-cones-on-t
 import { articleRoadConesForSaleBuyingGuide } from './articles/road-cones-for-sale-buying-guide'
 import { articleOrangeConstructionConesGuide } from './articles/orange-construction-cones-guide'
 import { articleConstructionConesForSalePillarGuide } from './articles/construction-cones-for-sale-pillar-guide'
+import { articleBarricadeForTrafficFaqGuide } from './articles/barricade-for-traffic-faq-guide'
 
 export const articles: Article[] = [
+  articleBarricadeForTrafficFaqGuide,
   articleConstructionConesForSalePillarGuide,
   articleOrangeConstructionConesGuide,
   articleRoadConesForSaleBuyingGuide,
