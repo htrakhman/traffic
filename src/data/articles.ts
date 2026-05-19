@@ -177,8 +177,10 @@ import { articleTemporaryBarricadeGuide } from './articles/temporary-barricade-g
 import { articleOrangeConesOnTheRoadMeaning } from './articles/orange-cones-on-the-road-meaning'
 import { articleRoadConesForSaleBuyingGuide } from './articles/road-cones-for-sale-buying-guide'
 import { articleOrangeConstructionConesGuide } from './articles/orange-construction-cones-guide'
+import { articleConstructionConesForSalePillarGuide } from './articles/construction-cones-for-sale-pillar-guide'
 
 export const articles: Article[] = [
+  articleConstructionConesForSalePillarGuide,
   articleOrangeConstructionConesGuide,
   articleRoadConesForSaleBuyingGuide,
   articleOrangeConesOnTheRoadMeaning,
