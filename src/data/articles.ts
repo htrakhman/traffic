@@ -175,8 +175,10 @@ import { articleRubberTrafficConesGuide } from './articles/rubber-traffic-cones-
 import { articleUsedJerseyBarriersForSaleGuide } from './articles/used-jersey-barriers-for-sale-guide'
 import { articleTemporaryBarricadeGuide } from './articles/temporary-barricade-guide'
 import { articleOrangeConesOnTheRoadMeaning } from './articles/orange-cones-on-the-road-meaning'
+import { articleRoadConesForSaleBuyingGuide } from './articles/road-cones-for-sale-buying-guide'
 
 export const articles: Article[] = [
+  articleRoadConesForSaleBuyingGuide,
   articleOrangeConesOnTheRoadMeaning,
   articleTemporaryBarricadeGuide,
   articleUsedJerseyBarriersForSaleGuide,
