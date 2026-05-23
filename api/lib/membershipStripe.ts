@@ -8,7 +8,11 @@ export function getStripe(): Stripe {
 
 /** Public site origin for Checkout return URLs. */
 export function siteOrigin(): string {
-  const explicit = process.env.SITE_URL?.replace(/\/$/, '')
+  const explicit =
+    process.env.SITE_URL?.replace(/\/$/, '') ||
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ||
+    process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ||
+    process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, '')
   if (explicit) return explicit
   if (process.env.URL) return process.env.URL.replace(/\/$/, '')
   if (process.env.DEPLOY_PRIME_URL) return process.env.DEPLOY_PRIME_URL.replace(/\/$/, '')

@@ -97,6 +97,12 @@ export interface Product {
   variantGroupKey?: string
   /** Other color/SKU options for this product line (from sibling catalog URLs when present) */
   colorVariants?: ProductColorVariant[]
+  /** When true, hide Add to Cart and show Request Quote */
+  quoteOnly?: boolean
+  /** Fixed shelf price when set (overrides tier calc for display) */
+  sellingPrice?: number
+  salePrice?: number
+  availabilityStatus?: string
 }
 
 export type JobType =

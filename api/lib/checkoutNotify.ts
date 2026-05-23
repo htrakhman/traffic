@@ -8,13 +8,15 @@
  *   CHECKOUT_EMAIL_FROM — optional; default Resend sandbox from (domain verify for production)
  */
 
+import { createOrderWithSnapshots } from './catalogDb.js'
+import { sendCustomerOrderConfirmation } from './orderEmails.js'
+import type { DbOrderLineItem } from './dropshipTypes.js'
+
 export type CheckoutLinePayload = {
   productId: string
   productName: string
   /** Store catalog SKU; included on checkouts for fulfillment. */
   sku?: string
-  /** OEM / supplier reorder SKU when present. */
-  supplierSku?: string
   quantity: number
   unitPrice: number
   lineTotal: number
@@ -53,7 +55,6 @@ function normalizeLineRow(r: Record<string, unknown>): CheckoutLinePayload | nul
     return null
   }
   const sku = isNonEmptyString(r.sku) ? r.sku.trim() : undefined
-  const supplierSku = isNonEmptyString(r.supplierSku) ? r.supplierSku.trim() : undefined
   const qty = Math.max(1, Math.floor(r.quantity))
   let unitPrice: number
   if (typeof r.unitPrice === 'number') {
@@ -67,7 +68,6 @@ function normalizeLineRow(r: Record<string, unknown>): CheckoutLinePayload | nul
     productId: r.productId.trim(),
     productName: r.productName.trim(),
     sku,
-    supplierSku,
     quantity: qty,
     unitPrice,
     lineTotal: r.lineTotal,
@@ -145,10 +145,32 @@ function escapeHtml(s: string): string {
 }
 
 function skuPlainSuffix(l: CheckoutLinePayload): string {
-  const parts: string[] = []
-  if (l.sku) parts.push(`SKU ${l.sku}`)
-  if (l.supplierSku) parts.push(`supplier ${l.supplierSku}`)
-  return parts.length ? ` · ${parts.join(' · ')}` : ''
+  return l.sku ? ` · SKU ${l.sku}` : ''
+}
+
+function formatSupplierFulfillmentBlock(lines: DbOrderLineItem[]): string {
+  return lines
+    .map((l) => {
+      const parts = [
+        `Product: ${l.product_purchased}`,
+        `Qty: ${l.quantity_purchased}`,
+        `Customer paid: $${l.customer_paid_total.toFixed(2)}`,
+        l.expected_gross_margin != null ? `Expected margin: ${l.expected_gross_margin}%` : null,
+        `Primary: ${l.primary_supplier_name_at_order_time ?? '—'}`,
+        l.primary_supplier_url_at_order_time ? `URL: ${l.primary_supplier_url_at_order_time}` : null,
+        l.primary_supplier_sku_at_order_time ? `SKU: ${l.primary_supplier_sku_at_order_time}` : null,
+        l.primary_supplier_unit_cost_at_order_time != null
+          ? `Unit cost: $${l.primary_supplier_unit_cost_at_order_time.toFixed(2)}`
+          : null,
+        l.primary_supplier_landed_cost_at_order_time != null
+          ? `Landed: $${l.primary_supplier_landed_cost_at_order_time.toFixed(2)}`
+          : null,
+        `Backup: ${l.backup_supplier_name_at_order_time ?? '—'}`,
+        l.backup_supplier_url_at_order_time ? `Backup URL: ${l.backup_supplier_url_at_order_time}` : null,
+      ].filter(Boolean)
+      return parts.join('\n  ')
+    })
+    .join('\n\n')
 }
 
 function formatPlainText(p: CheckoutNotifyPayload): string {
@@ -181,22 +203,20 @@ function formatPlainText(p: CheckoutNotifyPayload): string {
   ].join('\n')
 }
 
-function formatHtml(p: CheckoutNotifyPayload): string {
+function formatHtml(p: CheckoutNotifyPayload, orderNumber?: string, fulfillmentLines?: DbOrderLineItem[]): string {
   const rows = p.lines
     .map((l) => {
-      let skuCell = '—'
-      if (l.sku && l.supplierSku) {
-        skuCell = `<span style="font-family:ui-monospace,monospace">${escapeHtml(l.sku)}</span><br/><span style="font-size:12px;color:#555">Supplier: ${escapeHtml(l.supplierSku)}</span>`
-      } else if (l.sku) {
-        skuCell = `<span style="font-family:ui-monospace,monospace">${escapeHtml(l.sku)}</span>`
-      } else if (l.supplierSku) {
-        skuCell = `<span style="font-size:12px;color:#555">Supplier: ${escapeHtml(l.supplierSku)}</span>`
-      }
+      const skuCell = l.sku
+        ? `<span style="font-family:ui-monospace,monospace">${escapeHtml(l.sku)}</span>`
+        : '—'
       return `<tr><td>${escapeHtml(l.productName)}</td><td>${skuCell}</td><td>${l.quantity}</td><td>$${l.unitPrice.toFixed(2)}</td><td>$${l.lineTotal.toFixed(2)}</td></tr>`
     })
     .join('')
+  const fulfillmentHtml = fulfillmentLines?.length
+    ? `<h3>Supplier fulfillment (admin only)</h3><pre style="background:#f5f5f5;padding:12px;font-size:12px;white-space:pre-wrap">${escapeHtml(formatSupplierFulfillmentBlock(fulfillmentLines))}</pre>`
+    : ''
   return `<!DOCTYPE html><html><body style="font-family:sans-serif;line-height:1.5">
-<h2>New purchase checkout</h2>
+<h2>New purchase checkout${orderNumber ? ` — ${escapeHtml(orderNumber)}` : ''}</h2>
 <p><strong>Name:</strong> ${escapeHtml(p.name)}<br/>
 <strong>Email:</strong> ${escapeHtml(p.email)}<br/>
 <strong>Phone:</strong> ${p.phone ? escapeHtml(p.phone) : '—'}<br/>
@@ -214,6 +234,7 @@ ${p.notes ? `<p><strong>Notes</strong><br/>${escapeHtml(p.notes).replace(/\n/g, 
 Merchandise: $${p.totals.merchandiseSubtotal.toFixed(2)}<br/>
 Shipping line: $${p.totals.deliveryPickupCombined.toFixed(2)}<br/>
 <strong>Estimated total: $${p.totals.grandTotal.toFixed(2)}</strong></p>
+${fulfillmentHtml}
 </body></html>`
 }
 
@@ -225,6 +246,37 @@ export async function sendCheckoutNotification(data: unknown): Promise<NotifyRes
   const payload = validatePayload(data)
   if (!payload) {
     return { ok: false, status: 400, code: 'invalid_payload', message: 'Invalid checkout payload' }
+  }
+
+  let orderNumber: string | undefined
+  let fulfillmentLines: DbOrderLineItem[] = []
+  try {
+    const { order, lines } = await createOrderWithSnapshots({
+      customer_name: payload.name,
+      customer_email: payload.email,
+      customer_phone: payload.phone,
+      company: payload.company,
+      job_site: payload.jobSite,
+      notes: payload.notes,
+      delivery_needed: payload.deliveryNeeded,
+      merchandise_subtotal: payload.totals.merchandiseSubtotal,
+      delivery_fee: payload.totals.deliveryPickupCombined,
+      grand_total: payload.totals.grandTotal,
+      membership_at_checkout: payload.membershipSubscribedAtCheckout,
+      lines: payload.lines.map((l) => ({
+        product_id: l.productId,
+        quantity: l.quantity,
+        unit_price: l.unitPrice,
+        line_total: l.lineTotal,
+      })),
+    })
+    orderNumber = order.order_number
+    fulfillmentLines = lines
+    await sendCustomerOrderConfirmation(order, lines).catch((e) =>
+      console.error('[checkout-notify] customer email failed', e),
+    )
+  } catch (e) {
+    console.error('[checkout-notify] order persist failed', e)
   }
 
   const apiKey = process.env.RESEND_API_KEY
@@ -245,9 +297,13 @@ export async function sendCheckoutNotification(data: unknown): Promise<NotifyRes
     .map((s) => s.trim())
     .filter(Boolean)
 
-  const subject = `Purchase checkout: ${payload.name}`
-  const text = formatPlainText(payload)
-  const html = formatHtml(payload)
+  const subject = `Purchase checkout: ${payload.name}${orderNumber ? ` (${orderNumber})` : ''}`
+  const text = [
+    formatPlainText(payload),
+    orderNumber ? `\nOrder: ${orderNumber}` : '',
+    fulfillmentLines.length ? `\n\nSUPPLIER FULFILLMENT (admin only)\n${formatSupplierFulfillmentBlock(fulfillmentLines)}` : '',
+  ].join('')
+  const html = formatHtml(payload, orderNumber, fulfillmentLines)
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',

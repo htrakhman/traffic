@@ -22,7 +22,18 @@
   },
   "redirects": [
     { "source": "/guides", "destination": "/blog", "permanent": true },
-    { "source": "/guides/:slug", "destination": "/blog/:slug", "permanent": true }
+    { "source": "/guides/:slug", "destination": "/blog/:slug", "permanent": true },
+    { "source": "/category/cones-drums", "destination": "/category/traffic-cones", "permanent": true },
+    { "source": "/category/barricades-barriers", "destination": "/category/barricades", "permanent": true },
+    { "source": "/category/signs-sign-stands", "destination": "/category/signs-and-stands", "permanent": true },
+    { "source": "/category/safety-vests-hi-vis", "destination": "/category/safety-vests", "permanent": true },
+    { "source": "/category/bollards-chocks-corners", "destination": "/category/wheel-chocks", "permanent": true },
+    { "source": "/category/speed-bumps-humps", "destination": "/category/speed-control", "permanent": true },
+    { "source": "/category/parking-blocks", "destination": "/category/parking-lot-safety", "permanent": true },
+    { "source": "/product/28-inch-traffic-cone", "destination": "/product/28-inch-orange-traffic-cone", "permanent": true },
+    { "source": "/product/36-inch-traffic-cone", "destination": "/product/36-inch-orange-traffic-cone-reflective-collars", "permanent": true },
+    { "source": "/product/channelizing-drum", "destination": "/product/traffic-drum-with-rubber-base", "permanent": true },
+    { "source": "/product/type-ii-barricade", "destination": "/product/type-ii-traffic-barricade", "permanent": true }
   ],
   "rewrites": [
     {

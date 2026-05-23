@@ -35,12 +35,12 @@ export default function Hero({
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         {/* Headline */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-4">
-          Traffic Control Equipment.{' '}
-          <span className="gradient-text">Free Delivery.</span>
+          Traffic control supplies{' '}
+          <span className="gradient-text">without the markup.</span>
         </h1>
 
         <p className="text-slate-400 max-w-xl mx-auto mb-8 text-base sm:text-lg leading-relaxed">
-          Order what you actually need. Our AI job planner builds your equipment list before you spend a dollar — and every order ships free.
+          Competitive pricing on the gear contractors actually need — cones, barricades, drums, signs, vests, wheel chocks, speed bumps, and parking lot safety products.
         </p>
 
         {/* Search bar */}
@@ -51,7 +51,7 @@ export default function Hero({
               type="text"
               value={browseSearchQuery}
               onChange={(e) => onBrowseSearchQueryChange(e.target.value)}
-              placeholder="Search cones, signs, arrow boards, barricades..."
+              placeholder="Search cones, barricades, drums, signs..."
               className="w-full pl-11 pr-12 py-3.5 bg-slate-900 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500/50 transition-all shadow-lg"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {

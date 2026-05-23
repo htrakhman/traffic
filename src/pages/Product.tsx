@@ -17,7 +17,7 @@ import {
 import { useCart } from '../context/CartContext'
 import { useCatalogSync } from '../context/CatalogSyncContext'
 import { getProductBySlug } from '../data/products'
-import { categories } from '../data/categories'
+import { categories, LEGACY_PRODUCT_REDIRECTS } from '../data/categories'
 import { getAggregate, getReviews } from '../lib/reviews'
 import ReviewsSection from '../components/product/ReviewsSection'
 import HighlightsBlock from '../components/product/HighlightsBlock'
@@ -46,6 +46,13 @@ export default function Product() {
   const { slug } = useParams<{ slug: string }>()
   const product = slug ? getProductBySlug(slug) : undefined
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!slug || product) return
+    const target = LEGACY_PRODUCT_REDIRECTS[slug]
+    if (target) navigate(`/product/${target}`, { replace: true })
+  }, [slug, product, navigate])
+
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
@@ -143,7 +150,7 @@ export default function Product() {
         sku: product.sku,
         image: productImagesAbs,
         url: pageUrl,
-        brand: { '@type': 'Brand', name: product.supplier },
+        brand: { '@type': 'Brand', name: SITE_NAME },
         category: category?.name,
         aggregateRating: {
           '@type': 'AggregateRating',
@@ -561,11 +568,12 @@ export default function Product() {
                 <span className="text-xl font-bold text-white tabular-nums">${lineSubtotal.toFixed(2)}</span>
               </div>
 
-              <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium mb-3">
+              <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium mb-3">
                 <Truck size={13} />
-                Ships free — no minimum order
+                Ships from a U.S. supplier. Most orders ship in 1–3 business days. Tracking provided after fulfillment.
               </div>
 
+              {!product.quoteOnly ? (
               <button
                 type="button"
                 onClick={() => {
@@ -578,14 +586,15 @@ export default function Product() {
                 <ShoppingCart size={18} />
                 Add to cart
               </button>
+              ) : null}
               <button
                 type="button"
                 onClick={() => navigate('/quote', { state: { product, quantity } })}
-                disabled={!product.inStock}
+                disabled={!product.quoteOnly && !product.inStock}
                 className="w-full btn-primary py-3 justify-center text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
               >
                 <Package size={18} />
-                Request quote with job details
+                {product.quoteOnly ? 'Request quote' : 'Request quote with job details'}
               </button>
               <a
                 href={`tel:${SITE_CONTACT_PHONE_E164}`}
@@ -630,45 +639,6 @@ export default function Product() {
             </div>
           </div>
         </div>
-
-        {/* Manufacturer reference — transparency for SEO / AEO */}
-        <section aria-labelledby="mfg-heading" className="mt-12">
-          <h2 id="mfg-heading" className="text-xl font-bold text-white mb-4">
-            Manufacturer and catalog reference
-          </h2>
-          <div className="card p-6 border-slate-700/80">
-            <p className="text-slate-400 text-sm leading-relaxed mb-4">
-              {product.supplierUrl
-                ? 'We sell industry-standard models. The OEM catalog SKU and manufacturer link below help when your traffic control plan or submittal needs primary-source documentation.'
-                : 'We sell industry-standard models. The OEM catalog SKU below identifies the equipment family for your submittal — contact us if you need manufacturer cut sheets or compliance letters.'}
-            </p>
-            <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm border-t border-slate-800 pt-4">
-              <div>
-                <dt className="text-slate-500 font-medium mb-1">Store SKU ({SITE_NAME})</dt>
-                <dd className="text-slate-200 font-mono">{product.sku}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500 font-medium mb-1">Supplier catalog SKU</dt>
-                <dd className="text-slate-200 font-mono">{product.supplierSku}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500 font-medium mb-1">Distributor</dt>
-                <dd className="text-slate-200">{product.supplier}</dd>
-              </div>
-            </dl>
-            {product.supplierUrl ? (
-              <a
-                href={product.supplierUrl}
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-4 text-sm text-brand-400 hover:text-brand-300 transition-colors"
-              >
-                Open manufacturer product page
-                <ChevronRight size={14} />
-              </a>
-            ) : null}
-          </div>
-        </section>
 
         {/* Topic tags — long-tail & AEO */}
         {product.tags.length > 0 && (

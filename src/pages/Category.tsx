@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { useCatalogSync } from '../context/CatalogSyncContext'
-import { categories } from '../data/categories'
+import { categories, LEGACY_CATEGORY_REDIRECTS } from '../data/categories'
 import { getProductsByCategory } from '../data/products'
 import ProductCard from '../components/marketplace/ProductCard'
 import SEO from '../components/seo/SEO'
@@ -11,7 +11,15 @@ import { SITE_NAME } from '../config/site'
 
 export default function Category() {
   const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
   const { tick } = useCatalogSync()
+
+  useEffect(() => {
+    if (!slug) return
+    const target = LEGACY_CATEGORY_REDIRECTS[slug]
+    if (target) navigate(`/category/${target}`, { replace: true })
+  }, [slug, navigate])
+
   const category = categories.find((c) => c.slug === slug)
   const products = useMemo(
     () => (slug ? getProductsByCategory(slug) : []),

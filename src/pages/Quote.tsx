@@ -93,9 +93,28 @@ export default function Quote() {
   const { combined: deliveryPickupCombined } = getDeliveryPickupFees(isMember)
   const grandTotal = merchandiseSubtotal + deliveryPickupCombined
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     clearQuoteAiDraft()
+    try {
+      await fetch('/api/quote-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          lines: items.map((i) => ({
+            productId: i.product.id,
+            productName: i.product.name,
+            sku: i.product.sku,
+            quantity: i.quantity,
+          })),
+          merchandiseSubtotal,
+          grandTotal,
+        }),
+      })
+    } catch {
+      /* still show success — email may have sent */
+    }
     setSubmitted(true)
   }
 

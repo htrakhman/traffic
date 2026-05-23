@@ -1,5 +1,5 @@
 import type { JobDetails, MapArea, RecommendationItem, AIRecommendation } from '../types'
-import { curatedProducts, getProductById } from '../data/products'
+import { getProducts, getProductById } from '../data/products'
 import {
   getLowestRetailUnitPrice,
   getMinimumOrderQuantity,
@@ -68,7 +68,7 @@ function formatChatHttpError(status: number, rawBody: string): string {
   return lines.join('\n\n')
 }
 
-const CATALOG_PROMPT_LINES = curatedProducts
+const CATALOG_PROMPT_LINES = getProducts()
   .map((p) => {
     const moq = getMinimumOrderQuantity(p)
     const low = getLowestRetailUnitPrice(p)
@@ -77,7 +77,7 @@ const CATALOG_PROMPT_LINES = curatedProducts
   .join('\n')
 
 /** One line for streaming cart instructions */
-const STREAM_CART_PRODUCT_RATES = curatedProducts
+const STREAM_CART_PRODUCT_RATES = getProducts()
   .map((p) => {
     const moq = getMinimumOrderQuantity(p)
     const low = getLowestRetailUnitPrice(p)

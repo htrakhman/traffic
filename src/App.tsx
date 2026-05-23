@@ -4,12 +4,12 @@ import { usePostHog } from '@posthog/react'
 import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { MembershipProvider } from './context/MembershipContext'
-import { CatalogSyncProvider, useCatalogSync } from './context/CatalogSyncContext'
-import { registerExtendedCatalog } from './data/products'
+import { CatalogSyncProvider } from './context/CatalogSyncContext'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import AIPlannerWidget from './components/ai/AIPlannerWidget'
 import Home from './pages/Home'
+import { LegacyCategoryRedirect, LegacyProductRedirect } from './components/routing/LegacyRedirects'
 
 const Browse = lazy(() => import('./pages/Browse'))
 const Category = lazy(() => import('./pages/Category'))
@@ -22,6 +22,11 @@ const SiteMapPlanner = lazy(() => import('./pages/SiteMapPlanner'))
 const Blog = lazy(() => import('./pages/Blog'))
 const Article = lazy(() => import('./pages/Article'))
 const Account = lazy(() => import('./pages/Account'))
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
+const SupplierSourceMap = lazy(() => import('./pages/admin/SupplierSourceMap'))
+const AdminProductEdit = lazy(() => import('./pages/admin/AdminProductEdit'))
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'))
+const AdminOrderDetail = lazy(() => import('./pages/admin/AdminOrderDetail'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -47,34 +52,6 @@ function PostHogPageview() {
   return null
 }
 
-/** Loads TSS mirror catalog from `public/tss-catalog.json` (see `npm run catalog` / `scripts/generate-tss-catalog.mjs`). */
-function CatalogLoader() {
-  const { bump } = useCatalogSync()
-  useEffect(() => {
-    const run = () => fetch('/tss-catalog.json')
-      .then((r) => {
-        if (!r.ok) {
-          console.warn('[CatalogLoader] /tss-catalog.json HTTP', r.status)
-          return null
-        }
-        return r.json() as Promise<unknown[]>
-      })
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          registerExtendedCatalog(data as unknown[])
-          bump()
-        }
-      })
-      .catch((err) => {
-        console.warn('[CatalogLoader] Failed to load or parse /tss-catalog.json:', err)
-      })
-    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
-    if (typeof ric === 'function') ric(run, { timeout: 2000 })
-    else setTimeout(run, 200)
-  }, [bump])
-  return null
-}
-
 function AppLayout() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -86,6 +63,8 @@ function AppLayout() {
           <Route path="/browse" element={<Browse />} />
           <Route path="/category/:slug" element={<Category />} />
           <Route path="/product/:slug" element={<ProductPage />} />
+          <Route path="/product-legacy/:slug" element={<LegacyProductRedirect />} />
+          <Route path="/category-legacy/:slug" element={<LegacyCategoryRedirect />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/assistant" element={<Assistant />} />
@@ -96,7 +75,6 @@ function AppLayout() {
           <Route path="/guides" element={<Navigate to="/blog" replace />} />
           <Route path="/guides/:slug" element={<GuidesSlugRedirect />} />
           <Route path="/account" element={<Account />} />
-          {/* Fallback */}
           <Route path="*" element={<Home />} />
         </Routes>
         </Suspense>
@@ -115,13 +93,28 @@ export default function App() {
   return (
     <BrowserRouter>
       <CatalogSyncProvider>
-        <CatalogLoader />
         <AuthProvider>
         <MembershipProvider>
           <CartProvider>
             <ScrollToTop />
             {hasPostHogToken ? <PostHogPageview /> : null}
-            <AppLayout />
+            <Routes>
+              <Route
+                path="/admin"
+                element={
+                  <Suspense fallback={<div className="min-h-screen" />}>
+                    <AdminLayout />
+                  </Suspense>
+                }
+              >
+                <Route index element={<Navigate to="/admin/supplier-source-map" replace />} />
+                <Route path="supplier-source-map" element={<SupplierSourceMap />} />
+                <Route path="products/:id" element={<AdminProductEdit />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="orders/:id" element={<AdminOrderDetail />} />
+              </Route>
+              <Route path="/*" element={<AppLayout />} />
+            </Routes>
           </CartProvider>
         </MembershipProvider>
         </AuthProvider>

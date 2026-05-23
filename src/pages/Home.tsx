@@ -19,7 +19,7 @@ export default function Home() {
     <main>
       <SEO
         title={DEFAULT_PAGE_TITLE}
-        description={`Buy MUTCD-aware traffic control and safety equipment with delivery. Cones, signs, barricades, arrow boards, and more at ${SITE_DOMAIN}.`}
+        description={`Traffic control supplies without the markup. Cones, barricades, drums, signs, vests, wheel chocks, speed bumps, and parking lot safety at ${SITE_DOMAIN}.`}
         canonicalPath="/"
       />
       <JsonLd data={schema.organization()} />

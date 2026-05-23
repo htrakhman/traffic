@@ -219,7 +219,6 @@ export default function Checkout() {
       productId: product.id,
       productName: product.name,
       sku: product.sku,
-      supplierSku: product.supplierSku,
       quantity: line.quantity,
       unitPrice: getRetailUnitPriceForQty(product, line.quantity),
       lineTotal: getPurchaseLineSubtotal(product, line.quantity),

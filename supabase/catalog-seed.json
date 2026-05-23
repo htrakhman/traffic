@@ -1,0 +1,701 @@
+[
+  {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "sku": "TCS-28-CONE",
+    "name": "28 Inch Orange Traffic Cone",
+    "slug": "28-inch-orange-traffic-cone",
+    "category_slug": "traffic-cones",
+    "description": "Affordable 28 inch orange traffic cone for work zones, parking lots, warehouses, schools, events, and general safety use.",
+    "long_description": "28 inch JBC black base traffic cone, 7 lb option, optional reflective collars. Orange, MUTCD and NCHRP-350 crashworthy approval. Ships from a U.S. supplier.",
+    "selling_price": 18.49,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "/catalog/cone-28-orange-7lb.webp",
+    "images": [
+      "/catalog/cone-28-orange-7lb.webp",
+      "/catalog/cone-36-orange-10lb.webp"
+    ],
+    "specs": {
+      "Height": "28\"",
+      "Base": "14\" × 14\"",
+      "Weight": "7 lbs",
+      "Color": "Orange",
+      "Compliance": "MUTCD / NCHRP-350"
+    },
+    "features": [
+      "MUTCD and NCHRP-350 crashworthy",
+      "7 lb black base option",
+      "Optional reflective collars",
+      "Stackable for transport"
+    ],
+    "tags": [
+      "cone",
+      "orange",
+      "28 inch",
+      "price leader"
+    ],
+    "compliance": [
+      "MUTCD",
+      "NCHRP-350"
+    ],
+    "use_cases": [
+      {
+        "title": "Work zones",
+        "description": "Lane closures and shoulder work on roads up to 45 mph."
+      },
+      {
+        "title": "Parking lots",
+        "description": "Temporary lane and stall control."
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How fast can you ship?",
+        "answer": "Most orders ship in 1 to 3 business days from our U.S. supplier network. Tracking is provided after fulfillment."
+      }
+    ],
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": 14,
+        "supplierReferenceUnitPrice": 13.93
+      },
+      {
+        "minQty": 15,
+        "maxQty": 49,
+        "supplierReferenceUnitPrice": 12.77
+      },
+      {
+        "minQty": 50,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 11.63
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": true,
+    "weight": "7 lbs",
+    "dimensions": "28\" H",
+    "availability_status": "Active",
+    "primary_supplier_name": "TrafficCones.com",
+    "primary_supplier_url": "https://www.trafficcones.com/shop/28-inch-traffic-cones-jbc-black-base/CR28S",
+    "primary_supplier_sku": "CR28S",
+    "primary_supplier_unit_cost": 12.25,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Traffic Safety Store",
+    "backup_supplier_url": "https://www.trafficsafetystore.com/traffic-cones/28",
+    "backup_supplier_sku": "CR28",
+    "backup_supplier_unit_cost": 17.49,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": 18.49,
+    "target_margin_percentage": 25,
+    "product_role": "Price Leader",
+    "supplier_group": "Traffic Cones",
+    "fulfillment_notes": "Open TrafficCones.com URL and order to customer ship-to. Save supplier order # and tracking in admin.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000002",
+    "sku": "TCS-36-CONE",
+    "name": "36 Inch Orange Traffic Cone with Reflective Collars",
+    "slug": "36-inch-orange-traffic-cone-reflective-collars",
+    "category_slug": "traffic-cones",
+    "description": "High visibility 36 inch reflective traffic cone for road work, construction zones, parking lots, and high visibility safety setups.",
+    "long_description": "36 inch JBC black base, 10 lb, 6\" and 4\" reflective collars. Item CR36SRC64. MUTCD and NCHRP-350.",
+    "selling_price": 33.75,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "/catalog/cone-36-orange-10lb.webp",
+    "images": [
+      "/catalog/cone-36-orange-10lb.webp"
+    ],
+    "specs": {
+      "Height": "36\"",
+      "Weight": "10 lbs",
+      "Reflective": "6\" + 4\" collars",
+      "Compliance": "MUTCD / NCHRP-350"
+    },
+    "features": [
+      "High-intensity reflective collars",
+      "10 lb rubber base",
+      "High-speed work zones"
+    ],
+    "tags": [
+      "cone",
+      "36 inch",
+      "reflective"
+    ],
+    "compliance": [
+      "MUTCD",
+      "NCHRP-350"
+    ],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 14.83
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": true,
+    "weight": "10 lbs",
+    "dimensions": "36\" H",
+    "availability_status": "Active",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/traffic-cones/36",
+    "primary_supplier_sku": "CR36SRC64",
+    "primary_supplier_unit_cost": 22.25,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "TrafficCones.com",
+    "backup_supplier_url": "https://www.trafficcones.com/shop/orange-36-inch-12-lb-black-base-cone-with-6-inch-4-inch-reflective-collars/CR36HDRC64",
+    "backup_supplier_sku": "CR36HDRC64",
+    "backup_supplier_unit_cost": 22.6,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": 33.75,
+    "target_margin_percentage": 30,
+    "product_role": "Price Leader",
+    "supplier_group": "Traffic Cones",
+    "fulfillment_notes": "Use Traffic Safety Store first; backup TrafficCones.com if OOS.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000003",
+    "sku": "TCS-T2-BARR",
+    "name": "Type II Traffic Barricade",
+    "slug": "type-ii-traffic-barricade",
+    "category_slug": "barricades",
+    "description": "Portable Type II barricade for work zones, closures, restricted areas, road work, and temporary traffic control.",
+    "long_description": "Type II plywood folding reflective barricade, 8\"×24\" panel, HI or EG reflective, 14 gauge galvanized legs, NCHRP-350.",
+    "selling_price": 82.5,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp",
+    "images": [],
+    "specs": {
+      "Panel": "8\" × 24\"",
+      "Legs": "14 gauge galvanized",
+      "Compliance": "NCHRP-350"
+    },
+    "features": [
+      "Folds for storage",
+      "Reflective panels",
+      "Crashworthy"
+    ],
+    "tags": [
+      "barricade",
+      "type ii"
+    ],
+    "compliance": [
+      "NCHRP-350"
+    ],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 36.67
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": true,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Active",
+    "primary_supplier_name": "Safety Zone Specialists",
+    "primary_supplier_url": "https://safetyzonespecialists.com/workzone-safety/barricades/product/type-ii-barricade",
+    "primary_supplier_sku": "TYPE-II",
+    "primary_supplier_unit_cost": 55,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Trans Supply",
+    "backup_supplier_url": "https://www.trans-supply.com/c/73/type-1-type-2-barricades",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": null,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": 82.5,
+    "target_margin_percentage": 30,
+    "product_role": "Price Leader",
+    "supplier_group": "Barricades",
+    "fulfillment_notes": "Bulky — confirm shipping before pricing large qty. Bulk quote for 25+.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000004",
+    "sku": "TCS-DRUM-RB",
+    "name": "Traffic Drum with Rubber Base",
+    "slug": "traffic-drum-with-rubber-base",
+    "category_slug": "traffic-drums",
+    "description": "Reflective traffic drum with weighted rubber base for construction zones, lane control, and roadway work areas.",
+    "long_description": "37\" drum, 6\" EG reflective, rubber tire ring base. Monitor supplier stock — primary SKU may be OOS.",
+    "selling_price": 87.5,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": false,
+    "unit": "each",
+    "image_url": "/catalog/channelizing-drum-6in-hi-tire-base.webp",
+    "images": [
+      "/catalog/channelizing-drum-6in-hi-tire-base.webp"
+    ],
+    "specs": {
+      "Height": "37\"",
+      "Base": "23\" tire ring"
+    },
+    "features": [
+      "Weighted rubber base",
+      "Reflective sheeting"
+    ],
+    "tags": [
+      "drum",
+      "channelizer"
+    ],
+    "compliance": [
+      "MUTCD"
+    ],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 38.43
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": false,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Needs Price Check",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/shop/traffic-drum-with-6-inch-reflective-collars-and-tire-ring-base-engineer-grade-eg/DRUM6EGTIRE",
+    "primary_supplier_sku": "DRUM6EGTIRE",
+    "primary_supplier_unit_cost": 57.65,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Traffic Safety Store",
+    "backup_supplier_url": "https://www.trafficsafetystore.com/shop/traffic-drum-with-4-inch-eg-reflective-stripes-and-rubber-base",
+    "backup_supplier_sku": "DRUM4EG",
+    "backup_supplier_unit_cost": 44.05,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": null,
+    "target_margin_percentage": 30,
+    "product_role": "Price Leader",
+    "supplier_group": "Traffic Drums",
+    "fulfillment_notes": "Check live stock. Use 4\" stripe drum backup or quote only if OOS.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": "Primary was OOS at last check"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000005",
+    "sku": "TCS-RU-48",
+    "name": "48 Inch Roll Up Construction Sign",
+    "slug": "48-inch-roll-up-construction-sign",
+    "category_slug": "signs-and-stands",
+    "description": "Portable roll up construction sign for temporary work zones, road closures, detours, jobsite warnings, and utility work.",
+    "long_description": "48\" heavy duty roll-up sign. Custom legend options — capture custom text on order.",
+    "selling_price": 0,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": true,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp",
+    "images": [],
+    "specs": {
+      "Size": "48\""
+    },
+    "features": [
+      "Custom legends",
+      "Reflective options"
+    ],
+    "tags": [
+      "roll-up sign",
+      "construction"
+    ],
+    "compliance": [
+      "MUTCD"
+    ],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 102.17
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": false,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Quote Only",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/traffic-signs/roll-up-custom",
+    "primary_supplier_sku": "ROLLUP-48",
+    "primary_supplier_unit_cost": 153.25,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Traffic Safety Warehouse",
+    "backup_supplier_url": "https://www.trafficsafetywarehouse.com/Roll-Up-Signs-Stands/products/27/",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": null,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": null,
+    "target_margin_percentage": 35,
+    "product_role": "Quote Only",
+    "supplier_group": "Signs and Stands",
+    "fulfillment_notes": "Submit custom text to supplier manually after order.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000006",
+    "sku": "TCS-STAND-QL",
+    "name": "Roll Up Sign Stand with Quick Latch",
+    "slug": "roll-up-sign-stand-quick-latch",
+    "category_slug": "signs-and-stands",
+    "description": "Heavy duty sign stand for roll up traffic and construction signs.",
+    "long_description": "Zephyr / quick latch roll-up sign stand with rubber or heavy base.",
+    "selling_price": 194.99,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/little-buster-dual-spring-telescoping-sign-stand-w-safesleeve-350-bracket-rigid-bracket.webp",
+    "images": [],
+    "specs": {
+      "Type": "Quick latch stand"
+    },
+    "features": [
+      "Pairs with roll-up signs",
+      "NCHRP approved where applicable"
+    ],
+    "tags": [
+      "sign stand"
+    ],
+    "compliance": [],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 86.63
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": false,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Active",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/sign-stands/zephyr-sign-stand",
+    "primary_supplier_sku": "ZEPHYR",
+    "primary_supplier_unit_cost": 129.95,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "SafetySign.com",
+    "backup_supplier_url": "https://www.safetysign.com/products/roll-up-sign-stands",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": 139.99,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": 194.99,
+    "target_margin_percentage": 30,
+    "product_role": "Normal Margin",
+    "supplier_group": "Signs and Stands",
+    "fulfillment_notes": "Cross-sell with 48\" roll-up sign in admin.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000007",
+    "sku": "TCS-VEST-C2",
+    "name": "Class 2 Hi Vis Safety Vest",
+    "slug": "class-2-hi-vis-safety-vest",
+    "category_slug": "safety-vests",
+    "description": "Affordable Class 2 high visibility safety vest for construction crews, road work, parking crews, warehouses, and jobsite safety.",
+    "long_description": "Class 2 mesh vest with reflective striping. Orange or lime where available.",
+    "selling_price": 14.99,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp",
+    "images": [],
+    "specs": {
+      "Class": "ANSI Class 2"
+    },
+    "features": [
+      "Reflective striping",
+      "Breathable mesh"
+    ],
+    "tags": [
+      "vest",
+      "hi-vis",
+      "class 2"
+    ],
+    "compliance": [
+      "ANSI/ISEA 107"
+    ],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 6.6
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": true,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Active",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/safety-vests",
+    "primary_supplier_sku": "KISHIGO-C2",
+    "primary_supplier_unit_cost": 9.9,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Uline",
+    "backup_supplier_url": "https://www.uline.com/Grp_234/Safety-Vests",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": null,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": 14.99,
+    "target_margin_percentage": 25,
+    "product_role": "Price Leader",
+    "supplier_group": "Safety Vests",
+    "fulfillment_notes": "Easy fulfill — verify live vest SKU before ordering.",
+    "return_notes": null,
+    "last_price_checked_date": "2026-05-23",
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000008",
+    "sku": "TCS-CHOCK-24",
+    "name": "24 Inch Heavy Duty Wheel Chocks",
+    "slug": "24-inch-heavy-duty-wheel-chocks",
+    "category_slug": "wheel-chocks",
+    "description": "Heavy duty wheel chocks for trucks, trailers, loading docks, construction sites, and parking safety.",
+    "long_description": "24\" heavy duty wheel chocks, typically sold as pair. Confirm supplier SKU at order time.",
+    "selling_price": 49.99,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "pair",
+    "image_url": "/catalog/cone-28-orange-7lb.webp",
+    "images": [],
+    "specs": {
+      "Length": "24\""
+    },
+    "features": [
+      "Truck/trailer grade"
+    ],
+    "tags": [
+      "wheel chock"
+    ],
+    "compliance": [],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 21.33
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": false,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Needs Price Check",
+    "primary_supplier_name": "Global Industrial",
+    "primary_supplier_url": "https://www.globalindustrial.com/c/material-handling/dock-equipment/wheel-chocks",
+    "primary_supplier_sku": null,
+    "primary_supplier_unit_cost": null,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Grainger",
+    "backup_supplier_url": "https://www.grainger.com/category/safety/wheel-chocks",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": null,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": null,
+    "target_margin_percentage": 30,
+    "product_role": "Normal Margin",
+    "supplier_group": "Wheel Chocks",
+    "fulfillment_notes": "Confirm live supplier URL and landed cost before quoting.",
+    "return_notes": null,
+    "last_price_checked_date": null,
+    "internal_notes": "Needs live supplier check"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000009",
+    "sku": "TCS-SPEED-95",
+    "name": "9.5 Foot Rubber Speed Bump",
+    "slug": "9-5-foot-rubber-speed-bump",
+    "category_slug": "speed-control",
+    "description": "Rubber speed bump for parking lots, private roads, garages, schools, warehouses, and property traffic control.",
+    "long_description": "9.5 ft rubber speed bump. Include shipping in margin — bulky item.",
+    "selling_price": 129.99,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/economy-rubber-speed-hump-middle-section-18-galv-steel-spikes-asphalt-gravel-or-dirt-traffic-calming.webp",
+    "images": [],
+    "specs": {
+      "Length": "9.5 ft"
+    },
+    "features": [
+      "Rubber construction",
+      "Surface mount"
+    ],
+    "tags": [
+      "speed bump"
+    ],
+    "compliance": [],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 56.67
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": false,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Needs Price Check",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/speed-bumps-humps",
+    "primary_supplier_sku": null,
+    "primary_supplier_unit_cost": null,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Global Industrial",
+    "backup_supplier_url": "https://www.globalindustrial.com/c/safety/speed-bumps-humps",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": null,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": null,
+    "target_margin_percentage": 30,
+    "product_role": "Price Leader",
+    "supplier_group": "Speed Control",
+    "fulfillment_notes": "Bulky — confirm freight before final price.",
+    "return_notes": null,
+    "last_price_checked_date": null,
+    "internal_notes": null
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000010",
+    "sku": "TCS-PARK-BLK",
+    "name": "Rubber Parking Block",
+    "slug": "rubber-parking-block",
+    "category_slug": "parking-lot-safety",
+    "description": "Rubber parking block for parking lots, garages, apartment complexes, commercial properties, and warehouse parking areas.",
+    "long_description": "Standard commercial rubber parking block with mounting hardware where included.",
+    "selling_price": 39.99,
+    "sale_price": null,
+    "status": "active",
+    "quote_only": false,
+    "in_stock": true,
+    "unit": "each",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/commercial-parking-block-3ft-blue-18-galv-steel-spikes-asphalt-gravel-or-dirt-rubber-wheel-stop-parking-curb-ada-compliant.webp",
+    "images": [],
+    "specs": {
+      "Length": "3 ft typical"
+    },
+    "features": [
+      "Recycled rubber",
+      "Pre-drilled"
+    ],
+    "tags": [
+      "parking block",
+      "wheel stop"
+    ],
+    "compliance": [],
+    "use_cases": null,
+    "faqs": null,
+    "volume_price_tiers": [
+      {
+        "minQty": 1,
+        "maxQty": null,
+        "supplierReferenceUnitPrice": 17.33
+      }
+    ],
+    "meta_title": null,
+    "meta_description": null,
+    "popular": false,
+    "weight": null,
+    "dimensions": null,
+    "availability_status": "Needs Price Check",
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/parking-blocks",
+    "primary_supplier_sku": null,
+    "primary_supplier_unit_cost": null,
+    "primary_supplier_shipping_estimate": null,
+    "backup_supplier_name": "Global Industrial",
+    "backup_supplier_url": "https://www.globalindustrial.com/c/safety/parking-lot-supplies/parking-blocks",
+    "backup_supplier_sku": null,
+    "backup_supplier_unit_cost": null,
+    "backup_supplier_shipping_estimate": null,
+    "cheapest_competitor_url": null,
+    "cheapest_competitor_price": null,
+    "recommended_selling_price": null,
+    "target_margin_percentage": 30,
+    "product_role": "Price Leader",
+    "supplier_group": "Parking Lot Safety",
+    "fulfillment_notes": "Include shipping in margin. Standard black/yellow preferred over blue.",
+    "return_notes": null,
+    "last_price_checked_date": null,
+    "internal_notes": null
+  }
+]
