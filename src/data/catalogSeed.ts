@@ -3,18 +3,27 @@
  * Supplier fields are admin-only at runtime via API.
  */
 import type { DbProduct } from '../types/dropship'
-import { RETAIL_REFERENCE_DIVISOR, roundMoney } from '../utils/pricingConstants'
+import { RETAIL_MARKUP_MULTIPLIER, roundMoney } from '../utils/pricingConstants'
 
-const ref = (retail: number) => roundMoney(retail / RETAIL_REFERENCE_DIVISOR)
+/** Tier ref so storefront applyRetailMarkup(ref) === intended shelf unit price. */
+const shelfRef = (shelfUnit: number) => roundMoney(shelfUnit / RETAIL_MARKUP_MULTIPLIER)
 
-const tier = (retailUnit: number) => [
-  { minQty: 1, maxQty: null as number | null, supplierReferenceUnitPrice: ref(retailUnit) },
+const shelfTier = (shelfUnit: number) => [
+  { minQty: 1, maxQty: null as number | null, supplierReferenceUnitPrice: shelfRef(shelfUnit) },
 ]
 
 const cone28Tiers = [
-  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: ref(20.9) },
-  { minQty: 15, maxQty: 49, supplierReferenceUnitPrice: ref(19.15) },
-  { minQty: 50, maxQty: null, supplierReferenceUnitPrice: ref(17.45) },
+  { minQty: 1, maxQty: 14, supplierReferenceUnitPrice: shelfRef(18.49) },
+  {
+    minQty: 15,
+    maxQty: 49,
+    supplierReferenceUnitPrice: shelfRef(roundMoney(18.49 * (19.15 / 20.9))),
+  },
+  {
+    minQty: 50,
+    maxQty: null,
+    supplierReferenceUnitPrice: shelfRef(roundMoney(18.49 * (17.45 / 20.9))),
+  },
 ]
 
 export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>[] = [
@@ -121,7 +130,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: ['MUTCD', 'NCHRP-350'],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(22.25),
+    volume_price_tiers: shelfTier(33.75),
     meta_title: null,
     meta_description: null,
     popular: true,
@@ -175,7 +184,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: ['NCHRP-350'],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(55),
+    volume_price_tiers: shelfTier(82.5),
     meta_title: null,
     meta_description: null,
     popular: true,
@@ -228,7 +237,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: ['MUTCD'],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(57.65),
+    volume_price_tiers: shelfTier(87.5),
     meta_title: null,
     meta_description: null,
     popular: false,
@@ -283,7 +292,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: ['MUTCD'],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(153.25),
+    volume_price_tiers: [],
     meta_title: null,
     meta_description: null,
     popular: false,
@@ -335,7 +344,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: [],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(129.95),
+    volume_price_tiers: shelfTier(194.99),
     meta_title: null,
     meta_description: null,
     popular: false,
@@ -387,7 +396,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: ['ANSI/ISEA 107'],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(9.9),
+    volume_price_tiers: shelfTier(14.99),
     meta_title: null,
     meta_description: null,
     popular: true,
@@ -438,7 +447,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: [],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(32),
+    volume_price_tiers: shelfTier(49.99),
     meta_title: null,
     meta_description: null,
     popular: false,
@@ -490,7 +499,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: [],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(85),
+    volume_price_tiers: shelfTier(129.99),
     meta_title: null,
     meta_description: null,
     popular: false,
@@ -542,7 +551,7 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     compliance: [],
     use_cases: null,
     faqs: null,
-    volume_price_tiers: tier(26),
+    volume_price_tiers: shelfTier(39.99),
     meta_title: null,
     meta_description: null,
     popular: false,

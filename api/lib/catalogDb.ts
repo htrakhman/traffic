@@ -18,7 +18,10 @@ export async function listPublicProducts(): Promise<DbProduct[]> {
     .select('*')
     .eq('status', 'active')
     .order('name')
-  if (error) throw new Error(error.message)
+  if (error) {
+    console.warn('[catalogDb] listPublicProducts:', error.message)
+    return getSeedProducts().filter((p) => p.status === 'active')
+  }
   if (!data?.length) return getSeedProducts().filter((p) => p.status === 'active')
   return data as DbProduct[]
 }

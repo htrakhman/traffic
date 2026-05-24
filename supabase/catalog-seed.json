@@ -61,17 +61,17 @@
       {
         "minQty": 1,
         "maxQty": 14,
-        "supplierReferenceUnitPrice": 13.93
+        "supplierReferenceUnitPrice": 9.13
       },
       {
         "minQty": 15,
         "maxQty": 49,
-        "supplierReferenceUnitPrice": 12.77
+        "supplierReferenceUnitPrice": 8.37
       },
       {
         "minQty": 50,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 11.63
+        "supplierReferenceUnitPrice": 7.62
       }
     ],
     "meta_title": null,
@@ -145,7 +145,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 14.83
+        "supplierReferenceUnitPrice": 16.67
       }
     ],
     "meta_title": null,
@@ -214,7 +214,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 36.67
+        "supplierReferenceUnitPrice": 40.74
       }
     ],
     "meta_title": null,
@@ -283,7 +283,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 38.43
+        "supplierReferenceUnitPrice": 43.21
       }
     ],
     "meta_title": null,
@@ -345,13 +345,7 @@
     ],
     "use_cases": null,
     "faqs": null,
-    "volume_price_tiers": [
-      {
-        "minQty": 1,
-        "maxQty": null,
-        "supplierReferenceUnitPrice": 102.17
-      }
-    ],
+    "volume_price_tiers": [],
     "meta_title": null,
     "meta_description": null,
     "popular": false,
@@ -412,7 +406,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 86.63
+        "supplierReferenceUnitPrice": 96.29
       }
     ],
     "meta_title": null,
@@ -479,7 +473,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 6.6
+        "supplierReferenceUnitPrice": 7.4
       }
     ],
     "meta_title": null,
@@ -541,7 +535,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 21.33
+        "supplierReferenceUnitPrice": 24.69
       }
     ],
     "meta_title": null,
@@ -604,7 +598,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 56.67
+        "supplierReferenceUnitPrice": 64.19
       }
     ],
     "meta_title": null,
@@ -668,7 +662,7 @@
       {
         "minQty": 1,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 17.33
+        "supplierReferenceUnitPrice": 19.75
       }
     ],
     "meta_title": null,
