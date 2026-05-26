@@ -33,7 +33,12 @@
     { "source": "/product/28-inch-traffic-cone", "destination": "/product/28-inch-orange-traffic-cone", "permanent": true },
     { "source": "/product/36-inch-traffic-cone", "destination": "/product/36-inch-orange-traffic-cone-reflective-collars", "permanent": true },
     { "source": "/product/channelizing-drum", "destination": "/product/traffic-drum-with-rubber-base", "permanent": true },
-    { "source": "/product/type-ii-barricade", "destination": "/product/type-ii-traffic-barricade", "permanent": true }
+    { "source": "/product/type-ii-barricade", "destination": "/product/type-ii-traffic-barricade", "permanent": true },
+    {
+      "source": "/product/multi-gate-expandable-barricade",
+      "destination": "/product/galvanized-crowd-control-fence-panel-6x10",
+      "permanent": true
+    }
   ],
   "rewrites": [
     {

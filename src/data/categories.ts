@@ -15,9 +15,9 @@ export const categories: Category[] = [
     id: 'cat-barricades',
     name: 'Barricades',
     slug: 'barricades',
-    description: 'Type II barricades and Multi-Gate expandable barriers for closures and work zones',
+    description: 'Type II barricades and galvanized crowd control fence for closures and events',
     seoDescription:
-      'Portable Type II traffic barricades and Multi-Gate expandable barricades for road work and restricted areas.',
+      'Portable Type II traffic barricades and galvanized crowd control fence panels for road work, events, and restricted areas.',
     icon: '',
     imageUrl:
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp',
@@ -103,6 +103,6 @@ export const LEGACY_PRODUCT_REDIRECTS: Record<string, string> = {
   'portable-rubber-speed-bump-6ft': '9-5-foot-rubber-speed-bump',
   'commercial-rubber-parking-block-6ft-blue': 'rubber-parking-block',
   'urethane-wheel-chock-truck-trailer': '24-inch-heavy-duty-wheel-chocks',
-  'multi-gate-expandable-barricade': 'multi-gate-expandable-barricade',
-  'multigate-expandable-barricade': 'multi-gate-expandable-barricade',
+  'multi-gate-expandable-barricade': 'galvanized-crowd-control-fence-panel-6x10',
+  'multigate-expandable-barricade': 'galvanized-crowd-control-fence-panel-6x10',
 }

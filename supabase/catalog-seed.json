@@ -694,99 +694,114 @@
   },
   {
     "id": "00000000-0000-4000-8000-000000000011",
-    "sku": "TCS-MULTI-GATE",
-    "name": "Multi-Gate Expandable Barricade",
-    "slug": "multi-gate-expandable-barricade",
+    "sku": "TCS-CC-FENCE-7",
+    "name": "Galvanized Crowd Control Fence Panel — 7 ft with Bridge Feet",
+    "slug": "galvanized-crowd-control-fence-panel-6x10",
     "category_slug": "barricades",
-    "description": "Portable expandable plastic barricade for work zones, parking garages, maintenance areas, and quick lane or pedestrian closures.",
-    "long_description": "HDPE Multi-Gate expands from 5.35\" stored to 90\" (7.5 ft) open. Fluorescent orange with reflective strips, adjustable locking width, optional water ballast (15–35 lb), and tape slots for extended runs. One-person setup.",
-    "selling_price": 199.99,
+    "description": "Interlocking galvanized steel crowd control fence panel with bridge feet for events, parades, and secured site perimeters.",
+    "long_description": "Heavy-duty galvanized steel crowd control panel, 7 ft long × 42 in tall, with removable bridge feet for grass and uneven ground. Interlocking hooks create continuous runs; flat feet available from supplier for paved surfaces. Typical panel weight about 35 lb with bridge feet.",
+    "selling_price": 149.99,
     "sale_price": null,
     "status": "active",
     "quote_only": false,
     "in_stock": true,
     "unit": "each",
-    "image_url": "https://cdn.shopify.com/s/files/1/2322/6603/files/Multi-Gate-Spec2_600x600.jpg",
+    "image_url": "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/galv-steel-crowd-control-fence-bridge-feet.webp",
     "images": [
-      "https://cdn.shopify.com/s/files/1/2322/6603/files/Multi-Gate-Spec2_600x600.jpg",
-      "https://cdn.shopify.com/s/files/1/2322/6603/files/Multi-Gate-Spec1_240x240.jpg"
+      "https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/galv-steel-crowd-control-fence-bridge-feet.webp"
     ],
     "specs": {
-      "Open length": "90\" (7.5 ft)",
-      "Closed length": "5.35\"",
-      "Height": "43\"",
-      "Width": "19\"",
-      "Weight (empty)": "15 lbs",
-      "Weight (water-filled)": "35 lbs",
-      "Material": "HDPE",
-      "Color": "Fluorescent orange"
+      "Panel": "7 ft long × 42 in tall",
+      "Frame": "Galvanized steel tube",
+      "Feet": "Bridge feet (removable)",
+      "Mesh": "Welded wire mesh",
+      "Weight": "~35 lb with bridge feet"
     },
     "features": [
-      "Expands to 7.5 ft in seconds",
-      "52 reflective strips for night visibility",
-      "Water-fillable for wind stability",
-      "Tape slots for extended barrier runs",
-      "Rust-free HDPE — all-weather"
+      "Fast interlocking install",
+      "Galvanized corrosion resistance",
+      "Bridge feet for turf and uneven ground",
+      "Compatible with privacy screens (request)"
     ],
     "tags": [
-      "multi-gate",
-      "expandable",
-      "barricade",
-      "portable"
+      "fence",
+      "crowd control",
+      "galvanized",
+      "event"
     ],
-    "compliance": [],
+    "compliance": [
+      "Event and fire code reviews required"
+    ],
     "use_cases": [
       {
-        "title": "Work zone closures",
-        "description": "Quickly block lanes, shoulders, or equipment access at short-duration jobs."
+        "title": "Concert and stage lines",
+        "description": "Create performer and crew separation from public zones."
       },
       {
-        "title": "Parking & garages",
-        "description": "Close wash bays, maintenance bays, and garage lanes without permanent hardware."
+        "title": "Construction laydown yards",
+        "description": "Perimeter control for materials and equipment overnight."
+      },
+      {
+        "title": "Parade routes",
+        "description": "Channel spectators at intersections and VIP crossings."
       }
     ],
     "faqs": [
       {
-        "question": "How wide does it open?",
-        "answer": "The Multi-Gate expands up to 90 inches (7.5 feet) and locks at any width in between. Collapsed storage width is about 5.35 inches."
+        "question": "How many panels per 100 ft?",
+        "answer": "Each panel spans 7 ft. Plan roughly 15 panels per 100 ft of run, plus extras for corners and gates."
       },
       {
-        "question": "Do I need water ballast?",
-        "answer": "For indoor or low-wind use, empty weight (about 15 lb) is usually enough. Outdoors or windy sites, fill the end caps with water for about 35 lb total stability."
+        "question": "Wind bracing?",
+        "answer": "Add ballast or angled braces per engineer or venue requirements on exposed runs."
+      },
+      {
+        "question": "Gates?",
+        "answer": "Yes — request swing gate panels from the supplier for equipment access."
       }
     ],
     "volume_price_tiers": [
       {
         "minQty": 1,
+        "maxQty": 14,
+        "supplierReferenceUnitPrice": 74.07
+      },
+      {
+        "minQty": 15,
+        "maxQty": 49,
+        "supplierReferenceUnitPrice": 67.99
+      },
+      {
+        "minQty": 50,
         "maxQty": null,
-        "supplierReferenceUnitPrice": 98.76
+        "supplierReferenceUnitPrice": 62.74
       }
     ],
     "meta_title": null,
-    "meta_description": "Buy Multi-Gate expandable plastic barricades for work zones and parking areas. Portable 7.5 ft HDPE safety gate with reflective strips.",
-    "popular": true,
-    "weight": "15 lbs (35 lbs water-filled)",
-    "dimensions": "43\" H × up to 90\" L",
+    "meta_description": "Buy galvanized steel crowd control fence panels with bridge feet for events, parades, and secured construction sites.",
+    "popular": false,
+    "weight": "~35 lb / panel (bridge feet)",
+    "dimensions": "7 ft × 42 in panel",
     "availability_status": "Active",
-    "primary_supplier_name": "Traffic Safety Warehouse",
-    "primary_supplier_url": "https://www.trafficsafetywarehouse.com/Multi-Gate-Expandable-Portable-Barricade-75/productinfo/MULTI-GATE/",
-    "primary_supplier_sku": "MULTI-GATE",
-    "primary_supplier_unit_cost": 167,
-    "primary_supplier_shipping_estimate": 18,
+    "primary_supplier_name": "Traffic Safety Store",
+    "primary_supplier_url": "https://www.trafficsafetystore.com/fencing/7-foot-steel-crowd-control-fence",
+    "primary_supplier_sku": "CCB87X42BF",
+    "primary_supplier_unit_cost": 112.75,
+    "primary_supplier_shipping_estimate": 22,
     "backup_supplier_name": "SONCO",
-    "backup_supplier_url": "https://www.soncocrowdcontrol.com/multigate-barricade",
-    "backup_supplier_sku": "PBMGATEOR",
-    "backup_supplier_unit_cost": 195,
+    "backup_supplier_url": "https://www.soncocrowdcontrol.com/6-x-10-inline-chain-link-temporary-fence-panel",
+    "backup_supplier_sku": "TP610S",
+    "backup_supplier_unit_cost": 89,
     "backup_supplier_shipping_estimate": null,
-    "cheapest_competitor_url": "https://www.trafficsafetywarehouse.com/Multi-Gate-Expandable-Portable-Barricade-75/productinfo/MULTI-GATE/",
-    "cheapest_competitor_price": 229.95,
-    "recommended_selling_price": 199.99,
+    "cheapest_competitor_url": "https://www.trafficsafetystore.com/fencing/7-foot-steel-crowd-control-fence",
+    "cheapest_competitor_price": 112.75,
+    "recommended_selling_price": 149.99,
     "target_margin_percentage": 30,
-    "product_role": "Price Leader",
+    "product_role": "Normal Margin",
     "supplier_group": "Barricades",
-    "fulfillment_notes": "Ships UPS ground — verify MULTI-GATE in stock before ordering. Offer connector/reflector upsell if customer needs longer runs.",
+    "fulfillment_notes": "Order CCB87X42BF bridge feet unless customer needs flat feet (CCB87X42FF). LTL for 10+ panels — quote freight before large orders.",
     "return_notes": null,
     "last_price_checked_date": "2026-05-23",
-    "internal_notes": "Restored per owner request (Multi-Gate expandable barricade)."
+    "internal_notes": "Restored crowd control fence (replaces mistaken Multi-Gate SKU). Slug kept for blog/SEO links."
   }
 ]
