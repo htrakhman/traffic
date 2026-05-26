@@ -1,5 +1,5 @@
 /**
- * Canonical 10-product catalog seed (used when Supabase is unavailable and for migrations).
+ * Canonical catalog seed (used when Supabase is unavailable and for migrations).
  * Supplier fields are admin-only at runtime via API.
  */
 import type { DbProduct } from '../types/dropship'
@@ -578,5 +578,100 @@ export const CATALOG_SEED_PRODUCTS: Omit<DbProduct, 'created_at' | 'updated_at'>
     return_notes: null,
     last_price_checked_date: null,
     internal_notes: null,
+  },
+  {
+    id: '00000000-0000-4000-8000-000000000011',
+    sku: 'TCS-MULTI-GATE',
+    name: 'Multi-Gate Expandable Barricade',
+    slug: 'multi-gate-expandable-barricade',
+    category_slug: 'barricades',
+    description:
+      'Portable expandable plastic barricade for work zones, parking garages, maintenance areas, and quick lane or pedestrian closures.',
+    long_description:
+      'HDPE Multi-Gate expands from 5.35" stored to 90" (7.5 ft) open. Fluorescent orange with reflective strips, adjustable locking width, optional water ballast (15–35 lb), and tape slots for extended runs. One-person setup.',
+    selling_price: 199.99,
+    sale_price: null,
+    status: 'active',
+    quote_only: false,
+    in_stock: true,
+    unit: 'each',
+    image_url:
+      'https://cdn.shopify.com/s/files/1/2322/6603/files/Multi-Gate-Spec2_600x600.jpg',
+    images: [
+      'https://cdn.shopify.com/s/files/1/2322/6603/files/Multi-Gate-Spec2_600x600.jpg',
+      'https://cdn.shopify.com/s/files/1/2322/6603/files/Multi-Gate-Spec1_240x240.jpg',
+    ],
+    specs: {
+      'Open length': '90" (7.5 ft)',
+      'Closed length': '5.35"',
+      Height: '43"',
+      Width: '19"',
+      'Weight (empty)': '15 lbs',
+      'Weight (water-filled)': '35 lbs',
+      Material: 'HDPE',
+      Color: 'Fluorescent orange',
+    },
+    features: [
+      'Expands to 7.5 ft in seconds',
+      '52 reflective strips for night visibility',
+      'Water-fillable for wind stability',
+      'Tape slots for extended barrier runs',
+      'Rust-free HDPE — all-weather',
+    ],
+    tags: ['multi-gate', 'expandable', 'barricade', 'portable'],
+    compliance: [],
+    use_cases: [
+      {
+        title: 'Work zone closures',
+        description: 'Quickly block lanes, shoulders, or equipment access at short-duration jobs.',
+      },
+      {
+        title: 'Parking & garages',
+        description: 'Close wash bays, maintenance bays, and garage lanes without permanent hardware.',
+      },
+    ],
+    faqs: [
+      {
+        question: 'How wide does it open?',
+        answer:
+          'The Multi-Gate expands up to 90 inches (7.5 feet) and locks at any width in between. Collapsed storage width is about 5.35 inches.',
+      },
+      {
+        question: 'Do I need water ballast?',
+        answer:
+          'For indoor or low-wind use, empty weight (about 15 lb) is usually enough. Outdoors or windy sites, fill the end caps with water for about 35 lb total stability.',
+      },
+    ],
+    volume_price_tiers: shelfTier(199.99),
+    meta_title: null,
+    meta_description:
+      'Buy Multi-Gate expandable plastic barricades for work zones and parking areas. Portable 7.5 ft HDPE safety gate with reflective strips.',
+    popular: true,
+    weight: '15 lbs (35 lbs water-filled)',
+    dimensions: '43" H × up to 90" L',
+    availability_status: 'Active',
+    primary_supplier_name: 'Traffic Safety Warehouse',
+    primary_supplier_url:
+      'https://www.trafficsafetywarehouse.com/Multi-Gate-Expandable-Portable-Barricade-75/productinfo/MULTI-GATE/',
+    primary_supplier_sku: 'MULTI-GATE',
+    primary_supplier_unit_cost: 167,
+    primary_supplier_shipping_estimate: 18,
+    backup_supplier_name: 'SONCO',
+    backup_supplier_url: 'https://www.soncocrowdcontrol.com/multigate-barricade',
+    backup_supplier_sku: 'PBMGATEOR',
+    backup_supplier_unit_cost: 195,
+    backup_supplier_shipping_estimate: null,
+    cheapest_competitor_url:
+      'https://www.trafficsafetywarehouse.com/Multi-Gate-Expandable-Portable-Barricade-75/productinfo/MULTI-GATE/',
+    cheapest_competitor_price: 229.95,
+    recommended_selling_price: 199.99,
+    target_margin_percentage: 30,
+    product_role: 'Price Leader',
+    supplier_group: 'Barricades',
+    fulfillment_notes:
+      'Ships UPS ground — verify MULTI-GATE in stock before ordering. Offer connector/reflector upsell if customer needs longer runs.',
+    return_notes: null,
+    last_price_checked_date: '2026-05-23',
+    internal_notes: 'Restored per owner request (Multi-Gate expandable barricade).',
   },
 ]
