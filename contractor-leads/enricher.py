@@ -134,7 +134,7 @@ def extract_emails(html: str) -> list[str]:
             continue
         cleaned.append(e)
     # Preserve order: prefer info@, contact@, sales@, then rest
-    priority = ("info@", "contact@", "sales@", "office@", "hello@", "admin@")
+    priority = ("info@", "contact@", "sales@", "office@", "admin@")
     cleaned.sort(key=lambda x: (0 if x.startswith(priority) else 1, x))
     return cleaned
 
