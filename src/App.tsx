@@ -8,7 +8,7 @@ import { CatalogSyncProvider } from './context/CatalogSyncContext'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import AIPlannerWidget from './components/ai/AIPlannerWidget'
-import Home from './pages/Home'
+import SupplierHome from './pages/SupplierHome'
 import { LegacyCategoryRedirect, LegacyProductRedirect } from './components/routing/LegacyRedirects'
 
 const Browse = lazy(() => import('./pages/Browse'))
@@ -59,7 +59,6 @@ function AppLayout() {
       <div className="flex-1">
         <Suspense fallback={<div className="min-h-screen" />}>
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/browse" element={<Browse />} />
           <Route path="/category/:slug" element={<Category />} />
           <Route path="/product/:slug" element={<ProductPage />} />
@@ -75,7 +74,7 @@ function AppLayout() {
           <Route path="/guides" element={<Navigate to="/blog" replace />} />
           <Route path="/guides/:slug" element={<GuidesSlugRedirect />} />
           <Route path="/account" element={<Account />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<Navigate to="/browse" replace />} />
         </Routes>
         </Suspense>
       </div>
@@ -99,6 +98,9 @@ export default function App() {
             <ScrollToTop />
             {hasPostHogToken ? <PostHogPageview /> : null}
             <Routes>
+              {/* Job A — supplier lead-gen homepage. Standalone: no storefront
+                  Header/Footer/AIPlannerWidget, no shared chrome with Job B below. */}
+              <Route path="/" element={<SupplierHome />} />
               <Route
                 path="/admin"
                 element={

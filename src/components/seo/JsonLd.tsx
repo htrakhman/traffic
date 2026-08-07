@@ -35,6 +35,24 @@ export const schema = {
     logo: `${SITE_ORIGIN}${SITE_LOGO_PATH}`,
     sameAs: [] as string[],
   }),
+  service: () => ({
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'Traffic control equipment lead generation',
+    provider: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_ORIGIN,
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'United States',
+    },
+    audience: {
+      '@type': 'Audience',
+      audienceType: 'Traffic control and work zone safety equipment suppliers',
+    },
+  }),
   website: () => ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',

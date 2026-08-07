@@ -19,10 +19,26 @@ export default {
         slate: {
           950: '#020617',
         },
+        // Supplier homepage (Job A) tokens — see src/pages/SupplierHome.css for the
+        // single-source CSS custom properties these read from.
+        paper: 'var(--paper)',
+        surface: 'var(--surface)',
+        ink: 'var(--ink)',
+        muted: 'var(--muted)',
+        line: 'var(--line)',
+        zone: {
+          DEFAULT: 'var(--zone)',
+          soft: 'var(--zone-soft)',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Inter', 'system-ui', 'sans-serif'],
+        // Supplier homepage only — kept separate from the storefront's Inter-based
+        // 'sans'/'display' so this doesn't change any existing page.
+        tcsDisplay: ['Archivo', 'system-ui', 'sans-serif'],
+        tcsBody: ['"Public Sans"', 'system-ui', 'sans-serif'],
+        tcsMono: ['"DM Mono"', 'ui-monospace', 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',

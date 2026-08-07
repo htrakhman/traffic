@@ -18,6 +18,9 @@
     },
     "api/stripe-portal.ts": {
       "maxDuration": 15
+    },
+    "api/supplier-signup.ts": {
+      "maxDuration": 15
     }
   },
   "redirects": [
