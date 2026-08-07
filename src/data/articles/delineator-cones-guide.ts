@@ -213,7 +213,7 @@ export const articleDelineatorConesGuide: Article = {
       h('li', null, h('strong', null, 'Buying 28" cones for a 50 mph road.'), ' Inspector will fail the setup; you redeploy the entire taper.'),
       h('li', null, h('strong', null, 'Engineer Grade sheeting at night.'), ' Looks fine in the yard, invisible at 50 ft on a wet road. Cited in NJDOT post-incident reviews more than any other gear failure.'),
       h('li', null, h('strong', null, 'Light bases on a windy bridge deck.'), ' A 4 lb tubular delineator base will skate across an open deck in 25 mph wind. Use 10 lb minimum or sandbag.'),
-      h('li', null, h('strong', null, 'Treating cones as permanent.'), ' Standard rubber-base cones fade, walk off, and get stolen inside a week of unattended deployment. For longer than that, buy a tubular delineator or rent a drum.'),
+      h('li', null, h('strong', null, 'Treating cones as permanent.'), ' Standard rubber-base cones fade, walk off, and get stolen inside a week of unattended deployment. For longer than that, buy a tubular delineator or a channelizer drum.'),
     ),
 
     h('h2', null, 'What to actually buy'),

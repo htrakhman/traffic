@@ -129,7 +129,7 @@ export const articleTrafficBarricadesPillarGuide: Article = {
       h('li', null, h('strong', null, 'Is this a vehicle work zone?'), ' If no — pick crowd control gates or Type I (sidewalk).'),
       h('li', null, h('strong', null, 'What is the posted speed?'), ' Above 45 mph or freeway → jersey wall or water-filled positive protection. Below 45 mph → Type II/III plus channelizing devices.'),
       h('li', null, h('strong', null, 'Daytime or nighttime?'), ' Nighttime requires Type II (two rails) minimum and reflective sheeting that meets Type IV high-intensity prismatic.'),
-      h('li', null, h('strong', null, 'How long does the closure last?'), ' Long-duration (multi-day) pushes you toward jersey wall or rented water-filled barriers. Short-duration (under 24 hours) is Type III + cones territory.'),
+      h('li', null, h('strong', null, 'How long does the closure last?'), ' Long-duration (multi-day) pushes you toward jersey wall or water-filled barriers. Short-duration (under 24 hours) is Type III + cones territory.'),
       h('li', null, h('strong', null, 'Is the area pedestrianized?'), ' If pedestrians cross the barricade line, MUTCD §6D.02 requires a continuous detectable barrier — not Type I sawhorse, but a solid plastic jersey or pedestrian-rated barricade.'),
     ),
 
@@ -164,7 +164,7 @@ export const articleTrafficBarricadesPillarGuide: Article = {
     h(
       'p',
       null,
-      'For positive-protection jobs (bridge, freeway shoulder, long-duration high-speed) — buy or rent jersey wall by the linear foot rather than stocking it. The transport cost makes ownership inefficient unless you run multi-month closures regularly.',
+      'For positive-protection jobs (bridge, freeway shoulder, long-duration high-speed) — buy jersey wall by the linear foot rather than stocking it. The transport cost makes ownership inefficient unless you run multi-month closures regularly.',
     ),
 
     h('h2', null, 'Pricing: what traffic barricades actually cost'),
@@ -181,7 +181,7 @@ export const articleTrafficBarricadesPillarGuide: Article = {
       h('li', null, h('strong', null, 'Type III:'), ' $120-220 each, depending on whether you pick A-frame or flat-base configuration.'),
       h('li', null, h('strong', null, 'Plastic jersey:'), ' $140-220 per 6-ft section.'),
       h('li', null, h('strong', null, 'Concrete jersey:'), ' $350-500 per 10-ft section, plus delivery (these are 4,000-lb sections — flatbed delivery typically $400-800 per truck).'),
-      h('li', null, h('strong', null, 'Water-filled:'), ' $200-320 each, refundable rentals are common.'),
+      h('li', null, h('strong', null, 'Water-filled:'), ' $200-320 each.'),
     ),
     h(
       'p',

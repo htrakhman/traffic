@@ -1,5 +1,5 @@
 const SPECS = [
-  { label: 'What', value: 'Purchase requests only, never rental inquiries' },
+  { label: 'What', value: 'Purchase requests only, buyers ready to own the equipment' },
   { label: 'Where', value: 'Nationwide, routed by territory' },
   { label: 'Price', value: 'Set on a call, never published on the site' },
   { label: 'Source', value: 'Search traffic looking to buy, not a cold list' },

@@ -138,11 +138,11 @@ export const articlePedestrianCrosswalkSignsMutcd: Article = {
       'On work zones, where a permanent crosswalk is closed and walkers must be routed across active traffic, the contract drawings will specify either a flagger-controlled crossing, a temporary signal head, or a pedestrian-only AFAD-style remote-controlled signal. Each carries its own sign sequence per MUTCD Part 6.',
     ),
 
-    h('h2', null, 'How do I rent pedestrian crosswalk signs and devices?'),
+    h('h2', null, 'How do I get pedestrian crosswalk signs and devices?'),
     h(
       'p',
       null,
-      'For permanent installations (a new school crosswalk, a mid-block crosswalk addition), the work usually goes through a public-works agency rather than a rental — signs, posts, and beacons are purchased and installed under a capital contract. For temporary or work-zone pedestrian routing, the contractor rents the sign sequence (R9-9, R9-10, R9-11, R1-6 in-street signs, W11-2 signs as needed) plus the pedestrian channelizing devices (water-filled pedestrian barricades, fence panels, ADA-compliant detectable edge devices) and the sign stands or post mounts. Lead time runs 24–72 hours in major metros for standard pedestrian sign packages, longer for ADA-compliant TPAR equipment with detectable edges.',
+      'For permanent installations (a new school crosswalk, a mid-block crosswalk addition), the work usually goes through a public-works agency — signs, posts, and beacons are purchased and installed under a capital contract. For temporary or work-zone pedestrian routing, the contractor purchases the sign sequence (R9-9, R9-10, R9-11, R1-6 in-street signs, W11-2 signs as needed) plus the pedestrian channelizing devices (water-filled pedestrian barricades, fence panels, ADA-compliant detectable edge devices) and the sign stands or post mounts. Lead time runs 24–72 hours in major metros for standard pedestrian sign packages, longer for ADA-compliant TPAR equipment with detectable edges.',
     ),
 
     h(
@@ -199,7 +199,6 @@ export const articlePedestrianCrosswalkSignsMutcd: Article = {
 
   relatedArticles: [
     'uniform-traffic-control-devices-mutcd-guide',
-    'barricade-rental-near-me-guide',
     'traffic-control-devices-guide',
   ],
 }

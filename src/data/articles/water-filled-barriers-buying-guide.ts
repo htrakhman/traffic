@@ -34,7 +34,7 @@ export const articleWaterFilledBarriersBuyingGuide: Article = {
       { className: 'lead' },
       'Water filled barriers are hollow plastic units (HDPE or polyethylene) that ship empty and weigh ',
       h('strong', null, '60–120 lbs dry / 1,500–2,200 lbs filled'),
-      ' depending on the model. They give you a temporary jersey-barrier-equivalent for road closures, work-zone perimeters, parking-lot channelizing, and crowd control — without renting a crane or a flatbed for concrete. Below: the sizes, the MASH/NCHRP-350 crashworthiness ratings, what fits which job, and what to buy first if you are stocking a yard.',
+      ' depending on the model. They give you a temporary jersey-barrier-equivalent for road closures, work-zone perimeters, parking-lot channelizing, and crowd control — without needing a crane or a flatbed for concrete. Below: the sizes, the MASH/NCHRP-350 crashworthiness ratings, what fits which job, and what to buy first if you are stocking a yard.',
     ),
 
     h('h2', null, 'What a water filled barrier actually is'),

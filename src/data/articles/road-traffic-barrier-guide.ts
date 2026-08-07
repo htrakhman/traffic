@@ -266,10 +266,6 @@ export const articleRoadTrafficBarrierGuide: Article = {
       q: 'How long are road traffic barriers (concrete Jersey)?',
       a: 'Standard precast concrete Jersey barriers are 10 ft long, 32 in tall, and weigh roughly 4,000 lb. Some manufacturers also produce 20 ft units. Plastic and water-filled units are typically 4 ft or 6 ft long for easier handling.',
     },
-    {
-      q: 'Can I rent road traffic barriers or only buy?',
-      a: 'Traffic Control Supply sells barriers for purchase with delivery. For contractors who do not want to own a barrier inventory, buying still tends to be cheaper than rental on any job longer than 3–4 weeks because rental rates compound and pickup logistics add up. For short jobs that genuinely need a one-time barrier, contact us for a quote and we will scope the right approach.',
-    },
   ],
   relatedProducts: [
     { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },

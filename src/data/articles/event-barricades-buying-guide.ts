@@ -60,7 +60,7 @@ export const articleEventBarricadesBuyingGuide: Article = {
       'p',
       null,
       h('strong', null, 'Pricing:'),
-      ' $80–$140 per section new; $40–$70 used or rental return. Custom branding adds $20–$40 per scrim panel.',
+      ' $80–$140 per section new; $40–$70 used. Custom branding adds $20–$40 per scrim panel.',
     ),
 
     h('h3', null, '2. Plastic interlocking barrier'),
@@ -98,7 +98,7 @@ export const articleEventBarricadesBuyingGuide: Article = {
       'p',
       null,
       h('strong', null, 'Pricing:'),
-      ' $250–$500 per section new; rental dominates this category because storage is a hassle.',
+      ' $250–$500 per section new.',
     ),
 
     h('h2', null, 'Quick comparison table'),
@@ -189,7 +189,7 @@ export const articleEventBarricadesBuyingGuide: Article = {
       'Use a Mojo / crowd-control gate when bodies will push the line. Concerts, rallies, festival main stages, and VIP arrival pinch points all qualify. The differentiator is the weighted base footprint that resists tip-over under direct shove force — bike racks rated to ~30 lb of lateral force; crowd gates rated to 200+ lb. If the budget cannot support the upgrade for a high-density event, hire more security to maintain a buffer at the line.',
     ),
 
-    h('h2', null, 'Stocking strategy for an event-rental contractor'),
+    h('h2', null, 'Stocking strategy for an event-services contractor'),
     h(
       'p',
       null,
@@ -200,7 +200,7 @@ export const articleEventBarricadesBuyingGuide: Article = {
       null,
       h('li', null, '100–200× 8 ft bike-rack barricades on shipping pallets (handles most parades, races, festivals)'),
       h('li', null, '20× plastic interlocking barriers in orange (sidewalk closures, light-density use)'),
-      h('li', null, 'Optional: 30 × Mojo-style crowd-control gates for concert work (or sub-rent)'),
+      h('li', null, 'Optional: 30 × Mojo-style crowd-control gates for concert work'),
       h('li', null, '10× scrim panels (custom-printed sponsor branding stock)'),
       h('li', null, 'Pallet jacks and a flatbed for transport'),
     ),
@@ -238,11 +238,11 @@ export const articleEventBarricadesBuyingGuide: Article = {
     },
     {
       q: 'What is a Mojo barrier?',
-      a: 'Mojo is a brand-name front-of-stage crowd-control barrier used at concerts. It is a 4 ft tall steel barrier with a weighted floor base that locks together in a curved line in front of a stage. Designed to take 200+ lb of lateral surge force without tipping. Generic equivalents are sold as "crowd-control gates" and are often rented rather than bought because storage is a hassle.',
+      a: 'Mojo is a brand-name front-of-stage crowd-control barrier used at concerts. It is a 4 ft tall steel barrier with a weighted floor base that locks together in a curved line in front of a stage. Designed to take 200+ lb of lateral surge force without tipping. Generic equivalents are sold as "crowd-control gates."',
     },
     {
       q: 'How much does an event barricade cost?',
-      a: 'Bike-rack steel barricades run $80–$140 per 8 ft section new, $40–$70 used. Plastic interlocking barriers run $90–$160 per 6 ft section, plus on-site ballast (sand or water). Steel crowd-control gates / Mojo-style barriers are $250–$500 per section new and are commonly rented per event.',
+      a: 'Bike-rack steel barricades run $80–$140 per 8 ft section new, $40–$70 used. Plastic interlocking barriers run $90–$160 per 6 ft section, plus on-site ballast (sand or water). Steel crowd-control gates / Mojo-style barriers are $250–$500 per section new.',
     },
   ],
   relatedProducts: [

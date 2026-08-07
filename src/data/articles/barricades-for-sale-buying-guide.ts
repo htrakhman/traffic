@@ -246,12 +246,6 @@ export const articleBarricadesForSaleBuyingGuide: Article = {
         h('strong', null, 'Skipping the base upgrade: '),
         'a base barricade is $40 cheaper but blows over in a thunderstorm. The base upcharge pays back the first time you do not have to redeploy a row of fallen units mid-shift.',
       ),
-      h(
-        'li',
-        null,
-        h('strong', null, 'Renting forever: '),
-        'a contractor renting 8 Type 2 barricades for 6 jobs/year at $12/day for 3-day jobs spends ~$1,700/year. The same kit bought outright costs $700–$1,100 and lasts 4+ seasons.',
-      ),
     ),
 
     h('h2', null, 'Where to buy barricades for sale in NJ'),

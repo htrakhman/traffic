@@ -49,7 +49,7 @@ export const articleCustomTrafficConesBuyingGuide: Article = {
       h('li', null, h('strong', null, 'Branded contractor / fleet identity.'), ' A stenciled company name on every cone is a daily marketing impression on every job, and it deters cone theft (employees track their gear; competitors and passersby don\'t want to take a cone with someone else\'s phone number on it).'),
       h('li', null, h('strong', null, 'Reserved parking / no-parking enforcement.'), ' "RESERVED FOR [TENANT]," "EMPLOYEE OF THE MONTH," "FIRE LANE — TOW ZONE," "EV CHARGING ONLY" — printed cones reduce ambiguity and reduce the policy enforcement load on staff.'),
       h('li', null, h('strong', null, 'Event / security operations.'), ' Custom-printed cones with "STAFF ONLY," "VIP," "MEDIA," or "CREDENTIAL CHECK" cleanly designate zones and read instantly to the public.'),
-      h('li', null, h('strong', null, 'Wayfinding on large private property.'), ' Hospital campuses, airport rental-car lots, conference centers, college campuses — custom cones with arrows and zone labels solve a real wayfinding problem.'),
+      h('li', null, h('strong', null, 'Wayfinding on large private property.'), ' Hospital campuses, airport parking lots, conference centers, college campuses — custom cones with arrows and zone labels solve a real wayfinding problem.'),
       h('li', null, h('strong', null, 'Specialty utility / hazard marking.'), ' "WATER LINE," "ELECTRIC," "OVERHEAD HAZARD," "EXCAVATION" printed alongside the APWA color makes the cone a self-documenting locate.'),
     ),
 

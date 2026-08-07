@@ -226,7 +226,6 @@ export const articleTrafficSafetyStoresBuyingGuide: Article = {
     { label: 'Arrow Boards', path: '/category/arrow-boards' },
   ],
   relatedArticles: [
-    'rent-vs-buy-traffic-control-equipment',
     'traffic-cones-near-me-same-day-delivery',
     'safety-cones-buying-guide',
   ],

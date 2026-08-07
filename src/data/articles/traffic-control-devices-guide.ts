@@ -5,23 +5,21 @@ import type { Article } from '../articles'
 /**
  * PILLAR ARTICLE - Targets "traffic control devices" (5,000/mo, CI=68, score=74)
  * Secondary: "traffic control equipment", "work zone traffic control devices",
- *            "temporary traffic control devices", "traffic safety devices",
- *            "traffic control device rental"
+ *            "temporary traffic control devices", "traffic safety devices"
  */
 export const articleTrafficControlDevicesGuide: Article = {
   slug: 'traffic-control-devices-guide',
-  title: 'Traffic Control Devices: Types, Standards, and How to Rent Them',
+  title: 'Traffic Control Devices: Types, Standards, and How to Order Them',
   excerpt:
-    'A contractor-focused breakdown of traffic control device categories — cones, signs, barricades, arrow boards, and signals — with MUTCD standards, sizing rules, and rental guidance.',
+    'A contractor-focused breakdown of traffic control device categories — cones, signs, barricades, arrow boards, and signals — with MUTCD standards, sizing rules, and ordering guidance.',
   metaDescription:
-    'Traffic control devices explained: cones, barricades, signs, arrow boards, and signals. MUTCD compliance, spacing tables, and rental rates for road work.',
+    'Traffic control devices explained: cones, barricades, signs, arrow boards, and signals. MUTCD compliance and spacing tables for road work.',
   primaryKeyword: 'traffic control devices',
   secondaryKeywords: [
     'traffic control equipment',
     'work zone traffic control devices',
     'temporary traffic control devices',
     'traffic safety devices',
-    'traffic control device rental',
     'MUTCD work zone devices',
   ],
   targetVolume: 5000,
@@ -167,7 +165,7 @@ export const articleTrafficControlDevicesGuide: Article = {
     h(
       'p',
       null,
-      'Retroreflectivity is the most commonly missed requirement. Engineer Grade (EG) sheeting suffices for daytime, low-speed work. High Intensity (HI) or Diamond Grade (DG) is required for speeds above 45 mph and for all nighttime operations. If your rental inventory is not labeled with sheeting grade, ask before you accept delivery.',
+      'Retroreflectivity is the most commonly missed requirement. Engineer Grade (EG) sheeting suffices for daytime, low-speed work. High Intensity (HI) or Diamond Grade (DG) is required for speeds above 45 mph and for all nighttime operations. If your inventory is not labeled with sheeting grade, ask before you accept delivery.',
     ),
     h(
       'p',
@@ -279,9 +277,7 @@ export const articleTrafficControlDevicesGuide: Article = {
     h(
       'p',
       null,
-      'Trailer-mounted Type C arrow boards (at least 48" × 96" with 15 lamp panel) are the standard for highway work. Truck-mounted boards are acceptable where the host vehicle stays in position throughout the shift. See the ',
-      h(Link, { to: '/blog/arrow-board-rental-guide' }, 'arrow board rental guide'),
-      ' for panel size, mounting, and rate comparisons.',
+      'Trailer-mounted Type C arrow boards (at least 48" × 96" with 15 lamp panel) are the standard for highway work. Truck-mounted boards are acceptable where the host vehicle stays in position throughout the shift.',
     ),
 
     // Section 7: Related reading (before CTA)
@@ -291,9 +287,7 @@ export const articleTrafficControlDevicesGuide: Article = {
       null,
       'If your job uses flaggers or will run longer than one day, review the ',
       h(Link, { to: '/blog/uniform-traffic-control-devices-mutcd-guide' }, 'MUTCD field guide'),
-      ' for device-by-device compliance details and retroreflectivity requirements. For jobs that need full road closures or detours, the ',
-      h(Link, { to: '/blog/barricade-rental-near-me-guide' }, 'barricade rental guide'),
-      ' covers Type I\u2013III selection, material options, and how to build a watertight pedestrian diversion.',
+      ' for device-by-device compliance details and retroreflectivity requirements.',
     ),
     h(
       'p',
@@ -350,10 +344,6 @@ export const articleTrafficControlDevicesGuide: Article = {
       a: 'MUTCD Section 6F.53 mandates arrow boards for lane closures on multi-lane roads. For single-lane closures above 45 mph they are strongly recommended. Most state DOT inspectors treat any lane closure with a center-line road above 35 mph as requiring an arrow board.',
     },
     {
-      q: 'Can I rent traffic control devices instead of buying them?',
-      a: 'Yes, and renting is the standard approach for project-based work. Daily, weekly, and monthly rates are typical. Rentals come with compliant sheeting grades, current crashworthiness ratings, and delivery/pickup service — avoiding the depreciation and storage costs of ownership.',
-    },
-    {
       q: 'What OSHA standard applies to traffic control devices?',
       a: 'OSHA 29 CFR 1926.200–1926.202 requires that all signs, signals, and barricades on construction projects conform to the MUTCD. For flaggers specifically, OSHA 1926.201 sets minimum PPE and positioning requirements.',
     },
@@ -372,7 +362,5 @@ export const articleTrafficControlDevicesGuide: Article = {
   ],
   relatedArticles: [
     'uniform-traffic-control-devices-mutcd-guide',
-    'barricade-rental-near-me-guide',
-    'arrow-board-rental-guide',
   ],
 }

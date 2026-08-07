@@ -5,7 +5,7 @@ import type { Article } from '../articles'
  * Targets "safe barriers" / "safety barriers" (~5,000/mo, High comp, $26.71 bid).
  * Pillar guide structure: maps the entire safety-barrier category by hazard
  * profile (vehicle, pedestrian, fall, crowd, work-zone) so a buyer can land
- * the right SKU in one visit. Buy/sell framing — no rental references.
+ * the right SKU in one visit. Buy/sell framing only — the copy never mentions alternative acquisition models.
  */
 export const articleSafeBarriersPillarGuide: Article = {
   slug: 'safe-barriers-pillar-guide',

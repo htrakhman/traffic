@@ -23,7 +23,7 @@ export default function SupplierFooter() {
           </div>
         </div>
         <div className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <span>© {year} {SITE_NAME}. Leads only. We do not sell or rent equipment directly.</span>
+          <span>© {year} {SITE_NAME}. Leads only. We do not sell equipment directly.</span>
           <a href="/browse" className="hover:text-ink">
             Looking to buy equipment instead?
           </a>

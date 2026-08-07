@@ -38,7 +38,7 @@ export default function BuyerFooter() {
           </nav>
         </div>
         <div className="mt-8 border-t border-line pt-6 text-xs text-muted">
-          © {year} {SITE_NAME}. Purchase only. We don't rent equipment.
+          © {year} {SITE_NAME}. Purchase only.
         </div>
       </div>
     </footer>

@@ -6,7 +6,7 @@
     <atom:link href="https://trafficcontrolsupply.com/rss.xml" rel="self" type="application/rss+xml" />
     <description>Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, and job-site safety.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 23 May 2026 21:46:06 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 07 Aug 2026 02:08:33 GMT</lastBuildDate>
     <item>
       <title>Road Construction Cones: A 5-Question Decision Tree (and Exact Specs to Order)</title>
       <link>https://trafficcontrolsupply.com/blog/road-construction-cones-decision-guide</link>
@@ -708,13 +708,6 @@
       <description>The &quot;Traffic Controller&quot; or &quot;Flagger&quot; sign — MUTCD W21-7 — warns motorists of an upcoming flagger station. Here are the specs, the placement distances, and the rules for using a roll-up version on a work zone.</description>
     </item>
     <item>
-      <title>Traffic Control Truck Rental: TMA Trucks, Cone Trucks, and Shadow Vehicles</title>
-      <link>https://trafficcontrolsupply.com/blog/traffic-control-truck-rental-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/traffic-control-truck-rental-guide</guid>
-      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A field-level guide to the truck-mounted vehicles that anchor a modern work zone — TMA trucks, cone trucks, shadow vehicles, and arrow-board trucks — with MUTCD use cases and 2026 rental rates.</description>
-    </item>
-    <item>
       <title>How to Build a Temporary Traffic Control Plan for a Small Utility Job (NJ Field Guide)</title>
       <link>https://trafficcontrolsupply.com/blog/temporary-traffic-control-plan-utility-job</link>
       <guid>https://trafficcontrolsupply.com/blog/temporary-traffic-control-plan-utility-job</guid>
@@ -734,20 +727,6 @@
       <guid>https://trafficcontrolsupply.com/blog/road-cones-vs-traffic-cones</guid>
       <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
       <description>&quot;Road cones,&quot; &quot;traffic cones,&quot; and &quot;street cones&quot; all describe the same gear — but only some sizes and reflectivity grades actually pass MUTCD inspection. Here is the size-by-application guide and what to buy.</description>
-    </item>
-    <item>
-      <title>What Traffic Control Gear Should You Stock vs. Order Per Job? (Contractor's Guide)</title>
-      <link>https://trafficcontrolsupply.com/blog/rent-vs-buy-traffic-control-equipment</link>
-      <guid>https://trafficcontrolsupply.com/blog/rent-vs-buy-traffic-control-equipment</guid>
-      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Buy the gear you use every week; order the high-value, low-utilization gear (arrow boards, message boards, Type III barricades, full sign packages) per job with same-day delivery. Here is the breakeven math by category.</description>
-    </item>
-    <item>
-      <title>Portable Traffic Barrier Rental: Water-Filled, Concrete, and Steel</title>
-      <link>https://trafficcontrolsupply.com/blog/portable-traffic-barrier-rental-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/portable-traffic-barrier-rental-guide</guid>
-      <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A practical comparison of the three portable longitudinal barriers contractors actually rent — water-filled plastic, precast concrete, and steel — with MASH test levels, deflection, and 2026 rental rates.</description>
     </item>
     <item>
       <title>Pedestrian Crosswalk Signs: MUTCD Specs, Sizes, and Placement</title>
@@ -789,7 +768,7 @@
       <link>https://trafficcontrolsupply.com/blog/jersey-barricades-guide</link>
       <guid>https://trafficcontrolsupply.com/blog/jersey-barricades-guide</guid>
       <pubDate>Mon, 27 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A &quot;Jersey barricade&quot; is the J-shape barrier born on New Jersey highways and now made in plastic for events and parking lots, concrete for highway work. Here is the working guide to choosing and renting them.</description>
+      <description>A &quot;Jersey barricade&quot; is the J-shape barrier born on New Jersey highways and now made in plastic for events and parking lots, concrete for highway work. Here is the working guide to choosing them.</description>
     </item>
     <item>
       <title>Cone Zone: How Contractors Build a Compliant Work Zone</title>
@@ -806,13 +785,6 @@
       <description>Barricades come in five families — Type I, Type II, Type III, water-filled, and pedestrian — each one solving a different MUTCD problem. Here is the working contractor reference.</description>
     </item>
     <item>
-      <title>Traffic Control Trailers: Arrow Boards, PCMS, AFADs, and TMAs Compared</title>
-      <link>https://trafficcontrolsupply.com/blog/traffic-control-trailer-rental-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/traffic-control-trailer-rental-guide</guid>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A field-level breakdown of the five trailer-mounted devices that show up on most work zones — what each does, what MUTCD Part 6 requires, and how to pick the right rental.</description>
-    </item>
-    <item>
       <title>How Many Traffic Cones Do You Actually Need for a Lane Closure? (NJ MUTCD Guide)</title>
       <link>https://trafficcontrolsupply.com/blog/how-many-cones-for-lane-closure-nj</link>
       <guid>https://trafficcontrolsupply.com/blog/how-many-cones-for-lane-closure-nj</guid>
@@ -820,25 +792,11 @@
       <description>For a typical single-lane closure on a 40 mph NJ road you need roughly 20–30 cones. Here's the MUTCD formula, worked examples for 25–55 mph roads, nighttime rules, and what NJDOT adds on top.</description>
     </item>
     <item>
-      <title>Traffic Cone Rental: 28&quot; vs. 36&quot;, Spacing Tables, and MUTCD Requirements</title>
-      <link>https://trafficcontrolsupply.com/blog/traffic-cone-rental-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/traffic-cone-rental-guide</guid>
-      <pubDate>Fri, 24 Apr 2026 00:00:00 GMT</pubDate>
-      <description>How to choose the right cone height, how many you need for a lane closure, and what MUTCD Part 6 requires for spacing by road speed.</description>
-    </item>
-    <item>
-      <title>Traffic Control Devices: Types, Standards, and How to Rent Them</title>
+      <title>Traffic Control Devices: Types, Standards, and How to Order Them</title>
       <link>https://trafficcontrolsupply.com/blog/traffic-control-devices-guide</link>
       <guid>https://trafficcontrolsupply.com/blog/traffic-control-devices-guide</guid>
       <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A contractor-focused breakdown of traffic control device categories — cones, signs, barricades, arrow boards, and signals — with MUTCD standards, sizing rules, and rental guidance.</description>
-    </item>
-    <item>
-      <title>Traffic Control Equipment Rental: A Contractor's Field Checklist</title>
-      <link>https://trafficcontrolsupply.com/blog/traffic-control-equipment-rental</link>
-      <guid>https://trafficcontrolsupply.com/blog/traffic-control-equipment-rental</guid>
-      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description>What each type of traffic control device does, where MUTCD Part 6 requires it, and how to assemble a compliant kit for road work, utility cuts, and lane closures.</description>
+      <description>A contractor-focused breakdown of traffic control device categories — cones, signs, barricades, arrow boards, and signals — with MUTCD standards, sizing rules, and ordering guidance.</description>
     </item>
     <item>
       <title>What Are Uniform Traffic Control Devices? An MUTCD Field Guide</title>
@@ -855,32 +813,11 @@
       <description>Portable signals, cones, rumble strips, and barricades for short-term or mobile work zones. NCHRP 350 / MASH ratings, ATSSA standards, and when to use each type.</description>
     </item>
     <item>
-      <title>Barricade Rental Near Me: How to Pick the Right Type and Provider</title>
-      <link>https://trafficcontrolsupply.com/blog/barricade-rental-near-me-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/barricade-rental-near-me-guide</guid>
-      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
-      <description>MUTCD Type I, II, and III barricades explained. Decide which type your job needs, compare water-filled vs. steel vs. plastic, and what to ask a local rental provider.</description>
-    </item>
-    <item>
       <title>Automated Flagger Assistance Devices (AFADs): What They Are and When to Use One</title>
       <link>https://trafficcontrolsupply.com/blog/automated-flagger-assistance-device-afad-guide</link>
       <guid>https://trafficcontrolsupply.com/blog/automated-flagger-assistance-device-afad-guide</guid>
       <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A technical guide to AFADs: how they work, MUTCD Section 6E.04 rules, when to use STOP/SLOW vs. Red/Yellow Lens models, and typical costs-purchase vs. daily rental.</description>
-    </item>
-    <item>
-      <title>Arrow Board Rental: Trailer vs. Truck-Mount, Specs, and What You Will Pay</title>
-      <link>https://trafficcontrolsupply.com/blog/arrow-board-rental-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/arrow-board-rental-guide</guid>
-      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Compare trailer and truck-mounted arrow boards for lane closures. Learn MUTCD Type A/B/C specs, when they're required, and real rental rates for daily, weekly, and monthly terms.</description>
-    </item>
-    <item>
-      <title>Traffic Control Rental: What to Rent, What It Costs, and How to Plan a Work Zone</title>
-      <link>https://trafficcontrolsupply.com/blog/traffic-control-rental-guide</link>
-      <guid>https://trafficcontrolsupply.com/blog/traffic-control-rental-guide</guid>
-      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
-      <description>A contractor-focused guide to renting traffic control equipment - what you actually need, typical day/week rates, and how to lay out an MUTCD-compliant work zone without overspending.</description>
+      <description>A technical guide to AFADs: how they work, MUTCD Section 6E.04 rules, when to use STOP/SLOW vs. Red/Yellow Lens models, and typical purchase costs.</description>
     </item>
   </channel>
 </rss>

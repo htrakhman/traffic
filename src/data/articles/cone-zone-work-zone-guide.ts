@@ -247,11 +247,11 @@ export const articleConeZoneWorkZoneGuide: Article = {
       'The other failure mode is mid-shift erosion. The setup at 7 AM looks compliant; by 3 PM cones have been dragged, knocked over, or kicked into the active lane. A documented mid-shift inspection — once every two hours at minimum, more often in heavy traffic — catches and corrects the drift.',
     ),
 
-    h('h2', null, 'How do I rent equipment for a cone zone?'),
+    h('h2', null, 'How do I order equipment for a cone zone?'),
     h(
       'p',
       null,
-      'Send a quote request with the operation class (mobile, short-duration, short-term, intermediate-term, long-term per MUTCD §6G.02), road speed, lane configuration, expected duration, delivery address, and any state DOT plan number or typical-application reference. The rental coordinator can match cones, drums, signs, arrow boards, and any required barriers to the plan, confirm MASH eligibility for state-funded work, and stage delivery for the morning of mobilization. Lead time runs 24–48 hours for cones, signs, and arrow boards in major metros; longer for water-filled or concrete barriers and for multi-trailer packages.',
+      'Send a quote request with the operation class (mobile, short-duration, short-term, intermediate-term, long-term per MUTCD §6G.02), road speed, lane configuration, expected duration, delivery address, and any state DOT plan number or typical-application reference. Our team can match cones, drums, signs, arrow boards, and any required barriers to the plan, confirm MASH eligibility for state-funded work, and stage delivery for the morning of mobilization. Lead time runs 24–48 hours for cones, signs, and arrow boards in major metros; longer for water-filled or concrete barriers and for multi-trailer packages.',
     ),
 
     h(
@@ -307,7 +307,6 @@ export const articleConeZoneWorkZoneGuide: Article = {
   ],
 
   relatedArticles: [
-    'traffic-control-rental-guide',
     'how-many-cones-for-lane-closure-nj',
     'uniform-traffic-control-devices-mutcd-guide',
   ],

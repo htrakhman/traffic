@@ -152,6 +152,5 @@ export const articleOfficialTrafficControlDeviceMutcd: Article = {
   relatedArticles: [
     'uniform-traffic-control-devices-mutcd-guide',
     'traffic-control-devices-guide',
-    'traffic-control-rental-guide',
   ],
 }

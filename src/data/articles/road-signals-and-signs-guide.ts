@@ -13,7 +13,7 @@ export const articleRoadSignalsAndSignsGuide: Article = {
   excerpt:
     'Signs warn, regulate, and guide. Signals control. The MUTCD splits the road-device world into distinct families, and a contractor needs to know which one to deploy when. Here is the working reference.',
   metaDescription:
-    'Road signals and signs: MUTCD device families (regulatory, warning, guide, signal), work-zone sign sequence, sizing by speed, retroreflectivity, and how to rent them.',
+    'Road signals and signs: MUTCD device families (regulatory, warning, guide, signal), work-zone sign sequence, sizing by speed, and retroreflectivity.',
   primaryKeyword: 'road signals and signs',
   secondaryKeywords: [
     'road signal signs',
@@ -155,11 +155,11 @@ export const articleRoadSignalsAndSignsGuide: Article = {
       'Roll-up vinyl signs with prismatic sheeting carry 1–3 year service-life warranties under continuous outdoor exposure, with noticeable retroreflectivity loss after 12–18 months of continuous deployment. Rigid aluminum signs with high-intensity prismatic sheeting last 7–10 years. Sign stands (X-stands and telescoping poles) last several years with normal handling but are prone to wind damage if undersized base weights are used. Solar-powered arrow boards and PCMS units carry 5–7 year service lives on the panel and 3–5 year service life on the battery bank, with battery replacement scheduled mid-life.',
     ),
 
-    h('h2', null, 'How do I rent the right signs and signals for a job?'),
+    h('h2', null, 'How do I order the right signs and signals for a job?'),
     h(
       'p',
       null,
-      'Send the quote with the work-zone typical application (the MUTCD Part 6 TA number from the contract drawings), road speed, lane configuration, and duration. The rental coordinator can pull the conforming sign sequence — W20-1, W21-7, W20-5, etc. — at the right size for the speed, plus the right arrow board class (Type B for low-speed, Type C for highway), plus warning lights, sign stands, and base weights. Lead time runs 24–48 hours for sign packages and arrow boards in major metros, 2–5 business days for AFADs and portable signal trailers, and 1 week or more for full PCMS deployments on long-duration projects.',
+      'Send the quote with the work-zone typical application (the MUTCD Part 6 TA number from the contract drawings), road speed, lane configuration, and duration. Our team can pull the conforming sign sequence — W20-1, W21-7, W20-5, etc. — at the right size for the speed, plus the right arrow board class (Type B for low-speed, Type C for highway), plus warning lights, sign stands, and base weights. Lead time runs 24–48 hours for sign packages and arrow boards in major metros, 2–5 business days for AFADs and portable signal trailers, and 1 week or more for full PCMS deployments on long-duration projects.',
     ),
 
     h(
@@ -217,7 +217,6 @@ export const articleRoadSignalsAndSignsGuide: Article = {
 
   relatedArticles: [
     'uniform-traffic-control-devices-mutcd-guide',
-    'arrow-board-rental-guide',
     'traffic-control-devices-guide',
   ],
 }

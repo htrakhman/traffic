@@ -293,6 +293,5 @@ export const articleWhatIsATrafficPylon: Article = {
   relatedArticles: [
     'road-cones-vs-traffic-cones',
     'portable-traffic-control-devices-guide',
-    'traffic-cone-rental-guide',
   ],
 }

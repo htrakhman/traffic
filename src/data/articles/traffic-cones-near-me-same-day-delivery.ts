@@ -63,7 +63,6 @@ export const articleTrafficConesNearMeSameDayDelivery: Article = {
           h('tr', null, h('td', { className: 'p-2' }, 'Home Depot / Lowe\'s'), h('td', { className: 'p-2' }, 'Drive there now'), h('td', { className: 'p-2' }, '18, 28 in (limited stock)'), h('td', { className: 'p-2' }, 'Sometimes — check collar'), h('td', { className: 'p-2' }, '$28-40 each')),
           h('tr', null, h('td', { className: 'p-2' }, 'Amazon / online retailers'), h('td', { className: 'p-2' }, '2-5 days shipping'), h('td', { className: 'p-2' }, 'All sizes'), h('td', { className: 'p-2' }, 'Listed but verify on arrival'), h('td', { className: 'p-2' }, '$18-30 each + freight')),
           h('tr', null, h('td', { className: 'p-2' }, 'Tractor / farm supply'), h('td', { className: 'p-2' }, 'Same day at store'), h('td', { className: 'p-2' }, '18-28 in only'), h('td', { className: 'p-2' }, 'Rarely — agricultural use'), h('td', { className: 'p-2' }, '$25-35 each')),
-          h('tr', null, h('td', { className: 'p-2' }, 'Rental yards (Sunbelt, etc.)'), h('td', { className: 'p-2' }, 'Same day pickup, daily rate'), h('td', { className: 'p-2' }, '28 in mostly'), h('td', { className: 'p-2' }, 'Yes — but rental, not buy'), h('td', { className: 'p-2' }, '$2-4/day rental')),
         ),
       ),
     ),
@@ -222,14 +221,6 @@ export const articleTrafficConesNearMeSameDayDelivery: Article = {
     {
       q: 'How much do traffic cones cost?',
       a: 'In 2026, 28-inch fluorescent orange cones with double reflective collars run $22-32 each from local suppliers, $28-40 at big-box stores, and $18-30 plus freight from online retailers. 36-inch cones are roughly 2-2.5x the 28-inch price.',
-    },
-    {
-      q: 'Should I rent or buy traffic cones?',
-      a: 'For occasional one-off jobs (under 4-5 deployments per year), renting from a local yard at $2-4/cone/day works. For any contractor doing weekly road work, buying pays back in 6-10 deployments. See our rent vs buy guide for the full breakdown.',
-    },
-    {
-      q: 'Where can I rent traffic cones near me?',
-      a: 'Equipment rental yards (Sunbelt, United, etc.) carry 28-inch traffic cones at $2-4/day. For multi-week projects or recurring work, ask about weekly or monthly rates — they typically halve the daily rate. Our rent vs buy guide walks through when each makes sense.',
     },
   ],
   relatedProducts: [

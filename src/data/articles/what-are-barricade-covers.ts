@@ -6,7 +6,7 @@ import type { Article } from '../articles'
  * Definitional "what is X" structure — answers the search-intent question
  * directly in the lead, then unpacks fabric covers, branded covers, jersey
  * barrier covers, and event-skirt variants. Niche but high-bid, useful for
- * event-rental and contractor branding queries.
+ * event and contractor branding queries.
  */
 export const articleWhatAreBarricadeCovers: Article = {
   slug: 'what-are-barricade-covers',
@@ -50,7 +50,7 @@ export const articleWhatAreBarricadeCovers: Article = {
     h(
       'p',
       null,
-      'Most event rental companies bundle 50 or 100 jackets with the bike-rack barricades themselves. Specify the print 4–6 weeks ahead — turnaround on dye-sublimation prints is typically 10–14 business days for runs over 50 units.',
+      'Most event companies bundle 50 or 100 jackets with the bike-rack barricades themselves. Specify the print 4–6 weeks ahead — turnaround on dye-sublimation prints is typically 10–14 business days for runs over 50 units.',
     ),
 
     h('h3', null, '2. Steel-frame mesh banners (for construction perimeters)'),
@@ -140,7 +140,7 @@ export const articleWhatAreBarricadeCovers: Article = {
     h(
       'p',
       null,
-      'For event rental orders that need both barricades and matching covers delivered together, browse our ',
+      'For event orders that need both barricades and matching covers delivered together, browse our ',
       h('a', { href: '/category/barricades-barriers' }, 'barricades and barriers category'),
       ' or ',
       h('a', { href: '/quote' }, 'request a quote'),
@@ -162,7 +162,7 @@ export const articleWhatAreBarricadeCovers: Article = {
     },
     {
       q: 'How are bike-rack barricade covers attached?',
-      a: 'Three common methods: Velcro (fastest to swap between events), grommets with zip-ties (most secure for windy outdoor venues), and sewn-in sleeves (cleanest look, but only fits one barricade size). Velcro is the default for rental fleets because the same cover can switch between barricades quickly.',
+      a: 'Three common methods: Velcro (fastest to swap between events), grommets with zip-ties (most secure for windy outdoor venues), and sewn-in sleeves (cleanest look, but only fits one barricade size). Velcro is the default for multi-event fleets because the same cover can switch between barricades quickly.',
     },
     {
       q: 'How long is the lead time for a custom barricade cover order?',

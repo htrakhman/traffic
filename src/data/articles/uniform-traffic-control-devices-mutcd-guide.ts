@@ -235,5 +235,5 @@ export const articleUniformTrafficControlDevicesMutcdGuide: Article = {
     { label: 'Roll-Up Signs', path: '/category/signs-sign-stands' },
     { label: 'Safety Lighting', path: '/category/safety-lighting' },
   ],
-  relatedArticles: ['arrow-board-rental-guide', 'automated-flagger-assistance-device-afad-guide', 'barricade-rental-near-me-guide'],
+  relatedArticles: ['automated-flagger-assistance-device-afad-guide'],
 }

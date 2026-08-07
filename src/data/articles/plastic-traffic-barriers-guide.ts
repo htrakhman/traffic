@@ -31,7 +31,7 @@ export const articlePlasticTrafficBarriersGuide: Article = {
     h(
       'p',
       { className: 'lead' },
-      'Plastic traffic barriers are the fastest way to close a lane, route a detour, or protect a work zone without renting a crane. ',
+      'Plastic traffic barriers are the fastest way to close a lane, route a detour, or protect a work zone without needing a crane. ',
       h('strong', null, 'A single contractor can deploy 100 linear feet of plastic barrier in 45–60 minutes; the same length in concrete needs a crane, a truck, and half a day.'),
       ' The trade-off: plastic does not stop a 60 mph passenger car. Whether it is the right pick comes down to two questions — what speed is the road, and does the engineer want positive protection. Here is the working comparison.',
     ),
@@ -141,22 +141,11 @@ export const articlePlasticTrafficBarriersGuide: Article = {
     h(
       'p',
       null,
-      'Working cost: ~$3,800–$6,300 for a full reusable kit. The same coverage in concrete jersey is ~$6,000–$11,000 PLUS the crane / boom-truck rental every time you move it. ',
+      'Working cost: ~$3,800–$6,300 for a full reusable kit. The same coverage in concrete jersey is ~$6,000–$11,000, plus a crane or boom truck every time you move it. ',
       h('a', { href: '/category/barricades-barriers' }, 'Browse plastic barriers in our catalog'),
       ' or ',
       h('a', { href: '/quote' }, 'request a quote'),
       ' with your job specs.',
-    ),
-
-    h('h2', null, 'Rental vs. purchase for plastic barriers'),
-    h(
-      'p',
-      null,
-      'For occasional use (under ~20 deploy-days a year), renting wins — daily rates run $8–$15 per 6-ft unit and you skip storage and transport. Above 20 days a year, buying pays back in roughly one season. Our ',
-      h('a', { href: '/blog/rent-vs-buy-traffic-control-equipment' }, 'rent vs. buy guide'),
-      ' has the breakeven math. For one-time jobs or peak-season overflow, ',
-      h('a', { href: '/blog/portable-traffic-barrier-rental-guide' }, 'see our portable barrier rental guide'),
-      '.',
     ),
 
     h('h2', null, 'AI-assisted spec — let the assistant size your kit'),

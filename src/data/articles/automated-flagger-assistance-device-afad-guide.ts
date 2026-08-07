@@ -10,7 +10,7 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
   slug: 'automated-flagger-assistance-device-afad-guide',
   title: 'Automated Flagger Assistance Devices (AFADs): What They Are and When to Use One',
   excerpt:
-    'A technical guide to AFADs: how they work, MUTCD Section 6E.04 rules, when to use STOP/SLOW vs. Red/Yellow Lens models, and typical costs-purchase vs. daily rental.',
+    'A technical guide to AFADs: how they work, MUTCD Section 6E.04 rules, when to use STOP/SLOW vs. Red/Yellow Lens models, and typical purchase costs.',
   metaDescription:
     'Automated Flagger Assistance Device (AFAD) guide: MUTCD rules, STOP/SLOW vs. Red/Yellow, when required, and pricing. For single-lane traffic control.',
   primaryKeyword: 'automated flagger assistance device',
@@ -33,7 +33,7 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
     h(
       'p',
       { className: 'lead' },
-      'An Automated Flagger Assistance Device (AFAD) lets one trained operator stop and release traffic from a remote location without standing in the roadway. They\'re used on utility cuts, pipeline work, and emergency repairs. This guide covers how they work, when they\'re allowed, and whether to rent or buy.',
+      'An Automated Flagger Assistance Device (AFAD) lets one trained operator stop and release traffic from a remote location without standing in the roadway. They\'re used on utility cuts, pipeline work, and emergency repairs. This guide covers how they work, when they\'re allowed, and what to expect when buying one.',
     ),
     h('h2', null, 'What is an AFAD and how does it work?'),
     h(
@@ -102,17 +102,17 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
       null,
       'Under MUTCD \\u00a76E.04, an AFAD must: (1) Be operated only by a trained flagger. (2) Never be left unattended while in use. (3) Have an unobstructed line of sight from the operator to the device and approaching traffic. (4) Be illuminated at night per Section 6E.08 (warning lights or reflective sheeting). (5) Meet crashworthiness criteria per Section 6F.01 (NCHRP 350 or MASH). (6) Be positioned where drivers have sufficient warning and a clear view of the sign.',
     ),
-    h('h2', null, 'What does an AFAD cost to purchase versus rent?'),
+    h('h2', null, 'What does an AFAD cost to purchase?'),
     h(
       'p',
       null,
-      'New STOP/SLOW AFADs range from $15,000 to $30,000 depending on brand (Wanco, Trafcon, National Signal) and features. Used AFADs typically cost $8,000-$15,000. Daily rental ranges from $50-$100. Weekly rental is $150-$250. Monthly rental is $400-$700. If you use an AFAD fewer than 100 days per year, rental is more economical. If you deploy them 200+ days annually, purchase becomes competitive.',
+      'New STOP/SLOW AFADs range from $15,000 to $30,000 depending on brand (Wanco, Trafcon, National Signal) and features. Used AFADs typically cost $8,000-$15,000.',
     ),
     h('h2', null, 'What training is required to operate an AFAD?'),
     h(
       'p',
       null,
-      'Operators must be trained on the specific AFAD model they will use. Training typically covers: (1) Device operation (remote control, sign placement, light activation). (2) Sight lines and positioning (never leaving the device unattended, maintaining clear view of traffic). (3) MUTCD rules and job-site integration. (4) Emergency procedures (malfunction, breakdown). Training is usually 2-4 hours and often provided by the AFAD manufacturer or a rental company. Some states (e.g., Massachusetts) require certified Traffic Control Supervisors to oversee AFAD work.',
+      'Operators must be trained on the specific AFAD model they will use. Training typically covers: (1) Device operation (remote control, sign placement, light activation). (2) Sight lines and positioning (never leaving the device unattended, maintaining clear view of traffic). (3) MUTCD rules and job-site integration. (4) Emergency procedures (malfunction, breakdown). Training is usually 2-4 hours and often provided by the AFAD manufacturer. Some states (e.g., Massachusetts) require certified Traffic Control Supervisors to oversee AFAD work.',
     ),
     h('h2', null, 'How do AFADs improve flagger safety?'),
     h(
@@ -124,13 +124,13 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
     h(
       'p',
       null,
-      'Major AFAD manufacturers include Wanco, Trafcon, National Signal, and Bay-Con. Rental is available through most national and regional traffic safety equipment companies. Purchase options include direct from manufacturers and distributors. Many rental companies also sell used AFADs.',
+      'Major AFAD manufacturers include Wanco, Trafcon, National Signal, and Bay-Con. Purchase options include direct from manufacturers and distributors.',
     ),
     h('h2', null, 'What maintenance does an AFAD require?'),
     h(
       'p',
       null,
-      'Routine maintenance includes: (1) Checking that lamps and reflectors are clean and operational. (2) Verifying battery charge (on solar or battery-powered models). (3) Testing the remote control for signal strength. (4) Inspecting the device for physical damage or corrosion. (5) Replacing worn or failed lamps. Rental providers usually handle all maintenance. If you own an AFAD, budget $1,000-$2,000 annually for upkeep.',
+      'Routine maintenance includes: (1) Checking that lamps and reflectors are clean and operational. (2) Verifying battery charge (on solar or battery-powered models). (3) Testing the remote control for signal strength. (4) Inspecting the device for physical damage or corrosion. (5) Replacing worn or failed lamps. If you own an AFAD, budget $1,000-$2,000 annually for upkeep.',
     ),
   ),
   faqs: [
@@ -143,10 +143,6 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
       a: 'The operator must immediately switch to manual flagging (STOP paddle) or evacuate the work zone and post advance warning signs. Never leave an AFAD unattended. Have a backup plan (additional flaggers, portable signs) in your traffic control plan.',
     },
     {
-      q: 'Can I rent an AFAD for just 4 hours, or is there a minimum?',
-      a: 'Most rental companies require a 1-day minimum. Some may offer 4-hour rentals at premium rates (e.g., half-day billing). Contact your provider directly about short-term needs.',
-    },
-    {
       q: 'Do AFADs work at night?',
       a: 'Yes, if they are properly illuminated. MUTCD Section 6E.08 requires AFADs to be lit with warning lights or have retroreflective sheeting visible to approaching traffic. Some AFADs have solar-powered LED lighting that activates at dusk.',
     },
@@ -156,7 +152,7 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
     },
     {
       q: 'What is the difference between an AFAD and a temporary traffic signal?',
-      a: 'A temporary traffic signal displays red, yellow, and green lights and is used at intersections. An AFAD displays STOP/SLOW (or red/yellow) and is used on non-intersection roadways for work zones. Temporary signals are much more expensive ($5,000-$15,000/month rental) and require utility coordination.',
+      a: 'A temporary traffic signal displays red, yellow, and green lights and is used at intersections. An AFAD displays STOP/SLOW (or red/yellow) and is used on non-intersection roadways for work zones. Temporary signals are much more expensive and require utility coordination.',
     },
     {
       q: 'Can one operator manage two AFADs (one at each end of a work zone)?',

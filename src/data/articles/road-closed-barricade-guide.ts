@@ -319,7 +319,7 @@ export const articleRoadClosedBarricadeGuide: Article = {
       h('li', null, '2× W20-3 advance warning signs (placed at table distances above)'),
       h('li', null, '20× channelizing drums for the taper'),
       h('li', null, '4× Type B flashing lights, 4× Type C steady-burns'),
-      h('li', null, '1× arrow board (rented or on lease)'),
+      h('li', null, '1× arrow board'),
     ),
     h(
       'h3',
@@ -397,8 +397,8 @@ export const articleRoadClosedBarricadeGuide: Article = {
       a: 'Arrow boards are required by MUTCD §6F.61 for lane closures on roads with speeds ≥ 45 mph, or any closure with more than one approach lane. For a full closure with no through traffic, an arrow board is not required but is strongly recommended at speeds ≥ 35 mph because it gives a 30+ second visual cue from upstream.',
     },
     {
-      q: 'Can I just rent a "road closed" kit instead of buying?',
-      a: 'You can — but our buy/sell model with same-day delivery typically pencils out under purchase after 3–4 closures. A typical Profile A kit runs $850–$1,200 to buy outright vs $200–$300/day to rent the same package. If you do more than 4 closures a year, owning is cheaper.',
+      q: 'Is it cheaper to buy a "road closed" kit outright?',
+      a: 'For most contractors, yes. A typical Profile A kit runs $850–$1,200 to buy outright, and our buy/sell model with same-day delivery pencils out under purchase after 3–4 closures. If you do more than 4 closures a year, owning is cheaper.',
     },
   ],
   relatedProducts: [

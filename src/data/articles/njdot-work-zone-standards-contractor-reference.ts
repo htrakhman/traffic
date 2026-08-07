@@ -113,7 +113,7 @@ export const articleNjdotWorkZoneStandardsContractorReference: Article = {
       h('li', null, 'Setup photos showing all advance signs and the taper'),
       h('li', null, 'A photo of the approved TCP / permit on site'),
       h('li', null, 'Flagger certification cards'),
-      h('li', null, 'Equipment serial numbers and rental receipts (for chain-of-custody on damage claims)'),
+      h('li', null, 'Equipment serial numbers and purchase receipts (for chain-of-custody on damage claims)'),
       h('li', null, 'Daily inspection log signed by the lead'),
     ),
 

@@ -4,14 +4,13 @@ import type { Article } from '../articles'
 /**
  * PILLAR — Targets "jersey barricades" (50K/mo, CI=96).
  * Specific subtype pillar: plastic-Jersey-shape barricades for events,
- * parking lots, low-speed channelization. Distinct from
- * portable-traffic-barrier-rental-guide (contractor barrier-vs-barricade taxonomy).
+ * parking lots, low-speed channelization.
  */
 export const articleJerseyBarricadesGuide: Article = {
   slug: 'jersey-barricades-guide',
   title: 'Jersey Barricades: Plastic vs. Concrete, Sizes, and When to Use Them',
   excerpt:
-    'A "Jersey barricade" is the J-shape barrier born on New Jersey highways and now made in plastic for events and parking lots, concrete for highway work. Here is the working guide to choosing and renting them.',
+    'A "Jersey barricade" is the J-shape barrier born on New Jersey highways and now made in plastic for events and parking lots, concrete for highway work. Here is the working guide to choosing them.',
   metaDescription:
     'Jersey barricades explained: plastic vs concrete, MASH ratings, sizes (4 ft, 6 ft, 10 ft), event and contractor uses, and how to size a Jersey barricade run.',
   primaryKeyword: 'jersey barricades',
@@ -89,14 +88,14 @@ export const articleJerseyBarricadesGuide: Article = {
     h(
       'p',
       null,
-      'The choice is not interchangeable. A plastic Jersey on a 65 mph highway shoulder is a failed inspection. A concrete Jersey for a parking-lot lane closure is wasted money — it costs more to mobilize than the rental of the alternative for the entire duration.',
+      'The choice is not interchangeable. A plastic Jersey on a 65 mph highway shoulder is a failed inspection. A concrete Jersey for a parking-lot lane closure is wasted money — it costs more to mobilize than the plastic alternative is worth for the entire duration.',
     ),
 
     h('h2', null, 'When does a contractor or event planner actually use Jersey barricades?'),
     h(
       'p',
       null,
-      'Five common use cases dominate Jersey barricade rentals. First, event perimeters — concerts, festivals, parades — where ',
+      'Five common use cases dominate Jersey barricade use. First, event perimeters — concerts, festivals, parades — where ',
       h('a', { href: '/product/urbanite-water-filled-pedestrian-barricade' }, 'water-filled pedestrian barricades'),
       ' provide visible perimeter control without crashworthy containment. Second, parking-lot lane control — drive-thru lanes, vaccine clinics, voting precincts — where plastic Jerseys delineate flow at sub-25 mph speeds. Third, short-duration low-speed work zones — utility patches, paving, water-line repairs — where TL-2 plastic Jerseys provide both delineation and modest containment. Fourth, full-time highway work zones — bridge replacements, lane reconstructions — where MASH TL-3 concrete Jerseys are the contract requirement. Fifth, security perimeters — event entrances, government buildings, anti-vehicle approaches — where concrete or specialized anti-ram Jerseys serve dual safety/security duty.',
     ),
@@ -183,23 +182,11 @@ export const articleJerseyBarricadesGuide: Article = {
       ),
     ),
 
-    h('h2', null, 'How much does it cost to rent Jersey barricades?'),
+    h('h2', null, 'How do I order Jersey barricades?'),
     h(
       'p',
       null,
-      'Rental rates in 2026 vary by material, run length, and delivery distance. Plastic water-filled Jerseys typically run $8–$15 per linear foot per week, with a one-time fill/empty fee of $200–$400 and a delivery charge. Concrete Jersey barrier runs $15–$30 per linear foot per week plus a per-segment crane and trucking charge of $50–$100 each way, often negotiated to a flat-rate transport on long runs. The per-pound trucking economics drive the total cost on big concrete runs more than the rental rate itself; concrete is cheap to rent and expensive to mobilize and demobilize.',
-    ),
-    h(
-      'p',
-      null,
-      'Beyond the linear-foot rate, the cost drivers worth asking about up front are end treatments (an attenuator can add $1,500–$3,000 per end on a contractor job), trucking, and on-site crane time. For events, the line items are usually delivery, set, removal, and pickup — bundled into a flat per-foot or per-linear-foot rate. For contractor work, expect itemized quoting so the contract drawings can be matched line-by-line.',
-    ),
-
-    h('h2', null, 'How do I rent Jersey barricades?'),
-    h(
-      'p',
-      null,
-      'Send the quote with the Jersey type (plastic vs concrete), run length in linear feet, segment length preference, location speed (or "event, no traffic" if applicable), expected duration, delivery address, and any state DOT plan or event-permit reference. The rental coordinator can match material, MASH level, and end-treatment availability, and schedule trucking. Lead time on plastic water-filled Jerseys runs 24–72 hours in major metros. Concrete Jersey barrier runs 1–2 weeks because the trucking pool is smaller and 10-foot or 20-foot segments queue at the yard. Plan early on big runs.',
+      'Send the quote with the Jersey type (plastic vs concrete), run length in linear feet, segment length preference, location speed (or "event, no traffic" if applicable), delivery address, and any state DOT plan or event-permit reference. Our quote team can match material, MASH level, and end-treatment availability, and schedule trucking. Lead time on plastic water-filled Jerseys runs 24–72 hours in major metros. Concrete Jersey barrier runs 1–2 weeks because the trucking pool is smaller and 10-foot or 20-foot segments queue at the yard. Plan early on big runs.',
     ),
 
     h(
@@ -217,7 +204,7 @@ export const articleJerseyBarricadesGuide: Article = {
     },
     {
       q: 'Are plastic Jersey barricades crashworthy at highway speeds?',
-      a: 'Generally no. Plastic water-filled Jerseys are typically MASH TL-2 (≤45 mph) when properly filled and connected. Some specialized reinforced models carry TL-3 letters, but most plastic Jerseys on event and parking-lot rentals are not rated for highway-speed impact. For work zones above 45 mph, the contract spec will require concrete or steel.',
+      a: 'Generally no. Plastic water-filled Jerseys are typically MASH TL-2 (≤45 mph) when properly filled and connected. Some specialized reinforced models carry TL-3 letters, but most plastic Jerseys used for events and parking lots are not rated for highway-speed impact. For work zones above 45 mph, the contract spec will require concrete or steel.',
     },
     {
       q: 'Can I use Jersey barricades for an event without a road permit?',
@@ -225,7 +212,7 @@ export const articleJerseyBarricadesGuide: Article = {
     },
     {
       q: 'What is the difference between a Jersey barrier and an F-shape barrier?',
-      a: 'Both are 32-inch concrete longitudinal barriers, but the F-shape has a slightly different sloped profile that performs better in subsequent crash tests, particularly with smaller passenger vehicles. Most modern concrete barrier rentals are F-shape under the FHWA acceptance program, even when called "Jersey" colloquially. The 42-inch tall single-slope and TL-4 versions are separate categories built for truck impacts.',
+      a: 'Both are 32-inch concrete longitudinal barriers, but the F-shape has a slightly different sloped profile that performs better in subsequent crash tests, particularly with smaller passenger vehicles. Most modern concrete barriers are F-shape under the FHWA acceptance program, even when called "Jersey" colloquially. The 42-inch tall single-slope and TL-4 versions are separate categories built for truck impacts.',
     },
     {
       q: 'How do you connect Jersey barricade segments?',
@@ -233,7 +220,7 @@ export const articleJerseyBarricadesGuide: Article = {
     },
     {
       q: 'Are anti-vehicle Jersey barriers for security different from work-zone Jerseys?',
-      a: 'Yes. Anti-vehicle (anti-ram) Jersey or wedge-shape barriers used at security perimeters are separately rated under ASTM F2656 vehicle-impact standards (M30, M40, M50), not MASH. The rating describes the speed and weight of the vehicle a barrier stops at the perimeter line. A standard concrete Jersey can be M30-rated with proper anchoring, but most rental Jerseys are MASH-rated work-zone barriers, not security barriers — confirm the rating standard before specifying for a security application.',
+      a: 'Yes. Anti-vehicle (anti-ram) Jersey or wedge-shape barriers used at security perimeters are separately rated under ASTM F2656 vehicle-impact standards (M30, M40, M50), not MASH. The rating describes the speed and weight of the vehicle a barrier stops at the perimeter line. A standard concrete Jersey can be M30-rated with proper anchoring, but most Jerseys sold are MASH-rated work-zone barriers, not security barriers — confirm the rating standard before specifying for a security application.',
     },
     {
       q: 'How long does it take to install 1,000 feet of plastic Jersey barricade?',
@@ -254,8 +241,6 @@ export const articleJerseyBarricadesGuide: Article = {
   ],
 
   relatedArticles: [
-    'barricade-rental-near-me-guide',
     'type-iii-barricade-vs-type-i-type-ii',
-    'traffic-control-rental-guide',
   ],
 }

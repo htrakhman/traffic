@@ -52,7 +52,7 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
     h(
       'p',
       null,
-      'A portable traffic signal system is a solar-powered or battery-powered signal head (red, yellow, green) mounted on a portable mast or trailer. They control traffic at intersections or work zones where a permanent signal is not installed. Portable signals are ATSSA-certified (American Traffic Safety Services Association) and meet MUTCD Chapter 4 specifications. They are used for: (1) short-term lane closures at intersections, (2) multi-way stop replacements, (3) event traffic control. Cost is high: $3,000-$8,000/month rental. Use them only when flaggers or simpler devices won\'t work.',
+      'A portable traffic signal system is a solar-powered or battery-powered signal head (red, yellow, green) mounted on a portable mast or trailer. They control traffic at intersections or work zones where a permanent signal is not installed. Portable signals are ATSSA-certified (American Traffic Safety Services Association) and meet MUTCD Chapter 4 specifications. They are used for: (1) short-term lane closures at intersections, (2) multi-way stop replacements, (3) event traffic control. Cost is high: $8,000-$15,000 to purchase. Use them only when flaggers or simpler devices won\'t work.',
     ),
     h(
       'p',
@@ -128,19 +128,19 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
     h(
       'p',
       null,
-      'ATSSA (American Traffic Safety Services Association) certifies traffic safety equipment manufacturers and workers against industry standards. ATSSA certification means a product or service has been independently verified to meet safety and performance requirements. For portable signals, temporary traffic control devices, and professional traffic management, ATSSA certification is a quality marker. Look for it when renting or purchasing.',
+      'ATSSA (American Traffic Safety Services Association) certifies traffic safety equipment manufacturers and workers against industry standards. ATSSA certification means a product or service has been independently verified to meet safety and performance requirements. For portable signals, temporary traffic control devices, and professional traffic management, ATSSA certification is a quality marker. Look for it when purchasing.',
     ),
     h('h2', null, 'How do I transport portable traffic control devices?'),
     h(
       'p',
       null,
-      'Cones stack in crates or bins (50-100 per crate). Drums require individual storage or rack systems. Portable barricades should be stored flat or upright in a secure rack. Portable signal heads are mounted on trailers or in protective cases. Most rental companies handle transport and delivery. If you own devices, budget space for secure, weather-protected storage (a storage unit or covered yard area).',
+      'Cones stack in crates or bins (50-100 per crate). Drums require individual storage or rack systems. Portable barricades should be stored flat or upright in a secure rack. Portable signal heads are mounted on trailers or in protective cases. Budget space for secure, weather-protected storage (a storage unit or covered yard area).',
     ),
-    h('h2', null, 'What is the cost difference between renting and buying portable devices?'),
+    h('h2', null, 'What do portable devices cost to buy?'),
     h(
       'p',
       null,
-      'Cones: $0.50-$1.50/day rental vs. $30-$60 purchase per cone. For 100 cones and 50 days/year, renting ($2,500-$7,500/year) is cheaper. Drums: $5-$10/day rental vs. $200-$400 purchase. Portable barricades: $10-$20/day rental vs. $800-$1,500 purchase. Portable signals: $150-$300/day rental vs. $8,000-$15,000 purchase. If you use devices fewer than 100 days per year, rent. If you use them 200+ days, purchase becomes economical.',
+      'Cones: $30-$60 purchase per cone. Drums: $200-$400 purchase. Portable barricades: $800-$1,500 purchase. Portable signals: $8,000-$15,000 purchase.',
     ),
   ),
   faqs: [
@@ -154,7 +154,7 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
     },
     {
       q: 'Do portable cones and drums expire or have a shelf life?',
-      a: 'Cones and drums last 3-7 years with normal use. UV exposure and weather degrade plastic over time, but plastic is recyclable. If a cone develops cracks or loses retroreflectivity, retire it and replace it. Rental companies rotate stock regularly.',
+      a: 'Cones and drums last 3-7 years with normal use. UV exposure and weather degrade plastic over time, but plastic is recyclable. If a cone develops cracks or loses retroreflectivity, retire it and replace it.',
     },
     {
       q: 'What happens if wind blows over a portable cone or drum?',
@@ -170,7 +170,7 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
     },
     {
       q: 'What maintenance do portable cones and drums need?',
-      a: 'Clean them regularly to maintain retroreflectivity (reflectivity decreases with dirt accumulation). Inspect for cracks, missing reflectors, or fading. Replace any damaged devices. Rental companies handle maintenance; if you own devices, budget 10-15% of fleet annually for replacement.',
+      a: 'Clean them regularly to maintain retroreflectivity (reflectivity decreases with dirt accumulation). Inspect for cracks, missing reflectors, or fading. Replace any damaged devices. Budget 10-15% of fleet annually for replacement.',
     },
     {
       q: 'Can portable rumble strips be used on any road surface?',

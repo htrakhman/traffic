@@ -156,11 +156,11 @@ export const articleLowProfileAirportBarricadesGuide: Article = {
       null,
       'Airport-grade barricades are usually a special-order product line. Lead times run 3–8 weeks from manufacturer. Major suppliers (Off the Wall, Yodock, TrafFix, Roadtech) all carry FAA-compliant lines. Most distributors will sell directly; some will only quote against an open project number.',
     ),
-    h('h3', null, 'Pricing and rental'),
+    h('h3', null, 'Pricing'),
     h(
       'p',
       null,
-      'Per-unit costs run higher than roadway equivalents because of the frangibility engineering and FAA-listed lighting. Rental is common — rates typically $25–$50 per 6-ft section per week, plus lighting at $8–$15 per light per week. For a typical taxiway closure (~600 ft perimeter), expect $1,800–$3,000/week in barricade rental alone.',
+      'Per-unit costs run higher than roadway equivalents because of the frangibility engineering and FAA-listed lighting.',
     ),
     h('h3', null, 'Documentation and submittals'),
     h(
@@ -195,7 +195,7 @@ export const articleLowProfileAirportBarricadesGuide: Article = {
     },
     {
       q: 'How much does an airport barricade cost?',
-      a: 'Frangible plastic water-filled low-profile units run $180–$340 per 6-ft section. Foam-filled units run $260–$420. Add $80–$160 per FAA L-810 red steady-burn obstruction light. Most projects rent rather than buy: $25–$50/week per section, $8–$15/week per light.',
+      a: 'Frangible plastic water-filled low-profile units run $180–$340 per 6-ft section. Foam-filled units run $260–$420. Add $80–$160 per FAA L-810 red steady-burn obstruction light.',
     },
     {
       q: 'What height limit applies to airport barricades?',

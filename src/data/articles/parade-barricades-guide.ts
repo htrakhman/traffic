@@ -123,9 +123,9 @@ export const articleParadeBarricadesGuide: Article = {
     h(
       'ul',
       null,
-      h('li', null, h('strong', null, 'Short fixed route (<1 mile, set up morning, take down afternoon) '), '— rent bike rack; one truckload covers it.'),
-      h('li', null, h('strong', null, 'Long route (1–3 miles) '), '— buy the core 200 ft of bike rack, rent supplemental for the rest. Reuse the bought stock across multiple events per year.'),
-      h('li', null, h('strong', null, 'Multi-day or weekly event '), '— buy outright. Three events pays back rental cost.'),
+      h('li', null, h('strong', null, 'Short fixed route (<1 mile, set up morning, take down afternoon) '), '— one truckload of bike rack covers it.'),
+      h('li', null, h('strong', null, 'Long route (1–3 miles) '), '— buy the core 200 ft of bike rack. Reuse the bought stock across multiple events per year.'),
+      h('li', null, h('strong', null, 'Multi-day or weekly event '), '— buy outright.'),
     ),
 
     h('h2', null, 'Bike rack (French) barricades — the parade default'),
@@ -180,8 +180,8 @@ export const articleParadeBarricadesGuide: Article = {
       h('li', null, h('strong', null, 'Spectator separation '), ': bike rack on both sides through downtown core (0.5 mile each side = ~1 mile total = ~660 units of 8 ft barricade)'),
       h('li', null, h('strong', null, 'Outer route '), ': sawhorses + caution tape are acceptable where crowds thin (1.5 miles each side)'),
       h('li', null, h('strong', null, 'Cross-street closures '), ': 8 Type 3 barricades, one at each major intersection'),
-      h('li', null, h('strong', null, 'Total gear '), ': 660 bike rack units (rent: ~$1.50/unit/day = $990; buy: ~$130/unit = $85,800)'),
-      h('li', null, h('strong', null, 'Verdict '), ': rent. Buying only makes sense if the town runs 8+ parade-grade events per year.'),
+      h('li', null, h('strong', null, 'Total gear '), ': 660 bike rack units (buy: ~$130/unit = $85,800)'),
+      h('li', null, h('strong', null, 'Verdict '), ': buying only makes sense if the town runs 8+ parade-grade events per year.'),
     ),
 
     h('h2', null, 'Common parade-barricade mistakes'),
@@ -206,15 +206,9 @@ export const articleParadeBarricadesGuide: Article = {
         h('strong', null, 'Skipping the takedown plan: '),
         'a 600-unit setup takes 90 minutes with a 6-person crew and 30 minutes more for loadout. Build the schedule backward from the moment the road needs to reopen.',
       ),
-      h(
-        'li',
-        null,
-        h('strong', null, 'Renting when buying is cheaper long-run: '),
-        'a town that runs Memorial Day, July 4th, Veterans Day, and Holiday parades will spend $4,000+ per year renting. 200 owned bike rack units cost ~$26,000 and amortize in 6–7 years.',
-      ),
     ),
 
-    h('h2', null, 'Where to buy or rent parade barricades in NJ'),
+    h('h2', null, 'Where to buy parade barricades in NJ'),
     h(
       'p',
       null,
@@ -250,10 +244,6 @@ export const articleParadeBarricadesGuide: Article = {
     {
       q: 'Are bike rack barricades better than Type 1 barricades for parades?',
       a: 'Yes, in almost all cases. Bike rack barricades interlock end-to-end, distributing crowd pressure across the full line; Type 1/2 barricades sit as separate units and walk under pressure. Bike rack vertical bars also discourage climbing. For any parade with more than light spectator turnout, bike rack is the right call.',
-    },
-    {
-      q: 'Should I rent or buy parade barricades?',
-      a: 'Rent for one-off events under 500 units. Buy if you host 4+ parade-grade events per year, or if 200+ units gives you a permanent backbone you can rent supplemental for. A town running 4 annual parades pays roughly $4,000/year in rental; 200 owned bike rack units cost ~$26,000 and amortize in 6–7 years.',
     },
     {
       q: 'Do I need vehicle barriers at a small-town parade?',

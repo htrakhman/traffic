@@ -166,15 +166,6 @@ export const articleConstructionBarricadeGuide: Article = {
       h('a', { href: '/quote' }, 'request a quote'),
       ' with the job specs and we will size the set to your typical work — Central NJ same-day delivery available.',
     ),
-
-    h('h2', null, 'When to rent vs. buy'),
-    h(
-      'p',
-      null,
-      'For a contractor that runs work zones more than ~10 days a year, buying beats renting on a 6–10 month payback. Renting still wins for one-off jobs (utility shutdowns, weekend events) and for water-filled barriers in any quantity over 20 units — the truck math gets ugly fast. Our ',
-      h('a', { href: '/blog/rent-vs-buy-traffic-control-equipment' }, 'rent vs. buy guide'),
-      ' has the breakeven math by category.',
-    ),
   ),
   faqs: [
     {

@@ -12,7 +12,7 @@ export const articleUsedJerseyBarriersForSaleGuide: Article = {
   excerpt:
     'Used concrete Jersey barriers typically sell for $80–$180 each — about 40–60% off new. The catch is condition: rebar exposure, spalling, and impact cracks can make a $90 barrier worthless.',
   metaDescription:
-    'Used Jersey barriers for sale — pricing, inspection checklist, when used makes sense vs new or rental, and what contractors actually pay in the NJ/NY/PA market.',
+    'Used Jersey barriers for sale — pricing, inspection checklist, when used makes sense vs new, and what contractors actually pay in the NJ/NY/PA market.',
   primaryKeyword: 'used jersey barriers for sale',
   secondaryKeywords: [
     'used concrete jersey barriers',

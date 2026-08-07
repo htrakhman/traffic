@@ -346,7 +346,6 @@ export const articleParkingConesBuyingGuide: Article = {
   ],
   relatedArticles: [
     'road-cones-vs-traffic-cones',
-    'traffic-cone-rental-guide',
     'how-many-cones-for-lane-closure-nj',
   ],
 }

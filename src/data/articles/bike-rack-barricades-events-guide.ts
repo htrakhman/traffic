@@ -64,7 +64,7 @@ export const articleBikeRackBarricadesEventsGuide: Article = {
         ),
       ),
     ),
-    h('p', null, 'The 8 ft × 42 in is the workhorse — it is what every event-rental company stocks and what most municipal ordinances reference for parade-route requirements.'),
+    h('p', null, 'The 8 ft × 42 in is the workhorse — it is what most event companies stock and what most municipal ordinances reference for parade-route requirements.'),
 
     h('h2', null, 'Steel vs. plated steel vs. galvanized'),
     h(
@@ -82,7 +82,7 @@ export const articleBikeRackBarricadesEventsGuide: Article = {
     h(
       'p',
       null,
-      'For event-rental companies and municipalities, hot-dip galvanized is the buy because the units survive winter storage and weather without showing rust at the next event.',
+      'For event companies and municipalities, hot-dip galvanized is the buy because the units survive winter storage and weather without showing rust at the next event.',
     ),
 
     h('h2', null, 'Connectors — the make-or-break detail'),
@@ -114,7 +114,7 @@ export const articleBikeRackBarricadesEventsGuide: Article = {
     h(
       'p',
       null,
-      'A typical event-rental fleet has both: bike rack for the long perimeter runs, French barrier for the staging area, the press pool, and the VIP entrance.',
+      'A typical event fleet has both: bike rack for the long perimeter runs, French barrier for the staging area, the press pool, and the VIP entrance.',
     ),
 
     h('h2', null, 'How many do you need?'),
@@ -153,7 +153,7 @@ export const articleBikeRackBarricadesEventsGuide: Article = {
     h(
       'p',
       null,
-      'Bike rack barricades stack — typically 8–10 units to a stack, 30–40 to a single 53\' trailer load. They take real yard space, so an event-rental company outfitting a 200-unit fleet needs roughly a 20\' × 20\' covered storage footprint, or a 20\' container.',
+      'Bike rack barricades stack — typically 8–10 units to a stack, 30–40 to a single 53\' trailer load. They take real yard space, so an event company outfitting a 200-unit fleet needs roughly a 20\' × 20\' covered storage footprint, or a 20\' container.',
     ),
 
     h('h2', null, 'What to buy first'),

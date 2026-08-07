@@ -178,12 +178,11 @@ export const articleWaterFilledJerseyBarriersGuide: Article = {
       h('li', null, h('strong', null, 'Water-filled jersey: '), '~$2,800–$4,200 to buy (16 units × $175–$260). Reusable across hundreds of jobs.'),
       h('li', null, h('strong', null, 'Plastic jersey barriers (no water): '), '~$1,500–$2,500 to buy, but no positive impact protection — they are channelizers, not barriers.'),
       h('li', null, h('strong', null, 'Concrete jersey: '), '~$3,500–$5,500 for 10 ft sections + delivery/crane. Best for permanent or 6+ month installs.'),
-      h('li', null, h('strong', null, 'Steel guardrail (rented): '), 'TMA-mounted, day-rate-based — only used for highest-speed point work.'),
     ),
     h(
       'p',
       null,
-      'For a contractor doing 4+ medium-duration closures per year, owning a 100-ft water-filled set pays back in 12–18 months vs renting equivalent capacity each time.',
+      'For a contractor doing 4+ medium-duration closures per year, owning a 100-ft water-filled set pays back in 12–18 months.',
     ),
 
     h('h2', null, 'Common buying mistakes'),

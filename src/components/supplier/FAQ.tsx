@@ -1,7 +1,7 @@
 export const SUPPLIER_FAQS = [
   {
-    q: 'Is this a rental company?',
-    a: 'No. Every lead is someone looking to buy, never rent. We built the whole site around purchase intent on purpose.',
+    q: 'Do you generate leads for anything besides equipment purchases?',
+    a: 'No. Every lead is someone looking to buy and own the equipment outright. We built the whole site around purchase intent on purpose.',
   },
   {
     q: 'How much does a lead cost?',

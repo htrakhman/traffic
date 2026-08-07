@@ -4,8 +4,7 @@ import type { Article } from '../articles'
 /**
  * PILLAR — Targets "barricades" (50K/mo, CI=83).
  * Head-category pillar absorbing "traffic barricades" (5K), "construction barricades",
- * "street barricades", "road barricades". Distinct from barricade-rental-near-me-guide
- * (rental/local intent) and type-iii-barricade (type-comparison).
+ * "street barricades", "road barricades". Distinct from type-iii-barricade (type-comparison).
  */
 export const articleBarricadesTypesUsesGuide: Article = {
   slug: 'barricades-types-uses-guide',
@@ -13,7 +12,7 @@ export const articleBarricadesTypesUsesGuide: Article = {
   excerpt:
     'Barricades come in five families — Type I, Type II, Type III, water-filled, and pedestrian — each one solving a different MUTCD problem. Here is the working contractor reference.',
   metaDescription:
-    'Barricades explained: five families (Type I, II, III, water-filled, pedestrian), MUTCD §6F.63 specs, when to use each, sizing rules, and how to rent the right barricade.',
+    'Barricades explained: five families (Type I, II, III, water-filled, pedestrian), MUTCD §6F.63 specs, when to use each, sizing rules, and how to order the right barricade.',
   primaryKeyword: 'barricades',
   secondaryKeywords: [
     'traffic barricades',
@@ -247,11 +246,11 @@ export const articleBarricadesTypesUsesGuide: Article = {
       'Modern Type I and II barricades use HDPE or polyethylene panels with prismatic retroreflective sheeting — they survive 3–5 years of continuous outdoor exposure with retroreflectivity loss accelerating after year 2. Type III barricades on aluminum or galvanized steel frames last longer, 5–10 years, but the panels themselves degrade on the same timeline. Water-filled barricades have a similar 3–5 year service life; UV degradation of the plastic and silt buildup in the cavities are the typical end-of-life issues. For long-duration projects, plan to rotate stock or specify panels with a 7-year reflective-sheeting warranty.',
     ),
 
-    h('h2', null, 'How do I rent the right barricades?'),
+    h('h2', null, 'How do I order the right barricades?'),
     h(
       'p',
       null,
-      'Send the quote with the barricade type (I / II / III / pedestrian / water-filled), quantity, road speed, expected duration, delivery address, and any state DOT plan or specification reference. The rental coordinator can confirm MASH acceptance for the specific model and bundle warning lights or sign mounts as needed. Lead time runs 24–48 hours for Type I/II/III and pedestrian barricades in major metros; water-filled barricades for long runs (more than 100 units) need 2–5 business days because they ship empty and fill on site.',
+      'Send the quote with the barricade type (I / II / III / pedestrian / water-filled), quantity, road speed, expected duration, delivery address, and any state DOT plan or specification reference. Our team can confirm MASH acceptance for the specific model and bundle warning lights or sign mounts as needed. Lead time runs 24–48 hours for Type I/II/III and pedestrian barricades in major metros; water-filled barricades for long runs (more than 100 units) need 2–5 business days because they ship empty and fill on site.',
     ),
 
     h(
@@ -288,7 +287,7 @@ export const articleBarricadesTypesUsesGuide: Article = {
       a: 'Yes. MUTCD §6F.63 requires retroreflective sheeting on both faces visible to traffic, with alternating orange and white stripes sloping downward toward the side traffic should pass. The sheeting class must meet §6F.03 minimums — typically Type IV or higher prismatic sheeting on rigid panels, equivalent grade on roll-up or fabric panels.',
     },
     {
-      q: 'How heavy are typical rental barricades?',
+      q: 'How heavy are typical barricades?',
       a: 'Type I and Type II A-frame barricades weigh 15–40 pounds each — light enough for a single worker to carry. Type III barricades range 30–80 pounds depending on the frame material. Water-filled plastic barricades weigh 50–80 pounds empty and 200–400 pounds filled. Concrete pedestrian barriers weigh 200+ pounds and require equipment to set.',
     },
     {
@@ -307,7 +306,6 @@ export const articleBarricadesTypesUsesGuide: Article = {
   ],
 
   relatedArticles: [
-    'barricade-rental-near-me-guide',
     'type-iii-barricade-vs-type-i-type-ii',
     'uniform-traffic-control-devices-mutcd-guide',
   ],

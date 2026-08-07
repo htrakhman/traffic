@@ -227,7 +227,7 @@ export const articleHowManyConesForLaneClosure: Article = {
         'li',
         null,
         h('strong', null, '28-inch cones (7 lb base)'),
-        ' — The standard for daytime work on roads up to 45 mph. Look for a single or double retroreflective collar. These are the cone most NJ contractors rent for typical jobs.',
+        ' — The standard for daytime work on roads up to 45 mph. Look for a single or double retroreflective collar. These are the cone most NJ contractors keep on the truck for typical jobs.',
       ),
       h(
         'li',
@@ -240,7 +240,7 @@ export const articleHowManyConesForLaneClosure: Article = {
       'p',
       null,
       'Quick check: if your cones don\'t have a prominent reflective collar visible from 400+ feet, they\'re not passing a nighttime inspection. Browse our ',
-      h('a', { href: '/category/cones-drums' }, '28" and 36" rental cones'),
+      h('a', { href: '/category/cones-drums' }, '28" and 36" traffic cones'),
       ' if you need the right size for your job.',
     ),
 
@@ -295,7 +295,7 @@ export const articleHowManyConesForLaneClosure: Article = {
     h(
       'p',
       null,
-      'For same-day or next-day rentals in Central NJ (Middlesex, Monmouth, Mercer, Somerset, Union, Hunterdon counties), ',
+      'For same-day or next-day delivery in Central NJ (Middlesex, Monmouth, Mercer, Somerset, Union, Hunterdon counties), ',
       h('a', { href: '/quote' }, 'get a quote here'),
       '.',
     ),
@@ -319,7 +319,7 @@ export const articleHowManyConesForLaneClosure: Article = {
     },
     {
       q: 'How many spare cones should I bring on a job?',
-      a: 'Add 25% to your calculated minimum. On a job requiring 20 cones, bring 25. Cones get knocked over, repositioned, or borrowed mid-job. When renting, there\'s no penalty for returning extras.',
+      a: 'Add 25% to your calculated minimum. On a job requiring 20 cones, bring 25. Cones get knocked over, repositioned, or borrowed mid-job.',
     },
   ],
   relatedProducts: [
@@ -329,8 +329,6 @@ export const articleHowManyConesForLaneClosure: Article = {
     { label: 'Arrow Boards', path: '/category/arrow-boards' },
   ],
   relatedArticles: [
-    'arrow-board-rental-guide',
     'uniform-traffic-control-devices-mutcd-guide',
-    'barricade-rental-near-me-guide',
   ],
 }

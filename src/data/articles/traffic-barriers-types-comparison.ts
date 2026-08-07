@@ -143,10 +143,10 @@ export const articleTrafficBarriersTypesComparison: Article = {
     h(
       'p',
       null,
-      'The corrugated W-shape steel beam mounted on wood or steel posts you see on the shoulder of every NJ highway. TL-3 rated. Install is a posthole/auger operation — these are not portable barriers and not what you want for a 2-week work zone. We mention them only because the keyword "road barriers" pulls them in, and contractors sometimes confuse permanent guardrail with portable barrier rental.',
+      'The corrugated W-shape steel beam mounted on wood or steel posts you see on the shoulder of every NJ highway. TL-3 rated. Install is a posthole/auger operation — these are not portable barriers and not what you want for a 2-week work zone. We mention them only because the keyword "road barriers" pulls them in, and contractors sometimes confuse permanent guardrail with portable barriers.',
     ),
 
-    h('h2', null, 'Decision tree: what to buy or rent'),
+    h('h2', null, 'Decision tree: what to buy'),
     h(
       'ol',
       null,

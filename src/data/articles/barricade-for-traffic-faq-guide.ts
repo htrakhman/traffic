@@ -194,11 +194,11 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
       'Type III barricades typically have wide-footprint bases and rarely need additional weight, except in very-high-wind locations like bridge decks.',
     ),
 
-    h('h2', null, '9. Can I rent traffic barricades instead of buying?'),
+    h('h2', null, '9. Can I buy traffic barricades for a single job instead of a long-term supply?'),
     h(
       'p',
       null,
-      'Some local suppliers rent them; we sell with same-day Central NJ delivery instead. The break-even is roughly 6 weeks of use — if your job runs longer than that, buying wins. For short one-off events, ',
+      'Yes — we sell with same-day Central NJ delivery for jobs of any length. For short one-off events, ',
       h('a', { href: '/quote' }, 'request a quote'),
       ' and we can recommend the smallest spec that meets your job requirements.',
     ),

@@ -211,6 +211,5 @@ export const articleRoadConesVsTrafficCones: Article = {
   relatedArticles: [
     'how-many-cones-for-lane-closure-nj',
     'mutcd-taper-length-formula-nj',
-    'traffic-cone-rental-guide',
   ],
 }

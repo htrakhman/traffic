@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     q: 'Do you sell direct?',
-    a: "No. This page routes your request to a supplier who carries and ships the equipment. We don't hold inventory, and we don't rent anything.",
+    a: "No. This page routes your request to a supplier who carries and ships the equipment. We don't hold inventory ourselves.",
   },
 ]
 

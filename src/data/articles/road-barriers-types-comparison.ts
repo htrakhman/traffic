@@ -65,7 +65,7 @@ export const articleRoadBarriersTypesComparison: Article = {
         h(
           'tbody',
           null,
-          h('tr', null, h('td', { className: 'p-2' }, 'Concrete jersey'), h('td', { className: 'p-2' }, 'TL-3 / TL-4'), h('td', { className: 'p-2' }, 'Crane + hours'), h('td', { className: 'p-2' }, 'Long-duration work zones, freeway closures'), h('td', { className: 'p-2' }, '$700–$1,800 buy / $25–$50/day rent')),
+          h('tr', null, h('td', { className: 'p-2' }, 'Concrete jersey'), h('td', { className: 'p-2' }, 'TL-3 / TL-4'), h('td', { className: 'p-2' }, 'Crane + hours'), h('td', { className: 'p-2' }, 'Long-duration work zones, freeway closures'), h('td', { className: 'p-2' }, '$700–$1,800 buy')),
           h('tr', null, h('td', { className: 'p-2' }, 'Plastic jersey (delineator)'), h('td', { className: 'p-2' }, 'None (channelizer only)'), h('td', { className: 'p-2' }, 'Minutes by hand'), h('td', { className: 'p-2' }, 'Low-speed channelization, parking lots, events'), h('td', { className: 'p-2' }, '$120–$280 buy')),
           h('tr', null, h('td', { className: 'p-2' }, 'Water-filled (Triton-style)'), h('td', { className: 'p-2' }, 'TL-2 / TL-3 when filled'), h('td', { className: 'p-2' }, 'Hand-place + fill on site'), h('td', { className: 'p-2' }, 'Mid-speed redirect, fast deployment'), h('td', { className: 'p-2' }, '$280–$650 buy')),
           h('tr', null, h('td', { className: 'p-2' }, 'Steel guardrail (W-beam)'), h('td', { className: 'p-2' }, 'TL-3 / TL-4'), h('td', { className: 'p-2' }, 'Permanent — multi-day install'), h('td', { className: 'p-2' }, 'Permanent roadside protection'), h('td', { className: 'p-2' }, '$25–$45 per linear foot')),
@@ -230,14 +230,14 @@ export const articleRoadBarriersTypesComparison: Article = {
     },
     {
       q: 'How much do road barriers cost?',
-      a: 'In purchase pricing, plastic jersey runs $120–$280 per 6-ft section, water-filled $280–$650 per 6-ft section, concrete jersey $700–$1,800 per 10-ft section. Steel guardrail is $25–$45 per linear foot installed. Rental pricing for concrete jersey runs $25–$50 per section per day in NJ.',
+      a: 'In purchase pricing, plastic jersey runs $120–$280 per 6-ft section, water-filled $280–$650 per 6-ft section, concrete jersey $700–$1,800 per 10-ft section. Steel guardrail is $25–$45 per linear foot installed.',
     },
     {
       q: 'How fast can I install temporary road barriers?',
       a: 'Plastic jersey: 5–10 minutes per section by hand. Water-filled: 10–15 minutes per section to place, plus 30–60 seconds to fill once water is on site. Concrete jersey: 10–15 minutes per section with a crane truck; an experienced crew sets ~20 sections per shift.',
     },
     {
-      q: 'Can I rent road barriers with same-day delivery in NJ?',
+      q: 'Can I get road barriers with same-day delivery in NJ?',
       a: 'For purchase, we offer same-day delivery on plastic jersey and water-filled barriers in Central NJ. Concrete jersey involves a crane-truck schedule, so request a quote 24–48 hours ahead for those. Browse our barricades and barriers category or request a quote with the project details.',
     },
   ],

@@ -51,7 +51,7 @@ export const articleTrafficSafetySupplyBuyingGuide: Article = {
       h('li', null, h('strong', null, 'Signs and stands: '), 'standard MUTCD warning signs (W series), regulatory signs (R series), guide signs, and the spring-base or X-base sign stands that hold them up. A good supplier stocks the most-used signs (Road Work Ahead, Lane Closed, Detour, Flagger Ahead) cut and ready, plus blanks for custom prints.'),
       h('li', null, h('strong', null, 'Tape and tagging: '), 'caution tape, danger tape, barricade tape, detectable underground tape, and reflective marking tape. These wear out fast on real jobs - expect to reorder monthly.'),
       h('li', null, h('strong', null, 'Personal protection: '), 'Class 2 and Class 3 ANSI 107 vests, hard hats, and traffic paddles for flaggers. Many crews source these elsewhere, but a one-stop supplier reduces purchase-order overhead.'),
-      h('li', null, h('strong', null, 'Smart-zone equipment: '), 'arrow boards, portable changeable message signs (PCMS), automated flagger assistance devices (AFAD), and speed-feedback trailers. Most contractors rent these from the same supplier instead of buying because the capex is high.'),
+      h('li', null, h('strong', null, 'Smart-zone equipment: '), 'arrow boards, portable changeable message signs (PCMS), automated flagger assistance devices (AFAD), and speed-feedback trailers.'),
     ),
 
     h('h2', null, 'The five questions that separate suppliers'),
@@ -78,8 +78,8 @@ export const articleTrafficSafetySupplyBuyingGuide: Article = {
     h('h3', null, '5. "Who do I call when a barricade gets hit at 2 a.m.?"'),
     h('p', null, 'Roadway gear gets damaged. A supplier with an after-hours line and a yard staffed by a foreman (not a call center) can dispatch replacement cones, drums, or barricades in time for the morning shift. Ask explicitly. If the answer is "open a ticket on the website," plan for at least one full shift of downtime per incident.'),
 
-    h('h2', null, 'Buy vs rent: when each makes sense'),
-    h('p', null, 'Most NJ contractors run a hybrid model. Cones, signs, tape, vests, and small barricades are bought outright because they are consumable and you need them on every job. Arrow boards, PCMS, AFAD units, and crash trucks are rented per-project because the capex is large and utilization is uneven.'),
+    h('h2', null, 'What to buy outright'),
+    h('p', null, 'Most NJ contractors buy cones, signs, tape, vests, and small barricades outright because they are consumable and you need them on every job. Arrow boards, PCMS, and AFAD units carry high capex and see uneven utilization, so contractors weigh that carefully before buying them.'),
     h(
       'div',
       { className: 'overflow-x-auto my-4' },
@@ -98,9 +98,7 @@ export const articleTrafficSafetySupplyBuyingGuide: Article = {
         h('tbody', null,
           h('tr', null, h('td', { className: 'p-2' }, '28"/36" cones'), h('td', { className: 'p-2' }, 'Buy'), h('td', { className: 'p-2' }, 'Used daily, payback in 3-4 jobs')),
           h('tr', null, h('td', { className: 'p-2' }, 'Type I/II barricades'), h('td', { className: 'p-2' }, 'Buy'), h('td', { className: 'p-2' }, 'Same logic as cones')),
-          h('tr', null, h('td', { className: 'p-2' }, 'Type III road closures'), h('td', { className: 'p-2' }, 'Buy if monthly use'), h('td', { className: 'p-2' }, 'Bulky to store - rent for one-off shutdowns')),
-          h('tr', null, h('td', { className: 'p-2' }, 'Arrow boards'), h('td', { className: 'p-2' }, 'Rent'), h('td', { className: 'p-2' }, '$8K-$15K capex, low utilization')),
-          h('tr', null, h('td', { className: 'p-2' }, 'AFAD / PCMS'), h('td', { className: 'p-2' }, 'Rent'), h('td', { className: 'p-2' }, 'High capex, project-specific')),
+          h('tr', null, h('td', { className: 'p-2' }, 'Type III road closures'), h('td', { className: 'p-2' }, 'Buy if monthly use'), h('td', { className: 'p-2' }, 'Bulky to store')),
           h('tr', null, h('td', { className: 'p-2' }, 'Sign stands'), h('td', { className: 'p-2' }, 'Buy'), h('td', { className: 'p-2' }, 'Cheap, breakable, always need spares')),
         ),
       ),
@@ -149,10 +147,6 @@ export const articleTrafficSafetySupplyBuyingGuide: Article = {
     h('p', null, 'We stock everything in the six categories above out of our Central NJ yard, run same-day delivery in Middlesex / Monmouth / Mercer / Somerset / Union / Hunterdon / northern Ocean counties, and answer the phone after hours. Set up a contractor account once and orders ship without a credit card swipe each time.'),
   ),
   faqs: [
-    {
-      q: 'What is the difference between a traffic safety supply company and a traffic control rental company?',
-      a: 'A supply company sells equipment outright - you own it and use it across jobs. A rental company leases it for a project window and picks it up after. Most contractors buy consumables (cones, signs, barricades) from a supplier and rent only the high-capex items (arrow boards, PCMS, AFAD, crash trucks). Traffic Control Supply now operates as a buy/sell + delivery model after pivoting from rental in April 2026.',
-    },
     {
       q: 'Do I need an account to order traffic safety supplies?',
       a: 'For one-off small orders, no - any reputable supplier will sell to walk-ins. For repeat orders, a contractor account gets you net-30 terms, line-of-credit pricing, and faster phone-order checkout. Setting up an account usually requires a W-9 and trade references.',

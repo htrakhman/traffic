@@ -44,7 +44,7 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
     h(
       'p',
       null,
-      'For a contractor, the practical impact is that "qualified" is rarely a single sticker — it is a paper trail. Keep the FHWA acceptance letter or eligibility entry for each barrier and attenuator on file, keep the manufacturer cut sheet and MUTCD reference for each sign and channelizer, and keep the rental invoice that ties each item on site to the inventory you brought.',
+      'For a contractor, the practical impact is that "qualified" is rarely a single sticker — it is a paper trail. Keep the FHWA acceptance letter or eligibility entry for each barrier and attenuator on file, keep the manufacturer cut sheet and MUTCD reference for each sign and channelizer, and keep the purchase invoice that ties each item on site to the inventory you brought.',
     ),
 
     h('h2', null, 'Which traffic control devices need formal qualification on a MassDOT job?'),
@@ -56,7 +56,7 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
     h(
       'p',
       null,
-      'Lower-risk devices — 28" and 36" traffic cones, channelizing drums, Type I and Type II barricades, roll-up signs, sign stands — still must conform to MUTCD §6F dimensional and retroreflectivity rules but rarely require their own paperwork past the rental invoice. The exception is when the project specifications cross-reference Section 850 specifically, in which case the rental supplier should be able to confirm compliance in writing.',
+      'Lower-risk devices — 28" and 36" traffic cones, channelizing drums, Type I and Type II barricades, roll-up signs, sign stands — still must conform to MUTCD §6F dimensional and retroreflectivity rules but rarely require their own paperwork past the purchase invoice. The exception is when the project specifications cross-reference Section 850 specifically, in which case the supplier should be able to confirm compliance in writing.',
     ),
 
     h('h2', null, 'How does MassDOT compliance map to federal MUTCD and MASH?'),
@@ -73,7 +73,7 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
         },
         'FHWA Office of Safety roadside hardware program',
       ),
-      ', and any device on that federal eligibility list is also accepted by MassDOT unless the contract documents specifically restrict the list further. That federal alignment is why a Wanco arrow board or a Yodock water-filled barrier rented in New Jersey is also acceptable for a Massachusetts paving job, provided the test level matches the road class.',
+      ', and any device on that federal eligibility list is also accepted by MassDOT unless the contract documents specifically restrict the list further. That federal alignment is why a Wanco arrow board or a Yodock water-filled barrier purchased in New Jersey is also acceptable for a Massachusetts paving job, provided the test level matches the road class.',
     ),
     h(
       'p',
@@ -85,19 +85,19 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
     h(
       'p',
       null,
-      'Build a binder (or a shared folder) with five sections. First, the contract-document references for traffic control — Section 850 callouts, plan-sheet typical applications, and any pay items that reference specific equipment. Second, the FHWA acceptance letters for every crashworthy device on site. Third, the manufacturer cut sheets for arrow boards, PCMS, AFADs, and TMAs, each annotated with the MUTCD reference (§6F.61, §6F.60, §6E.04, §6F.81 respectively). Fourth, the rental invoice or purchase order for each item, dated to the work-zone deployment. Fifth, the daily inspection log — a one-line entry per device per shift confirming retroreflectivity, lamp operation, panel readability, and battery state.',
+      'Build a binder (or a shared folder) with five sections. First, the contract-document references for traffic control — Section 850 callouts, plan-sheet typical applications, and any pay items that reference specific equipment. Second, the FHWA acceptance letters for every crashworthy device on site. Third, the manufacturer cut sheets for arrow boards, PCMS, AFADs, and TMAs, each annotated with the MUTCD reference (§6F.61, §6F.60, §6E.04, §6F.81 respectively). Fourth, the purchase invoice or purchase order for each item, dated to the work-zone deployment. Fifth, the daily inspection log — a one-line entry per device per shift confirming retroreflectivity, lamp operation, panel readability, and battery state.',
     ),
     h(
       'p',
       null,
-      'The binder is what the resident engineer or the MassDOT inspector wants to see if anything goes sideways. It is also what the rental supplier can pre-build for you on quoted equipment if you ask up front.',
+      'The binder is what the resident engineer or the MassDOT inspector wants to see if anything goes sideways. It is also what the supplier can pre-build for you on quoted equipment if you ask up front.',
     ),
 
-    h('h2', null, 'How do I rent MassDOT-compliant traffic control equipment?'),
+    h('h2', null, 'How do I order MassDOT-compliant traffic control equipment?'),
     h(
       'p',
       null,
-      'Send the rental request with the Highway Division project number, the relevant typical-application sheet from the contract plans, and the work-zone duration class (mobile, short-duration, short-term, intermediate-term, long-term per MUTCD §6G.02). The rental coordinator can then match each line item to a MASH-eligible or MUTCD-compliant equivalent, attach the federal acceptance documentation, and confirm delivery to the job site. Lead times in eastern Massachusetts run 24–48 hours for cones, drums, signs, and arrow boards, and 2–5 business days for TMAs, AFADs, and longer barrier runs.',
+      'Send the quote request with the Highway Division project number, the relevant typical-application sheet from the contract plans, and the work-zone duration class (mobile, short-duration, short-term, intermediate-term, long-term per MUTCD §6G.02). Our quote team can then match each line item to a MASH-eligible or MUTCD-compliant equivalent, attach the federal acceptance documentation, and confirm delivery to the job site. Lead times in eastern Massachusetts run 24–48 hours for cones, drums, signs, and arrow boards, and 2–5 business days for TMAs, AFADs, and longer barrier runs.',
     ),
 
     h(
@@ -118,8 +118,8 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
       a: 'No. The required test level follows the posted operating speed. MASH TL-2 is acceptable on roads at or below 45 mph; TL-3 is required at higher speeds. The contract documents will specify the test level, and the FHWA acceptance letter for the device must match it.',
     },
     {
-      q: 'Are out-of-state rental devices acceptable on MassDOT projects?',
-      a: 'Generally yes, provided the device appears on the federal MASH/NCHRP 350 eligibility list and conforms to MUTCD §6F dimensions and retroreflectivity. Massachusetts adopts the federal MUTCD and the federal eligibility list by reference. The contract documents may add state-specific labeling or signing details that the rental supplier should confirm in writing.',
+      q: 'Is out-of-state equipment acceptable on MassDOT projects?',
+      a: 'Generally yes, provided the device appears on the federal MASH/NCHRP 350 eligibility list and conforms to MUTCD §6F dimensions and retroreflectivity. Massachusetts adopts the federal MUTCD and the federal eligibility list by reference. The contract documents may add state-specific labeling or signing details that the supplier should confirm in writing.',
     },
     {
       q: 'What signs need to be MUTCD-compliant on a Massachusetts work zone?',
@@ -131,7 +131,7 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
     },
     {
       q: 'How long should I keep traffic control compliance documentation after a MassDOT job?',
-      a: 'Most state-funded contracts require records to be kept for the duration of the contract plus three to seven years, depending on funding source. Federally funded projects typically require seven years post-final-payment. Keeping the rental invoices, FHWA acceptance letters, and daily inspection logs in a single binder makes any post-project audit a non-event.',
+      a: 'Most state-funded contracts require records to be kept for the duration of the contract plus three to seven years, depending on funding source. Federally funded projects typically require seven years post-final-payment. Keeping the purchase invoices, FHWA acceptance letters, and daily inspection logs in a single binder makes any post-project audit a non-event.',
     },
     {
       q: 'Are water-filled barriers acceptable for full-time use on MassDOT highways?',
@@ -148,8 +148,6 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
   ],
 
   relatedArticles: [
-    'traffic-control-equipment-rental',
-    'traffic-control-trailer-rental-guide',
     'uniform-traffic-control-devices-mutcd-guide',
   ],
 }

@@ -47,7 +47,7 @@ export const articleTrafficControllerSignMutcd: Article = {
     h(
       'p',
       null,
-      'A roll-up version is acceptable for short-duration and short-term work and is what most contractors actually deploy. Roll-ups use a fluorescent orange vinyl substrate with the symbol screen-printed in black; the substrate flexes onto a spring-frame stand (X-stand or telescoping pole) and meets the same retroreflectivity requirement when ordered in the right grade. Confirm the sheeting class on the rental invoice — a Type I or II roll-up is not MUTCD-compliant on a state highway.',
+      'A roll-up version is acceptable for short-duration and short-term work and is what most contractors actually deploy. Roll-ups use a fluorescent orange vinyl substrate with the symbol screen-printed in black; the substrate flexes onto a spring-frame stand (X-stand or telescoping pole) and meets the same retroreflectivity requirement when ordered in the right grade. Confirm the sheeting class on the invoice — a Type I or II roll-up is not MUTCD-compliant on a state highway.',
     ),
 
     h('h2', null, 'Where exactly does the sign go on a work zone?'),
@@ -96,11 +96,11 @@ export const articleTrafficControllerSignMutcd: Article = {
       'A small utility job on a residential street might use only one W21-7 in each direction. A multi-day paving operation on a state route will use the W21-7 in a sign sequence that includes ROAD WORK AHEAD, FLAGGER, and BE PREPARED TO STOP, with each spaced per the §6C.04 table.',
     ),
 
-    h('h2', null, 'How do I rent a traffic controller sign?'),
+    h('h2', null, 'How do I order a traffic controller sign?'),
     h(
       'p',
       null,
-      'Most rental signs ship as roll-up panels with X-stand or telescoping bases, sized 48" × 48" by default. Specify the sheeting grade (Type IV or higher for state highway work), quantity, and rental duration. Lead time in major metros is 24–48 hours for standard signs. For long-duration deployments (more than 30 days), rigid signs on hardened stands often pencil out cheaper than roll-ups because the roll-up substrate degrades under continuous UV exposure.',
+      'Most signs ship as roll-up panels with X-stand or telescoping bases, sized 48" × 48" by default. Specify the sheeting grade (Type IV or higher for state highway work) and quantity. Lead time in major metros is 24–48 hours for standard signs. For long-duration deployments (more than 30 days), rigid signs on hardened stands often pencil out cheaper than roll-ups because the roll-up substrate degrades under continuous UV exposure.',
     ),
 
     h(

@@ -253,6 +253,5 @@ export const articleTypeIiiBarricadeVsTypeITypeIi: Article = {
   relatedArticles: [
     'how-many-cones-for-lane-closure-nj',
     'uniform-traffic-control-devices-mutcd-guide',
-    'barricade-rental-near-me-guide',
   ],
 }

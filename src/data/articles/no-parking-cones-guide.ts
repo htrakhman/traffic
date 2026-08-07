@@ -52,7 +52,7 @@ export const articleNoParkingConesGuide: Article = {
       h('li', null, h('strong', null, 'Private property (your driveway, your business lot, an HOA-managed spot):'), ' yes, you can place cones to reserve, block, or restrict parking. The lot owner has the authority. Posted "Reserved" or "No Parking" signage backs the cone up if a vehicle ignores it.'),
       h('li', null, h('strong', null, 'Public street with NO permit:'), ' generally NOT enforceable. Random orange cones in a public spot have no legal weight, can be moved by anyone, and the parker is not legally bound to honor them. Police and meter staff routinely remove unpermitted cones.'),
       h('li', null, h('strong', null, 'Public street WITH permit (block party, moving truck, contractor work zone):'), ' yes, when paired with the city-issued permit and any required signage. Most municipalities sell short-duration "no parking" permits for $25–$100 that include cones or barricades.'),
-      h('li', null, h('strong', null, 'Curbside in front of a business with no posted reservation:'), ' enforceable only by the business owner with a signed contract / lease that includes the curbside; otherwise it is public street and the cones do nothing.'),
+      h('li', null, h('strong', null, 'Curbside in front of a business with no posted reservation:'), ' enforceable only by the business owner with a signed agreement that includes the curbside; otherwise it is public street and the cones do nothing.'),
     ),
     h(
       'p',
@@ -166,7 +166,7 @@ export const articleNoParkingConesGuide: Article = {
       null,
       'Browse our ',
       h('a', { href: '/category/cones-drums' }, 'cones and channelizers category'),
-      ' for 28 in MUTCD-grade cones in 7 lb and 10 lb base weights, plus cone-top sign toppers in stock "No Parking" / "Reserved" / blank-custom variants. For a property-management or event-rental quantity with same-day Central NJ delivery, ',
+      ' for 28 in MUTCD-grade cones in 7 lb and 10 lb base weights, plus cone-top sign toppers in stock "No Parking" / "Reserved" / blank-custom variants. For a property-management or event quantity with same-day Central NJ delivery, ',
       h('a', { href: '/quote' }, 'request a quote'),
       ' or ask the ',
       h('a', { href: '/assistant' }, 'AI Assistant'),

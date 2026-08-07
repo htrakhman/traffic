@@ -121,7 +121,7 @@ export const articleConcreteBarriersForSaleGuide: Article = {
       'p',
       null,
       h('strong', null, 'Loading equipment matters too.'),
-      ' You need a forklift rated 8,000 lb minimum (most rental skid-steer forklifts are 6,000 lb and will not lift these), or a small crane / excavator with a barrier clamp. If your jobsite cannot accept a flatbed and forklift, factor in a transload yard — that is another $40–$80/barrier in handling.',
+      ' You need a forklift rated 8,000 lb minimum (most standard skid-steer forklifts are 6,000 lb and will not lift these), or a small crane / excavator with a barrier clamp. If your jobsite cannot accept a flatbed and forklift, factor in a transload yard — that is another $40–$80/barrier in handling.',
     ),
 
     h('h2', null, 'Used concrete barriers — where to find them, what to inspect'),
@@ -203,7 +203,7 @@ export const articleConcreteBarriersForSaleGuide: Article = {
       null,
       h('li', null, h('strong', null, 'Permanent industrial perimeter (warehouse yard, fuel depot):'), ' buy used concrete. Crash rating matters less than mass and durability.'),
       h('li', null, h('strong', null, 'Multi-month highway work zone:'), ' buy new MASH TL-3 concrete. Match the spec letter your DOT requires.'),
-      h('li', null, h('strong', null, 'Event / parade / festival:'), ' do NOT buy concrete. Use water-filled or steel pedestrian barricades. The freight alone exceeds the rental of plastics for the same length.'),
+      h('li', null, h('strong', null, 'Event / parade / festival:'), ' do NOT buy concrete. Use water-filled or steel pedestrian barricades. The freight alone makes concrete impractical for the same length.'),
       h('li', null, h('strong', null, 'Construction site, 6 months or less:'), ' water-filled or plastic Jersey. Lower freight, repositionable.'),
       h('li', null, h('strong', null, 'Anti-vehicle / security perimeter at low speed:'), ' used concrete is fine; ASTM F2656 rated wedge / bollard is required for higher threat levels.'),
     ),
