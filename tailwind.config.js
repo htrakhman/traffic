@@ -19,8 +19,8 @@ export default {
         slate: {
           950: '#020617',
         },
-        // Supplier homepage (Job A) tokens — see src/pages/SupplierHome.css for the
-        // single-source CSS custom properties these read from.
+        // Shared light theme (Job A homepage + Job B buyer pages) — see
+        // src/styles/site.css for the single-source CSS custom properties.
         paper: 'var(--paper)',
         surface: 'var(--surface)',
         ink: 'var(--ink)',

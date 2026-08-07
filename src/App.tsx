@@ -1,32 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { usePostHog } from '@posthog/react'
-import { AuthProvider } from './context/AuthContext'
-import { CartProvider } from './context/CartContext'
-import { MembershipProvider } from './context/MembershipContext'
-import { CatalogSyncProvider } from './context/CatalogSyncContext'
-import Header from './components/layout/Header'
-import Footer from './components/layout/Footer'
-import AIPlannerWidget from './components/ai/AIPlannerWidget'
 import SupplierHome from './pages/SupplierHome'
-import { LegacyCategoryRedirect, LegacyProductRedirect } from './components/routing/LegacyRedirects'
+import BlogLayout from './components/blog/BlogLayout'
+import TrafficSafetySupplies from './pages/buyers/TrafficSafetySupplies'
+import TrafficConesForSale from './pages/buyers/TrafficConesForSale'
+import TrafficControlEquipment from './pages/buyers/TrafficControlEquipment'
+import TrafficSafetyEquipment from './pages/buyers/TrafficSafetyEquipment'
 
-const Browse = lazy(() => import('./pages/Browse'))
-const Category = lazy(() => import('./pages/Category'))
-const ProductPage = lazy(() => import('./pages/Product'))
-const Assistant = lazy(() => import('./pages/Assistant'))
-const Quote = lazy(() => import('./pages/Quote'))
-const Cart = lazy(() => import('./pages/Cart'))
-const Checkout = lazy(() => import('./pages/Checkout'))
-const SiteMapPlanner = lazy(() => import('./pages/SiteMapPlanner'))
 const Blog = lazy(() => import('./pages/Blog'))
 const Article = lazy(() => import('./pages/Article'))
-const Account = lazy(() => import('./pages/Account'))
-const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'))
-const SupplierSourceMap = lazy(() => import('./pages/admin/SupplierSourceMap'))
-const AdminProductEdit = lazy(() => import('./pages/admin/AdminProductEdit'))
-const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'))
-const AdminOrderDetail = lazy(() => import('./pages/admin/AdminOrderDetail'))
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -52,38 +35,6 @@ function PostHogPageview() {
   return null
 }
 
-function AppLayout() {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <div className="flex-1">
-        <Suspense fallback={<div className="min-h-screen" />}>
-        <Routes>
-          <Route path="/browse" element={<Browse />} />
-          <Route path="/category/:slug" element={<Category />} />
-          <Route path="/product/:slug" element={<ProductPage />} />
-          <Route path="/product-legacy/:slug" element={<LegacyProductRedirect />} />
-          <Route path="/category-legacy/:slug" element={<LegacyCategoryRedirect />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/assistant" element={<Assistant />} />
-          <Route path="/quote" element={<Quote />} />
-          <Route path="/planner" element={<SiteMapPlanner />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<Article />} />
-          <Route path="/guides" element={<Navigate to="/blog" replace />} />
-          <Route path="/guides/:slug" element={<GuidesSlugRedirect />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="*" element={<Navigate to="/browse" replace />} />
-        </Routes>
-        </Suspense>
-      </div>
-      <Footer />
-      <AIPlannerWidget />
-    </div>
-  )
-}
-
 export default function App() {
   const hasPostHogToken = Boolean(
     import.meta.env.VITE_PUBLIC_POSTHOG_TOKEN ?? import.meta.env.NEXT_PUBLIC_POSTHOG_KEY
@@ -91,36 +42,45 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <CatalogSyncProvider>
-        <AuthProvider>
-        <MembershipProvider>
-          <CartProvider>
-            <ScrollToTop />
-            {hasPostHogToken ? <PostHogPageview /> : null}
-            <Routes>
-              {/* Job A — supplier lead-gen homepage. Standalone: no storefront
-                  Header/Footer/AIPlannerWidget, no shared chrome with Job B below. */}
-              <Route path="/" element={<SupplierHome />} />
-              <Route
-                path="/admin"
-                element={
-                  <Suspense fallback={<div className="min-h-screen" />}>
-                    <AdminLayout />
-                  </Suspense>
-                }
-              >
-                <Route index element={<Navigate to="/admin/supplier-source-map" replace />} />
-                <Route path="supplier-source-map" element={<SupplierSourceMap />} />
-                <Route path="products/:id" element={<AdminProductEdit />} />
-                <Route path="orders" element={<AdminOrders />} />
-                <Route path="orders/:id" element={<AdminOrderDetail />} />
-              </Route>
-              <Route path="/*" element={<AppLayout />} />
-            </Routes>
-          </CartProvider>
-        </MembershipProvider>
-        </AuthProvider>
-      </CatalogSyncProvider>
+      <ScrollToTop />
+      {hasPostHogToken ? <PostHogPageview /> : null}
+      <Routes>
+        {/* Job A — supplier lead-gen homepage. */}
+        <Route path="/" element={<SupplierHome />} />
+
+        {/* Job B — buyer product pages. Each ends in the quote form that is the
+            product: every submission is a lead sold to a supplier. */}
+        <Route path="/traffic-safety-supplies" element={<TrafficSafetySupplies />} />
+        <Route path="/traffic-cones-for-sale" element={<TrafficConesForSale />} />
+        <Route path="/traffic-control-equipment" element={<TrafficControlEquipment />} />
+        <Route path="/traffic-safety-equipment" element={<TrafficSafetyEquipment />} />
+
+        {/* Work zone guides — pre-existing content, kept live. */}
+        <Route
+          path="/blog"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+              <BlogLayout>
+                <Blog />
+              </BlogLayout>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+              <BlogLayout>
+                <Article />
+              </BlogLayout>
+            </Suspense>
+          }
+        />
+        <Route path="/guides" element={<Navigate to="/blog" replace />} />
+        <Route path="/guides/:slug" element={<GuidesSlugRedirect />} />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
   )
 }

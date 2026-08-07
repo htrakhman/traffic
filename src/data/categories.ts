@@ -8,7 +8,6 @@ export const categories: Category[] = [
     description: 'Orange traffic cones for work zones, parking lots, and site safety',
     seoDescription:
       'Buy 28" and 36" orange traffic cones with reflective options. MUTCD-compliant cones for contractors and property managers.',
-    icon: '',
     imageUrl: '/catalog/cone-28-orange-7lb.webp',
   },
   {
@@ -18,7 +17,6 @@ export const categories: Category[] = [
     description: 'Type II barricades and galvanized crowd control fence for closures and events',
     seoDescription:
       'Portable Type II traffic barricades and galvanized crowd control fence panels for road work, events, and restricted areas.',
-    icon: '',
     imageUrl:
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/i/economy-type-ii-barricade-with-steel-legs-plastic-panels-eg-reflective-sheeting.webp',
   },
@@ -28,7 +26,6 @@ export const categories: Category[] = [
     slug: 'traffic-drums',
     description: 'Channelizing drums with weighted rubber bases',
     seoDescription: 'Reflective traffic drums with rubber tire ring bases for lane control.',
-    icon: '',
     imageUrl: '/catalog/channelizing-drum-6in-hi-tire-base.webp',
   },
   {
@@ -37,7 +34,6 @@ export const categories: Category[] = [
     slug: 'signs-and-stands',
     description: 'Roll-up construction signs and heavy-duty stands',
     seoDescription: '48" roll-up construction signs and quick-latch sign stands for work zones.',
-    icon: '',
     imageUrl:
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_2.0,f_auto,q_auto:best,w_600/images/products/thumb/heavy-duty-roll-up-sign-road-work-ahead-hip-roll-up-sign-mutcd.webp',
   },
@@ -47,7 +43,6 @@ export const categories: Category[] = [
     slug: 'safety-vests',
     description: 'Class 2 hi-vis safety vests for crews',
     seoDescription: 'Affordable ANSI Class 2 high visibility safety vests for road and construction crews.',
-    icon: '',
     imageUrl:
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/b_rgb:FFFFFF,c_pad,c_scale/i/contrasting-mesh-class-2-vest-orange-2xl-kishigo-hi-vis.webp',
   },
@@ -57,7 +52,6 @@ export const categories: Category[] = [
     slug: 'wheel-chocks',
     description: 'Heavy duty wheel chocks for trucks and trailers',
     seoDescription: '24" heavy duty wheel chocks for trucks, trailers, and loading docks.',
-    icon: '',
     imageUrl: '/catalog/cone-28-orange-7lb.webp',
   },
   {
@@ -66,7 +60,6 @@ export const categories: Category[] = [
     slug: 'speed-control',
     description: 'Rubber speed bumps for parking and private roads',
     seoDescription: '9.5 foot rubber speed bumps for parking lots, garages, and property traffic calming.',
-    icon: '',
     imageUrl:
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/economy-rubber-speed-hump-middle-section-18-galv-steel-spikes-asphalt-gravel-or-dirt-traffic-calming.webp',
   },
@@ -76,7 +69,6 @@ export const categories: Category[] = [
     slug: 'parking-lot-safety',
     description: 'Rubber parking blocks and wheel stops',
     seoDescription: 'Commercial rubber parking blocks for lots, garages, and warehouse parking areas.',
-    icon: '',
     imageUrl:
       'https://media.trafficsafetystore.com/image/upload/c_limit,dpr_3.0,f_auto,q_auto:best,w_600/i/commercial-parking-block-3ft-blue-18-galv-steel-spikes-asphalt-gravel-or-dirt-rubber-wheel-stop-parking-curb-ada-compliant.webp',
   },

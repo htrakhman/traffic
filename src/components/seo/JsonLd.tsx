@@ -114,6 +114,20 @@ export const schema = {
       : undefined,
     keywords: a.keywords?.join(', '),
   }),
+  /**
+   * No price/offers here on purpose — pricing is never published on this site.
+   * Add AggregateOffer only if real offer data ever exists; never fabricate one.
+   */
+  product: (p: { name: string; description: string; slug: string; image?: string; category?: string }) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: p.name,
+    description: p.description,
+    category: p.category,
+    url: `${SITE_ORIGIN}/${p.slug}`,
+    image: p.image ? (p.image.startsWith('http') ? p.image : SITE_ORIGIN + p.image) : undefined,
+    brand: { '@type': 'Organization', name: SITE_NAME },
+  }),
   faqPage: (qas: { q: string; a: string }[]) => ({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

@@ -1,4 +1,4 @@
-import './SupplierHome.css'
+import '../styles/site.css'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import { DEFAULT_PAGE_TITLE, SITE_DOMAIN } from '../config/site'
@@ -15,7 +15,7 @@ import SignupForm from '../components/supplier/SignupForm'
 
 export default function SupplierHome() {
   return (
-    <div className="tcs-home font-tcsBody">
+    <div className="tcs-site font-tcsBody">
       <SEO
         title={`${DEFAULT_PAGE_TITLE} — Leads for Suppliers`}
         description={`We generate purchase-intent demand for traffic control and work zone safety equipment, then sell those leads to suppliers nationwide on a pay-per-lead basis. ${SITE_DOMAIN}.`}

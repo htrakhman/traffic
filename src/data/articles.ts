@@ -49,21 +49,14 @@ export interface Article extends ArticleMeta {
 }
 
 // Imports are kept static so Vite tree-shakes and includes the bodies in the bundle.
-import { articleTrafficControlRentalGuide } from './articles/traffic-control-rental-guide'
 import { articleUniformTrafficControlDevicesMutcdGuide } from './articles/uniform-traffic-control-devices-mutcd-guide'
-import { articleArrowBoardRentalGuide } from './articles/arrow-board-rental-guide'
 import { articleAutomatedFlaggerAssistanceDeviceAfadGuide } from './articles/automated-flagger-assistance-device-afad-guide'
-import { articleBarricadeRentalNearMeGuide } from './articles/barricade-rental-near-me-guide'
 import { articlePortableTrafficControlDevicesGuide } from './articles/portable-traffic-control-devices-guide'
-import { articleTrafficControlEquipmentRental } from './articles/traffic-control-equipment-rental'
 import { articleTrafficControlDevicesGuide } from './articles/traffic-control-devices-guide'
-import { articleTrafficConeRentalGuide } from './articles/traffic-cone-rental-guide'
 import { articleHowManyConesForLaneClosure } from './articles/how-many-cones-for-lane-closure-nj'
-import { articleTrafficControlTrailerRentalGuide } from './articles/traffic-control-trailer-rental-guide'
 import { articleTypeIiiBarricadeVsTypeITypeIi } from './articles/type-iii-barricade-vs-type-i-type-ii'
 import { articleMutcdTaperLengthFormulaNj } from './articles/mutcd-taper-length-formula-nj'
 import { articleTemporaryTrafficControlPlanUtilityJob } from './articles/temporary-traffic-control-plan-utility-job'
-import { articleRentVsBuyTrafficControlEquipment } from './articles/rent-vs-buy-traffic-control-equipment'
 import { articleNjdotWorkZoneStandardsContractorReference } from './articles/njdot-work-zone-standards-contractor-reference'
 import { articleRoadConesVsTrafficCones } from './articles/road-cones-vs-traffic-cones'
 import { articleConeZoneWorkZoneGuide } from './articles/cone-zone-work-zone-guide'
@@ -78,9 +71,7 @@ import { articleWhatIsATrafficPylon } from './articles/what-is-a-traffic-pylon'
 import { articleHazardConesVsTrafficCones } from './articles/hazard-cones-vs-traffic-cones'
 import { articleMassDotQualifiedTrafficControlEquipment } from './articles/massdot-qualified-traffic-control-equipment'
 import { articleOfficialTrafficControlDeviceMutcd } from './articles/official-traffic-control-device-mutcd'
-import { articlePortableTrafficBarrierRentalGuide } from './articles/portable-traffic-barrier-rental-guide'
 import { articleTrafficControllerSignMutcd } from './articles/traffic-controller-sign-mutcd'
-import { articleTrafficControlTruckRentalGuide } from './articles/traffic-control-truck-rental-guide'
 import { articleTrafficConesBuyingGuide } from './articles/traffic-cones-buying-guide'
 import { articleOrangeConesExplained } from './articles/orange-cones-explained'
 import { articleStreetConesGuide } from './articles/street-cones-guide'
@@ -282,9 +273,7 @@ export const articles: Article[] = [
   articleHazardConesVsTrafficCones,
   articleMassDotQualifiedTrafficControlEquipment,
   articleOfficialTrafficControlDeviceMutcd,
-  articlePortableTrafficBarrierRentalGuide,
   articleTrafficControllerSignMutcd,
-  articleTrafficControlTruckRentalGuide,
   articleConeZoneWorkZoneGuide,
   articleBarricadesTypesUsesGuide,
   articleJerseyBarricadesGuide,
@@ -294,19 +283,12 @@ export const articles: Article[] = [
   articleTypeIiiBarricadeVsTypeITypeIi,
   articleMutcdTaperLengthFormulaNj,
   articleTemporaryTrafficControlPlanUtilityJob,
-  articleRentVsBuyTrafficControlEquipment,
   articleNjdotWorkZoneStandardsContractorReference,
-  articleTrafficControlTrailerRentalGuide,
   articleHowManyConesForLaneClosure,
-  articleTrafficConeRentalGuide,
   articleTrafficControlDevicesGuide,
   articleUniformTrafficControlDevicesMutcdGuide,
-  articleArrowBoardRentalGuide,
   articleAutomatedFlaggerAssistanceDeviceAfadGuide,
-  articleBarricadeRentalNearMeGuide,
   articlePortableTrafficControlDevicesGuide,
-  articleTrafficControlEquipmentRental,
-  articleTrafficControlRentalGuide,
 ]
 
 /** Returns articles sorted newest-first. */

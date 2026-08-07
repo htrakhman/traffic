@@ -1,45 +1,302 @@
-# Chat API (Netlify Functions). Must appear before SPA fallback if you add one.
-[[redirects]]
-from = "/api/chat"
-to = "/.netlify/functions/chat"
-status = 200
-force = true
+# Vercel is the live deploy target for trafficcontrolsupply.com (see vercel.json).
+# This file is kept in sync for redirects only, in case Netlify is ever used for
+# preview/staging. The api/supplier-signup and api/buyer-lead-submit serverless
+# functions exist as Vercel functions only — they are not mirrored here.
 
 [[redirects]]
-from = "/api/checkout-notify"
-to = "/.netlify/functions/checkout-notify"
-status = 200
-force = true
+from = "/guides"
+to = "/blog"
+status = 301
 
 [[redirects]]
-from = "/api/create-membership-checkout"
-to = "/.netlify/functions/create-membership-checkout"
-status = 200
-force = true
+from = "/guides/:slug"
+to = "/blog/:slug"
+status = 301
 
 [[redirects]]
-from = "/api/membership-complete"
-to = "/.netlify/functions/membership-complete"
-status = 200
-force = true
+from = "/browse"
+to = "/traffic-safety-supplies"
+status = 301
 
 [[redirects]]
-from = "/api/membership-sync"
-to = "/.netlify/functions/membership-sync"
-status = 200
-force = true
+from = "/quote"
+to = "/traffic-safety-supplies"
+status = 301
 
 [[redirects]]
-from = "/api/stripe-portal"
-to = "/.netlify/functions/stripe-portal"
-status = 200
-force = true
+from = "/assistant"
+to = "/traffic-safety-supplies"
+status = 301
 
-# Same-origin proxy for Google Roads REST (avoids browser CORS on roads.googleapis.com).
 [[redirects]]
-from = "/roads-api/*"
-to = "https://roads.googleapis.com/:splat"
-status = 200
+from = "/planner"
+to = "/traffic-safety-supplies"
+status = 301
+
+[[redirects]]
+from = "/cart"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/checkout"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/account"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/admin/*"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/admin"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/product-legacy/*"
+to = "/traffic-safety-supplies"
+status = 301
+
+[[redirects]]
+from = "/category-legacy/*"
+to = "/traffic-safety-supplies"
+status = 301
+
+[[redirects]]
+from = "/category/traffic-cones"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/category/cones-drums"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/category/barricades"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/barricades-barriers"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/traffic-drums"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/signs-and-stands"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/signs-sign-stands"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/safety-vests"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/safety-vests-hi-vis"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/wheel-chocks"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/bollards-chocks-corners"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/speed-control"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/speed-bumps-humps"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/parking-lot-safety"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/category/parking-blocks"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/28-inch-orange-traffic-cone"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/product/28-inch-traffic-cone"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/product/36-inch-orange-traffic-cone-reflective-collars"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/product/36-inch-traffic-cone"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/product/type-ii-traffic-barricade"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/type-ii-barricade"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/traffic-drum-with-rubber-base"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/channelizing-drum"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/48-inch-roll-up-construction-sign"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/roll-up-sign-stand-quick-latch"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/telescoping-sign-stand"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/galvanized-crowd-control-fence-panel-6x10"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/multi-gate-expandable-barricade"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/multigate-expandable-barricade"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/class-2-hi-vis-safety-vest"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/ansi-class-2-mesh-vest-orange"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/24-inch-heavy-duty-wheel-chocks"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/urethane-wheel-chock-truck-trailer"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/9-5-foot-rubber-speed-bump"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/portable-rubber-speed-bump-6ft"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/rubber-parking-block"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/product/commercial-rubber-parking-block-6ft-blue"
+to = "/traffic-safety-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/traffic-cone-rental-guide"
+to = "/traffic-cones-for-sale"
+status = 301
+
+[[redirects]]
+from = "/blog/barricade-rental-near-me-guide"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/traffic-control-rental-guide"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/traffic-control-equipment-rental"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/traffic-control-trailer-rental-guide"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/traffic-control-truck-rental-guide"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/arrow-board-rental-guide"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/portable-traffic-barrier-rental-guide"
+to = "/traffic-control-equipment"
+status = 301
+
+[[redirects]]
+from = "/blog/rent-vs-buy-traffic-control-equipment"
+to = "/traffic-safety-supplies"
+status = 301
 
 # SPA fallback (must be last): client routes like /blog load index.html.
 [[redirects]]

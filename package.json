@@ -1,5 +1,5 @@
 {
-  "name": "traffic-rental",
+  "name": "traffic-control-supply",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,14 +7,7 @@
     "node": "20.x"
   },
   "scripts": {
-    "catalog": "node scripts/generate-tss-catalog.mjs",
-    "catalog:titles": "node scripts/enrich-tss-catalog-titles.mjs",
-    "catalog:full": "npm run catalog && npm run catalog:titles",
-    "verify-catalog": "node scripts/verify-tss-catalog.mjs",
-    "patch-catalog-images": "python3 scripts/patch-tss-catalog-images.py",
     "sitemap": "node scripts/generate-sitemap.mjs",
-    "seed:supabase": "node scripts/seed-supabase.mjs",
-    "deploy:supabase": "node scripts/deploy-supabase-existing.mjs",
     "rss": "node scripts/generate-rss.mjs",
     "seo:build": "node scripts/generate-sitemap.mjs && node scripts/generate-rss.mjs",
     "dev": "vite",
@@ -22,16 +15,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^2.0.2",
     "@posthog/react": "^1.9.0",
     "@supabase/supabase-js": "^2.106.1",
-    "@types/google.maps": "^3.64.0",
     "lucide-react": "^0.441.0",
     "posthog-js": "^1.369.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1",
-    "stripe": "^17.4.0"
+    "react-router-dom": "^6.26.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",
@@ -39,8 +29,6 @@
     "@vercel/node": "^5.7.11",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
-    "node-html-parser": "^6.1.13",
-    "pg": "^8.21.0",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.3",
