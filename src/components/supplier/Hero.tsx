@@ -18,12 +18,12 @@ export default function Hero() {
             For traffic control equipment suppliers
           </p>
           <h1 className="mt-4 font-tcsDisplay text-4xl font-bold leading-[1.08] text-ink sm:text-5xl">
-            People are already searching for cones and barricades. We hand you the ones ready to buy.
+            People already want to buy cones and barricades. We hand you the ones ready to buy.
           </h1>
           <p className="mt-5 max-w-xl text-lg text-muted">
-            We run the search and content side for traffic control equipment nationwide. When a buyer
-            fills out a request for cones, Type III barricades, arrow boards or signs, it comes to you.
-            You sell what you already stock. We don't touch the equipment.
+            We generate purchase-intent demand for traffic control equipment nationwide. When a
+            buyer fills out a request for cones, Type III barricades, arrow boards or signs, it
+            comes to you. You sell what you already stock. We don't touch the equipment.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a

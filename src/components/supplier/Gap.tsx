@@ -2,7 +2,7 @@ const SPECS = [
   { label: 'What', value: 'Purchase requests only, buyers ready to own the equipment' },
   { label: 'Where', value: 'Nationwide, routed by territory' },
   { label: 'Price', value: 'Set on a call, never published on the site' },
-  { label: 'Source', value: 'Search traffic looking to buy, not a cold list' },
+  { label: 'Source', value: 'Buyers who came to us, not a cold list' },
 ]
 
 export default function Gap() {
@@ -18,12 +18,11 @@ export default function Gap() {
               and you've already solved it.
             </p>
             <p>
-              Generating demand is a different job. Bidding on "traffic control equipment" in
-              Google Ads gets expensive fast and mostly rewards whoever bids highest, not whoever
-              ships the better cone. Ranking organically for those terms takes months of content
-              nobody on a fulfillment team has time to write.
+              Generating demand is a different job, and most fulfillment teams don't have anyone
+              doing it full time. It takes a different set of hours than running a warehouse and a
+              delivery schedule.
             </p>
-            <p>We write it, rank it, and hand you the person who filled out the form at the bottom.</p>
+            <p>We put in those hours and hand you the person who filled out the form at the bottom.</p>
           </div>
         </div>
 
