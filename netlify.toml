@@ -80,27 +80,27 @@ status = 301
 
 [[redirects]]
 from = "/category/barricades"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
 from = "/category/barricades-barriers"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
 from = "/category/traffic-drums"
-to = "/traffic-control-equipment"
+to = "/channelizing-drums"
 status = 301
 
 [[redirects]]
 from = "/category/signs-and-stands"
-to = "/traffic-control-equipment"
+to = "/work-zone-signs"
 status = 301
 
 [[redirects]]
 from = "/category/signs-sign-stands"
-to = "/traffic-control-equipment"
+to = "/work-zone-signs"
 status = 301
 
 [[redirects]]
@@ -165,52 +165,52 @@ status = 301
 
 [[redirects]]
 from = "/product/type-ii-traffic-barricade"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
 from = "/product/type-ii-barricade"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
 from = "/product/traffic-drum-with-rubber-base"
-to = "/traffic-control-equipment"
+to = "/channelizing-drums"
 status = 301
 
 [[redirects]]
 from = "/product/channelizing-drum"
-to = "/traffic-control-equipment"
+to = "/channelizing-drums"
 status = 301
 
 [[redirects]]
 from = "/product/48-inch-roll-up-construction-sign"
-to = "/traffic-control-equipment"
+to = "/work-zone-signs"
 status = 301
 
 [[redirects]]
 from = "/product/roll-up-sign-stand-quick-latch"
-to = "/traffic-control-equipment"
+to = "/work-zone-signs"
 status = 301
 
 [[redirects]]
 from = "/product/telescoping-sign-stand"
-to = "/traffic-control-equipment"
+to = "/work-zone-signs"
 status = 301
 
 [[redirects]]
 from = "/product/galvanized-crowd-control-fence-panel-6x10"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
 from = "/product/multi-gate-expandable-barricade"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
 from = "/product/multigate-expandable-barricade"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
@@ -260,7 +260,7 @@ status = 301
 
 [[redirects]]
 from = "/blog/barricade-rental-near-me-guide"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]
@@ -285,12 +285,12 @@ status = 301
 
 [[redirects]]
 from = "/blog/arrow-board-rental-guide"
-to = "/traffic-control-equipment"
+to = "/arrow-boards"
 status = 301
 
 [[redirects]]
 from = "/blog/portable-traffic-barrier-rental-guide"
-to = "/traffic-control-equipment"
+to = "/barricades"
 status = 301
 
 [[redirects]]

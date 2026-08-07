@@ -5,6 +5,10 @@ const PAGES = [
   { label: 'Traffic cones for sale', href: '/traffic-cones-for-sale' },
   { label: 'Traffic control equipment', href: '/traffic-control-equipment' },
   { label: 'Traffic safety equipment', href: '/traffic-safety-equipment' },
+  { label: 'Barricades', href: '/barricades' },
+  { label: 'Arrow boards', href: '/arrow-boards' },
+  { label: 'Channelizing drums', href: '/channelizing-drums' },
+  { label: 'Work zone signs', href: '/work-zone-signs' },
 ]
 
 export default function BuyerFooter() {
@@ -26,7 +30,7 @@ export default function BuyerFooter() {
           </div>
           <nav aria-label="Product pages">
             <p className="tcs-mono text-xs uppercase tracking-[0.1em] text-muted">Shop by category</p>
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-3 grid grid-cols-2 gap-x-8 gap-y-2">
               {PAGES.map((p) => (
                 <li key={p.href}>
                   <a href={p.href} className="text-sm text-ink hover:text-zone">

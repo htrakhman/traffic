@@ -16,6 +16,10 @@ const STATIC_PATHS = [
   { loc: '/traffic-cones-for-sale', changefreq: 'weekly', priority: '0.9' },
   { loc: '/traffic-control-equipment', changefreq: 'weekly', priority: '0.8' },
   { loc: '/traffic-safety-equipment', changefreq: 'weekly', priority: '0.8' },
+  { loc: '/barricades', changefreq: 'weekly', priority: '0.7' },
+  { loc: '/arrow-boards', changefreq: 'weekly', priority: '0.6' },
+  { loc: '/channelizing-drums', changefreq: 'weekly', priority: '0.6' },
+  { loc: '/work-zone-signs', changefreq: 'weekly', priority: '0.6' },
   { loc: '/blog', changefreq: 'weekly', priority: '0.7' },
 ]
 

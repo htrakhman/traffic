@@ -7,6 +7,10 @@ import TrafficSafetySupplies from './pages/buyers/TrafficSafetySupplies'
 import TrafficConesForSale from './pages/buyers/TrafficConesForSale'
 import TrafficControlEquipment from './pages/buyers/TrafficControlEquipment'
 import TrafficSafetyEquipment from './pages/buyers/TrafficSafetyEquipment'
+import Barricades from './pages/buyers/Barricades'
+import ArrowBoards from './pages/buyers/ArrowBoards'
+import ChannelizingDrums from './pages/buyers/ChannelizingDrums'
+import WorkZoneSigns from './pages/buyers/WorkZoneSigns'
 
 const Blog = lazy(() => import('./pages/Blog'))
 const Article = lazy(() => import('./pages/Article'))
@@ -54,6 +58,10 @@ export default function App() {
         <Route path="/traffic-cones-for-sale" element={<TrafficConesForSale />} />
         <Route path="/traffic-control-equipment" element={<TrafficControlEquipment />} />
         <Route path="/traffic-safety-equipment" element={<TrafficSafetyEquipment />} />
+        <Route path="/barricades" element={<Barricades />} />
+        <Route path="/arrow-boards" element={<ArrowBoards />} />
+        <Route path="/channelizing-drums" element={<ChannelizingDrums />} />
+        <Route path="/work-zone-signs" element={<WorkZoneSigns />} />
 
         {/* Work zone guides — pre-existing content, kept live. */}
         <Route
