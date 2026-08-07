@@ -6,7 +6,7 @@ export default function Hero() {
           For traffic control equipment suppliers
         </p>
         <h1 className="mt-4 font-tcsDisplay text-4xl font-bold leading-[1.08] text-ink sm:text-5xl">
-          People already want to buy cones and barricades. We hand you the ones ready to buy.
+          We find the buyers. You fill the orders.
         </h1>
         <p className="mt-5 max-w-xl text-lg text-muted">
           We generate purchase-intent demand for traffic control equipment nationwide. When a
