@@ -8,7 +8,6 @@ import StripeDivider from '../components/supplier/StripeDivider'
 import Hero from '../components/supplier/Hero'
 import Gap from '../components/supplier/Gap'
 import LeadDefinition from '../components/supplier/LeadDefinition'
-import HowItWorks from '../components/supplier/HowItWorks'
 import Coverage from '../components/supplier/Coverage'
 import FAQ, { SUPPLIER_FAQS } from '../components/supplier/FAQ'
 import SignupForm from '../components/supplier/SignupForm'
@@ -33,7 +32,6 @@ export default function SupplierHome() {
         <Gap />
         <StripeDivider />
         <LeadDefinition />
-        <HowItWorks />
         <StripeDivider />
         <Coverage />
         <FAQ />

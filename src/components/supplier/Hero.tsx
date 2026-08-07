@@ -33,10 +33,10 @@ export default function Hero() {
               Request lead access
             </a>
             <a
-              href="#how-it-works"
+              href="#faq"
               className="rounded-md border border-line px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink"
             >
-              See how it works
+              Read the FAQ
             </a>
           </div>
         </div>
