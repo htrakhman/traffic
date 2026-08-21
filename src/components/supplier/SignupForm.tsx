@@ -39,6 +39,7 @@ export default function SignupForm() {
           website: data.get('website'),
           territory: data.get('territory'),
           products,
+          otherProducts: data.get('otherProducts'),
           monthlyVolume: data.get('monthlyVolume'),
           source: 'homepage',
         }),
@@ -122,6 +123,19 @@ export default function SignupForm() {
                   </button>
                 )
               })}
+            </div>
+            <div className="mt-3">
+              <label htmlFor="otherProducts" className="sr-only">
+                Other product lines
+              </label>
+              <input
+                id="otherProducts"
+                name="otherProducts"
+                type="text"
+                maxLength={200}
+                placeholder="Other — anything you sell that isn't listed above"
+                className="w-full rounded-md border border-white/20 bg-transparent px-3.5 py-2.5 text-white placeholder-white/30"
+              />
             </div>
           </div>
 

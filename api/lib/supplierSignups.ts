@@ -8,6 +8,7 @@ export type SupplierSignupInput = {
   website?: string
   territory: string
   products?: string[]
+  otherProducts?: string
   monthlyVolume?: string
   source?: string
 }
@@ -23,6 +24,7 @@ export async function insertSupplierSignup(input: SupplierSignupInput): Promise<
     website: input.website || null,
     territory: input.territory,
     products: input.products?.length ? input.products.join(', ') : null,
+    other_products: input.otherProducts || null,
     monthly_volume: input.monthlyVolume || null,
     source: input.source || null,
   })

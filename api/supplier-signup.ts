@@ -26,6 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const products = Array.isArray(body?.products) ? body.products.map(String) : []
   const phone = body?.phone ? String(body.phone) : undefined
   const website = body?.website ? String(body.website) : undefined
+  const otherProducts = body?.otherProducts ? String(body.otherProducts).trim().slice(0, 200) : undefined
   const monthlyVolume = body?.monthlyVolume ? String(body.monthlyVolume) : undefined
   const source = body?.source ? String(body.source) : undefined
 
@@ -36,7 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let dbError: string | null = null
   if (isSupabaseConfigured()) {
     try {
-      await insertSupplierSignup({ name, company, email, phone, website, territory, products, monthlyVolume, source })
+      await insertSupplierSignup({ name, company, email, phone, website, territory, products, otherProducts, monthlyVolume, source })
     } catch (e: unknown) {
       dbError = e instanceof Error ? e.message : String(e)
       console.error('[api/supplier-signup] supabase insert failed:', dbError)
@@ -66,6 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             `Website: ${website || '(not given)'}`,
             `Territory: ${territory}`,
             `Products: ${products.length ? products.join(', ') : '(not given)'}`,
+            ...(otherProducts ? [`Other products: ${otherProducts}`] : []),
             `Monthly volume: ${monthlyVolume || '(not given)'}`,
             ...(dbError ? ['', `WARNING: the database write failed (${dbError}). This email is the only copy.`] : []),
           ].join('\n'),
