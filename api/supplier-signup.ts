@@ -29,23 +29,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const monthlyVolume = body?.monthlyVolume ? String(body.monthlyVolume) : undefined
   const source = body?.source ? String(body.source) : undefined
 
-  try {
-    if (isSupabaseConfigured()) {
+  // The Supabase write and the Resend notification are independent capture
+  // paths. A signup that lands in only one of them is still a signup we can
+  // act on, so neither failure is allowed to abort the other — we only fail
+  // the request when both paths are gone and the lead would be lost.
+  let dbError: string | null = null
+  if (isSupabaseConfigured()) {
+    try {
       await insertSupplierSignup({ name, company, email, phone, website, territory, products, monthlyVolume, source })
+    } catch (e: unknown) {
+      dbError = e instanceof Error ? e.message : String(e)
+      console.error('[api/supplier-signup] supabase insert failed:', dbError)
     }
+  }
 
-    const apiKey = process.env.RESEND_API_KEY
-    const toRaw = process.env.CHECKOUT_NOTIFY_TO
-    if (apiKey && toRaw?.trim()) {
-      const from = process.env.CHECKOUT_EMAIL_FROM?.trim() || 'Traffic Control Supply <onboarding@resend.dev>'
-      await fetch('https://api.resend.com/emails', {
+  const apiKey = process.env.RESEND_API_KEY
+  const toRaw = process.env.CHECKOUT_NOTIFY_TO
+  const notifyConfigured = Boolean(apiKey && toRaw?.trim())
+  let notifyError: string | null = null
+  if (notifyConfigured) {
+    const from = process.env.CHECKOUT_EMAIL_FROM?.trim() || 'Traffic Control Supply <onboarding@resend.dev>'
+    try {
+      const resend = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           from,
-          to: toRaw.split(',').map((s) => s.trim()).filter(Boolean),
+          to: toRaw!.split(',').map((s) => s.trim()).filter(Boolean),
           reply_to: email,
-          subject: `Supplier signup: ${company}`,
+          subject: dbError ? `Supplier signup (NOT SAVED): ${company}` : `Supplier signup: ${company}`,
           text: [
             `Name: ${name}`,
             `Company: ${company}`,
@@ -55,15 +67,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             `Territory: ${territory}`,
             `Products: ${products.length ? products.join(', ') : '(not given)'}`,
             `Monthly volume: ${monthlyVolume || '(not given)'}`,
+            ...(dbError ? ['', `WARNING: the database write failed (${dbError}). This email is the only copy.`] : []),
           ].join('\n'),
         }),
       })
+      if (!resend.ok) {
+        notifyError = `resend responded ${resend.status}: ${(await resend.text().catch(() => '')).slice(0, 200)}`
+      }
+    } catch (e: unknown) {
+      notifyError = e instanceof Error ? e.message : String(e)
     }
-
-    return res.status(200).json({ ok: true })
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e)
-    console.error('[api/supplier-signup]', msg)
-    return res.status(500).json({ error: 'signup failed', detail: msg })
+    if (notifyError) console.error('[api/supplier-signup] notification failed:', notifyError)
   }
+
+  // Nothing captured the lead: the DB write failed (or was never configured)
+  // and no notification went out. Tell the browser so the visitor retries.
+  const savedToDb = isSupabaseConfigured() && !dbError
+  const notified = notifyConfigured && !notifyError
+  if (!savedToDb && !notified) {
+    return res.status(500).json({ error: 'signup failed', detail: dbError || notifyError || 'no signup destination configured' })
+  }
+
+  return res.status(200).json({ ok: true })
 }
