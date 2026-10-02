@@ -65,6 +65,17 @@
   );
 }
 
+/* Full-strength orange/white barricade stripe under the hero. */
+.tcs-stripe-bold {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--zone) 0,
+    var(--zone) 18px,
+    #ffffff 18px,
+    #ffffff 36px
+  );
+}
+
 /* Dashed vertical road stripe the How it works steps sit on. */
 .tcs-road-line {
   background-image: repeating-linear-gradient(

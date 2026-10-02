@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { usePostHog } from '@posthog/react'
-import SupplierHome from './pages/SupplierHome'
+import Home from './pages/Home'
 import BlogLayout from './components/blog/BlogLayout'
 import TrafficSafetySupplies from './pages/buyers/TrafficSafetySupplies'
 import TrafficConesForSale from './pages/buyers/TrafficConesForSale'
@@ -49,11 +49,10 @@ export default function App() {
       <ScrollToTop />
       {hasPostHogToken ? <PostHogPageview /> : null}
       <Routes>
-        {/* Job A — supplier lead-gen homepage. */}
-        <Route path="/" element={<SupplierHome />} />
+        {/* Wholesale + retail landing page. */}
+        <Route path="/" element={<Home />} />
 
-        {/* Job B — buyer product pages. Each ends in the quote form that is the
-            product: every submission is a lead sold to a supplier. */}
+        {/* Category pages. Each ends in the quote form. */}
         <Route path="/traffic-safety-supplies" element={<TrafficSafetySupplies />} />
         <Route path="/traffic-cones-for-sale" element={<TrafficConesForSale />} />
         <Route path="/traffic-control-equipment" element={<TrafficControlEquipment />} />

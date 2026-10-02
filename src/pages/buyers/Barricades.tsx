@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: 'How many barricades do I need for a closure?',
-    a: 'It depends on the length of the closure and your state DOT taper formula, which is usually tied to posted speed. Put your road type and speed in the notes field and we\'ll route the request to a supplier who can help size it.',
+    a: 'It depends on the length of the closure and your state DOT taper formula, which is usually tied to posted speed. Put your road type and speed in the notes field and we\'ll help you size it.',
   },
   {
     q: 'What is a galvanized crowd control fence panel used for?',

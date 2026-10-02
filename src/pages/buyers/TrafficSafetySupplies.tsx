@@ -16,11 +16,11 @@ const FAQS = [
   },
   {
     q: 'Can I buy in bulk for a fleet or multiple job sites?',
-    a: 'Yes. Fill out the form with your quantities and we route the request to a supplier who can cover the volume.',
+    a: 'Yes. Fill out the form with your quantities and we will quote it at wholesale volume pricing.',
   },
   {
     q: 'Do you sell direct?',
-    a: "No. This page routes your request to a supplier who carries and ships the equipment. We don't hold inventory ourselves.",
+    a: 'Yes. We sell wholesale and retail, from a single item to pallet quantities, and deliver to your site.',
   },
 ]
 
@@ -50,8 +50,8 @@ export default function TrafficSafetySupplies() {
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-muted">
               Cones, barricades, drums, signs, vests, wheel chocks, and speed bumps. Whatever's on
-              the list for the job site, tell us the quantity and where it's going and we'll route
-              it to a supplier who covers your area.
+              the list for the job site, tell us the quantity and where it's going and we'll quote
+              it with delivery included.
             </p>
           </div>
           <QuoteForm productCategory="Traffic Safety Supplies" anchorId="quote" heading="Get a quote" />
@@ -76,8 +76,8 @@ export default function TrafficSafetySupplies() {
               room, though anywhere vehicles move at speed it's still worth using tested equipment.
             </p>
             <p>
-              We don't carry inventory ourselves. This page and the form below route your request
-              to a supplier who stocks what you need and delivers to your state. No price is
+              We sell wholesale and retail. Send your list through the form below and we'll quote
+              it with delivery to your site. No price is
               posted here because it depends on quantity and delivery distance, not because we're
               hiding it.
             </p>
