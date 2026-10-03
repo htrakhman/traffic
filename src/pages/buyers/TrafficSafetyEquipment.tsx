@@ -23,8 +23,8 @@ const FAQS = [
     a: 'No. A speed bump runs across a driving lane to slow moving vehicles, typically sold in multi-foot sections you connect end to end. A parking block sits at the front of a parking stall to stop a parked car from rolling forward into a wall or walkway. They solve different problems.',
   },
   {
-    q: 'Can I get one supplier for a multi-site rollout?',
-    a: 'Tell us the states and rough quantities per site in the notes field. We route it to a supplier who can handle the volume.',
+    q: 'Can you handle a multi-site rollout?',
+    a: 'Tell us the states and rough quantities per site in the notes field. We will quote it at wholesale volume pricing.',
   },
 ]
 

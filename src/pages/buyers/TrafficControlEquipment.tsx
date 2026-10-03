@@ -16,11 +16,11 @@ const FAQS = [
   },
   {
     q: 'Do I need a traffic control plan before I order equipment?',
-    a: "For most public road work, yes, and it usually specifies exact devices, spacing, and taper lengths. If you already have an approved plan, put the device list and quantities in the notes field and we'll route it accordingly. If you don't have one yet, order what you know you need and add to it.",
+    a: "For most public road work, yes, and it usually specifies exact devices, spacing, and taper lengths. If you already have an approved plan, put the device list and quantities in the notes field and we'll quote it as specified. If you don't have one yet, order what you know you need and add to it.",
   },
   {
-    q: 'Can one supplier cover cones, barricades, and signs in the same order?',
-    a: "Usually, yes, if they're in your delivery territory. Put everything in one request and we'll match it to a supplier who covers the full list rather than splitting it across two calls.",
+    q: 'Can I get cones, barricades, and signs on the same order?',
+    a: "Yes. Put everything in one request and we'll quote the full list together, with one delivery, rather than splitting it across vendors.",
   },
 ]
 
@@ -74,8 +74,8 @@ export default function TrafficControlEquipment() {
               and reads as a hard stop, used where the road is fully closed ahead.
             </p>
             <p>
-              We route requests to suppliers, we don't ship anything ourselves. If your job needs
-              an item outside this list, put it in the notes field and we'll try to match it.
+              If your job needs an item outside this list, put it in the notes field and we'll
+              quote it with the rest of your order.
             </p>
           </div>
 

@@ -15,10 +15,14 @@ export default function QuoteForm({
   productCategory,
   anchorId,
   heading = 'Get a quote',
+  orderTypes,
 }: {
   productCategory: string
   anchorId?: string
   heading?: string
+  /** When set, shows a required "Order type" select (e.g. Retail / Wholesale) and
+      appends the choice to productCategory on submit. */
+  orderTypes?: string[]
 }) {
   const uid = useId()
   const [status, setStatus] = useState<Status>('idle')
@@ -45,7 +49,7 @@ export default function QuoteForm({
           email: data.get('email'),
           phone: data.get('phone'),
           organization: data.get('organization'),
-          productCategory,
+          productCategory: orderTypes ? `${productCategory} — ${data.get('orderType')}` : productCategory,
           quantity: data.get('quantity'),
           deliveryCity: data.get('deliveryCity'),
           deliveryState: data.get('deliveryState'),
@@ -71,7 +75,7 @@ export default function QuoteForm({
       <div id={anchorId} className="rounded-lg border border-line bg-surface p-6 sm:p-8">
         <h2 className="font-tcsDisplay text-xl font-bold text-ink">Got your request.</h2>
         <p className="mt-2 text-muted">
-          We'll match it to a supplier who covers your area and get back to you.
+          We'll put together pricing for your order and get back to you shortly.
         </p>
       </div>
     )
@@ -86,6 +90,24 @@ export default function QuoteForm({
         <input type="text" name="org_site" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
         <div className="grid gap-4 sm:grid-cols-2">
+          {orderTypes ? (
+            <fieldset className="sm:col-span-2">
+              <legend className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">
+                Order type *
+              </legend>
+              <div className="flex flex-wrap gap-3">
+                {orderTypes.map((t, i) => (
+                  <label
+                    key={t}
+                    className="flex cursor-pointer items-center gap-2 rounded-md border border-line bg-paper px-4 py-2.5 text-ink has-[:checked]:border-zone has-[:checked]:bg-zone-soft"
+                  >
+                    <input type="radio" name="orderType" value={t} defaultChecked={i === 0} required className="accent-[var(--zone)]" />
+                    {t}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ) : null}
           <QField idPrefix={uid} label="Name" name="name" required autoComplete="name" />
           <QField idPrefix={uid} label="Email" name="email" type="email" required autoComplete="email" />
           <QField idPrefix={uid} label="Phone" name="phone" type="tel" autoComplete="tel" />

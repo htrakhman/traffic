@@ -38,7 +38,7 @@ export const schema = {
   service: () => ({
     '@context': 'https://schema.org',
     '@type': 'Service',
-    serviceType: 'Traffic control equipment lead generation',
+    serviceType: 'Wholesale and retail traffic control equipment sales',
     provider: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -50,7 +50,7 @@ export const schema = {
     },
     audience: {
       '@type': 'Audience',
-      audienceType: 'Traffic control and work zone safety equipment suppliers',
+      audienceType: 'Contractors, municipalities, rental companies and resellers',
     },
   }),
   website: () => ({

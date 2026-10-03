@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: 'Do I need a custom message?',
-    a: 'Standard MUTCD legends (ROAD WORK AHEAD, ONE LANE ROAD AHEAD, etc.) are usually in stock. Custom text is available but typically has to go back to the supplier as a special order, so it takes longer. Put the exact wording you need in the notes field.',
+    a: 'Standard MUTCD legends (ROAD WORK AHEAD, ONE LANE ROAD AHEAD, etc.) are usually in stock. Custom text is available but typically is made to order, so it takes longer. Put the exact wording you need in the notes field.',
   },
   {
     q: 'What stand do I need for a roll-up sign?',

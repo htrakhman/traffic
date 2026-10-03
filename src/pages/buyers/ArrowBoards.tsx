@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: 'What size arrow board do I need?',
-    a: "MUTCD groups arrow boards into classes by minimum legibility distance and lamp count, with the required class tied to posted speed. Lower-speed shoulder work can use a smaller board; higher-speed highway closures need a class rated for longer sight distance. Tell us your road's posted speed in the notes field and we'll route it to a supplier who can confirm the right class.",
+    a: "MUTCD groups arrow boards into classes by minimum legibility distance and lamp count, with the required class tied to posted speed. Lower-speed shoulder work can use a smaller board; higher-speed highway closures need a class rated for longer sight distance. Tell us your road's posted speed in the notes field and we'll confirm the right class.",
   },
   {
     q: 'Do I need a trailer-mounted or truck-mounted board?',
