@@ -1,4 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
+import { SITE_CONTACT_PHONE_DISPLAY } from '../../config/site'
 
 const US_STATES = [
   'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
@@ -59,8 +60,7 @@ export default function QuoteForm({
         }),
       })
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        throw new Error(body.error || 'Submission failed')
+        throw new Error(`We couldn't send your request. Please try again, or call ${SITE_CONTACT_PHONE_DISPLAY}.`)
       }
       setStatus('success')
       form.reset()
