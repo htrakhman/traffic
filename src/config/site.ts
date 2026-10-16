@@ -12,8 +12,6 @@ export const SITE_LOGO_PATH = '/brand/traffic-control-supply-logo.png'
 /** Primary homepage SERP title (HTML `<title>` / Google title link). */
 export const DEFAULT_PAGE_TITLE = 'Traffic Control & Safety Equipment'
 
-export const SITE_CONTACT_EMAIL = `orders@${SITE_DOMAIN}`
-
 /** E.164 for `href="tel:..."` (include country code). */
 export const SITE_CONTACT_PHONE_E164 = '+17326752499'
 

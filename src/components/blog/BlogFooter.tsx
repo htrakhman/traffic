@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Phone, Mail } from 'lucide-react'
-import { SITE_CONTACT_EMAIL, SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
+import { Phone } from 'lucide-react'
+import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
 
 export default function BlogFooter() {
   return (
@@ -16,10 +16,6 @@ export default function BlogFooter() {
           <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="flex items-center gap-2 hover:text-white transition-colors">
             <Phone size={14} className="text-brand-400" aria-hidden />
             {SITE_CONTACT_PHONE_DISPLAY}
-          </a>
-          <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="flex items-center gap-2 hover:text-white transition-colors">
-            <Mail size={14} className="text-brand-400" aria-hidden />
-            {SITE_CONTACT_EMAIL}
           </a>
         </div>
         <Link to="/" className="text-sm text-slate-500 hover:text-white transition-colors">
