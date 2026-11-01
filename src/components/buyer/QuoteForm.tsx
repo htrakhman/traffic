@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react'
-import { SITE_CONTACT_PHONE_DISPLAY } from '../../config/site'
+import { SITE_CONTACT_EMAIL } from '../../config/site'
 
 const US_STATES = [
   'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA',
@@ -39,6 +39,12 @@ export default function QuoteForm({
       return
     }
 
+    if (!String(data.get('item') || '').trim()) {
+      setStatus('error')
+      setErrorMessage('Tell us what item you need.')
+      return
+    }
+
     setStatus('submitting')
     setErrorMessage('')
     try {
@@ -49,6 +55,7 @@ export default function QuoteForm({
           name: data.get('name'),
           email: data.get('email'),
           phone: data.get('phone'),
+          item: data.get('item'),
           organization: data.get('organization'),
           productCategory: orderTypes ? `${productCategory} — ${data.get('orderType')}` : productCategory,
           quantity: data.get('quantity'),
@@ -60,7 +67,7 @@ export default function QuoteForm({
         }),
       })
       if (!res.ok) {
-        throw new Error(`We couldn't send your request. Please try again, or call ${SITE_CONTACT_PHONE_DISPLAY}.`)
+        throw new Error(`We couldn't send your request. Please try again, or email ${SITE_CONTACT_EMAIL}.`)
       }
       setStatus('success')
       form.reset()
@@ -112,6 +119,15 @@ export default function QuoteForm({
           <QField idPrefix={uid} label="Email" name="email" type="email" required autoComplete="email" />
           <QField idPrefix={uid} label="Phone" name="phone" type="tel" autoComplete="tel" />
           <QField idPrefix={uid} label="Company (optional)" name="organization" autoComplete="organization" />
+          <div className="sm:col-span-2">
+            <QField
+              idPrefix={uid}
+              label="Item needed"
+              name="item"
+              required
+              placeholder="e.g. 36 inch orange cones, steel bike rack barricades"
+            />
+          </div>
           <QField idPrefix={uid} label="Quantity" name="quantity" placeholder="e.g. 20" />
           <div>
             <label htmlFor={`${uid}-timeline`} className="mb-1.5 block text-xs font-medium uppercase tracking-wide text-muted">

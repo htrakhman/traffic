@@ -1,5 +1,5 @@
 import QuoteForm from '../buyer/QuoteForm'
-import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164 } from '../../config/site'
+import { SITE_CONTACT_EMAIL } from '../../config/site'
 
 export default function QuoteSection() {
   return (
@@ -15,9 +15,9 @@ export default function QuoteSection() {
             going, and we'll quote it with delivery included.
           </p>
           <div className="mt-8 space-y-3 text-ink">
-            <p className="text-sm text-muted">Rather talk it through?</p>
-            <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="tcs-mono block text-lg hover:text-zone">
-              {SITE_CONTACT_PHONE_DISPLAY}
+            <p className="text-sm text-muted">Rather email us directly?</p>
+            <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="tcs-mono block text-lg hover:text-zone">
+              {SITE_CONTACT_EMAIL}
             </a>
           </div>
         </div>

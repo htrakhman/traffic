@@ -1,4 +1,4 @@
-import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
+import { SITE_CONTACT_EMAIL, SITE_NAME } from '../../config/site'
 
 const PAGES = [
   { label: 'Traffic safety supplies', href: '/traffic-safety-supplies' },
@@ -20,8 +20,8 @@ export default function BuyerFooter() {
           <div>
             <div className="font-tcsDisplay text-base font-bold text-ink">{SITE_NAME}</div>
             <div className="tcs-mono mt-3 text-sm text-muted">
-              <a href={`tel:${SITE_CONTACT_PHONE_E164}`} className="block hover:text-ink">
-                {SITE_CONTACT_PHONE_DISPLAY}
+              <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="block hover:text-ink">
+                {SITE_CONTACT_EMAIL}
               </a>
             </div>
           </div>

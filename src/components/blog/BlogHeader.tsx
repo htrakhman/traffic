@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Phone } from 'lucide-react'
-import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
+import { Mail } from 'lucide-react'
+import { SITE_CONTACT_EMAIL, SITE_NAME } from '../../config/site'
 
 export default function BlogHeader() {
   return (
@@ -11,11 +11,11 @@ export default function BlogHeader() {
           <span className="ml-2 text-slate-500 font-normal">Guides</span>
         </Link>
         <a
-          href={`tel:${SITE_CONTACT_PHONE_E164}`}
+          href={`mailto:${SITE_CONTACT_EMAIL}`}
           className="inline-flex items-center gap-2 text-sm text-slate-300 hover:text-white transition-colors"
         >
-          <Phone size={14} className="text-brand-400" aria-hidden />
-          <span className="hidden sm:inline">{SITE_CONTACT_PHONE_DISPLAY}</span>
+          <Mail size={14} className="text-brand-400" aria-hidden />
+          <span className="hidden sm:inline">{SITE_CONTACT_EMAIL}</span>
         </a>
       </div>
     </header>

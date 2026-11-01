@@ -1,4 +1,4 @@
-import { SITE_CONTACT_PHONE_DISPLAY, SITE_CONTACT_PHONE_E164, SITE_NAME } from '../../config/site'
+import { SITE_CONTACT_EMAIL, SITE_NAME } from '../../config/site'
 
 export default function BuyerHeader() {
   return (
@@ -9,10 +9,10 @@ export default function BuyerHeader() {
         </a>
         <div className="flex items-center gap-4">
           <a
-            href={`tel:${SITE_CONTACT_PHONE_E164}`}
+            href={`mailto:${SITE_CONTACT_EMAIL}`}
             className="tcs-mono hidden text-sm text-muted hover:text-ink sm:block"
           >
-            {SITE_CONTACT_PHONE_DISPLAY}
+            {SITE_CONTACT_EMAIL}
           </a>
           <a
             href="#quote"

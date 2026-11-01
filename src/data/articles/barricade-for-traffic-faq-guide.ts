@@ -218,7 +218,7 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
       null,
       'For Central NJ contractors, we deliver same-day on all standard barricade types when the order comes in before noon. Submit a ',
       h('a', { href: '/quote' }, 'quote request'),
-      ' or call (732) 675-2499 with your job site address and we can recommend the right model. See our full ',
+      ' or email harold@trafficcontrolsupply.com with your job site address and we can recommend the right model. See our full ',
       h('a', { href: '/category/barricades' }, 'barricade catalog'),
       ' for all in-stock options.',
     ),

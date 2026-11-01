@@ -10,6 +10,9 @@ export const config = { runtime: 'nodejs' }
 /** Where quote requests are emailed when CHECKOUT_NOTIFY_TO is not set. */
 const DEFAULT_NOTIFY_TO = 'haroldtrakhman@gmail.com'
 
+/** Public contact address; customer confirmations reply here. */
+const CONTACT_EMAIL = 'harold@trafficcontrolsupply.com'
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
@@ -26,6 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'name, email, productCategory, and deliveryState are required' })
   }
 
+  const item = body?.item ? String(body.item).trim() : undefined
   const phone = body?.phone ? String(body.phone) : undefined
   const organization = body?.organization ? String(body.organization) : undefined
   const quantity = body?.quantity ? String(body.quantity) : undefined
@@ -50,7 +54,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         deliveryCity,
         deliveryState,
         timeline,
-        notes,
+        notes: item ? `Item: ${item}${notes ? `\n${notes}` : ''}` : notes,
         landingPage,
       })
     } catch (e: unknown) {
@@ -72,12 +76,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           from,
           to: toRaw.split(',').map((s) => s.trim()).filter(Boolean),
           reply_to: email,
-          subject: `${dbError ? 'Quote request (NOT SAVED)' : 'Quote request'}: ${productCategory}${deliveryCity ? ` — ${deliveryCity}, ${deliveryState}` : ` — ${deliveryState}`}`,
+          subject: `${dbError ? 'Quote request (NOT SAVED)' : 'Quote request'}: ${item || productCategory}${deliveryCity ? ` — ${deliveryCity}, ${deliveryState}` : ` — ${deliveryState}`}`,
           text: [
             `Name: ${name}`,
             `Email: ${email}`,
             `Phone: ${phone || '(not given)'}`,
             `Company: ${organization || '(not given)'}`,
+            `Item needed: ${item || '(not given)'}`,
             `Product category: ${productCategory}`,
             `Quantity: ${quantity || '(not given)'}`,
             `Delivery: ${deliveryCity ? `${deliveryCity}, ` : ''}${deliveryState}`,
@@ -98,6 +103,51 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } else {
     notifyError = 'RESEND_API_KEY is not set'
     console.error('[api/buyer-lead-submit] RESEND_API_KEY is not set; no email sent')
+  }
+
+  // Confirmation to the person who submitted. Best effort: a failure here
+  // never fails the request, since the lead is already captured above.
+  // Needs CHECKOUT_EMAIL_FROM on a domain verified in Resend; the default
+  // onboarding@resend.dev sender can only mail the Resend account owner.
+  const leadCaptured = (isSupabaseConfigured() && !dbError) || !notifyError
+  if (apiKey && leadCaptured) {
+    const from = process.env.CHECKOUT_EMAIL_FROM?.trim() || 'Traffic Control Supply <onboarding@resend.dev>'
+    const firstName = name.split(/\s+/)[0]
+    try {
+      const confirm = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from,
+          to: [email],
+          reply_to: CONTACT_EMAIL,
+          subject: 'We got your quote request | Traffic Control Supply',
+          text: [
+            `Hi ${firstName},`,
+            '',
+            "Thanks for reaching out. We got your quote request and we're putting your pricing together now. You'll hear back from us shortly.",
+            '',
+            'What you sent us:',
+            `Item: ${item || '(not given)'}`,
+            `Quantity: ${quantity || '(not given)'}`,
+            `Delivery: ${deliveryCity ? `${deliveryCity}, ` : ''}${deliveryState}`,
+            `Timeline: ${timeline || '(not given)'}`,
+            ...(notes ? [`Notes: ${notes}`] : []),
+            '',
+            `Need to add something? Just reply to this email or write to ${CONTACT_EMAIL}.`,
+            '',
+            'Harold',
+            'Traffic Control Supply',
+            'trafficcontrolsupply.com',
+          ].join('\n'),
+        }),
+      })
+      if (!confirm.ok) {
+        console.error('[api/buyer-lead-submit] confirmation email failed:', confirm.status, (await confirm.text().catch(() => '')).slice(0, 200))
+      }
+    } catch (e: unknown) {
+      console.error('[api/buyer-lead-submit] confirmation email failed:', e instanceof Error ? e.message : String(e))
+    }
   }
 
   const savedToDb = isSupabaseConfigured() && !dbError
