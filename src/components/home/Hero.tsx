@@ -41,17 +41,17 @@ export default function Hero() {
           <img
             src={HERO_IMAGES.crowdBarricade}
             alt="Galvanized steel metal crowd control barricade (bike rack barricade)"
-            width={1200}
-            height={900}
-            className="relative z-0 w-[88%] max-w-[480px] mix-blend-multiply"
+            width={998}
+            height={708}
+            className="relative z-0 -ml-[14%] w-[80%] max-w-[440px] mix-blend-multiply"
             fetchPriority="high"
           />
           <img
             src={HERO_IMAGES.waterBarrier}
-            alt="Orange plastic water filled traffic barrier"
-            width={1200}
-            height={900}
-            className="relative z-10 -mt-[18%] ml-[22%] w-[72%] max-w-[400px] mix-blend-multiply"
+            alt="Orange and white plastic water filled barriers connected end to end"
+            width={1160}
+            height={442}
+            className="relative z-10 -mt-[11%] ml-[18%] w-[86%] max-w-[480px] mix-blend-multiply"
           />
         </div>
       </div>
