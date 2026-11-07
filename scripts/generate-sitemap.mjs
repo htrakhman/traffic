@@ -21,7 +21,35 @@ const STATIC_PATHS = [
   { loc: '/channelizing-drums', changefreq: 'weekly', priority: '0.6' },
   { loc: '/work-zone-signs', changefreq: 'weekly', priority: '0.6' },
   { loc: '/blog', changefreq: 'weekly', priority: '0.7' },
+  { loc: '/crowd-control-barricades', changefreq: 'weekly', priority: '0.9' },
+  { loc: '/water-filled-barriers', changefreq: 'weekly', priority: '0.9' },
+  { loc: '/delineator-posts', changefreq: 'weekly', priority: '0.8' },
+  { loc: '/temporary-fence-panels', changefreq: 'weekly', priority: '0.8' },
+  { loc: '/tools/barricade-calculator', changefreq: 'monthly', priority: '0.7' },
+  { loc: '/tools/cone-taper-calculator', changefreq: 'monthly', priority: '0.7' },
+  { loc: '/about', changefreq: 'monthly', priority: '0.5' },
+  { loc: '/contact', changefreq: 'monthly', priority: '0.5' },
+  { loc: '/shipping-and-delivery', changefreq: 'monthly', priority: '0.5' },
+  { loc: '/wholesale', changefreq: 'monthly', priority: '0.6' },
 ]
+
+/** Pages generated from src/data: [file, URL prefix, priority]. */
+const DATA_PAGES = [
+  ['src/data/catalog.ts', '/products/', '0.8'],
+  ['src/data/locations.ts', '/delivery/', '0.7'],
+  ['src/data/comparisons.ts', '/compare/', '0.7'],
+]
+
+async function parseDataPages() {
+  const out = []
+  for (const [file, prefix, priority] of DATA_PAGES) {
+    const src = await readFile(join(ROOT, file), 'utf8')
+    for (const m of src.matchAll(/^    slug: '([^']+)'/gm)) {
+      out.push({ loc: prefix + m[1], changefreq: 'monthly', priority })
+    }
+  }
+  return out
+}
 
 const today = new Date().toISOString().slice(0, 10)
 
@@ -56,7 +84,7 @@ async function parseArticles() {
 
 async function main() {
   const articles = await parseArticles()
-  const all = [...STATIC_PATHS, ...articles]
+  const all = [...STATIC_PATHS, ...(await parseDataPages()), ...articles]
   const body = all.map(urlEntry).join('\n')
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`
   await writeFile(join(ROOT, 'public/sitemap.xml'), xml)

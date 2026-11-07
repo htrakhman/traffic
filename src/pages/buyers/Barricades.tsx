@@ -77,6 +77,17 @@ export default function Barricades() {
               and laydown yards. Panels interlock end to end and typically span 7 ft each, so a
               100 ft run takes about 15 panels plus extras for corners and gates.
             </p>
+            <p>
+              See every size in{' '}
+              <a href="/crowd-control-barricades" className="underline hover:text-zone">
+                metal crowd control barricades
+              </a>{' '}
+              or count panels with the{' '}
+              <a href="/tools/barricade-calculator" className="underline hover:text-zone">
+                barricade calculator
+              </a>
+              .
+            </p>
           </div>
 
           <dl className="self-start space-y-5 border-t border-line pt-6 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">

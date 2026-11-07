@@ -11,6 +11,13 @@ import Barricades from './pages/buyers/Barricades'
 import ArrowBoards from './pages/buyers/ArrowBoards'
 import ChannelizingDrums from './pages/buyers/ChannelizingDrums'
 import WorkZoneSigns from './pages/buyers/WorkZoneSigns'
+import CategoryPage from './pages/CategoryPage'
+import ProductPage from './pages/ProductPage'
+import LocationPage from './pages/LocationPage'
+import ComparisonPage from './pages/ComparisonPage'
+import BarricadeCalculator from './pages/tools/BarricadeCalculator'
+import ConeTaperCalculator from './pages/tools/ConeTaperCalculator'
+import { About, Contact, Shipping, Wholesale } from './pages/InfoPages'
 
 const Blog = lazy(() => import('./pages/Blog'))
 const Article = lazy(() => import('./pages/Article'))
@@ -61,6 +68,21 @@ export default function App() {
         <Route path="/arrow-boards" element={<ArrowBoards />} />
         <Route path="/channelizing-drums" element={<ChannelizingDrums />} />
         <Route path="/work-zone-signs" element={<WorkZoneSigns />} />
+        <Route path="/crowd-control-barricades" element={<CategoryPage id="crowd-control-barricades" />} />
+        <Route path="/water-filled-barriers" element={<CategoryPage id="water-filled-barriers" />} />
+        <Route path="/delineator-posts" element={<CategoryPage id="delineator-posts" />} />
+        <Route path="/temporary-fence-panels" element={<CategoryPage id="temporary-fence-panels" />} />
+
+        {/* Product, location, comparison, tool and trust pages. */}
+        <Route path="/products/:slug" element={<ProductPage />} />
+        <Route path="/delivery/:state" element={<LocationPage />} />
+        <Route path="/compare/:slug" element={<ComparisonPage />} />
+        <Route path="/tools/barricade-calculator" element={<BarricadeCalculator />} />
+        <Route path="/tools/cone-taper-calculator" element={<ConeTaperCalculator />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/shipping-and-delivery" element={<Shipping />} />
+        <Route path="/wholesale" element={<Wholesale />} />
 
         {/* Work zone guides — pre-existing content, kept live. */}
         <Route
