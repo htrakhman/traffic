@@ -66,7 +66,13 @@ async function main() {
           urlList: batch,
         }),
       })
-      // 200 = accepted, 202 = accepted pending key check. Anything else is a failure.
+      // 200 = accepted, 202 = accepted pending key check. 403 = key not verified yet
+      // (normal for a while after the first submission), 429 = rate limited: warn
+      // and keep the old manifest so the next deploy retries these URLs.
+      if (r.status === 403 || r.status === 429) {
+        console.warn(`::warning::IndexNow returned HTTP ${r.status}; will retry on the next deploy. ${await r.text()}`)
+        return
+      }
       if (r.status !== 200 && r.status !== 202) {
         throw new Error(`IndexNow rejected the submission: HTTP ${r.status} ${await r.text()}`)
       }
