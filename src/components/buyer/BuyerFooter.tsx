@@ -21,12 +21,16 @@ const RESOURCES = [
   { label: 'Water vs concrete barriers', href: '/compare/water-filled-vs-concrete-jersey-barriers' },
   { label: 'Steel vs plastic barricades', href: '/compare/steel-vs-plastic-crowd-control-barricades' },
   { label: '28 vs 36 inch cones', href: '/compare/28-vs-36-inch-traffic-cones' },
+  { label: 'Glossary', href: '/glossary' },
+  { label: 'Event crowd control', href: '/uses/event-crowd-control' },
+  { label: 'Sidewalk closures', href: '/uses/sidewalk-and-street-closures' },
   { label: 'Blog', href: '/blog' },
 ]
 
 const COMPANY = [
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Request a quote', href: '/request-quote' },
   { label: 'Wholesale', href: '/wholesale' },
   { label: 'Shipping and delivery', href: '/shipping-and-delivery' },
   { label: 'New Jersey', href: '/delivery/new-jersey' },

@@ -180,3 +180,118 @@ export const STATES: StatePage[] = [
 export function getState(slug: string): StatePage | undefined {
   return STATES.find((s) => s.slug === slug)
 }
+
+/**
+ * City pages (/delivery/:state/:city). Keep local details general enough to be
+ * true: no promised delivery times, no named permit offices we can't confirm.
+ */
+export interface CityPage {
+  slug: string
+  city: string
+  stateSlug: string
+  intro: string
+  notes: string[]
+  nearby: string[]
+  faqs: { q: string; a: string }[]
+}
+
+export const CITIES: CityPage[] = [
+  {
+    slug: 'newark',
+    city: 'Newark',
+    stateSlug: 'new-jersey',
+    intro:
+      'Newark job sites, venues and city crews get steel barricades, water-filled barriers, cones and fence panels quoted delivered from our New Jersey supply network.',
+    notes: [
+      'Street and sidewalk work in Newark needs a city right-of-way permit, and the permit often specifies devices. Send it with your request and we quote to it.',
+      'Arena and downtown events lean on steel crowd control barricades for queues and water-filled barriers for street closures.',
+      'Downtown deliveries often need a scheduled window and people on site to unload, since trucks can not block the street for long.',
+    ],
+    nearby: ['Jersey City', 'Elizabeth', 'East Orange', 'Harrison', 'Kearny', 'Irvington'],
+    faqs: [
+      {
+        q: 'Can you deliver barricades to Newark?',
+        a: 'Yes. We quote a delivered price to any Newark address. Tell us the delivery window and whether you have a forklift or crew to unload.',
+      },
+    ],
+  },
+  {
+    slug: 'jersey-city',
+    city: 'Jersey City',
+    stateSlug: 'new-jersey',
+    intro:
+      'From waterfront construction to street fairs, we quote barriers, fencing, barricades and cones delivered anywhere in Jersey City and Hudson County.',
+    notes: [
+      'Dense blocks and active sidewalks mean many jobs need a continuous pedestrian detour. Interlocking water-filled barriers with fence toppers are a common setup.',
+      'Waterfront sites see strong wind, so plan heavier cone bases and extra bracing on fence panels.',
+      'Street work requires a city permit. Bring the permit conditions and we will match the devices.',
+    ],
+    nearby: ['Hoboken', 'Bayonne', 'Newark', 'Union City', 'Weehawken', 'Secaucus'],
+    faqs: [
+      {
+        q: 'Do you deliver to Hoboken and the rest of Hudson County?',
+        a: 'Yes. We quote delivered pricing to every Hudson County town.',
+      },
+    ],
+  },
+  {
+    slug: 'new-brunswick',
+    city: 'New Brunswick',
+    stateSlug: 'new-jersey',
+    intro:
+      'In Central New Jersey, close to home for us, we quote crowd control barricades, cones, delineators and barriers delivered to New Brunswick and the rest of Middlesex County.',
+    notes: [
+      'University events, game days and downtown festivals drive demand for steel barricades and colored cones for parking.',
+      'Middlesex County road and utility jobs follow NJDOT and the MUTCD, so night work needs 28 inch or taller reflective cones.',
+    ],
+    nearby: ['East Brunswick', 'Edison', 'Piscataway', 'Highland Park', 'North Brunswick', 'Sayreville'],
+    faqs: [
+      {
+        q: 'Do you serve all of Middlesex County?',
+        a: 'Yes. We quote delivered pricing to every Middlesex County town.',
+      },
+    ],
+  },
+  {
+    slug: 'new-york-city',
+    city: 'New York City',
+    stateSlug: 'new-york',
+    intro:
+      'Manhattan sidewalk closures, Brooklyn job sites, Queens events: we quote water-filled barriers, fence toppers, steel barricades and cones delivered to all five boroughs.',
+    notes: [
+      'Sidewalk and street work in New York City requires NYC DOT permits, and the permit stipulations often specify the barrier. A 42 inch water-filled barrier with a fence topper is a common setup.',
+      'Most deliveries need a scheduled appointment, a crew to unload and attention to truck route and parking rules on your block.',
+      'Parades, marathons and street fairs use steel crowd control barricades by the hundreds. Ask for truckload pricing on large orders.',
+    ],
+    nearby: ['Manhattan', 'Brooklyn', 'Queens', 'The Bronx', 'Staten Island', 'Long Island'],
+    faqs: [
+      {
+        q: 'Can you deliver to a job site in Manhattan?',
+        a: 'Yes. Send the address with cross streets, your delivery window and whether you have a crew on site, and we will price the right truck.',
+      },
+    ],
+  },
+  {
+    slug: 'philadelphia',
+    city: 'Philadelphia',
+    stateSlug: 'pennsylvania',
+    intro:
+      'Philadelphia contractors, venues and event producers get barricades, barriers, cones and fence quoted delivered, often from nearby Pennsylvania supply points that keep freight low.',
+    notes: [
+      'Street and sidewalk closures in Philadelphia need a permit from the city Streets Department, and the permit often names the devices.',
+      'Stadium-district events and parades use steel crowd control barricades in volume.',
+      'Southeastern Pennsylvania has several stocking points for traffic control equipment, so many orders can ship quickly.',
+    ],
+    nearby: ['Camden', 'Cherry Hill', 'King of Prussia', 'Chester', 'Upper Darby', 'Trenton'],
+    faqs: [
+      {
+        q: 'Do you deliver to South Jersey too?',
+        a: 'Yes. Camden, Cherry Hill and the rest of South Jersey are quoted delivered just like Philadelphia.',
+      },
+    ],
+  },
+]
+
+export function getCity(stateSlug: string, citySlug: string): CityPage | undefined {
+  return CITIES.find((c) => c.stateSlug === stateSlug && c.slug === citySlug)
+}

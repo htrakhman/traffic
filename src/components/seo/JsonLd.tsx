@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { SITE_CONTACT_EMAIL, SITE_LOGO_PATH, SITE_NAME, SITE_ORIGIN } from '../../config/site'
+import { SITE_AUTHOR, SITE_CONTACT_EMAIL, SITE_LOGO_PATH, SITE_NAME, SITE_ORIGIN } from '../../config/site'
 import { ssrHead } from './ssrHead'
 
 /**
@@ -111,10 +111,15 @@ export const schema = {
     },
     datePublished: a.datePublished,
     dateModified: a.dateModified || a.datePublished,
-    author: {
-      '@type': 'Organization',
-      name: a.author || SITE_NAME,
-    },
+    author: a.author
+      ? { '@type': 'Organization', name: a.author }
+      : {
+          '@type': 'Person',
+          name: SITE_AUTHOR.name,
+          jobTitle: SITE_AUTHOR.jobTitle,
+          url: SITE_ORIGIN + SITE_AUTHOR.path,
+          worksFor: { '@type': 'Organization', name: SITE_NAME, url: SITE_ORIGIN },
+        },
     publisher: {
       '@type': 'Organization',
       name: SITE_NAME,

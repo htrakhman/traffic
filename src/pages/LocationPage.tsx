@@ -5,7 +5,7 @@ import BuyerFAQ from '../components/buyer/BuyerFAQ'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import { CATEGORIES } from '../data/catalog'
-import { getState, STATES } from '../data/locations'
+import { CITIES, getState, STATES } from '../data/locations'
 import { SITE_NAME, SITE_ORIGIN } from '../config/site'
 
 export default function LocationPage() {
@@ -67,6 +67,23 @@ export default function LocationPage() {
               ))}
             </ul>
             <p className="mt-6 text-sm text-muted">State DOT: {st.dot}.</p>
+            {CITIES.some((c) => c.stateSlug === st.slug) && (
+              <>
+                <h3 className="mt-8 font-tcsDisplay text-lg font-bold text-ink">Cities</h3>
+                <ul className="mt-3 flex flex-wrap gap-3">
+                  {CITIES.filter((c) => c.stateSlug === st.slug).map((c) => (
+                    <li key={c.slug}>
+                      <a
+                        href={`/delivery/${st.slug}/${c.slug}`}
+                        className="inline-block rounded-md border border-line px-4 py-2 text-sm text-ink hover:border-zone"
+                      >
+                        {c.city}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
           <div>
             <h2 className="font-tcsDisplay text-2xl font-bold text-ink sm:text-3xl">What we deliver</h2>

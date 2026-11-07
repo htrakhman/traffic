@@ -11,6 +11,7 @@ import {
   HowItWorks,
   PopularProducts,
   ShopByCategory,
+  ShopByJob,
 } from '../components/home/HomeSections'
 import QuoteSection from '../components/home/QuoteSection'
 import HomeFaq, { HOME_FAQ } from '../components/home/HomeFaq'
@@ -35,6 +36,7 @@ export default function Home() {
         <Hero />
         <TopSellers />
         <ShopByCategory />
+        <ShopByJob />
         <PopularProducts />
         <HowItWorks />
         <QuoteSection />

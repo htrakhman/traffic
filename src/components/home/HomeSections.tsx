@@ -2,6 +2,7 @@ import ProductGrid from '../catalog/ProductGrid'
 import { CATEGORIES, getProduct, type Product } from '../../data/catalog'
 import { STATES } from '../../data/locations'
 import { COMPARISONS } from '../../data/comparisons'
+import { USE_CASES } from '../../data/useCases'
 
 /** Category tiles on the homepage, in priority order. Also feeds the homepage ItemList schema. */
 export const HOME_CATEGORIES = [
@@ -69,6 +70,30 @@ export function ShopByCategory() {
                 <h3 className="font-tcsDisplay text-lg font-bold text-ink group-hover:text-zone">{c.name}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{c.blurb}</p>
                 <span className="tcs-mono mt-4 text-xs uppercase tracking-[0.08em] text-zone">Shop →</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+export function ShopByJob() {
+  return (
+    <section aria-labelledby="jobs-heading" className="bg-paper">
+      <div className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-20">
+        <SectionHead eyebrow="Shop by job" title="Equipment lists for common jobs" id="jobs-heading">
+          Not sure what to order? Start from the job and we list what it takes.
+        </SectionHead>
+        <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {USE_CASES.map((u) => (
+            <li key={u.slug}>
+              <a
+                href={`/uses/${u.slug}`}
+                className="block rounded-lg border border-line bg-surface px-5 py-4 font-semibold text-ink hover:border-zone hover:text-zone"
+              >
+                {u.h1} →
               </a>
             </li>
           ))}
@@ -207,6 +232,11 @@ export function GuidesAndTools() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a href="/glossary" className="text-ink underline hover:text-zone">
+                  Traffic control glossary
+                </a>
+              </li>
               <li>
                 <a href="/blog" className="font-semibold text-zone hover:underline">
                   All guides →
