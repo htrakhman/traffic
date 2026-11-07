@@ -175,7 +175,7 @@ export const articleSafetyConesNearMeNj: Article = {
       null,
       'For Central NJ contractors, browse our ',
       h('a', { href: '/category/cones-drums' }, 'cones, drums and channelizers category'),
-      ' for 28" and 36" MUTCD-compliant cones with Type IV collars. Same-day delivery in Central NJ; 50+ in stock at all times. Call (732) 675-2499 or ',
+      ' for 28" and 36" MUTCD-compliant cones with Type IV collars. Same-day delivery in Central NJ; 50+ in stock at all times. Email harold@trafficcontrolsupply.com or ',
       h('a', { href: '/quote' }, 'request a quote'),
       ' for a price and delivery window in under 2 minutes.',
     ),
