@@ -4,7 +4,7 @@ import { Clock, ChevronDown, ArrowRight, ArrowLeft } from 'lucide-react'
 import { getArticleBySlug, getRelatedArticles } from '../data/articles'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
-import { SITE_NAME } from '../config/site'
+import { SITE_AUTHOR, SITE_NAME } from '../config/site'
 import { productPath, productsForTopic } from '../data/catalog'
 
 /**
@@ -65,7 +65,11 @@ export default function Article() {
         </Link>
 
         <header className="mb-10">
-          <div className="flex items-center gap-3 text-sm text-slate-500 mb-4">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 mb-4">
+            <a href={SITE_AUTHOR.path} className="text-slate-300 hover:text-white">
+              By {SITE_AUTHOR.name}
+            </a>
+            <span className="w-1 h-1 rounded-full bg-slate-700" />
             <time dateTime={article.datePublished}>
               {new Date(article.datePublished).toLocaleDateString('en-US', {
                 month: 'long',
@@ -125,6 +129,14 @@ export default function Article() {
             </div>
           </section>
         )}
+
+        <aside className="mt-12 rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+          <p className="text-xs uppercase tracking-wider text-slate-500">About the author</p>
+          <p className="mt-2 font-bold text-white">
+            {SITE_AUTHOR.name}, <span className="font-normal text-slate-400">{SITE_AUTHOR.jobTitle}</span>
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-300">{SITE_AUTHOR.bio}</p>
+        </aside>
 
         {shop.length > 0 && (
           <section className="mt-12">

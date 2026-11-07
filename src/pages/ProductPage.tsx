@@ -5,6 +5,7 @@ import BuyerFAQ from '../components/buyer/BuyerFAQ'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import ProductGrid from '../components/catalog/ProductGrid'
+import AddToQuote from '../components/catalog/AddToQuote'
 import { getCategory, getProduct, productPath, productsIn } from '../data/catalog'
 
 export default function ProductPage() {
@@ -58,6 +59,7 @@ export default function ProductPage() {
             <p className="mt-4 max-w-xl text-sm text-muted">
               Wholesale or retail. Send the quantity and delivery ZIP and we'll quote the delivered total.
             </p>
+            <AddToQuote item={product.name} />
             {product.image && (
               <img
                 src={product.image}
@@ -66,7 +68,7 @@ export default function ProductPage() {
               />
             )}
           </div>
-          <QuoteForm productCategory={product.name} anchorId="quote" heading={`Quote: ${product.name}`} />
+          <QuoteForm productCategory={product.name} anchorId="quote" heading={`Quote: ${product.name}`} defaultItem={product.name} />
         </div>
       </section>
 

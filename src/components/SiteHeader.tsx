@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { SITE_CONTACT_EMAIL, SITE_NAME } from '../config/site'
 import { CATEGORIES } from '../data/catalog'
+import { useQuoteList } from '../lib/quoteList'
+import { USE_CASES } from '../data/useCases'
 
 const PRODUCTS = [
   ...CATEGORIES.map((c) => ({ label: c.shortName, href: c.path })),
@@ -11,12 +13,15 @@ const PRODUCTS = [
   { label: 'All traffic safety supplies', href: '/traffic-safety-supplies' },
 ]
 
+const SOLUTIONS = USE_CASES.map((u) => ({ label: u.h1.replace(/ (equipment|and security equipment)$/, ''), href: `/uses/${u.slug}` }))
+
 const RESOURCES = [
   { label: 'Barricade calculator', href: '/tools/barricade-calculator' },
   { label: 'Cone taper calculator', href: '/tools/cone-taper-calculator' },
   { label: 'Water vs concrete barriers', href: '/compare/water-filled-vs-concrete-jersey-barriers' },
   { label: 'Steel vs plastic barricades', href: '/compare/steel-vs-plastic-crowd-control-barricades' },
   { label: '28 vs 36 inch cones', href: '/compare/28-vs-36-inch-traffic-cones' },
+  { label: 'Traffic control glossary', href: '/glossary' },
   { label: 'Guides and articles', href: '/blog' },
 ]
 
@@ -52,6 +57,7 @@ function Dropdown({ label, links }: { label: string; links: NavLink[] }) {
 /** Site-wide top bar: logo, product/resource menus, quote button. Menus are <details>, so they work before JS loads. */
 export default function SiteHeader() {
   const ref = useRef<HTMLElement>(null)
+  const quoteCount = useQuoteList().length
 
   // Close any open menu when clicking outside it or pressing Escape.
   useEffect(() => {
@@ -84,16 +90,17 @@ export default function SiteHeader() {
           <a href="/water-filled-barriers" className="whitespace-nowrap rounded-md px-3 py-2 text-sm font-semibold text-ink hover:text-zone">
             Water barriers
           </a>
+          <Dropdown label="Solutions" links={SOLUTIONS} />
           <Dropdown label="Resources" links={RESOURCES} />
           <Dropdown label="Company" links={COMPANY} />
         </nav>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <a
-            href="#quote"
+            href={quoteCount ? '/request-quote' : '#quote'}
             className="whitespace-nowrap rounded-md bg-zone px-3 py-2 text-sm font-semibold text-white transition hover:bg-[#c85009] sm:px-5 sm:py-2.5"
           >
-            Get a quote
+            {quoteCount ? `Quote list (${quoteCount})` : 'Get a quote'}
           </a>
 
           <details className="group lg:hidden">
@@ -110,6 +117,7 @@ export default function SiteHeader() {
             >
               {[
                 { title: 'Products', links: PRODUCTS },
+                { title: 'Solutions', links: SOLUTIONS },
                 { title: 'Resources', links: RESOURCES },
                 { title: 'Company', links: COMPANY },
               ].map((g) => (

@@ -4,7 +4,7 @@ import QuoteForm from '../components/buyer/QuoteForm'
 import BuyerFAQ from '../components/buyer/BuyerFAQ'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
-import { SITE_CONTACT_EMAIL, SITE_NAME } from '../config/site'
+import { SITE_AUTHOR, SITE_CONTACT_EMAIL, SITE_NAME, SITE_ORIGIN } from '../config/site'
 import { STATES } from '../data/locations'
 
 function InfoLayout({
@@ -75,6 +75,16 @@ export function About() {
       quoteLabel="About page"
     >
       <JsonLd data={schema.organization()} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: SITE_AUTHOR.name,
+          jobTitle: SITE_AUTHOR.jobTitle,
+          url: SITE_ORIGIN + SITE_AUTHOR.path,
+          worksFor: { '@type': 'Organization', name: SITE_NAME, url: SITE_ORIGIN },
+        }}
+      />
       <p>
         {SITE_NAME} is a New Jersey based supplier of traffic and crowd control equipment. We sell steel
         crowd control barricades, water-filled barriers, traffic cones, delineator posts and temporary
@@ -98,6 +108,8 @@ export function About() {
         <li>Event, festival and venue operators</li>
         <li>Equipment rental companies and resellers</li>
       </ul>
+      <H2>Who runs it</H2>
+      <p>{SITE_AUTHOR.bio}</p>
       <p>
         Questions? Email <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="underline">{SITE_CONTACT_EMAIL}</a>.
       </p>

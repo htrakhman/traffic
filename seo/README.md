@@ -34,7 +34,8 @@ because of the `description` field in its definition.
 
 ## npm scripts the specialist uses
 
-- `npm run sitemap` — regenerates `public/sitemap.xml` from products + articles.
 - `npm run rss` — regenerates `public/rss.xml` from articles.
-- `npm run seo:build` — runs both. Wired into `npm run build` so every deploy
-  ships a fresh sitemap and RSS.
+- `npm run seo:build` — runs the RSS step. Wired into `npm run build`.
+- `npm run build` — also prerenders every route (`scripts/prerender.mjs`) and
+  writes `dist/sitemap.xml`, `dist/llms.txt` and `dist/indexnow-manifest.json`
+  from the same route list, so the sitemap always matches the live pages.

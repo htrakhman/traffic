@@ -4,8 +4,8 @@
  * answer engines that do not run JavaScript get the full page: title, meta,
  * canonical, JSON-LD and body text. The browser app still boots and takes over.
  *
- * Writes dist/<route>/index.html for each route, dist/404.html, dist/llms.txt and
- * dist/indexnow-manifest.json (read by scripts/indexnow.mjs).
+ * Writes dist/<route>/index.html for each route, dist/404.html, dist/llms.txt,
+ * dist/sitemap.xml and dist/indexnow-manifest.json (read by scripts/indexnow.mjs).
  */
 import { createHash } from 'node:crypto'
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises'
@@ -28,7 +28,7 @@ async function main() {
     logLevel: 'warn',
     build: { ssr: 'src/entry-server.tsx', outDir: SSR_OUT, emptyOutDir: true },
   })
-  const { render, routes } = await import(pathToFileURL(join(SSR_OUT, 'entry-server.js')).href)
+  const { render, routes, lastModified } = await import(pathToFileURL(join(SSR_OUT, 'entry-server.js')).href)
 
   const template = await readFile(join(DIST, 'index.html'), 'utf8')
   if (!HEAD_RE.test(template) || !APP_RE.test(template)) {
@@ -57,7 +57,24 @@ async function main() {
 
   await writeFile(join(DIST, 'llms.txt'), llmsTxt(pages))
   await writeFile(join(DIST, 'indexnow-manifest.json'), JSON.stringify(manifest))
-  console.log(`Prerendered ${pages.length} routes + 404.html + llms.txt + indexnow-manifest.json`)
+  await writeFile(join(DIST, 'sitemap.xml'), sitemapXml(pages.map((p) => p.route), lastModified()))
+  console.log(`Prerendered ${pages.length} routes + 404.html + llms.txt + sitemap.xml + indexnow-manifest.json`)
+}
+
+/** Sitemap built from the same route list that was prerendered, so it can never drift. */
+function sitemapXml(routes, lastmods) {
+  const today = new Date().toISOString().slice(0, 10)
+  const priority = (r) =>
+    r === '/' ? '1.0'
+    : /^\/(crowd-control-barricades|water-filled-barriers|traffic-cones-for-sale)$/.test(r) ? '0.9'
+    : r.startsWith('/products/') || r.startsWith('/uses/') ? '0.8'
+    : r.startsWith('/blog/') ? '0.6'
+    : '0.7'
+  const urls = routes.map(
+    (r) =>
+      `  <url>\n    <loc>${ORIGIN}${r}</loc>\n    <lastmod>${lastmods[r] || today}</lastmod>\n    <priority>${priority(r)}</priority>\n  </url>`,
+  )
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`
 }
 
 /** https://llmstxt.org — a plain map of the site for AI answer engines. */

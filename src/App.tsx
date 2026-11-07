@@ -19,6 +19,10 @@ import BarricadeCalculator from './pages/tools/BarricadeCalculator'
 import ConeTaperCalculator from './pages/tools/ConeTaperCalculator'
 import { About, Contact, Shipping, Wholesale } from './pages/InfoPages'
 import NotFound from './pages/NotFound'
+import RequestQuote from './pages/RequestQuote'
+import UseCasePage from './pages/UseCasePage'
+import Glossary from './pages/Glossary'
+import CityPage from './pages/CityPage'
 
 const Blog = lazy(() => import('./pages/Blog'))
 const Article = lazy(() => import('./pages/Article'))
@@ -85,6 +89,9 @@ export function AppRoutes() {
         {/* Product, location, comparison, tool and trust pages. */}
         <Route path="/products/:slug" element={<ProductPage />} />
         <Route path="/delivery/:state" element={<LocationPage />} />
+        <Route path="/delivery/:state/:city" element={<CityPage />} />
+        <Route path="/uses/:slug" element={<UseCasePage />} />
+        <Route path="/glossary" element={<Glossary />} />
         <Route path="/compare/:slug" element={<ComparisonPage />} />
         <Route path="/tools/barricade-calculator" element={<BarricadeCalculator />} />
         <Route path="/tools/cone-taper-calculator" element={<ConeTaperCalculator />} />
@@ -92,6 +99,7 @@ export function AppRoutes() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/shipping-and-delivery" element={<Shipping />} />
         <Route path="/wholesale" element={<Wholesale />} />
+        <Route path="/request-quote" element={<RequestQuote />} />
 
         {/* Work zone guides — pre-existing content, kept live. */}
         <Route

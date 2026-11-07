@@ -13,7 +13,7 @@
     { "source": "/guides/:slug", "destination": "/blog/:slug", "permanent": true },
 
     { "source": "/browse", "destination": "/traffic-safety-supplies", "permanent": true },
-    { "source": "/quote", "destination": "/traffic-safety-supplies", "permanent": true },
+    { "source": "/quote", "destination": "/request-quote", "permanent": true },
     { "source": "/assistant", "destination": "/traffic-safety-supplies", "permanent": true },
     { "source": "/planner", "destination": "/traffic-safety-supplies", "permanent": true },
     { "source": "/cart", "destination": "/", "permanent": true },

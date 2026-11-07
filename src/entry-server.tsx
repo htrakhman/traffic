@@ -8,7 +8,8 @@ import { StaticRouter } from 'react-router-dom/server'
 import { AppRoutes } from './App'
 import { serializeHead, ssrHead } from './components/seo/ssrHead'
 import { PRODUCTS, CATEGORIES } from './data/catalog'
-import { STATES } from './data/locations'
+import { CITIES, STATES } from './data/locations'
+import { USE_CASES } from './data/useCases'
 import { COMPARISONS } from './data/comparisons'
 import { articles } from './data/articles'
 
@@ -27,6 +28,8 @@ export const STATIC_ROUTES = [
   '/contact',
   '/shipping-and-delivery',
   '/wholesale',
+  '/request-quote',
+  '/glossary',
   '/blog',
 ]
 
@@ -36,10 +39,17 @@ export function routes(): string[] {
     ...CATEGORIES.map((c) => c.path),
     ...PRODUCTS.map((p) => `/products/${p.slug}`),
     ...STATES.map((s) => `/delivery/${s.slug}`),
+    ...CITIES.map((c) => `/delivery/${c.stateSlug}/${c.slug}`),
+    ...USE_CASES.map((u) => `/uses/${u.slug}`),
     ...COMPARISONS.map((c) => `/compare/${c.slug}`),
     ...articles.map((a) => `/blog/${a.slug}`),
   ]
   return [...new Set(all)]
+}
+
+/** Last-modified date per route, where the content carries one (articles). */
+export function lastModified(): Record<string, string> {
+  return Object.fromEntries(articles.map((a) => [`/blog/${a.slug}`, (a.dateModified || a.datePublished).slice(0, 10)]))
 }
 
 export function render(url: string): Promise<{ html: string; head: string }> {
