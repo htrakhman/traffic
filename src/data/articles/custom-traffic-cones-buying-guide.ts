@@ -170,9 +170,9 @@ export const articleCustomTrafficConesBuyingGuide: Article = {
       'p',
       null,
       'Traffic Control Supply runs custom cone orders for Central NJ contractors, property managers, event operators, and security fleets. We stock 18-inch and 28-inch orange cones with 4-lb and 7-lb bases that ship same-day for stock orders, plus 25-cone-minimum stencil printing and 50-cone-minimum heat-transfer printing on a 2-to-3-week turnaround. Browse our ',
-      h('a', { href: '/category/cones-drums' }, 'cones catalog'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'cones catalog'),
       ' for stock SKUs, and ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' with cone count, size, print method, and copy text for a custom order.',
     ),
     h(
@@ -212,10 +212,10 @@ export const articleCustomTrafficConesBuyingGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
-    { label: 'Pedestrian & Crowd Control', path: '/category/pedestrian-control' },
-    { label: 'Accessories & Hardware', path: '/category/accessories-hardware' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
+    { label: 'Pedestrian & Crowd Control', path: '/crowd-control-barricades' },
+    { label: 'Accessories & Hardware', path: '/traffic-safety-supplies' },
   ],
   relatedArticles: [
     'traffic-cones-buying-guide',

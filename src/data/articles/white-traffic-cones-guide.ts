@@ -175,9 +175,9 @@ export const articleWhiteTrafficConesGuide: Article = {
       'p',
       null,
       'For Central NJ valet operators, hotel ops teams, country clubs, and event planners, ',
-      h('a', { href: '/category/cones-drums' }, 'browse our cones catalog'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'browse our cones catalog'),
       ' — we stock 12-inch and 18-inch white cones with rubber bases and single reflective collars, plus the matching orange units for the road-work side of the business. Same-day delivery to Middlesex, Monmouth, Mercer, Somerset, Union, and Hunterdon. For a custom kit (mixed colors, branded, or sized for a specific job), ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       '.',
     ),
     h(
@@ -215,10 +215,10 @@ export const articleWhiteTrafficConesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Pedestrian & Crowd Control', path: '/category/pedestrian-control' },
-    { label: 'Accessories & Hardware', path: '/category/accessories-hardware' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Pedestrian & Crowd Control', path: '/crowd-control-barricades' },
+    { label: 'Accessories & Hardware', path: '/traffic-safety-supplies' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
   ],
   relatedArticles: [
     'road-cones-vs-traffic-cones',

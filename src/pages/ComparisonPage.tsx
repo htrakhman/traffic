@@ -5,6 +5,7 @@ import BuyerFAQ from '../components/buyer/BuyerFAQ'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import { COMPARISONS, getComparison } from '../data/comparisons'
+import { SITE_NAME, SITE_ORIGIN } from '../config/site'
 
 export default function ComparisonPage() {
   const { slug = '' } = useParams()
@@ -21,8 +22,8 @@ export default function ComparisonPage() {
           '@type': 'Article',
           headline: c.h1,
           description: c.description,
-          mainEntityOfPage: { '@type': 'WebPage', '@id': `https://trafficcontrolsupply.com${path}` },
-          author: { '@type': 'Organization', name: 'Traffic Control Supply' },
+          mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_ORIGIN}${path}` },
+          author: { '@type': 'Organization', name: SITE_NAME },
         }}
       />
       <JsonLd

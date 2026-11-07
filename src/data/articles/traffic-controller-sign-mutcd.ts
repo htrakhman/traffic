@@ -106,7 +106,7 @@ export const articleTrafficControllerSignMutcd: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Quote a flagger / W21-7 sign package'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Quote a flagger / W21-7 sign package'),
       ' — share the road speed and approach configuration, and we will line up the right sign sequence and stands.',
     ),
   ),
@@ -143,11 +143,11 @@ export const articleTrafficControllerSignMutcd: Article = {
   ],
 
   relatedProducts: [
-    { label: 'Roll-Up "Flagger Ahead" Sign', path: '/product/roll-up-flagger-ahead' },
-    { label: 'Roll-Up "Road Work Ahead" Sign', path: '/product/roll-up-road-work-ahead' },
-    { label: 'Telescoping Sign Stand', path: '/product/telescoping-sign-stand' },
-    { label: 'Type B Flashing Warning Light', path: '/product/type-b-flashing-warning-light' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Roll-Up "Flagger Ahead" Sign', path: '/work-zone-signs' },
+    { label: 'Roll-Up "Road Work Ahead" Sign', path: '/work-zone-signs' },
+    { label: 'Telescoping Sign Stand', path: '/work-zone-signs' },
+    { label: 'Type B Flashing Warning Light', path: '/traffic-safety-supplies' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
   ],
 
   relatedArticles: [

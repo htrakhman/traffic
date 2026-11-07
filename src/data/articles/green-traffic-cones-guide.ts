@@ -154,9 +154,9 @@ export const articleGreenTrafficConesGuide: Article = {
       'p',
       null,
       'Traffic Control Supply stocks 18-inch and 28-inch green cones with 7-lb bases (utility + golf), plus the matching APWA color set (red, yellow, blue, white) for full color-coded utility work. Browse our ',
-      h('a', { href: '/category/cones-drums' }, 'cones catalog'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'cones catalog'),
       ' for the complete inventory. Same-day delivery to Middlesex, Monmouth, Mercer, Somerset, Union, Hunterdon, and northern Ocean. For custom-printed cones (course branding, "SEWER" stencil, contractor logo), ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' with the cone count and stencil text.',
     ),
     h(
@@ -194,10 +194,10 @@ export const articleGreenTrafficConesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Accessories & Hardware', path: '/category/accessories-hardware' },
-    { label: 'Striping & Pavement Paint', path: '/category/striping-pavement-paint' },
-    { label: 'Pedestrian & Crowd Control', path: '/category/pedestrian-control' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Accessories & Hardware', path: '/traffic-safety-supplies' },
+    { label: 'Striping & Pavement Paint', path: '/traffic-safety-supplies' },
+    { label: 'Pedestrian & Crowd Control', path: '/crowd-control-barricades' },
   ],
   relatedArticles: [
     'blue-traffic-cones-guide',

@@ -1,7 +1,8 @@
-/** Apex production host (set DNS + TLS at Netlify/Vercel; optional www → redirect). */
+/** Registered domain. */
 export const SITE_DOMAIN = 'trafficcontrolsupply.com'
 
-export const SITE_ORIGIN = `https://${SITE_DOMAIN}`
+/** Canonical origin. The apex 308-redirects to www, so canonicals must use www. */
+export const SITE_ORIGIN = `https://www.${SITE_DOMAIN}`
 
 /** Brand / legal line — matches public domain. */
 export const SITE_NAME = 'Traffic Control Supply'

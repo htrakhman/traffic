@@ -198,10 +198,10 @@ export const articleRoadBarriersTypesComparison: Article = {
       'p',
       null,
       'For projects in Central NJ, ',
-      h('a', { href: '/category/barricades-barriers' }, 'browse our barricades and barriers'),
+      h('a', { href: '/barricades' }, 'browse our barricades and barriers'),
       ' — concrete jersey, water-filled, and plastic jersey, all with same-day delivery in Middlesex, Monmouth, Mercer, Somerset, Union, Hunterdon, and northern Ocean counties. ',
       'For a project-specific spec, ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' with the road class, design speed, and project duration, and we will recommend the right barrier mix.',
     ),
 
@@ -242,10 +242,10 @@ export const articleRoadBarriersTypesComparison: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
-    { label: 'Pedestrian Control', path: '/category/pedestrian-control' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
+    { label: 'Pedestrian Control', path: '/crowd-control-barricades' },
   ],
   relatedArticles: [
     'traffic-barriers-types-comparison',

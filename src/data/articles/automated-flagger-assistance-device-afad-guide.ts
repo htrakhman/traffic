@@ -164,10 +164,10 @@ export const articleAutomatedFlaggerAssistanceDeviceAfadGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Safety Vests & Hi-Vis Apparel', path: '/category/safety-vests-hi-vis' },
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Safety Lighting', path: '/category/safety-lighting' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Safety Vests & Hi-Vis Apparel', path: '/traffic-safety-supplies' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Safety Lighting', path: '/traffic-safety-supplies' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
   ],
   relatedArticles: ['uniform-traffic-control-devices-mutcd-guide', 'portable-traffic-control-devices-guide'],
 }

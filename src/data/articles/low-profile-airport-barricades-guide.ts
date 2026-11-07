@@ -176,7 +176,7 @@ export const articleLowProfileAirportBarricadesGuide: Article = {
       'Our primary market is road / utility / municipal contractor work — Type I/II/III construction barricades, water-filled barriers, cones, signs, arrow boards. We do not stock airport-grade frangible barricades. If you are in NJ and need a quote on airport work, we can refer you to the major FAA-listed manufacturers (Off the Wall, Yodock\'s airport line, TrafFix). For roadway low-profile work, see our ',
       h('a', { href: '/blog/low-profile-barricades-guide' }, 'low profile barricades guide'),
       ' or ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' through our standard channel.',
     ),
   ),
@@ -207,10 +207,10 @@ export const articleLowProfileAirportBarricadesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Barricades & Barriers (road grade)', path: '/category/barricades-barriers' },
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
-    { label: 'Request a quote (road work)', path: '/quote' },
+    { label: 'Barricades & Barriers (road grade)', path: '/barricades' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
+    { label: 'Request a quote (road work)', path: '/contact' },
   ],
   relatedArticles: [
     'low-profile-barricades-guide',

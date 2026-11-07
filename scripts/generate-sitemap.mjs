@@ -8,7 +8,7 @@ import { dirname, join } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(__dirname, '..')
-const ORIGIN = 'https://trafficcontrolsupply.com'
+const ORIGIN = 'https://www.trafficcontrolsupply.com'
 
 const STATIC_PATHS = [
   { loc: '/', changefreq: 'weekly', priority: '1.0' },
@@ -70,7 +70,7 @@ async function parseArticles() {
     if (!f.endsWith('.ts')) continue
     const src = await readFile(join(dir, f), 'utf8')
     const slugM = src.match(/slug:\s*'([^']+)'/)
-    const dateM = src.match(/date:\s*'([^']+)'/)
+    const dateM = src.match(/dateModified:\s*'([^']+)'/) || src.match(/datePublished:\s*'([^']+)'/)
     if (!slugM) continue
     out.push({
       loc: `/blog/${slugM[1]}`,

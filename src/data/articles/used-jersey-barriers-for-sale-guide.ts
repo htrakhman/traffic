@@ -186,9 +186,9 @@ export const articleUsedJerseyBarriersForSaleGuide: Article = {
       'p',
       null,
       'For new concrete and water-filled options, see ',
-      h('a', { href: '/category/barricades' }, 'Barricades & Barriers'),
-      '. For a delivery quote on either used or new in Central NJ, hit ',
-      h('a', { href: '/quote' }, '/quote'),
+      h('a', { href: '/barricades' }, 'Barricades & Barriers'),
+      '. For a delivery quote on either used or new in Central NJ, ',
+      h('a', { href: '/contact' }, 'request a quote'),
       '.',
     ),
 
@@ -226,10 +226,10 @@ export const articleUsedJerseyBarriersForSaleGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Browse barricades & barriers', path: '/category/barricades' },
-    { label: 'Browse cones & channelizers', path: '/category/cones' },
-    { label: 'Get a delivery quote', path: '/quote' },
-    { label: 'Chat with the Assistant', path: '/assistant' },
+    { label: 'Browse barricades & barriers', path: '/barricades' },
+    { label: 'Browse cones & channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Get a delivery quote', path: '/contact' },
+    { label: 'Chat with the Assistant', path: '/contact' },
   ],
   relatedArticles: [
     'jersey-barriers-for-sale-near-me',

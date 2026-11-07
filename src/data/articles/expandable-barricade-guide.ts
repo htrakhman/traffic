@@ -163,9 +163,9 @@ export const articleExpandableBarricadeGuide: Article = {
       'p',
       null,
       'A typical 10-ft, 6-panel steel expandable barricade runs $320–$540 at retail in NJ. Aluminum units run 25–40% higher. Bulk pricing on 10+ units cuts ~10–15%. ',
-      h('a', { href: '/category/barricades-barriers' }, 'See our barricade catalog'),
+      h('a', { href: '/barricades' }, 'See our barricade catalog'),
       ' for current selection or ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' if you have a specific deploy length or color spec in mind. For Central NJ contractors and venues, same-day delivery is available.',
     ),
 
@@ -205,10 +205,10 @@ export const articleExpandableBarricadeGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
-    { label: 'Crowd Control Barriers', path: '/category/barricades-barriers' },
-    { label: 'Pedestrian Barriers', path: '/category/barricades-barriers' },
-    { label: 'Request a quote', path: '/quote' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
+    { label: 'Crowd Control Barriers', path: '/barricades' },
+    { label: 'Pedestrian Barriers', path: '/barricades' },
+    { label: 'Request a quote', path: '/contact' },
   ],
   relatedArticles: [
     'crowd-control-barriers-buying-guide',

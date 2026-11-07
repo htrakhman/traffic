@@ -5,6 +5,7 @@ import { getArticleBySlug, getRelatedArticles } from '../data/articles'
 import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import { SITE_NAME } from '../config/site'
+import { productPath, productsForTopic } from '../data/catalog'
 
 /**
  * /blog/:slug — individual article. SEO-owned by seo-specialist subagent.
@@ -17,6 +18,7 @@ export default function Article() {
   if (!article) return <Navigate to="/blog" replace />
 
   const related = getRelatedArticles(article.slug, 3)
+  const shop = productsForTopic(`${article.slug} ${article.title}`, 4)
   const canonical = `/blog/${article.slug}`
 
   return (
@@ -111,15 +113,33 @@ export default function Article() {
               ))}
             </div>
             <div className="mt-5 pt-5 border-t border-slate-800 flex flex-wrap gap-3">
-              <Link to="/quote" className="btn-primary text-sm py-2 px-4">
+              <Link to="/contact" className="btn-primary text-sm py-2 px-4">
                 Request a quote
               </Link>
               <Link
-                to="/assistant"
+                to="/tools/cone-taper-calculator"
                 className="text-sm px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
               >
                 Plan your work zone
               </Link>
+            </div>
+          </section>
+        )}
+
+        {shop.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-lg font-bold text-white mb-4">Products for this job</h2>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {shop.map((p) => (
+                <Link
+                  key={p.slug}
+                  to={productPath(p)}
+                  className="group block px-4 py-3 rounded-lg bg-slate-950/60 hover:bg-slate-950 border border-slate-800 hover:border-brand-500/50 transition-colors"
+                >
+                  <span className="block text-sm font-semibold text-slate-200 group-hover:text-white">{p.name}</span>
+                  <span className="mt-1 block text-xs text-slate-400">{p.summary}</span>
+                </Link>
+              ))}
             </div>
           </section>
         )}

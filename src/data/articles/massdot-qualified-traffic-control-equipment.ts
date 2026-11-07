@@ -103,7 +103,7 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Request a MassDOT-ready traffic control quote'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Request a MassDOT-ready traffic control quote'),
       ' — share the project number and the typical-application sheet, and we will line up qualified equipment and the supporting paperwork.',
     ),
   ),
@@ -140,11 +140,11 @@ export const articleMassDotQualifiedTrafficControlEquipment: Article = {
   ],
 
   relatedProducts: [
-    { label: 'Type III Barricade', path: '/product/type-iii-barricade' },
-    { label: 'Trailer-Mounted Arrow Board (15-Lamp)', path: '/product/trailer-mounted-arrow-board-15' },
-    { label: 'Water-Filled Barrier (6 ft)', path: '/product/water-filled-barrier-6ft' },
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
-    { label: 'Arrow Boards', path: '/category/arrow-boards' },
+    { label: 'Type III Barricade', path: '/barricades' },
+    { label: 'Trailer-Mounted Arrow Board (15-Lamp)', path: '/arrow-boards' },
+    { label: 'Water-Filled Barrier (6 ft)', path: '/water-filled-barriers' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
+    { label: 'Arrow Boards', path: '/arrow-boards' },
   ],
 
   relatedArticles: [

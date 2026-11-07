@@ -172,9 +172,9 @@ export const articleSteelBarricadesGuide: Article = {
       'p',
       null,
       'Total: ~$4,300–$6,900 for a fleet that covers ~250 ft of perimeter with multi-decade durability. ',
-      h('a', { href: '/category/barricades-barriers' }, 'See our barricades catalog'),
+      h('a', { href: '/barricades' }, 'See our barricades catalog'),
       ' or ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' for bulk pricing. Same-day delivery available across Central NJ.',
     ),
 
@@ -214,10 +214,10 @@ export const articleSteelBarricadesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
-    { label: 'Crowd Control Barriers', path: '/category/barricades-barriers' },
-    { label: 'Pedestrian Barriers', path: '/category/barricades-barriers' },
-    { label: 'Request a quote', path: '/quote' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
+    { label: 'Crowd Control Barriers', path: '/barricades' },
+    { label: 'Pedestrian Barriers', path: '/barricades' },
+    { label: 'Request a quote', path: '/contact' },
   ],
   relatedArticles: [
     'metal-barricades-buying-guide',

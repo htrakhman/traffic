@@ -20,6 +20,9 @@ if (posthogKey) {
   })
 }
 
+// Prerendered pages ship their JSON-LD in <head>; the app re-adds it from components.
+document.querySelectorAll('script[data-ssr]').forEach((el) => el.remove())
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {posthogKey ? (

@@ -61,9 +61,9 @@ export const articlePedestrianCrosswalkSignsMutcd: Article = {
       'p',
       null,
       'On work zones, when the contractor closes a sidewalk, MUTCD §6D requires either a TPAR (temporary pedestrian access route) along an alternate path with proper accessibility, or a sidewalk-closure sign sequence (R9-9 SIDEWALK CLOSED, R9-10 USE OTHER SIDEWALK, R9-11 SIDEWALK CLOSED AHEAD CROSS HERE) directing pedestrians to the alternate route. The route itself uses ',
-      h('a', { href: '/product/economy-pedestrian-barricade-orange-eg' }, 'pedestrian barricades'),
+      h('a', { href: '/crowd-control-barricades' }, 'pedestrian barricades'),
       ' or ',
-      h('a', { href: '/product/urbanite-water-filled-pedestrian-barricade' }, 'water-filled pedestrian barricades'),
+      h('a', { href: '/water-filled-barriers' }, 'water-filled pedestrian barricades'),
       ' to physically channelize walkers.',
     ),
 
@@ -148,7 +148,7 @@ export const articlePedestrianCrosswalkSignsMutcd: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Quote pedestrian crosswalk signs and routing'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Quote pedestrian crosswalk signs and routing'),
       ' — share the typical application and the sidewalk-closure plan, and we will line up the sign sequence, pedestrian barricades, and detectable-edge devices.',
     ),
   ),
@@ -189,12 +189,12 @@ export const articlePedestrianCrosswalkSignsMutcd: Article = {
   ],
 
   relatedProducts: [
-    { label: 'Pedestrian Barricade (Orange EG)', path: '/product/economy-pedestrian-barricade-orange-eg' },
-    { label: 'Urbanite Water-Filled Pedestrian Barricade', path: '/product/urbanite-water-filled-pedestrian-barricade' },
-    { label: 'Telescoping Sign Stand', path: '/product/telescoping-sign-stand' },
-    { label: 'Galvanized Crowd Control Fence Panel (6 × 10)', path: '/product/galvanized-crowd-control-fence-panel-6x10' },
-    { label: 'Pedestrian Control', path: '/category/pedestrian-control' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Pedestrian Barricade (Orange EG)', path: '/crowd-control-barricades' },
+    { label: 'Urbanite Water-Filled Pedestrian Barricade', path: '/water-filled-barriers' },
+    { label: 'Telescoping Sign Stand', path: '/work-zone-signs' },
+    { label: 'Galvanized Crowd Control Fence Panel (6 × 10)', path: '/crowd-control-barricades' },
+    { label: 'Pedestrian Control', path: '/crowd-control-barricades' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
   ],
 
   relatedArticles: [

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
-import { SITE_LOGO_PATH, SITE_NAME, SITE_ORIGIN } from '../../config/site'
+import { SITE_CONTACT_EMAIL, SITE_LOGO_PATH, SITE_NAME, SITE_ORIGIN } from '../../config/site'
+import { ssrHead } from './ssrHead'
 
 /**
  * Injects a JSON-LD script tag into <head>. Each instance renders one block.
@@ -14,6 +15,7 @@ import { SITE_LOGO_PATH, SITE_NAME, SITE_ORIGIN } from '../../config/site'
  */
 export default function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }) {
   const json = useMemo(() => JSON.stringify(data), [data])
+  ssrHead.active?.jsonLd.add(json)
   useEffect(() => {
     const el = document.createElement('script')
     el.type = 'application/ld+json'
@@ -33,7 +35,26 @@ export const schema = {
     name: SITE_NAME,
     url: SITE_ORIGIN,
     logo: `${SITE_ORIGIN}${SITE_LOGO_PATH}`,
-    sameAs: [] as string[],
+    email: SITE_CONTACT_EMAIL,
+    description:
+      'Wholesale and retail supplier of steel crowd control barricades, water-filled barriers, traffic cones, delineator posts and temporary fence, delivered across the United States.',
+    address: { '@type': 'PostalAddress', addressRegion: 'NJ', addressCountry: 'US' },
+    areaServed: { '@type': 'Country', name: 'United States' },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: SITE_CONTACT_EMAIL,
+      areaServed: 'US',
+      availableLanguage: 'English',
+    },
+    knowsAbout: [
+      'crowd control barricades',
+      'water-filled barriers',
+      'traffic cones',
+      'delineator posts',
+      'temporary fence panels',
+      'MUTCD temporary traffic control',
+    ],
   }),
   service: () => ({
     '@context': 'https://schema.org',
@@ -58,11 +79,7 @@ export const schema = {
     '@type': 'WebSite',
     name: SITE_NAME,
     url: SITE_ORIGIN,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${SITE_ORIGIN}/browse?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_ORIGIN },
   }),
   breadcrumb: (items: { name: string; path: string }[]) => ({
     '@context': 'https://schema.org',
