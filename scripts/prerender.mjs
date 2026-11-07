@@ -4,8 +4,10 @@
  * answer engines that do not run JavaScript get the full page: title, meta,
  * canonical, JSON-LD and body text. The browser app still boots and takes over.
  *
- * Writes dist/<route>/index.html for each route, dist/404.html, and dist/llms.txt.
+ * Writes dist/<route>/index.html for each route, dist/404.html, dist/llms.txt and
+ * dist/indexnow-manifest.json (read by scripts/indexnow.mjs).
  */
+import { createHash } from 'node:crypto'
 import { readFile, writeFile, mkdir, rm } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -36,6 +38,8 @@ async function main() {
   const fill = (head, html) => template.replace(HEAD_RE, () => head).replace(APP_RE, () => html)
   const titleOf = (head) => head.match(/<title>([^<]*)<\/title>/)?.[1] ?? ''
   const pages = []
+  /** url → hash of the rendered page (not the asset-hashed template), for IndexNow diffs. */
+  const manifest = {}
 
   for (const route of routes()) {
     const { html, head } = await render(route)
@@ -45,13 +49,15 @@ async function main() {
     await mkdir(dirname(file), { recursive: true })
     await writeFile(file, fill(head, html))
     pages.push({ route, title: titleOf(head).replace(/&amp;/g, '&') })
+    manifest[ORIGIN + (route === '/' ? '/' : route)] = createHash('sha1').update(head + html).digest('hex')
   }
 
   const notFound = await render('/__not-found__')
   await writeFile(join(DIST, '404.html'), fill(notFound.head, notFound.html))
 
   await writeFile(join(DIST, 'llms.txt'), llmsTxt(pages))
-  console.log(`Prerendered ${pages.length} routes + 404.html + llms.txt`)
+  await writeFile(join(DIST, 'indexnow-manifest.json'), JSON.stringify(manifest))
+  console.log(`Prerendered ${pages.length} routes + 404.html + llms.txt + indexnow-manifest.json`)
 }
 
 /** https://llmstxt.org — a plain map of the site for AI answer engines. */
