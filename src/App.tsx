@@ -18,6 +18,7 @@ import ComparisonPage from './pages/ComparisonPage'
 import BarricadeCalculator from './pages/tools/BarricadeCalculator'
 import ConeTaperCalculator from './pages/tools/ConeTaperCalculator'
 import { About, Contact, Shipping, Wholesale } from './pages/InfoPages'
+import NotFound from './pages/NotFound'
 
 const Blog = lazy(() => import('./pages/Blog'))
 const Article = lazy(() => import('./pages/Article'))
@@ -55,6 +56,14 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       {hasPostHogToken ? <PostHogPageview /> : null}
+      <AppRoutes />
+    </BrowserRouter>
+  )
+}
+
+/** Route table, shared by the browser app and the build-time prerender (src/entry-server.tsx). */
+export function AppRoutes() {
+  return (
       <Routes>
         {/* Wholesale + retail landing page. */}
         <Route path="/" element={<Home />} />
@@ -108,8 +117,7 @@ export default function App() {
         <Route path="/guides" element={<Navigate to="/blog" replace />} />
         <Route path="/guides/:slug" element={<GuidesSlugRedirect />} />
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
   )
 }

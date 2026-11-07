@@ -137,15 +137,15 @@ export const articleBarricadesTypesUsesGuide: Article = {
       'p',
       null,
       'A short-duration daytime utility patch on a 30 mph residential street usually uses Type I barricades to channelize, paired with a ',
-      h('a', { href: '/product/roll-up-road-work-ahead' }, 'ROAD WORK AHEAD sign'),
+      h('a', { href: '/work-zone-signs' }, 'ROAD WORK AHEAD sign'),
       ' upstream. A multi-day water-line repair on a 40 mph collector steps up to ',
-      h('a', { href: '/product/type-ii-barricade' }, 'Type II barricades'),
+      h('a', { href: '/barricades' }, 'Type II barricades'),
       ' for the longer visibility profile, with ',
-      h('a', { href: '/product/type-b-flashing-warning-light' }, 'Type B flashing warning lights'),
+      h('a', { href: '/traffic-safety-supplies' }, 'Type B flashing warning lights'),
       ' on the lead barricades for nighttime hours. A full road closure for a bridge inspection or a pavement panel replacement uses ',
-      h('a', { href: '/product/type-iii-barricade' }, 'Type III barricades'),
+      h('a', { href: '/barricades' }, 'Type III barricades'),
       ' across the entire roadway with a DETOUR sign sequence. A pedestrian sidewalk diversion uses ',
-      h('a', { href: '/product/economy-pedestrian-barricade-orange-eg' }, 'pedestrian barricades'),
+      h('a', { href: '/crowd-control-barricades' }, 'pedestrian barricades'),
       ' or interlocking water-filled pedestrian panels.',
     ),
     h(
@@ -256,7 +256,7 @@ export const articleBarricadesTypesUsesGuide: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Quote barricades for your work zone'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Quote barricades for your work zone'),
       ' — share the type, count, road speed, and dates, and we will confirm availability, MASH letters, and delivery.',
     ),
   ),
@@ -297,12 +297,12 @@ export const articleBarricadesTypesUsesGuide: Article = {
   ],
 
   relatedProducts: [
-    { label: 'Type III Barricade', path: '/product/type-iii-barricade' },
-    { label: 'Type II Barricade', path: '/product/type-ii-barricade' },
-    { label: 'Pedestrian Barricade (Orange EG)', path: '/product/economy-pedestrian-barricade-orange-eg' },
-    { label: 'Urbanite Water-Filled Pedestrian Barricade', path: '/product/urbanite-water-filled-pedestrian-barricade' },
-    { label: 'Type B Flashing Warning Light', path: '/product/type-b-flashing-warning-light' },
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
+    { label: 'Type III Barricade', path: '/barricades' },
+    { label: 'Type II Barricade', path: '/barricades' },
+    { label: 'Pedestrian Barricade (Orange EG)', path: '/crowd-control-barricades' },
+    { label: 'Urbanite Water-Filled Pedestrian Barricade', path: '/water-filled-barriers' },
+    { label: 'Type B Flashing Warning Light', path: '/traffic-safety-supplies' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
   ],
 
   relatedArticles: [

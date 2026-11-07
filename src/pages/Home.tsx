@@ -30,7 +30,7 @@ export default function Home() {
           data={schema.product({
             name: p.name,
             description: p.description,
-            slug: `#${p.id}`,
+            slug: p.href.slice(1),
             image: PRODUCT_IMAGES[p.id],
             category: p.id === 'water-filled-barriers' ? 'Traffic barriers' : 'Crowd control barricades',
           })}

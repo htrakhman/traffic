@@ -75,11 +75,11 @@ export const articleConeZoneWorkZoneGuide: Article = {
         null,
         h('strong', null, 'Channelizing devices'),
         ' — ',
-        h('a', { href: '/product/28-inch-traffic-cone' }, '28-inch traffic cones'),
+        h('a', { href: '/traffic-cones-for-sale' }, '28-inch traffic cones'),
         ' for low-speed work, ',
-        h('a', { href: '/product/36-inch-traffic-cone' }, '36-inch traffic cones'),
+        h('a', { href: '/traffic-cones-for-sale' }, '36-inch traffic cones'),
         ' for higher-speed or nighttime work, and ',
-        h('a', { href: '/product/channelizing-drum' }, 'channelizing drums'),
+        h('a', { href: '/channelizing-drums' }, 'channelizing drums'),
         ' for multi-day deployments.',
       ),
       h(
@@ -87,13 +87,13 @@ export const articleConeZoneWorkZoneGuide: Article = {
         null,
         h('strong', null, 'Advance warning signs'),
         ' — ',
-        h('a', { href: '/product/roll-up-road-work-ahead' }, 'ROAD WORK AHEAD (W20-1)'),
+        h('a', { href: '/work-zone-signs' }, 'ROAD WORK AHEAD (W20-1)'),
         ', ',
-        h('a', { href: '/product/roll-up-flagger-ahead' }, 'FLAGGER (W21-7)'),
+        h('a', { href: '/work-zone-signs' }, 'FLAGGER (W21-7)'),
         ', LANE CLOSED, ',
-        h('a', { href: '/product/roll-up-one-lane-road' }, 'ONE LANE ROAD AHEAD (W20-4)'),
+        h('a', { href: '/work-zone-signs' }, 'ONE LANE ROAD AHEAD (W20-4)'),
         ', mounted on a ',
-        h('a', { href: '/product/telescoping-sign-stand' }, 'telescoping sign stand'),
+        h('a', { href: '/work-zone-signs' }, 'telescoping sign stand'),
         '.',
       ),
       h(
@@ -101,7 +101,7 @@ export const articleConeZoneWorkZoneGuide: Article = {
         null,
         h('strong', null, 'Arrow board'),
         ' — a ',
-        h('a', { href: '/product/trailer-mounted-arrow-board-15' }, 'trailer-mounted Type C arrow board'),
+        h('a', { href: '/arrow-boards' }, 'trailer-mounted Type C arrow board'),
         ' upstream of the taper on any lane closure on a multi-lane road above 45 mph.',
       ),
       h(
@@ -115,7 +115,7 @@ export const articleConeZoneWorkZoneGuide: Article = {
         null,
         h('strong', null, 'Warning lights'),
         ' — ',
-        h('a', { href: '/product/type-b-flashing-warning-light' }, 'Type B flashing warning lights'),
+        h('a', { href: '/traffic-safety-supplies' }, 'Type B flashing warning lights'),
         ' on signs and barricades for nighttime work above 45 mph.',
       ),
       h(
@@ -257,7 +257,7 @@ export const articleConeZoneWorkZoneGuide: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Quote a complete cone zone setup'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Quote a complete cone zone setup'),
       ' — share the typical application and the dates, and we will line up cones, drums, signs, and arrow boards to spec.',
     ),
   ),
@@ -298,12 +298,12 @@ export const articleConeZoneWorkZoneGuide: Article = {
   ],
 
   relatedProducts: [
-    { label: '28-Inch Traffic Cone', path: '/product/28-inch-traffic-cone' },
-    { label: '36-Inch Traffic Cone', path: '/product/36-inch-traffic-cone' },
-    { label: 'Channelizing Drum', path: '/product/channelizing-drum' },
-    { label: 'Roll-Up "Road Work Ahead" Sign', path: '/product/roll-up-road-work-ahead' },
-    { label: 'Trailer-Mounted Arrow Board (15-Lamp)', path: '/product/trailer-mounted-arrow-board-15' },
-    { label: 'Cones & Drums', path: '/category/cones-drums' },
+    { label: '28-Inch Traffic Cone', path: '/traffic-cones-for-sale' },
+    { label: '36-Inch Traffic Cone', path: '/traffic-cones-for-sale' },
+    { label: 'Channelizing Drum', path: '/channelizing-drums' },
+    { label: 'Roll-Up "Road Work Ahead" Sign', path: '/work-zone-signs' },
+    { label: 'Trailer-Mounted Arrow Board (15-Lamp)', path: '/arrow-boards' },
+    { label: 'Cones & Drums', path: '/traffic-cones-for-sale' },
   ],
 
   relatedArticles: [

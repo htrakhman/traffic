@@ -85,7 +85,7 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
       'p',
       null,
       'For a Type III road-closed installation on a 2-lane road, plan on 2 barricades minimum (one each direction), plus advance warning signs at MUTCD-spec distances and 8–15 cones in the taper. For a sidewalk closure, 2–3 A-frames will usually suffice unless the closure runs more than 100 feet. Our ',
-      h('a', { href: '/planner' }, 'SiteMapPlanner'),
+      h('a', { href: '/tools/cone-taper-calculator' }, 'SiteMapPlanner'),
       ' will generate the exact count if you tell it the road geometry.',
     ),
 
@@ -199,7 +199,7 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
       'p',
       null,
       'Yes — we sell with same-day Central NJ delivery for jobs of any length. For short one-off events, ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' and we can recommend the smallest spec that meets your job requirements.',
     ),
 
@@ -217,9 +217,9 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
       'p',
       null,
       'For Central NJ contractors, we deliver same-day on all standard barricade types when the order comes in before noon. Submit a ',
-      h('a', { href: '/quote' }, 'quote request'),
+      h('a', { href: '/contact' }, 'quote request'),
       ' or email harold@trafficcontrolsupply.com with your job site address and we can recommend the right model. See our full ',
-      h('a', { href: '/category/barricades' }, 'barricade catalog'),
+      h('a', { href: '/barricades' }, 'barricade catalog'),
       ' for all in-stock options.',
     ),
 
@@ -228,7 +228,7 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
       'p',
       null,
       'Three are tied for first place: (a) buying Type I barricades when the job requires Type III, (b) leaving the barricades unweighted so the first wind blast knocks them over, and (c) using channelizing barricades on a job that actually requires a physical barrier (water-filled or concrete). All three result in inspection failures and, in the worst case, vehicle intrusions into the work zone. If you are not sure which type fits your job, ',
-      h('a', { href: '/assistant' }, 'ask our Assistant'),
+      h('a', { href: '/contact' }, 'ask our Assistant'),
       ' or call before ordering.',
     ),
   ),
@@ -259,10 +259,10 @@ export const articleBarricadeForTrafficFaqGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Traffic Barricades (Full Catalog)', path: '/category/barricades' },
-    { label: 'Pedestrian Barriers', path: '/category/pedestrian-barriers' },
-    { label: 'Water-Filled Barriers', path: '/category/water-filled-barriers' },
-    { label: 'Request a Barricade Quote', path: '/quote' },
+    { label: 'Traffic Barricades (Full Catalog)', path: '/barricades' },
+    { label: 'Pedestrian Barriers', path: '/crowd-control-barricades' },
+    { label: 'Water-Filled Barriers', path: '/water-filled-barriers' },
+    { label: 'Request a Barricade Quote', path: '/contact' },
   ],
   relatedArticles: [
     'traffic-barricades-pillar-guide',

@@ -105,7 +105,7 @@ export const articleOfficialTrafficControlDeviceMutcd: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Quote MUTCD-compliant work-zone devices'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Quote MUTCD-compliant work-zone devices'),
       ' — share the permit and the typical-application sheet, and we will line up conforming signs, channelizers, and supports.',
     ),
   ),
@@ -142,11 +142,11 @@ export const articleOfficialTrafficControlDeviceMutcd: Article = {
   ],
 
   relatedProducts: [
-    { label: 'Roll-Up "Road Work Ahead" Sign', path: '/product/roll-up-road-work-ahead' },
-    { label: 'Roll-Up "Flagger Ahead" Sign', path: '/product/roll-up-flagger-ahead' },
-    { label: 'Telescoping Sign Stand', path: '/product/telescoping-sign-stand' },
-    { label: 'Type III Barricade', path: '/product/type-iii-barricade' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Roll-Up "Road Work Ahead" Sign', path: '/work-zone-signs' },
+    { label: 'Roll-Up "Flagger Ahead" Sign', path: '/work-zone-signs' },
+    { label: 'Telescoping Sign Stand', path: '/work-zone-signs' },
+    { label: 'Type III Barricade', path: '/barricades' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
   ],
 
   relatedArticles: [

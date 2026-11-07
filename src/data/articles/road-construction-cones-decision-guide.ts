@@ -138,7 +138,7 @@ export const articleRoadConstructionConesDecisionGuide: Article = {
       'p',
       null,
       'For exact counts based on your specific lane geometry and posted speed, use our ',
-      h('a', { href: '/planner' }, 'SiteMapPlanner'),
+      h('a', { href: '/tools/cone-taper-calculator' }, 'SiteMapPlanner'),
       '. It generates the MUTCD-spec taper length and cone interval for you.',
     ),
 
@@ -212,9 +212,9 @@ export const articleRoadConstructionConesDecisionGuide: Article = {
       'p',
       null,
       'For Central NJ contractors we deliver all standard road construction cone configurations same-day for orders placed before noon. ',
-      h('a', { href: '/quote' }, 'Submit a quote'),
+      h('a', { href: '/contact' }, 'Submit a quote'),
       ' with your job address, posted speed, and duration and we will recommend the exact SKU mix. Or browse the ',
-      h('a', { href: '/category/traffic-cones' }, 'full cone catalog'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'full cone catalog'),
       ' if you already know what you want.',
     ),
 
@@ -256,10 +256,10 @@ export const articleRoadConstructionConesDecisionGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Road Construction Cones', path: '/category/traffic-cones' },
-    { label: 'Traffic Drums & Channelizers', path: '/category/drums-channelizers' },
-    { label: 'Cone Lights', path: '/category/cone-lights' },
-    { label: 'Request a Job-Specific Quote', path: '/quote' },
+    { label: 'Road Construction Cones', path: '/traffic-cones-for-sale' },
+    { label: 'Traffic Drums & Channelizers', path: '/channelizing-drums' },
+    { label: 'Cone Lights', path: '/traffic-cones-for-sale' },
+    { label: 'Request a Job-Specific Quote', path: '/contact' },
   ],
   relatedArticles: [
     'road-cones-for-sale-buying-guide',

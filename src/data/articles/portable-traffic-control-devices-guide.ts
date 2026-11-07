@@ -178,11 +178,11 @@ export const articlePortableTrafficControlDevicesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
-    { label: 'Arrow Boards', path: '/category/arrow-boards' },
-    { label: 'Message Boards', path: '/category/message-boards' },
-    { label: 'Safety Lighting', path: '/category/safety-lighting' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
+    { label: 'Arrow Boards', path: '/arrow-boards' },
+    { label: 'Message Boards', path: '/work-zone-signs' },
+    { label: 'Safety Lighting', path: '/traffic-safety-supplies' },
   ],
   relatedArticles: ['uniform-traffic-control-devices-mutcd-guide', 'automated-flagger-assistance-device-afad-guide'],
 }

@@ -6,6 +6,7 @@ import SEO from '../components/seo/SEO'
 import JsonLd, { schema } from '../components/seo/JsonLd'
 import { CATEGORIES } from '../data/catalog'
 import { getState, STATES } from '../data/locations'
+import { SITE_NAME, SITE_ORIGIN } from '../config/site'
 
 export default function LocationPage() {
   const { state: slug = '' } = useParams()
@@ -25,7 +26,7 @@ export default function LocationPage() {
           '@context': 'https://schema.org',
           '@type': 'Service',
           serviceType: 'Traffic control and crowd control equipment sales and delivery',
-          provider: { '@type': 'Organization', name: 'Traffic Control Supply', url: 'https://trafficcontrolsupply.com' },
+          provider: { '@type': 'Organization', name: SITE_NAME, url: SITE_ORIGIN },
           areaServed: { '@type': 'State', name: st.state },
         }}
       />

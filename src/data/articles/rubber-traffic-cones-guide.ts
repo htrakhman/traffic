@@ -172,9 +172,9 @@ export const articleRubberTrafficConesGuide: Article = {
       'p',
       null,
       'For specs and current pricing across the rubber and PVC ranges, see our ',
-      h('a', { href: '/category/cones' }, 'Cones, Drums & Channelizers'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'Cones, Drums & Channelizers'),
       ' page, or chat with our ',
-      h('a', { href: '/assistant' }, 'Assistant'),
+      h('a', { href: '/contact' }, 'Assistant'),
       ' for a count and material recommendation based on your job.',
     ),
 
@@ -214,7 +214,7 @@ export const articleRubberTrafficConesGuide: Article = {
     },
     {
       q: 'Do you sell rubber traffic cones with same-day delivery in NJ?',
-      a: "Yes — we stock 28-inch solid-rubber and rubber-base PVC cones for same-day Central NJ delivery. Get a quote on /quote or chat with the Assistant for a count by job type.",
+      a: "Yes — we stock 28-inch solid-rubber and rubber-base PVC cones for same-day Central NJ delivery. Request a quote on our contact page with your job details.",
     },
     {
       q: "What's the difference between recycled rubber and virgin rubber cones?",
@@ -222,10 +222,10 @@ export const articleRubberTrafficConesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Browse cones, drums & channelizers', path: '/category/cones' },
-    { label: 'Browse barricades', path: '/category/barricades' },
-    { label: 'Get a delivery quote', path: '/quote' },
-    { label: 'Chat with the Assistant', path: '/assistant' },
+    { label: 'Browse cones, drums & channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Browse barricades', path: '/barricades' },
+    { label: 'Get a delivery quote', path: '/contact' },
+    { label: 'Chat with the Assistant', path: '/contact' },
   ],
   relatedArticles: [
     'weighted-traffic-cones-guide',

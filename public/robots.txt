@@ -22,4 +22,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://trafficcontrolsupply.com/sitemap.xml
+Sitemap: https://www.trafficcontrolsupply.com/sitemap.xml

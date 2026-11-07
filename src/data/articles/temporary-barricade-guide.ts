@@ -175,7 +175,7 @@ export const articleTemporaryBarricadeGuide: Article = {
       'p',
       null,
       'For a complete count from job geometry, the ',
-      h('a', { href: '/planner' }, 'SiteMapPlanner'),
+      h('a', { href: '/tools/cone-taper-calculator' }, 'SiteMapPlanner'),
       ' generates a full MUTCD-compliant layout — cones, signs, barricades, light kits — from a handful of inputs.',
     ),
 
@@ -232,14 +232,14 @@ export const articleTemporaryBarricadeGuide: Article = {
     },
     {
       q: 'Where do I buy temporary barricades in NJ?',
-      a: 'We stock all seven temporary barricade families for purchase with same-day Central NJ delivery, including TL-rated water-filled units and portable concrete. Get a quote on /quote or chat with our Assistant for a count tied to your job.',
+      a: 'We stock all seven temporary barricade families for purchase with same-day Central NJ delivery, including TL-rated water-filled units and portable concrete. Request a quote on our contact page with your job details.',
     },
   ],
   relatedProducts: [
-    { label: 'Browse barricades & barriers', path: '/category/barricades' },
-    { label: 'Browse signs & sign stands', path: '/category/signs' },
-    { label: 'Get a TTC delivery quote', path: '/quote' },
-    { label: 'Build a TTC plan with SiteMapPlanner', path: '/planner' },
+    { label: 'Browse barricades & barriers', path: '/barricades' },
+    { label: 'Browse signs & sign stands', path: '/work-zone-signs' },
+    { label: 'Get a TTC delivery quote', path: '/contact' },
+    { label: 'Build a TTC plan with SiteMapPlanner', path: '/tools/cone-taper-calculator' },
   ],
   relatedArticles: [
     'barricades-types-uses-guide',

@@ -229,11 +229,11 @@ export const articleUniformTrafficControlDevicesMutcdGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Traffic Cones', path: '/category/cones-drums' },
-    { label: 'Type III Barricades', path: '/category/barricades-barriers' },
-    { label: 'Arrow Boards', path: '/category/arrow-boards' },
-    { label: 'Roll-Up Signs', path: '/category/signs-sign-stands' },
-    { label: 'Safety Lighting', path: '/category/safety-lighting' },
+    { label: 'Traffic Cones', path: '/traffic-cones-for-sale' },
+    { label: 'Type III Barricades', path: '/barricades' },
+    { label: 'Arrow Boards', path: '/arrow-boards' },
+    { label: 'Roll-Up Signs', path: '/work-zone-signs' },
+    { label: 'Safety Lighting', path: '/traffic-safety-supplies' },
   ],
   relatedArticles: ['automated-flagger-assistance-device-afad-guide'],
 }

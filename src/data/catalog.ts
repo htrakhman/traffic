@@ -857,6 +857,20 @@ export function getProduct(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug)
 }
 
+/** Topic keywords → catalog category, used to link articles to matching products. */
+const TOPIC_CATEGORIES: [RegExp, CategoryId][] = [
+  [/crowd|bike.?rack|pedestrian|event|parade|queue/i, 'crowd-control-barricades'],
+  [/water.?fill|jersey|barrier/i, 'water-filled-barriers'],
+  [/delineator|channelizer|bike.?lane|tubular/i, 'delineator-posts'],
+  [/fence|fencing/i, 'temporary-fence-panels'],
+  [/cone|pylon|taper|lane.?closure/i, 'traffic-cones'],
+]
+
+export function productsForTopic(text: string, limit: number): Product[] {
+  const hit = TOPIC_CATEGORIES.find(([re]) => re.test(text))
+  return hit ? productsIn(hit[1]).slice(0, limit) : []
+}
+
 export function productPath(p: Product): string {
   return `/products/${p.slug}`
 }

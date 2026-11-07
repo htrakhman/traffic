@@ -1,4 +1,5 @@
 {
+  "trailingSlash": false,
   "functions": {
     "api/supplier-signup.ts": {
       "maxDuration": 15
@@ -71,11 +72,5 @@
     { "source": "/blog/arrow-board-rental-guide", "destination": "/arrow-boards", "permanent": true },
     { "source": "/blog/portable-traffic-barrier-rental-guide", "destination": "/barricades", "permanent": true },
     { "source": "/blog/rent-vs-buy-traffic-control-equipment", "destination": "/traffic-safety-supplies", "permanent": true }
-  ],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
   ]
 }

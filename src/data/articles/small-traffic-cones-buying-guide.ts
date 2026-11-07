@@ -118,9 +118,9 @@ export const articleSmallTrafficConesBuyingGuide: Article = {
       'p',
       null,
       'For ANY public roadway, parking lot above 25 mph, construction zone, or job that an OSHA or DOT inspector might walk through: skip small cones, go straight to 28" or 36". The cost difference per cone ($10 versus $30) is trivial against a single citation or shutdown. Browse our ',
-      h('a', { href: '/category/cones' }, 'full cones inventory'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'full cones inventory'),
       ' or talk to the ',
-      h('a', { href: '/assistant' }, 'AI Assistant'),
+      h('a', { href: '/contact' }, 'AI Assistant'),
       ' if you are not sure which size your job needs.',
     ),
 
@@ -154,10 +154,10 @@ export const articleSmallTrafficConesBuyingGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Traffic Cones', path: '/category/cones' },
-    { label: 'Wet Floor Signs', path: '/category/signs' },
-    { label: 'Safety Cones', path: '/category/cones' },
-    { label: 'Get a Quote', path: '/quote' },
+    { label: 'Traffic Cones', path: '/traffic-cones-for-sale' },
+    { label: 'Wet Floor Signs', path: '/work-zone-signs' },
+    { label: 'Safety Cones', path: '/traffic-cones-for-sale' },
+    { label: 'Get a Quote', path: '/contact' },
   ],
   relatedArticles: [
     'large-traffic-cones-buying-guide',

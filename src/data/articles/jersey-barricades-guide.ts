@@ -96,7 +96,7 @@ export const articleJerseyBarricadesGuide: Article = {
       'p',
       null,
       'Five common use cases dominate Jersey barricade use. First, event perimeters — concerts, festivals, parades — where ',
-      h('a', { href: '/product/urbanite-water-filled-pedestrian-barricade' }, 'water-filled pedestrian barricades'),
+      h('a', { href: '/water-filled-barriers' }, 'water-filled pedestrian barricades'),
       ' provide visible perimeter control without crashworthy containment. Second, parking-lot lane control — drive-thru lanes, vaccine clinics, voting precincts — where plastic Jerseys delineate flow at sub-25 mph speeds. Third, short-duration low-speed work zones — utility patches, paving, water-line repairs — where TL-2 plastic Jerseys provide both delineation and modest containment. Fourth, full-time highway work zones — bridge replacements, lane reconstructions — where MASH TL-3 concrete Jerseys are the contract requirement. Fifth, security perimeters — event entrances, government buildings, anti-vehicle approaches — where concrete or specialized anti-ram Jerseys serve dual safety/security duty.',
     ),
     h(
@@ -192,7 +192,7 @@ export const articleJerseyBarricadesGuide: Article = {
     h(
       'p',
       null,
-      h('a', { href: '/quote', className: 'cta-inline' }, 'Quote Jersey barricades'),
+      h('a', { href: '/contact', className: 'cta-inline' }, 'Quote Jersey barricades'),
       ' — share the linear feet, material preference, and dates, and we will confirm material, MASH level, and trucking within the hour.',
     ),
   ),
@@ -233,11 +233,11 @@ export const articleJerseyBarricadesGuide: Article = {
   ],
 
   relatedProducts: [
-    { label: 'Water-Filled Barrier (6 ft)', path: '/product/water-filled-barrier-6ft' },
-    { label: 'Urbanite Water-Filled Pedestrian Barricade', path: '/product/urbanite-water-filled-pedestrian-barricade' },
-    { label: 'Type III Barricade', path: '/product/type-iii-barricade' },
-    { label: 'Pedestrian Barricade (Orange EG)', path: '/product/economy-pedestrian-barricade-orange-eg' },
-    { label: 'Barricades & Barriers', path: '/category/barricades-barriers' },
+    { label: 'Water-Filled Barrier (6 ft)', path: '/water-filled-barriers' },
+    { label: 'Urbanite Water-Filled Pedestrian Barricade', path: '/water-filled-barriers' },
+    { label: 'Type III Barricade', path: '/barricades' },
+    { label: 'Pedestrian Barricade (Orange EG)', path: '/crowd-control-barricades' },
+    { label: 'Barricades & Barriers', path: '/barricades' },
   ],
 
   relatedArticles: [

@@ -162,9 +162,9 @@ export const articleBlueTrafficConesGuide: Article = {
       'p',
       null,
       'For Central NJ utility contractors, plumbers running water-line cut-overs, fire-services teams, and property managers, ',
-      h('a', { href: '/category/cones-drums' }, 'browse our cones catalog'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'browse our cones catalog'),
       ' — we stock 18-inch and 28-inch blue cones with 7-lb bases and reflective collars, plus the matching APWA color set (red, yellow, green, white) for full utility-coded work. Same-day delivery to Middlesex, Monmouth, Mercer, Somerset, Union, and Hunterdon. For a custom-printed run with your company name or "WATER LINE" / "FIRE HYDRANT" stencil, ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' with the cone count and stencil text.',
     ),
     h(
@@ -206,10 +206,10 @@ export const articleBlueTrafficConesGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Cones, Drums & Channelizers', path: '/category/cones-drums' },
-    { label: 'Accessories & Hardware', path: '/category/accessories-hardware' },
-    { label: 'Pedestrian & Crowd Control', path: '/category/pedestrian-control' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
+    { label: 'Cones, Drums & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Accessories & Hardware', path: '/traffic-safety-supplies' },
+    { label: 'Pedestrian & Crowd Control', path: '/crowd-control-barricades' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
   ],
   relatedArticles: [
     'orange-cones-explained',

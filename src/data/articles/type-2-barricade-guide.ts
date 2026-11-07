@@ -176,9 +176,9 @@ export const articleType2BarricadeGuide: Article = {
       'p',
       null,
       'For specs and pricing on each pattern, see our ',
-      h('a', { href: '/category/barricades' }, 'Barricades category page'),
+      h('a', { href: '/barricades' }, 'Barricades category page'),
       '. Not sure which pattern? Our ',
-      h('a', { href: '/assistant' }, 'Assistant'),
+      h('a', { href: '/contact' }, 'Assistant'),
       ' will ask three quick questions and recommend a count and pattern.',
     ),
 
@@ -214,7 +214,7 @@ export const articleType2BarricadeGuide: Article = {
       'p',
       null,
       'For a full lane closure plan that integrates barricades with cones, advance warning signs, and tapers, the ',
-      h('a', { href: '/planner' }, 'SiteMapPlanner'),
+      h('a', { href: '/tools/cone-taper-calculator' }, 'SiteMapPlanner'),
       ' will generate an MUTCD-compliant layout from a few inputs.',
     ),
 
@@ -248,14 +248,14 @@ export const articleType2BarricadeGuide: Article = {
     },
     {
       q: 'Do you deliver Type 2 barricades in Central NJ?',
-      a: "Yes — same-day Central NJ delivery on Type 2 barricades and full TTC packages. Get a quote on the /quote page or chat with our Assistant for a fast count.",
+      a: "Yes — same-day Central NJ delivery on Type 2 barricades and full TTC packages. Request a quote on our contact page with your job details.",
     },
   ],
   relatedProducts: [
-    { label: 'Browse barricades', path: '/category/barricades' },
-    { label: 'Browse signs & sign stands', path: '/category/signs' },
-    { label: 'Get a TTC delivery quote', path: '/quote' },
-    { label: 'Chat with the Assistant', path: '/assistant' },
+    { label: 'Browse barricades', path: '/barricades' },
+    { label: 'Browse signs & sign stands', path: '/work-zone-signs' },
+    { label: 'Get a TTC delivery quote', path: '/contact' },
+    { label: 'Chat with the Assistant', path: '/contact' },
   ],
   relatedArticles: [
     'type-1-barricade-guide',

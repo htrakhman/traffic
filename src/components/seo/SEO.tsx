@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { SITE_NAME, SITE_ORIGIN } from '../../config/site'
+import { escapeAttr, ssrHead } from './ssrHead'
 
 /**
  * Lightweight <head> manager. No react-helmet dependency — mutates document.head
@@ -56,13 +57,13 @@ function upsertLink(rel: string, href: string) {
 
 /**
  * Brand OG fallback — shown when a route does not supply an ogImage.
- * NOTE: SVG is not rendered by Facebook/Twitter/LinkedIn crawlers.
+ * PNG rendered from public/images/og/default.svg (social crawlers skip SVG).
  * A rasterized 1200×630 PNG at this path is needed for full social-sharing
  * coverage. Until one is produced, the SVG serves Google and schema validators.
  * To produce the PNG: open public/images/og/default.svg in a browser, screenshot
  * at 1200×630, and save as public/images/og/default.png — then update this constant.
  */
-const DEFAULT_OG_IMAGE = '/images/og/default.svg'
+const DEFAULT_OG_IMAGE = '/images/og/default.png'
 
 export default function SEO(props: SEOProps) {
   const {
@@ -76,6 +77,33 @@ export default function SEO(props: SEOProps) {
     keywords,
     noindex,
   } = props
+
+  const head = ssrHead.active
+  if (head) {
+    const canonical = canonicalPath?.startsWith('http') ? canonicalPath : SITE_ORIGIN + (canonicalPath || '/')
+    const image = absoluteOgImage(ogImage ?? DEFAULT_OG_IMAGE)
+    const meta = (attr: 'name' | 'property', key: string, content: string) =>
+      head.tags.set(`${attr}:${key}`, `<meta ${attr}="${key}" content="${escapeAttr(content)}" />`)
+    head.title = title
+    meta('name', 'description', description)
+    head.tags.set('link:canonical', `<link rel="canonical" href="${escapeAttr(canonical)}" />`)
+    meta('property', 'og:title', title)
+    meta('property', 'og:description', description)
+    meta('property', 'og:type', ogType)
+    meta('property', 'og:url', canonical)
+    meta('property', 'og:site_name', SITE_NAME)
+    meta('name', 'twitter:card', 'summary_large_image')
+    meta('name', 'twitter:title', title)
+    meta('name', 'twitter:description', description)
+    if (image) {
+      meta('property', 'og:image', image)
+      meta('name', 'twitter:image', image)
+    }
+    if (publishedTime) meta('property', 'article:published_time', publishedTime)
+    if (modifiedTime) meta('property', 'article:modified_time', modifiedTime)
+    if (keywords?.length) meta('name', 'keywords', keywords.join(', '))
+    meta('name', 'robots', noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large')
+  }
 
   useEffect(() => {
     const prevTitle = document.title
@@ -105,7 +133,7 @@ export default function SEO(props: SEOProps) {
     if (publishedTime) tags.push(upsertMeta('property', 'article:published_time', publishedTime))
     if (modifiedTime) tags.push(upsertMeta('property', 'article:modified_time', modifiedTime))
     if (keywords && keywords.length) tags.push(upsertMeta('name', 'keywords', keywords.join(', ')))
-    tags.push(upsertMeta('name', 'robots', noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large'))
+    tags.push(upsertMeta('name', 'robots', noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large'))
 
     return () => {
       document.title = prevTitle

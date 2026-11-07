@@ -1,6 +1,7 @@
 export const TOP_SELLERS = [
   {
     id: 'metal-crowd-control-barricades',
+    href: '/crowd-control-barricades',
     eyebrow: 'Our #1 seller',
     name: 'Metal crowd control barricades',
     aka: 'Also called bike rack barricades, steel barricades or pedestrian barricades',
@@ -10,6 +11,7 @@ export const TOP_SELLERS = [
   },
   {
     id: 'water-filled-barriers',
+    href: '/water-filled-barriers',
     eyebrow: 'Our #2 seller',
     name: 'Water filled barriers',
     aka: 'Also called water wall barriers, water filled jersey barriers or plastic barriers',
@@ -18,6 +20,17 @@ export const TOP_SELLERS = [
     uses: ['Work zones and lane closures', 'Vehicle access control', 'Event perimeters', 'Parking lots and loading areas'],
   },
 ] as const
+
+const MORE = [
+  { label: 'Traffic cones', href: '/traffic-cones-for-sale' },
+  { label: 'Delineator posts', href: '/delineator-posts' },
+  { label: 'Temporary fence panels', href: '/temporary-fence-panels' },
+  { label: 'Type II and Type III barricades', href: '/barricades' },
+  { label: 'Channelizer drums', href: '/channelizing-drums' },
+  { label: 'Work zone signs', href: '/work-zone-signs' },
+  { label: 'Arrow boards', href: '/arrow-boards' },
+  { label: 'Barricade calculator', href: '/tools/barricade-calculator' },
+]
 
 export default function TopSellers() {
   return (
@@ -42,16 +55,32 @@ export default function TopSellers() {
                   </li>
                 ))}
               </ul>
-              <a href="#quote" className="mt-6 inline-block font-semibold text-zone hover:underline">
-                Get a price on {p.name.toLowerCase()} →
-              </a>
+              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                <a href={p.href} className="font-semibold text-ink hover:text-zone hover:underline">
+                  See all sizes and specs →
+                </a>
+                <a href="#quote" className="font-semibold text-zone hover:underline">
+                  Get a price on {p.name.toLowerCase()} →
+                </a>
+              </div>
             </article>
           ))}
         </div>
-        <p className="mt-8 text-muted">
-          Also available: traffic cones, channelizer drums, Type II and Type III barricades, work zone
-          signs and sign stands, and arrow boards.
-        </p>
+        <nav aria-label="More products" className="mt-10">
+          <p className="tcs-mono text-xs uppercase tracking-[0.14em] text-muted">Also available</p>
+          <ul className="mt-3 flex flex-wrap gap-3">
+            {MORE.map((m) => (
+              <li key={m.href}>
+                <a
+                  href={m.href}
+                  className="inline-block rounded-md border border-line bg-surface px-4 py-2 text-sm text-ink hover:border-zone"
+                >
+                  {m.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </section>
   )

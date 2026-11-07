@@ -188,7 +188,7 @@ export const articleParkingConesBuyingGuide: Article = {
       'For closures that touch a public road — like a parking lot whose driveway dumps onto a 35 mph county road — the cone math changes. Use our ',
       h('a', { href: '/blog/how-many-cones-for-lane-closure-nj' }, 'cone-count guide for lane closures'),
       ' for the taper math. Or open the ',
-      h('a', { href: '/planner' }, 'SiteMapPlanner'),
+      h('a', { href: '/tools/cone-taper-calculator' }, 'SiteMapPlanner'),
       ' and lay out the lot — it will spit back a cone count sized to the speed limit.',
     ),
 
@@ -287,7 +287,7 @@ export const articleParkingConesBuyingGuide: Article = {
       'p',
       null,
       'These are TrafficKit retail ranges as of April 2026. Bid pricing on quantities above 100 cones is custom — ',
-      h('a', { href: '/quote' }, 'request a quote'),
+      h('a', { href: '/contact' }, 'request a quote'),
       ' with the lot dimensions and we will spec the right size mix.',
     ),
 
@@ -296,9 +296,9 @@ export const articleParkingConesBuyingGuide: Article = {
       'p',
       null,
       'TrafficKit ships 18-inch and 28-inch parking cones with same-day delivery to Middlesex, Monmouth, Mercer, Somerset, Union, Hunterdon, and northern Ocean counties. ',
-      h('a', { href: '/category/cones-drums' }, 'Browse cones and channelizers'),
+      h('a', { href: '/traffic-cones-for-sale' }, 'Browse cones and channelizers'),
       ' for the catalog, or talk to the ',
-      h('a', { href: '/assistant' }, 'TrafficKit Assistant'),
+      h('a', { href: '/contact' }, 'TrafficKit Assistant'),
       ' if you want it to spec a kit from a description of the lot. Property managers ordering recurring sealcoat / striping cycles get NET-30 terms after the first paid invoice.',
     ),
 
@@ -339,10 +339,10 @@ export const articleParkingConesBuyingGuide: Article = {
     },
   ],
   relatedProducts: [
-    { label: 'Cones & Channelizers', path: '/category/cones-drums' },
-    { label: 'Parking Blocks', path: '/category/parking-blocks' },
-    { label: 'Signs & Sign Stands', path: '/category/signs-sign-stands' },
-    { label: 'Speed Bumps & Humps', path: '/category/speed-bumps-humps' },
+    { label: 'Cones & Channelizers', path: '/traffic-cones-for-sale' },
+    { label: 'Parking Blocks', path: '/traffic-safety-supplies' },
+    { label: 'Signs & Sign Stands', path: '/work-zone-signs' },
+    { label: 'Speed Bumps & Humps', path: '/traffic-safety-supplies' },
   ],
   relatedArticles: [
     'road-cones-vs-traffic-cones',
