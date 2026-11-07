@@ -38,7 +38,7 @@ export default function TopSellers() {
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
         <p className="tcs-mono text-xs uppercase tracking-[0.14em] text-zone">What we sell most</p>
         <h2 id="top-sellers-heading" className="mt-3 font-tcsDisplay text-3xl font-bold leading-tight text-ink sm:text-4xl">
-          Crowd control barricades and water filled barriers, wholesale or by the piece
+          Our top sellers: steel barricades and water-filled barriers
         </h2>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {TOP_SELLERS.map((p) => (
