@@ -128,6 +128,16 @@ export const schema = {
     image: p.image ? (p.image.startsWith('http') ? p.image : SITE_ORIGIN + p.image) : undefined,
     brand: { '@type': 'Organization', name: SITE_NAME },
   }),
+  itemList: (items: { name: string; path: string }[]) => ({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: items.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: it.name,
+      url: SITE_ORIGIN + it.path,
+    })),
+  }),
   faqPage: (qas: { q: string; a: string }[]) => ({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',

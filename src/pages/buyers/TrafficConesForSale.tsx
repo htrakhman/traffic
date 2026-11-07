@@ -2,6 +2,8 @@ import BuyerLayout from '../../components/buyer/BuyerLayout'
 import QuoteForm from '../../components/buyer/QuoteForm'
 import SpecsTable from '../../components/buyer/SpecsTable'
 import BuyerFAQ from '../../components/buyer/BuyerFAQ'
+import ProductGrid from '../../components/catalog/ProductGrid'
+import { productsIn } from '../../data/catalog'
 import SEO from '../../components/seo/SEO'
 import JsonLd, { schema } from '../../components/seo/JsonLd'
 
@@ -58,6 +60,15 @@ export default function TrafficConesForSale() {
             </p>
           </div>
           <QuoteForm productCategory="Traffic Cones" anchorId="quote" />
+        </div>
+      </section>
+
+      <section className="bg-paper">
+        <div className="mx-auto max-w-6xl px-5 pt-16 sm:px-8 sm:pt-20">
+          <h2 className="font-tcsDisplay text-3xl font-bold text-ink sm:text-4xl">Shop cones by size</h2>
+          <div className="mt-8">
+            <ProductGrid products={productsIn('traffic-cones')} />
+          </div>
         </div>
       </section>
 
