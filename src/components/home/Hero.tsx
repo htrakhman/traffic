@@ -1,5 +1,3 @@
-import { SITE_CONTACT_EMAIL } from '../../config/site'
-
 export const HERO_IMAGES = {
   crowdBarricade: '/catalog/metal-crowd-control-barricade.webp',
   waterBarrier: '/catalog/water-filled-barrier.webp',
@@ -11,28 +9,29 @@ export default function Hero() {
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-12 pt-12 sm:px-8 sm:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6 lg:pb-16 lg:pt-20">
         <div>
           <p className="tcs-mono text-xs uppercase tracking-[0.14em] text-zone">
-            Wholesale &amp; retail · Shipped nationwide
+            Wholesale &amp; retail · Delivered nationwide
           </p>
           <h1 className="mt-4 font-tcsDisplay text-4xl font-bold leading-[1.04] text-ink sm:text-5xl lg:text-6xl">
-            Metal crowd control barricades and water filled barriers, best priced online.
+            Crowd control barricades and water-filled barriers for sale
           </h1>
           <p className="mt-6 max-w-xl text-lg text-muted">
-            Galvanized steel bike rack barricades for events, parades and job sites. Plastic water
-            filled barriers for work zones and perimeters. Plus cones, drums and signs. One piece or
-            a full truckload, send us your list and get our price.
+            Traffic Control Supply is a New Jersey supplier of galvanized steel crowd control
+            barricades (bike rack barricades), plastic water-filled barriers, traffic cones, delineator
+            posts and temporary fence. We compare manufacturers on every order and send one delivered
+            price to your site, for a single piece or a full truckload.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a
               href="#quote"
               className="rounded-md bg-zone px-7 py-3.5 text-base font-semibold text-white transition hover:bg-[#c85009]"
             >
-              Get my price
+              Get a delivered quote
             </a>
             <a
-              href={`mailto:${SITE_CONTACT_EMAIL}`}
-              className="break-all rounded-md border border-line px-7 py-3.5 text-base font-semibold text-ink transition hover:border-ink"
+              href="#categories"
+              className="rounded-md border border-line px-7 py-3.5 text-base font-semibold text-ink transition hover:border-ink"
             >
-              {SITE_CONTACT_EMAIL}
+              Shop all products
             </a>
           </div>
         </div>

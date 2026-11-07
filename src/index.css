@@ -76,6 +76,8 @@
 
   /* Blog / article prose. Owned by seo-specialist subagent. */
   .article-body {
+    min-width: 0;
+    max-width: 100%;
     @apply text-slate-300 leading-relaxed;
   }
   .article-body p {
