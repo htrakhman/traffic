@@ -1,0 +1,39 @@
+# After each successful Vercel production deploy, submit new or changed pages
+# to IndexNow (Bing, Yandex and others). See scripts/indexnow.mjs.
+name: IndexNow
+
+on:
+  deployment_status:
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Restore last submitted manifest
+        uses: actions/cache/restore@v4
+        with:
+          path: .indexnow/manifest.json
+          key: indexnow-${{ github.run_id }}
+          restore-keys: indexnow-
+
+      - name: Submit changed pages
+        run: node scripts/indexnow.mjs --previous .indexnow/manifest.json --save .indexnow/manifest.json
+
+      - name: Save manifest
+        uses: actions/cache/save@v4
+        with:
+          path: .indexnow/manifest.json
+          key: indexnow-${{ github.run_id }}
