@@ -19,7 +19,7 @@ export default function UseCasePage() {
 
   return (
     <BuyerLayout>
-      <SEO title={u.title} description={u.description} canonicalPath={path} />
+      <SEO title={u.title} description={u.description} canonicalPath={path} ogImage={u.image} />
       <JsonLd
         data={schema.breadcrumb([
           { name: 'Home', path: '/' },
@@ -39,6 +39,13 @@ export default function UseCasePage() {
                 <p key={p}>{p}</p>
               ))}
             </div>
+            {u.image && (
+              <img
+                src={u.image}
+                alt={u.imageAlt ?? u.h1}
+                className="mt-8 aspect-[3/2] w-full max-w-xl rounded-lg object-cover"
+              />
+            )}
           </div>
           <QuoteForm productCategory={u.h1} anchorId="quote" />
         </div>
