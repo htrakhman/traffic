@@ -22,7 +22,7 @@ export default function Article() {
   const canonical = `/blog/${article.slug}`
 
   return (
-    <div className="pt-28 pb-24 bg-slate-950 min-h-screen">
+    <div className="pt-10 pb-24 sm:pt-14">
       <SEO
         title={`${article.title} | ${SITE_NAME}`}
         description={article.metaDescription || article.excerpt}
@@ -59,17 +59,17 @@ export default function Article() {
       <article className="max-w-3xl mx-auto px-4 sm:px-6">
         <Link
           to="/blog"
-          className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white mb-6 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-zone mb-6 transition-colors"
         >
           <ArrowLeft size={14} /> All guides
         </Link>
 
         <header className="mb-10">
-          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 mb-4">
-            <a href={SITE_AUTHOR.path} className="text-slate-300 hover:text-white">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted mb-4">
+            <a href={SITE_AUTHOR.path} className="text-ink hover:text-zone">
               By {SITE_AUTHOR.name}
             </a>
-            <span className="w-1 h-1 rounded-full bg-slate-700" />
+            <span className="w-1 h-1 rounded-full bg-line" />
             <time dateTime={article.datePublished}>
               {new Date(article.datePublished).toLocaleDateString('en-US', {
                 month: 'long',
@@ -77,19 +77,19 @@ export default function Article() {
                 year: 'numeric',
               })}
             </time>
-            <span className="w-1 h-1 rounded-full bg-slate-700" />
+            <span className="w-1 h-1 rounded-full bg-line" />
             <span className="inline-flex items-center gap-1">
               <Clock size={12} /> {article.readMinutes} min read
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-bold text-ink tracking-tight leading-tight">
             {article.title}
           </h1>
-          <p className="mt-4 text-lg text-slate-400 leading-relaxed">{article.excerpt}</p>
+          <p className="mt-4 text-lg text-muted leading-relaxed">{article.excerpt}</p>
         </header>
 
         {article.heroImage && (
-          <div className="mb-10 rounded-xl overflow-hidden border border-slate-800 aspect-[16/9] bg-slate-900">
+          <div className="mb-10 rounded-xl overflow-hidden border border-line aspect-[16/9] bg-surface">
             <img src={article.heroImage} alt={article.title} className="w-full h-full object-cover" />
           </div>
         )}
@@ -99,30 +99,30 @@ export default function Article() {
         {article.faqs && article.faqs.length > 0 && <FAQBlock faqs={article.faqs} />}
 
         {article.relatedProducts && article.relatedProducts.length > 0 && (
-          <section className="mt-14 p-6 rounded-xl border border-slate-800 bg-slate-900/50">
-            <h2 className="text-lg font-bold text-white mb-4">Related equipment</h2>
+          <section className="mt-14 p-6 rounded-xl border border-line bg-surface">
+            <h2 className="text-lg font-bold text-ink mb-4">Related equipment</h2>
             <div className="grid gap-2 sm:grid-cols-2">
               {article.relatedProducts.map((r) => (
                 <Link
                   key={r.path}
                   to={r.path}
-                  className="group flex items-center justify-between px-4 py-3 rounded-lg bg-slate-950/60 hover:bg-slate-950 border border-slate-800 hover:border-brand-500/50 transition-colors"
+                  className="group flex items-center justify-between px-4 py-3 rounded-lg bg-surface hover:bg-paper border border-line hover:border-zone transition-colors"
                 >
-                  <span className="text-sm text-slate-200 group-hover:text-white">{r.label}</span>
+                  <span className="text-sm text-ink group-hover:text-zone">{r.label}</span>
                   <ArrowRight
                     size={14}
-                    className="text-slate-500 group-hover:text-brand-400 group-hover:translate-x-0.5 transition-all"
+                    className="text-muted group-hover:text-zone group-hover:translate-x-0.5 transition-all"
                   />
                 </Link>
               ))}
             </div>
-            <div className="mt-5 pt-5 border-t border-slate-800 flex flex-wrap gap-3">
+            <div className="mt-5 pt-5 border-t border-line flex flex-wrap gap-3">
               <Link to="/contact" className="btn-primary text-sm py-2 px-4">
                 Request a quote
               </Link>
               <Link
                 to="/tools/cone-taper-calculator"
-                className="text-sm px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+                className="text-sm px-4 py-2 rounded-lg border border-line text-ink hover:text-zone hover:border-line transition-colors"
               >
                 Plan your work zone
               </Link>
@@ -130,26 +130,26 @@ export default function Article() {
           </section>
         )}
 
-        <aside className="mt-12 rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-          <p className="text-xs uppercase tracking-wider text-slate-500">About the author</p>
-          <p className="mt-2 font-bold text-white">
-            {SITE_AUTHOR.name}, <span className="font-normal text-slate-400">{SITE_AUTHOR.jobTitle}</span>
+        <aside className="mt-12 rounded-xl border border-line bg-surface p-6">
+          <p className="text-xs uppercase tracking-wider text-muted">About the author</p>
+          <p className="mt-2 font-bold text-ink">
+            {SITE_AUTHOR.name}, <span className="font-normal text-muted">{SITE_AUTHOR.jobTitle}</span>
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-slate-300">{SITE_AUTHOR.bio}</p>
+          <p className="mt-2 text-sm leading-relaxed text-ink">{SITE_AUTHOR.bio}</p>
         </aside>
 
         {shop.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-lg font-bold text-white mb-4">Products for this job</h2>
+            <h2 className="text-lg font-bold text-ink mb-4">Products for this job</h2>
             <div className="grid gap-2 sm:grid-cols-2">
               {shop.map((p) => (
                 <Link
                   key={p.slug}
                   to={productPath(p)}
-                  className="group block px-4 py-3 rounded-lg bg-slate-950/60 hover:bg-slate-950 border border-slate-800 hover:border-brand-500/50 transition-colors"
+                  className="group block px-4 py-3 rounded-lg bg-surface hover:bg-paper border border-line hover:border-zone transition-colors"
                 >
-                  <span className="block text-sm font-semibold text-slate-200 group-hover:text-white">{p.name}</span>
-                  <span className="mt-1 block text-xs text-slate-400">{p.summary}</span>
+                  <span className="block text-sm font-semibold text-ink group-hover:text-zone">{p.name}</span>
+                  <span className="mt-1 block text-xs text-muted">{p.summary}</span>
                 </Link>
               ))}
             </div>
@@ -158,21 +158,21 @@ export default function Article() {
 
         {related.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-lg font-bold text-white mb-4">Keep reading</h2>
+            <h2 className="text-lg font-bold text-ink mb-4">Keep reading</h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {related.map((p) => (
                 <Link
                   key={p.slug}
                   to={`/blog/${p.slug}`}
-                  className="group p-5 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-brand-500/50 transition-colors"
+                  className="group p-5 rounded-xl border border-line bg-surface hover:border-zone transition-colors"
                 >
-                  <div className="text-xs text-slate-500 mb-1">
+                  <div className="text-xs text-muted mb-1">
                     {new Date(p.datePublished).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </div>
-                  <div className="font-semibold text-white group-hover:text-brand-400 transition-colors">
+                  <div className="font-semibold text-ink group-hover:text-zone transition-colors">
                     {p.title}
                   </div>
-                  <div className="mt-1 text-xs text-slate-400 line-clamp-2">{p.excerpt}</div>
+                  <div className="mt-1 text-xs text-muted line-clamp-2">{p.excerpt}</div>
                 </Link>
               ))}
             </div>
@@ -185,8 +185,8 @@ export default function Article() {
 
 function FAQBlock({ faqs }: { faqs: { q: string; a: string }[] }) {
   return (
-    <section className="mt-12 pt-10 border-t border-slate-800">
-      <h2 className="text-2xl font-bold text-white mb-6">Frequently asked questions</h2>
+    <section className="mt-12 pt-10 border-t border-line">
+      <h2 className="text-2xl font-bold text-ink mb-6">Frequently asked questions</h2>
       <div className="space-y-3">
         {faqs.map((f, i) => (
           <FAQItem key={i} q={f.q} a={f.a} />
@@ -199,19 +199,19 @@ function FAQBlock({ faqs }: { faqs: { q: string; a: string }[] }) {
 function FAQItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 overflow-hidden">
+    <div className="rounded-xl border border-line bg-surface overflow-hidden">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-slate-900 transition-colors"
+        className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-paper transition-colors"
         aria-expanded={open}
       >
-        <span className="font-semibold text-white pr-4">{q}</span>
+        <span className="font-semibold text-ink pr-4">{q}</span>
         <ChevronDown
           size={18}
-          className={`flex-shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`flex-shrink-0 text-muted transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
-      {open && <div className="px-5 pb-5 text-slate-300 leading-relaxed">{a}</div>}
+      {open && <div className="px-5 pb-5 text-ink leading-relaxed">{a}</div>}
     </div>
   )
 }

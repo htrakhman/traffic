@@ -1,13 +1,15 @@
 import type { ReactNode } from 'react'
-import BlogHeader from './BlogHeader'
-import BlogFooter from './BlogFooter'
+import '../../styles/site.css'
+import SiteHeader from '../SiteHeader'
+import BuyerFooter from '../buyer/BuyerFooter'
 
+/** Blog and article pages share the site's light theme, header and footer. */
 export default function BlogLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-950">
-      <BlogHeader />
-      <div className="flex-1">{children}</div>
-      <BlogFooter />
+    <div className="tcs-site flex min-h-screen flex-col font-tcsBody">
+      <SiteHeader />
+      <main className="flex-1">{children}</main>
+      <BuyerFooter />
     </div>
   )
 }

@@ -16,8 +16,9 @@
   }
 
   body {
-    @apply bg-slate-950 text-slate-100;
-    font-family: 'Inter', system-ui, sans-serif;
+    background: #f3f7f9;
+    color: #17222e;
+    font-family: 'Public Sans', system-ui, sans-serif;
   }
 }
 
@@ -78,55 +79,55 @@
   .article-body {
     min-width: 0;
     max-width: 100%;
-    @apply text-slate-300 leading-relaxed;
+    @apply text-ink leading-relaxed;
   }
   .article-body p {
     @apply my-5 text-base sm:text-lg leading-[1.75];
   }
   .article-body p.lead {
-    @apply text-lg sm:text-xl text-slate-200;
+    @apply text-lg sm:text-xl text-muted;
   }
   .article-body h2 {
-    @apply mt-12 mb-4 text-2xl sm:text-3xl font-bold text-white tracking-tight scroll-mt-24;
+    @apply mt-12 mb-4 text-2xl sm:text-3xl font-bold text-ink tracking-tight scroll-mt-24;
   }
   .article-body h3 {
-    @apply mt-10 mb-3 text-xl font-bold text-white;
+    @apply mt-10 mb-3 text-xl font-bold text-ink;
   }
   .article-body ul {
-    @apply my-5 space-y-2 list-disc pl-6 marker:text-brand-500;
+    @apply my-5 space-y-2 list-disc pl-6 marker:text-zone;
   }
   .article-body ol {
-    @apply my-5 space-y-2 list-decimal pl-6 marker:text-brand-500;
+    @apply my-5 space-y-2 list-decimal pl-6 marker:text-zone;
   }
   .article-body li {
     @apply text-base sm:text-lg leading-relaxed;
   }
   .article-body strong {
-    @apply font-semibold text-white;
+    @apply font-semibold text-ink;
   }
   .article-body a {
-    @apply text-brand-400 hover:text-brand-300 underline underline-offset-2 decoration-brand-500/40 hover:decoration-brand-400;
+    @apply text-zone hover:text-ink underline underline-offset-2;
   }
   .article-body blockquote {
-    @apply my-6 pl-5 border-l-4 border-brand-500/60 italic text-slate-200;
+    @apply my-6 pl-5 border-l-4 border-zone italic text-muted;
   }
   .article-body table {
     @apply my-6 w-full text-sm border-collapse;
   }
   .article-body thead {
-    @apply bg-slate-900/70;
+    @apply bg-paper;
   }
   .article-body th {
-    @apply text-left px-4 py-2.5 font-semibold text-white border-b border-slate-700;
+    @apply text-left px-4 py-2.5 font-semibold text-ink border-b border-line;
   }
   .article-body td {
-    @apply px-4 py-2.5 border-b border-slate-800 text-slate-300;
+    @apply px-4 py-2.5 border-b border-line text-ink;
   }
   .article-body tbody tr:hover td {
-    @apply bg-slate-900/40;
+    @apply bg-paper;
   }
   .article-body code {
-    @apply px-1.5 py-0.5 rounded bg-slate-800 text-brand-300 text-[0.9em];
+    @apply px-1.5 py-0.5 rounded bg-paper text-zone text-[0.9em];
   }
 }
 
@@ -136,14 +137,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f3f7f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #c5d0d8;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #9fb0bd;
 }
 
 /* AI chat message animations */

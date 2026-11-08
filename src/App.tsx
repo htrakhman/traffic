@@ -105,7 +105,7 @@ export function AppRoutes() {
         <Route
           path="/blog"
           element={
-            <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+            <Suspense fallback={<div className="min-h-screen bg-[#f3f7f9]" />}>
               <BlogLayout>
                 <Blog />
               </BlogLayout>
@@ -115,7 +115,7 @@ export function AppRoutes() {
         <Route
           path="/blog/:slug"
           element={
-            <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+            <Suspense fallback={<div className="min-h-screen bg-[#f3f7f9]" />}>
               <BlogLayout>
                 <Article />
               </BlogLayout>

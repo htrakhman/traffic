@@ -1,7 +1,6 @@
-/* Shared light theme for the rebuilt site: the supplier homepage (Job A) and
-   the buyer product pages (Job B). Scoped under .tcs-site so it doesn't touch
-   /blog and /blog/:slug, which keep their existing dark Inter-based theme
-   (src/index.css) rather than a risky retheme of 125 already-written articles.
+/* Shared light theme for every page, including /blog and /blog/:slug
+   (BlogLayout wraps them in .tcs-site). Article prose styles live in
+   src/index.css (.article-body).
 
    Token block — single source of color and type. */
 
@@ -31,6 +30,9 @@
   font-stretch: 108%;
   font-weight: 700;
   letter-spacing: -0.01em;
+  /* Long words (e.g. "Crashworthiness") wrap instead of pushing the page wider on small phones. */
+  overflow-wrap: break-word;
+  hyphens: auto;
   /* No color here on purpose — each heading sets its own via a Tailwind
      text-* class (e.g. the dark signup section needs text-white). A color
      here would win on specificity and silently override it. */

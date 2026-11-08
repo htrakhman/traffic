@@ -13,7 +13,7 @@ export default function Blog() {
   const posts = getAllArticlesMeta()
 
   return (
-    <div className="pt-28 pb-24 bg-slate-950 min-h-screen">
+    <div className="pt-10 pb-24 sm:pt-14">
       <SEO
         title={`Work Zone & Traffic Control Guides | ${SITE_NAME}`}
         description="Practical, contractor-voiced guides on traffic control equipment, MUTCD work zone setup, arrow boards, barricades, and job-site safety. Written for crews, not SEO bots."
@@ -44,22 +44,22 @@ export default function Blog() {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="mb-12">
-          <div className="inline-flex items-center gap-2 text-brand-400 text-sm font-semibold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 text-zone text-sm font-semibold uppercase tracking-wider mb-3">
             <BookOpen size={16} />
             Field Notes
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold text-ink tracking-tight">
             Work Zone & Traffic Control Guides
           </h1>
-          <p className="mt-4 text-lg text-slate-400 max-w-2xl">
+          <p className="mt-4 text-lg text-muted max-w-2xl">
             Practical writeups on buying, specifying, and running traffic control equipment. Written by people who
             have actually dropped 120 cones at 5&nbsp;AM.
           </p>
         </div>
 
         {posts.length === 0 ? (
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-10 text-center">
-            <p className="text-slate-400">No articles yet. Check back soon.</p>
+          <div className="rounded-xl border border-line bg-surface p-10 text-center">
+            <p className="text-muted">No articles yet. Check back soon.</p>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
@@ -67,10 +67,10 @@ export default function Blog() {
               <Link
                 key={p.slug}
                 to={`/blog/${p.slug}`}
-                className="group flex flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 hover:border-brand-500/50 hover:bg-slate-900 transition-all"
+                className="group flex flex-col overflow-hidden rounded-xl border border-line bg-surface hover:border-zone hover:bg-paper transition-all"
               >
                 {p.heroImage && (
-                  <div className="aspect-[16/9] overflow-hidden bg-slate-800">
+                  <div className="aspect-[16/9] overflow-hidden bg-line">
                     <img
                       src={p.heroImage}
                       alt={p.title}
@@ -80,7 +80,7 @@ export default function Blog() {
                   </div>
                 )}
                 <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-center gap-3 text-xs text-slate-500 mb-2">
+                  <div className="flex items-center gap-3 text-xs text-muted mb-2">
                     <time dateTime={p.datePublished}>
                       {new Date(p.datePublished).toLocaleDateString('en-US', {
                         month: 'long',
@@ -88,17 +88,17 @@ export default function Blog() {
                         year: 'numeric',
                       })}
                     </time>
-                    <span className="w-1 h-1 rounded-full bg-slate-700" />
+                    <span className="w-1 h-1 rounded-full bg-line" />
                     <span className="inline-flex items-center gap-1">
                       <Clock size={12} />
                       {p.readMinutes} min read
                     </span>
                   </div>
-                  <h2 className="text-xl font-bold text-white group-hover:text-brand-400 transition-colors leading-snug">
+                  <h2 className="text-xl font-bold text-ink group-hover:text-zone transition-colors leading-snug">
                     {p.title}
                   </h2>
-                  <p className="mt-3 text-sm text-slate-400 leading-relaxed flex-1">{p.excerpt}</p>
-                  <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-400">
+                  <p className="mt-3 text-sm text-muted leading-relaxed flex-1">{p.excerpt}</p>
+                  <div className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-zone">
                     Read the guide <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
