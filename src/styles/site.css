@@ -1,7 +1,6 @@
-/* Shared light theme for the rebuilt site: the supplier homepage (Job A) and
-   the buyer product pages (Job B). Scoped under .tcs-site so it doesn't touch
-   /blog and /blog/:slug, which keep their existing dark Inter-based theme
-   (src/index.css) rather than a risky retheme of 125 already-written articles.
+/* Shared light theme for every page, including /blog and /blog/:slug
+   (BlogLayout wraps them in .tcs-site). Article prose styles live in
+   src/index.css (.article-body).
 
    Token block — single source of color and type. */
 
