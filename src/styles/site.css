@@ -30,6 +30,9 @@
   font-stretch: 108%;
   font-weight: 700;
   letter-spacing: -0.01em;
+  /* Long words (e.g. "Crashworthiness") wrap instead of pushing the page wider on small phones. */
+  overflow-wrap: break-word;
+  hyphens: auto;
   /* No color here on purpose — each heading sets its own via a Tailwind
      text-* class (e.g. the dark signup section needs text-white). A color
      here would win on specificity and silently override it. */

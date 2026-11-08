@@ -82,7 +82,7 @@ export default function Article() {
               <Clock size={12} /> {article.readMinutes} min read
             </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-ink tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-bold text-ink tracking-tight leading-tight">
             {article.title}
           </h1>
           <p className="mt-4 text-lg text-muted leading-relaxed">{article.excerpt}</p>
