@@ -37,6 +37,8 @@ export interface Product {
   bestFor: string[]
   faqs: { q: string; a: string }[]
   image?: string
+  /** Describes what the photo shows (it may not be the exact model). */
+  imageAlt?: string
 }
 
 export const CATEGORIES: Category[] = [
@@ -338,6 +340,8 @@ export const PRODUCTS: Product[] = [
         a: 'Most units have locking casters. For longer closures, add a sign or warning light to the top rail.',
       },
     ],
+    image: '/photos/expandable-steel-safety-barricade-8-ft.webp',
+    imageAlt: 'Expandable red and white scissor barrier closing off a work area',
   },
 
   // ── Water filled barriers ────────────────────────────────────────────────
@@ -392,7 +396,8 @@ export const PRODUCTS: Product[] = [
         a: 'Expect roughly 40 to 60 gallons depending on the model, or about 330 to 500 lb filled.',
       },
     ],
-    image: '/catalog/water-filled-barrier.webp',
+    image: '/photos/stackable-water-filled-barrier-32x48.webp',
+    imageAlt: 'Short yellow plastic barriers lined up on asphalt',
   },
   {
     slug: 'water-filled-barrier-32x72',
@@ -418,7 +423,8 @@ export const PRODUCTS: Product[] = [
         a: 'Yes. Alternating orange and white is common because it reads clearly to drivers, especially at night.',
       },
     ],
-    image: '/catalog/water-filled-barrier.webp',
+    image: '/photos/water-filled-barrier-32x72.webp',
+    imageAlt: 'Red and white plastic barriers lining a city street',
   },
   {
     slug: 'water-filled-barrier-42-inch',
@@ -470,7 +476,8 @@ export const PRODUCTS: Product[] = [
         a: 'Concrete stops vehicles and needs a crane; plastic guides traffic and sets by hand. See our full comparison guide for which one your job needs.',
       },
     ],
-    image: '/catalog/water-filled-barrier.webp',
+    image: '/photos/plastic-jersey-barrier-42x72.webp',
+    imageAlt: 'Long line of white plastic jersey-style barriers beside a road',
   },
   {
     slug: 'water-filled-barrier-with-fence-panel',
@@ -496,7 +503,8 @@ export const PRODUCTS: Product[] = [
         a: 'Set the barriers in place, fill them, then mount the fence panels. The fill port stays reachable on most models.',
       },
     ],
-    image: '/catalog/water-filled-barrier.webp',
+    image: '/photos/water-filled-barrier-with-fence-panel.webp',
+    imageAlt: 'Orange and white water-filled barriers with fence panels on top enclosing a work area',
   },
 
   // ── Traffic cones ────────────────────────────────────────────────────────
@@ -518,6 +526,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Indoor hazard marking', 'Parking spot holds', 'Sports and training'],
     faqs: [],
+    image: '/photos/traffic-cone-12-inch.webp',
+    imageAlt: 'Small orange safety cones spaced across a paved plaza',
   },
   {
     slug: 'traffic-cone-18-inch',
@@ -536,6 +546,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Parking lots and driveways', 'Low-speed daytime work', 'School and facility use'],
     faqs: [],
+    image: '/photos/traffic-cone-18-inch.webp',
+    imageAlt: 'Orange traffic cone on a black base against a wall',
   },
   {
     slug: 'traffic-cone-18-inch-reflective',
@@ -554,6 +566,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Parking garages', 'Loading docks at night', 'Private roads and campuses'],
     faqs: [],
+    image: '/photos/traffic-cone-18-inch-reflective.webp',
+    imageAlt: 'Row of orange traffic cones along a curb',
   },
   {
     slug: 'traffic-cone-18-inch-colors',
@@ -573,6 +587,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Event parking color codes', 'School pickup lanes', 'Sports facilities'],
     faqs: [],
+    image: '/photos/traffic-cone-18-inch-colors.webp',
+    imageAlt: 'Stacks of green, tan and orange traffic cones',
   },
   {
     slug: 'traffic-cone-28-inch',
@@ -616,7 +632,8 @@ export const PRODUCTS: Product[] = [
         a: 'Yes for any night use on public roads. MUTCD calls for a 6 inch and a 4 inch white retroreflective band on 28 to 36 inch cones used at night.',
       },
     ],
-    image: '/catalog/cone-28-orange-7lb.webp',
+    image: '/photos/traffic-cone-28-inch-reflective.webp',
+    imageAlt: 'Orange traffic cone with white reflective collars in a row of cones',
   },
   {
     slug: 'traffic-cone-28-inch-10-lb-reflective',
@@ -635,6 +652,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Bridges and overpasses', 'Windy or open sites', 'High-speed shoulders'],
     faqs: [],
+    image: '/photos/traffic-cone-28-inch-10-lb-reflective.webp',
+    imageAlt: 'Orange traffic cone with reflective collars on a heavy black base',
   },
   {
     slug: 'traffic-cone-28-inch-lime-reflective',
@@ -653,6 +672,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Utility fleets', 'Company color standards', 'High-contrast marking'],
     faqs: [],
+    image: '/catalog/cone-36-lime.png',
+    imageAlt: 'Fluorescent lime traffic cone on a black base',
   },
   {
     slug: 'grabber-cone-28-inch-16-lb-base',
@@ -690,7 +711,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Highway and freeway work', 'Night closures', 'DOT spec jobs'],
     faqs: [],
-    image: '/catalog/cone-36-orange-10lb.webp',
+    image: '/photos/traffic-cone-36-inch-reflective.webp',
+    imageAlt: 'Tall orange traffic cone with reflective bands on a road',
   },
   {
     slug: 'traffic-cone-36-inch-15-lb-reflective',
@@ -709,6 +731,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Interstate work zones', 'Coastal and windy sites', 'Taper and transition areas'],
     faqs: [],
+    image: '/photos/traffic-cone-36-inch-15-lb-reflective.webp',
+    imageAlt: 'Line of reflective traffic cones along a curved road edge',
   },
 
   // ── Delineator posts ─────────────────────────────────────────────────────
@@ -767,6 +791,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Bike lanes', 'Lane and turn separation', 'Loading and no-parking zones'],
     faqs: [],
+    image: '/photos/surface-mount-delineator-36-inch.webp',
+    imageAlt: 'Row of red and white flexible delineator posts on a road',
   },
   {
     slug: 'surface-mount-delineator-48-inch',
@@ -786,6 +812,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Medians and gore areas', 'Highway ramps', 'Truck routes'],
     faqs: [],
+    image: '/photos/surface-mount-delineator-48-inch.webp',
+    imageAlt: 'Yellow flexible delineator posts lining a path',
   },
 
   // ── Temporary fence panels ───────────────────────────────────────────────
@@ -806,6 +834,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Construction site security', 'Laydown and storage yards', 'Long-term event perimeters'],
     faqs: [],
+    image: '/photos/temporary-chain-link-fence-panel-6x12.webp',
+    imageAlt: 'Temporary metal fence panels at a construction site',
   },
   {
     slug: 'plastic-temporary-fence-panel',
@@ -823,6 +853,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Festivals and races', 'Pedestrian routing', 'Short-term closures'],
     faqs: [],
+    image: '/photos/plastic-temporary-fence-panel.webp',
+    imageAlt: 'Orange plastic barricade panel with traffic cones on a sidewalk',
   },
   {
     slug: 'fence-panel-for-water-filled-barrier',
@@ -840,6 +872,8 @@ export const PRODUCTS: Product[] = [
     ],
     bestFor: ['Upgrading existing barriers', 'Urban job sites', 'Event security'],
     faqs: [],
+    image: '/photos/fence-panel-for-water-filled-barrier.webp',
+    imageAlt: 'Fence panels mounted on top of orange and white water-filled barriers',
   },
 ]
 

@@ -63,8 +63,8 @@ export default function ProductPage() {
             {product.image && (
               <img
                 src={product.image}
-                alt={product.name}
-                className="mt-8 aspect-[4/3] w-full max-w-lg rounded-lg bg-paper object-contain"
+                alt={product.imageAlt ?? product.name}
+                className={`mt-8 aspect-[4/3] w-full max-w-lg rounded-lg bg-paper ${product.image?.startsWith('/photos/') ? 'object-cover' : 'object-contain'}`}
               />
             )}
           </div>

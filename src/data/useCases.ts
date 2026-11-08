@@ -8,6 +8,8 @@ export interface UseCase {
   h1: string
   description: string
   intro: string[]
+  image?: string
+  imageAlt?: string
   /** Product slugs from catalog.ts with a note on how each is used for this job. */
   kit: { slug: string; why: string }[]
   planning: { heading: string; body: string }[]
@@ -18,6 +20,8 @@ export interface UseCase {
 export const USE_CASES: UseCase[] = [
   {
     slug: 'event-crowd-control',
+    image: '/photos/use-event-crowd-control.webp',
+    imageAlt: 'Crowd lined up behind steel barricades at a street event',
     title: 'Crowd Control Barricades for Events, Concerts & Festivals',
     h1: 'Crowd control equipment for events and festivals',
     description:
@@ -64,6 +68,8 @@ export const USE_CASES: UseCase[] = [
   },
   {
     slug: 'construction-site-perimeter',
+    image: '/photos/use-construction-site-perimeter.webp',
+    imageAlt: 'Construction area keep out sign on a chain link fence',
     title: 'Construction Site Fencing & Barriers | Perimeter Security Equipment',
     h1: 'Construction site perimeter and security equipment',
     description:
@@ -100,6 +106,8 @@ export const USE_CASES: UseCase[] = [
   },
   {
     slug: 'sidewalk-and-street-closures',
+    image: '/photos/use-sidewalk-and-street-closures.webp',
+    imageAlt: 'Water-filled barriers with fence panels closing off a sidewalk work area',
     title: 'Sidewalk & Street Closure Barriers | Pedestrian Detour Equipment',
     h1: 'Sidewalk and street closure equipment',
     description:
@@ -137,6 +145,8 @@ export const USE_CASES: UseCase[] = [
   },
   {
     slug: 'parking-lot-traffic-control',
+    image: '/photos/use-parking-lot-traffic-control.webp',
+    imageAlt: 'Yellow lane separators on a parking area crosswalk',
     title: 'Parking Lot Traffic Control Equipment | Cones, Delineators & Barriers',
     h1: 'Parking lot and garage traffic control',
     description:
@@ -170,6 +180,8 @@ export const USE_CASES: UseCase[] = [
   },
   {
     slug: 'road-work-lane-closures',
+    image: '/photos/use-road-work-lane-closures.webp',
+    imageAlt: 'Orange traffic cones lined up along a road edge',
     title: 'Lane Closure Equipment for Road Work | Cones, Barricades & Delineators',
     h1: 'Lane closure and road work equipment',
     description:

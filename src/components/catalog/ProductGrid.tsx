@@ -12,9 +12,9 @@ export default function ProductGrid({ products }: { products: Product[] }) {
             {p.image && (
               <img
                 src={p.image}
-                alt={p.name}
+                alt={p.imageAlt ?? p.name}
                 loading="lazy"
-                className="mb-4 aspect-[4/3] w-full rounded-md bg-paper object-contain"
+                className={`mb-4 aspect-[4/3] w-full rounded-md bg-paper ${p.image?.startsWith('/photos/') ? 'object-cover' : 'object-contain'}`}
               />
             )}
             <h3 className="font-tcsDisplay text-lg font-bold leading-snug text-ink group-hover:text-zone">
